@@ -50,6 +50,7 @@ class Map extends Component {
     ) {
       this.setState({
         viewport: {
+          ...viewport,
           height: target.innerHeight,
           width: target.innerWidth,
         },
