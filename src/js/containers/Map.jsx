@@ -40,6 +40,10 @@ class Map extends Component {
     }
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onWindowResize);
+  }
+
   onWindowResize(values) {
     // console.log('The values', values);
     const { target } = values;
