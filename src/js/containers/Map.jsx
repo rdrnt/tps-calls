@@ -22,10 +22,13 @@ class Map extends Component {
     };
 
     this.updateViewport = this.updateViewport.bind(this);
+    this.onWindowResize = this.onWindowResize.bind(this);
   }
 
   componentDidMount() {
     store.dispatch(policeApiActions.fetchIncidents());
+
+    window.addEventListener('resize', this.onWindowResize);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -33,6 +36,23 @@ class Map extends Component {
     if (!nextProps.policeApi.isFetching && nextProps.policeApi.incidents) {
       this.setState({
         incidents: nextProps.policeApi.incidents,
+      });
+    }
+  }
+
+  onWindowResize(values) {
+    // console.log('The values', values);
+    const { target } = values;
+    const { viewport } = this.state;
+    if (
+      viewport.width !== target.innerWidth ||
+      viewport.height !== target.innerHeight
+    ) {
+      this.setState({
+        viewport: {
+          height: target.innerHeight,
+          width: target.innerWidth,
+        },
       });
     }
   }
