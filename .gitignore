@@ -11,6 +11,7 @@
 
 # Netlify
 /.netlify
+src/js/lambda
 
 # misc
 .DS_Store
