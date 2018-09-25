@@ -25,10 +25,11 @@ class Overlay extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     // console.log('next', nextProps);
+    const { policeApi, UI } = nextProps;
     this.setState({
-      incidents: nextProps.policeApi.incidents,
-      showMenu: nextProps.UI.showMenu,
-      showIncidentTable: nextProps.UI.showIncidentTable,
+      incidents: policeApi.incidents,
+      showMenu: UI.showMenu,
+      showIncidentTable: UI.showIncidentTable,
     });
   }
 
