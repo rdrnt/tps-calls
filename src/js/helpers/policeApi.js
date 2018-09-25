@@ -13,8 +13,8 @@ const incidentObj = values => {
 const policeApi = {
   // converts x & y to Lat/Long
   // Returns and array like [87.11, 28.11]
-  convertXYToLatLon: incident => {
-    return new Promise((resolve, reject) => {
+  convertXYToLatLon: incident =>
+    new Promise(resolve => {
       loadModules(['esri/geometry/support/webMercatorUtils'])
         .then(([webMercatorUtils]) => {
           const { geometry, attributes } = incident;
@@ -28,8 +28,7 @@ const policeApi = {
           resolve(incidentObj(incidentValues));
         })
         .catch(err => console.error('Error!', err));
-    });
-  },
+    }),
 
   // Get all the incidents from the API
   getAllIncidents: callback => {
