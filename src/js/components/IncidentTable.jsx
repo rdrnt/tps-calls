@@ -10,7 +10,7 @@ import Paper from '@material-ui/core/Paper';
 const IncidentTable = props => (
   <Paper
     style={{
-      width: '75%',
+      maxWidth: '80%',
       maxHeight: '400px',
       overflowX: 'auto',
       marginBottom: 20,

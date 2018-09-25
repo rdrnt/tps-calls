@@ -8,8 +8,8 @@ import Switch from '@material-ui/core/Switch';
 
 import Icon from '../Icon';
 
-const MenuItem = ({ switchValues, text, icon }) => (
-  <ListItem button>
+const MenuItem = ({ switchValues, onClick, text, icon }) => (
+  <ListItem button onClick={onClick}>
     <Icon name={icon} />
     <ListItemText primary={text} />
     {switchValues && (
@@ -27,17 +27,15 @@ const MenuItem = ({ switchValues, text, icon }) => (
 MenuItem.propTypes = {
   icon: PropTypes.string,
   text: PropTypes.string,
+  onClick: PropTypes.func,
   switchValues: PropTypes.objectOf(PropTypes.shape),
 };
 
 MenuItem.defaultProps = {
   text: '',
   icon: '',
-  switchValues: {
-    onChange: () => {},
-    value: '',
-    checked: false,
-  },
+  onClick: () => {},
+  switchValues: null,
 };
 
 export default MenuItem;

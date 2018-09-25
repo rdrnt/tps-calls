@@ -8,7 +8,7 @@ import List from '@material-ui/core/List';
 
 import MenuItem from './Menu/MenuItem';
 
-import { uiActions } from '../actions';
+import { uiActions, policeApiActions } from '../actions';
 
 class Menu extends React.Component {
   constructor(props) {
@@ -19,6 +19,7 @@ class Menu extends React.Component {
     };
 
     this.toggleIncidentTable = this.toggleIncidentTable.bind(this);
+    this.fetchNewIncidents = this.fetchNewIncidents.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -38,6 +39,11 @@ class Menu extends React.Component {
     const { showIncidentTable } = this.state;
 
     dispatch(uiActions.toggleIncidentTable(!showIncidentTable));
+  }
+
+  fetchNewIncidents() {
+    const { dispatch } = this.props;
+    dispatch(policeApiActions.fetchIncidents());
   }
 
   render() {
@@ -61,7 +67,11 @@ class Menu extends React.Component {
                 value: 'showIncidentTable',
               }}
             />
-            <MenuItem text="Refresh" icon="Refresh" />
+            <MenuItem
+              text="Refresh"
+              icon="Refresh"
+              onClick={this.fetchNewIncidents}
+            />
           </List>
         </div>
       </Dialog>
