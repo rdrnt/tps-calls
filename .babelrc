@@ -1,0 +1,22 @@
+{
+  "plugins": [
+    "transform-object-rest-spread",
+    "syntax-dynamic-import",
+    "transform-class-properties"
+  ],
+  "presets": [
+    ["@babel/preset-env", {
+      "targets": {
+        "browsers": [
+          "last 1 version",
+          "ie >= 11",
+          "safari >= 9",
+          "ios >= 9",
+          "android >= 4.4"
+        ]
+      }
+    }],
+    "@babel/preset-react",
+  ],
+  "compact": false
+}
