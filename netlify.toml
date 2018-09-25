@@ -1,0 +1,22 @@
+[Settings]
+ID = "0b12a205-84f8-4d08-bed9-5c76ef24119a"
+
+# Settings in the [build] context are global and are applied to all contexts unless otherwise overridden by more specific contexts.
+
+[build]
+  # This is the directory to change to before starting a build.
+  base = ""
+  # NOTE: This is where we will look for package.json/.nvmrc/etc, not root.
+  # This is the directory that you are publishing from (relative to root of your repo)
+  publish = "build"
+  # This will be your default build command
+  command = "yarn build && yarn build:lambda"
+  # This is where we will look for your lambda functions
+  functions = "src/js/lambda/"
+
+# Always redirect any request to our index.html
+# and return the status code 200.
+[[redirects]]
+    from = "/*"
+    to = "/index.html"
+    status = 200

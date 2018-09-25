@@ -10,9 +10,9 @@
 /build
 
 # Netlify
-/.netlify
-src/js/lambda
-netlify.toml
+# /.netlify
+# src/js/lambda
+# netlify.toml
 
 # misc
 .DS_Store
