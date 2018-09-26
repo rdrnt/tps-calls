@@ -82,10 +82,14 @@ class Menu extends React.Component {
 Menu.propTypes = {
   isOpen: PropTypes.bool,
   closeMenu: PropTypes.func.isRequired,
+  showIncidentTable: PropTypes.bool,
+  dispatch: PropTypes.bool,
 };
 
 Menu.defaultProps = {
   isOpen: false,
+  dispatch: () => {},
+  showIncidentTable: false,
 };
 
 function mapStateToProps(state) {
