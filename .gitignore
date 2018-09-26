@@ -10,7 +10,7 @@
 /build
 
 # Netlify
-# /.netlify
+/.netlify
 # src/js/lambda
 netlify.toml
 
