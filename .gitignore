@@ -12,7 +12,7 @@
 # Netlify
 # /.netlify
 # src/js/lambda
-# netlify.toml
+netlify.toml
 
 # misc
 .DS_Store
