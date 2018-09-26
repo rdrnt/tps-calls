@@ -1,8 +1,5 @@
 import { loadModules } from 'react-arcgis';
 
-const apiUrl =
-  'https://6ufqcp1bjd.execute-api.us-east-1.amazonaws.com/default/fetchPoliceData';
-
 const incidentObj = values => {
   const incident = {
     ...values,
@@ -35,7 +32,7 @@ const policeApi = {
     // Get the incidents from the API
 
     const fetchIncidents = () =>
-      fetch(apiUrl)
+      fetch('/.netlify/functions/policeApi')
         .then(response => response.json())
         .then(json => json);
 

@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const policeApiInfo = [
   {
     name: 'York-South Weston',
@@ -13,6 +15,7 @@ const policeApiInfo = [
   },
 ];
 
+/*
 // Simply just fetch from a URL
 const fetchIncident = url =>
   fetch(url).then(response => response.json().then(json => json));
@@ -32,10 +35,30 @@ const fetchAllIncidents = () =>
     return allIncidents;
   });
 
+*/
+
+// Interate over fetch
+const fetchIncident = url => axios.get(url);
+
+const fetchAllIncidents = () =>
+  axios
+    .all([
+      fetchIncident(policeApiInfo[0].url),
+      fetchIncident(policeApiInfo[1].url),
+    ])
+    .then(response => {
+      const allIncidents = [];
+      response.map(responseData =>
+        allIncidents.push(...responseData.data.features)
+      );
+      return allIncidents;
+    });
+
 exports.handler = (event, context, callback) => {
-  /*
-  const incidents = fetchAllIncidents();
-  console.log(incidents);
-  */
-  callback(null, { statusCode: 200, body: 'hello!' });
+  fetchAllIncidents().then(incidents => {
+    callback(null, {
+      statusCode: 200,
+      body: JSON.stringify(incidents),
+    });
+  });
 };
