@@ -71,7 +71,7 @@
     "start:lambda": "netlify-lambda serve src/js/lambda",
     "build": "node scripts/build.js",
     "build:lambda": "netlify-lambda build src/js/lambda",
-    "netlify-deploy": "netlify deploy --dir build",
+    "netlify-deploy": " yarn build && yarn build:lambda && netlify deploy --dir build",
     "netlify-deploy:prod": "netlify deploy --prod",
     "test": "node scripts/test.js --env=jsdom"
   },
