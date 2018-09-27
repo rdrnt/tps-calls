@@ -83,7 +83,7 @@ Menu.propTypes = {
   isOpen: PropTypes.bool,
   closeMenu: PropTypes.func.isRequired,
   showIncidentTable: PropTypes.bool,
-  dispatch: PropTypes.bool,
+  dispatch: PropTypes.func,
 };
 
 Menu.defaultProps = {

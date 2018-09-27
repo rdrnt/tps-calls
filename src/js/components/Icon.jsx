@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import MenuIcon from '@material-ui/icons/Menu';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import ViewListIcon from '@material-ui/icons/ViewList';
+import PlaceIcon from '@material-ui/icons/Place';
 
 /*
  The purpose of this component is so we don't have a million icon imports in each file
@@ -14,6 +15,9 @@ const Icon = ({ name }) => {
   switch (name) {
     case 'Menu': {
       return <MenuIcon />;
+    }
+    case 'Place': {
+      return <PlaceIcon />;
     }
     case 'Refresh': {
       return <RefreshIcon />;

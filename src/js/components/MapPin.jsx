@@ -1,10 +1,26 @@
 import React from 'react';
-import PlaceIcon from '@material-ui/icons/Place';
+import PropTypes from 'prop-types';
+import IconButton from '@material-ui/core/IconButton';
 
-const MapPin = ({ onClick }) => (
-  <div className="mappin" onClick={onClick}>
-    <PlaceIcon />
-  </div>
+import Icon from './Icon';
+
+const MapPin = ({ onClick, selected }) => (
+  <IconButton
+    className="MapPin__button"
+    aria-label="Incident"
+    onClick={onClick}
+  >
+    <Icon name="Place" />
+  </IconButton>
 );
+
+MapPin.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  selected: PropTypes.bool,
+};
+
+MapPin.defaultProps = {
+  selected: false,
+};
 
 export default MapPin;

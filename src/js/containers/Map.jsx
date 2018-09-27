@@ -19,9 +19,13 @@ class Map extends Component {
         zoom: 10.3,
       },
       incidents: [],
+      selectedIncident: {
+        id: 0,
+      },
     };
 
     this.updateViewport = this.updateViewport.bind(this);
+    this.setSelectedIncident = this.setSelectedIncident.bind(this);
     this.onWindowResize = this.onWindowResize.bind(this);
   }
 
@@ -62,17 +66,23 @@ class Map extends Component {
     }
   }
 
+  setSelectedIncident(incident) {
+    this.setState({
+      selectedIncident: { ...incident },
+    });
+  }
+
   updateViewport(viewport) {
     this.setState({ viewport });
   }
 
   render() {
-    const { incidents } = this.state;
+    const { incidents, selectedIncident, viewport } = this.state;
     return (
       <ReactMapGL
         mapboxApiAccessToken={process.env.REACT_APP_MAP_APIKEY}
-        {...this.state.viewport}
-        onViewportChange={viewport => this.updateViewport(viewport)}
+        {...viewport}
+        onViewportChange={newViewport => this.updateViewport(newViewport)}
         minZoom={8.5}
       >
         {incidents.map(incident => (
@@ -84,7 +94,8 @@ class Map extends Component {
             key={incident.id}
           >
             <MapPin
-              onClick={() => console.log(incident.street, incident.type)}
+              onClick={() => this.setSelectedIncident(incident)}
+              selected={selectedIncident.id === incident.id}
             />
           </Marker>
         ))}

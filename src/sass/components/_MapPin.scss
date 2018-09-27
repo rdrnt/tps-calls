@@ -1,0 +1,17 @@
+.MapPin {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.MapPin__info {
+  background-color: white;
+  height: 50px;
+  width: 100px;
+  z-index: 1000;
+}
+
+.MapPin__button {
+  height: 15px;
+  width: 15px;
+}

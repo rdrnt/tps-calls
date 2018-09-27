@@ -10,7 +10,7 @@ import store from './store';
 const App = () => (
   <Provider store={store}>
     <div className="App">
-      <Overlay />
+      {/* <Overlay /> */}
       <Map />
     </div>
   </Provider>
