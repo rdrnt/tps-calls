@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import ReactMapGL, { Marker } from 'react-map-gl';
+import ReactMapGL from 'react-map-gl';
 
-import MapPin from '../components/MapPin';
+import MapMarker from '../components/MapMarker';
+import MapPopover from '../components/MapPopover';
 
 import store from '../store';
 import { policeApiActions } from '../actions';
@@ -11,6 +12,7 @@ class Map extends Component {
   constructor() {
     super();
     this.state = {
+      // Viewport is used for updating the map
       viewport: {
         width: window.innerWidth,
         height: window.innerHeight,
@@ -18,9 +20,12 @@ class Map extends Component {
         longitude: -79.383186,
         zoom: 10.3,
       },
+      // Incidents is where we'll store all of the ongoing incidents
       incidents: [],
+      // selectedIncident is for controlling the clicked on incident
       selectedIncident: {
         id: 0,
+        anchorEl: null, // This is used for the Popover
       },
     };
 
@@ -66,10 +71,21 @@ class Map extends Component {
     }
   }
 
-  setSelectedIncident(incident) {
-    this.setState({
-      selectedIncident: { ...incident },
-    });
+  setSelectedIncident(incident, event) {
+    const { currentTarget } = event;
+    const { selectedIncident } = this.state;
+    if (
+      currentTarget !== selectedIncident.anchorEl &&
+      incident.id !== selectedIncident.id
+    ) {
+      // console.log('Updating state', selectedIncident, currentTarget);
+      this.setState({
+        selectedIncident: {
+          ...incident,
+          anchorEl: event.currentTarget,
+        },
+      });
+    }
   }
 
   updateViewport(viewport) {
@@ -86,19 +102,16 @@ class Map extends Component {
         minZoom={8.5}
       >
         {incidents.map(incident => (
-          <Marker
-            latitude={incident.coordinates[1]}
-            longitude={incident.coordinates[0]}
-            offsetLeft={0}
-            offsetTop={0}
+          <MapMarker
+            incident={incident}
+            onClick={event => this.setSelectedIncident(incident, event)}
+            selected={selectedIncident.id === incident.id}
             key={incident.id}
-          >
-            <MapPin
-              onClick={() => this.setSelectedIncident(incident)}
-              selected={selectedIncident.id === incident.id}
-            />
-          </Marker>
+          />
         ))}
+        {selectedIncident.id !== 0 ? (
+          <MapPopover incident={selectedIncident} />
+        ) : null}
       </ReactMapGL>
     );
   }

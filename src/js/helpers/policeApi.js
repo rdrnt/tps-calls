@@ -1,12 +1,5 @@
 import { loadModules } from 'react-arcgis';
 
-const incidentObj = values => {
-  const incident = {
-    ...values,
-  };
-  return incident;
-};
-
 const policeApi = {
   // converts x & y to Lat/Long
   // Returns and array like [87.11, 28.11]
@@ -15,14 +8,23 @@ const policeApi = {
       loadModules(['esri/geometry/support/webMercatorUtils'])
         .then(([webMercatorUtils]) => {
           const { geometry, attributes } = incident;
+          // coordinatesFromXY is an array that holds two numbers
+          // At 0 it stores the longitude & at 1 it stores latitude
+          const coordinatesFromXY = webMercatorUtils.xyToLngLat(
+            geometry.x,
+            geometry.y
+          );
           const incidentValues = {
-            coordinates: webMercatorUtils.xyToLngLat(geometry.x, geometry.y),
+            coordinates: {
+              lat: coordinatesFromXY[1],
+              lon: coordinatesFromXY[0],
+            },
             type: attributes.TYP_ENG,
             id: attributes.OBJECTID,
             street: attributes.XSTREETS,
             date: attributes.ATSCENE_TS,
           };
-          resolve(incidentObj(incidentValues));
+          resolve(incidentValues);
         })
         .catch(err => console.error('Error!', err));
     }),
