@@ -26,12 +26,14 @@ class Map extends Component {
       selectedIncident: {
         id: 0,
         anchorEl: null, // This is used for the Popover
+        show: false, // Used to show/hide popover
       },
     };
 
     this.updateViewport = this.updateViewport.bind(this);
     this.setSelectedIncident = this.setSelectedIncident.bind(this);
     this.onWindowResize = this.onWindowResize.bind(this);
+    this.closePopper = this.closePopper.bind(this);
   }
 
   componentDidMount() {
@@ -83,9 +85,20 @@ class Map extends Component {
         selectedIncident: {
           ...incident,
           anchorEl: event.currentTarget,
+          show: true,
         },
       });
     }
+  }
+
+  // Popover is the
+  closePopper() {
+    const { selectedIncident } = this.state;
+    this.setState({
+      selectedIncident: {
+        show: !selectedIncident.show,
+      },
+    });
   }
 
   updateViewport(viewport) {
@@ -109,9 +122,10 @@ class Map extends Component {
             key={incident.id}
           />
         ))}
-        {selectedIncident.id !== 0 ? (
-          <MapPopover incident={selectedIncident} />
-        ) : null}
+        <MapPopover
+          incident={selectedIncident}
+          closePopper={this.closePopper}
+        />
       </ReactMapGL>
     );
   }
