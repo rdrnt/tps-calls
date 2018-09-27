@@ -20,7 +20,7 @@ const MapPopover = ({ incident, closePopper }) => (
         enabled: true,
       },
       preventOverflow: {
-        enabled: true,
+        enabled: false,
         boundariesElement: 'scrollParent',
       },
     }}
