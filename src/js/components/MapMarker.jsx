@@ -13,8 +13,12 @@ const MapMarker = ({ incident, onClick, selected }) => (
     offsetTop={0}
     className="MapPin__button"
   >
-    <IconButton aria-label="Incident" onClick={onClick}>
-      <Icon name="Place" />
+    <IconButton
+      aria-label="Incident"
+      onClick={onClick}
+      style={{ color: '#4d7ac2' }}
+    >
+      <Icon name="Dot" />
     </IconButton>
   </Marker>
 );

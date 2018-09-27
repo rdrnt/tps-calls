@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Brightness1 from '@material-ui/icons/Brightness1';
 import MenuIcon from '@material-ui/icons/Menu';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import ViewListIcon from '@material-ui/icons/ViewList';
@@ -13,6 +14,9 @@ import PlaceIcon from '@material-ui/icons/Place';
 
 const Icon = ({ name }) => {
   switch (name) {
+    case 'Dot': {
+      return <Brightness1 />;
+    }
     case 'Menu': {
       return <MenuIcon />;
     }
