@@ -3,10 +3,9 @@ import { connect } from 'react-redux';
 import ReactMapGL from 'react-map-gl';
 
 import MapMarker from '../components/MapMarker';
-import MapPopover from '../components/MapPopover';
 
 import store from '../store';
-import { policeApiActions } from '../actions';
+import { policeApiActions, uiActions } from '../actions';
 
 class Map extends Component {
   constructor() {
@@ -24,16 +23,13 @@ class Map extends Component {
       incidents: [],
       // selectedIncident is for controlling the clicked on incident
       selectedIncident: {
-        id: 0,
-        anchorEl: null, // This is used for the Popover
-        show: false, // Used to show/hide popover
+        id: 0, // Used to show/hide popover
       },
     };
 
     this.updateViewport = this.updateViewport.bind(this);
     this.setSelectedIncident = this.setSelectedIncident.bind(this);
     this.onWindowResize = this.onWindowResize.bind(this);
-    this.closePopper = this.closePopper.bind(this);
   }
 
   componentDidMount() {
@@ -73,36 +69,24 @@ class Map extends Component {
     }
   }
 
-  setSelectedIncident(incident, event) {
-    const { currentTarget } = event;
+  setSelectedIncident(incident) {
     const { selectedIncident } = this.state;
-    if (
-      currentTarget !== selectedIncident.anchorEl &&
-      incident.id !== selectedIncident.id
-    ) {
+    const { dispatch } = this.props;
+    if (incident.id !== selectedIncident.id) {
       // console.log('Updating state', selectedIncident, currentTarget);
       this.setState({
         selectedIncident: {
           ...incident,
-          anchorEl: event.currentTarget,
-          show: true,
         },
       });
+      dispatch(uiActions.toggleSideDrawer(true));
     }
-  }
-
-  // Popover is the
-  closePopper() {
-    const { selectedIncident } = this.state;
-    this.setState({
-      selectedIncident: {
-        show: !selectedIncident.show,
-      },
-    });
   }
 
   updateViewport(viewport) {
     this.setState({ viewport });
+    const { dispatch } = this.props;
+    dispatch(uiActions.toggleSideDrawer(false));
   }
 
   render() {
@@ -117,15 +101,11 @@ class Map extends Component {
         {incidents.map(incident => (
           <MapMarker
             incident={incident}
-            onClick={event => this.setSelectedIncident(incident, event)}
+            onClick={() => this.setSelectedIncident(incident)}
             selected={selectedIncident.id === incident.id}
             key={incident.id}
           />
         ))}
-        <MapPopover
-          incident={selectedIncident}
-          closePopper={this.closePopper}
-        />
       </ReactMapGL>
     );
   }

@@ -1,20 +1,13 @@
 const initialState = {
-  showMenu: false,
-  showIncidentTable: false,
+  showSideDrawer: false,
 };
 
 function UI(state = initialState, action) {
   switch (action.type) {
-    case 'TOGGLE_MENU': {
+    case 'TOGGLE_SIDE_DRAWER': {
       return {
         ...state,
-        showMenu: action.value,
-      };
-    }
-    case 'TOGGLE_INCIDENT_TABLE': {
-      return {
-        ...state,
-        showIncidentTable: action.value,
+        showSideDrawer: action.value,
       };
     }
     default: {

@@ -23,3 +23,7 @@ When commiting, please try your best to use [this](http://karma-runner.github.io
 https://uber.github.io/react-map-gl/#/Documentation/advanced/viewport-transition
 
 https://material-ui.com/
+
+# Notes
+
+https://medium.muz.li/map-location-ui-inspiration-6eb9d6b5a99b
