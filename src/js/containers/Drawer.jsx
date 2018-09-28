@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
 
-import { DrawerList, DrawerBody, DrawerHeader } from '../components/Drawer';
+import DrawerContainer from '../components/DrawerContainer';
 
 import { uiActions } from '../actions';
 
@@ -47,27 +46,16 @@ class SideDrawer extends React.Component {
       <div>
         {/* Mobile Drawer */}
         <Hidden mdUp>
-          <Drawer variant="temporary" open={mobileOpen}>
-            <DrawerHeader mobile closeMobileDrawer={this.closeMobileDrawer} />
-            <DrawerBody mobile>
-              <DrawerList
-                incidents={incidents}
-                selectedIncident={selectedIncident}
-              />
-            </DrawerBody>
-          </Drawer>
+          <DrawerContainer
+            open={mobileOpen}
+            mobile
+            closeMobileDrawer={this.closeMobileDrawer}
+            incidents={incidents}
+          />
         </Hidden>
         {/* Desktop Drawer */}
         <Hidden smDown implementation="css">
-          <Drawer variant="permanent" open>
-            <DrawerHeader mobile={false} />
-            <DrawerBody mobile={false}>
-              <DrawerList
-                incidents={incidents}
-                selectedIncident={selectedIncident}
-              />
-            </DrawerBody>
-          </Drawer>
+          <DrawerContainer open mobile={false} incidents={incidents} />
         </Hidden>
       </div>
     );
