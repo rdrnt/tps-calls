@@ -15,6 +15,7 @@ class SideDrawer extends React.Component {
     this.state = {
       mobileOpen: false,
       incidents: [],
+      selectedIncident: null,
     };
 
     this.closeMobileDrawer = this.closeMobileDrawer.bind(this);
@@ -25,6 +26,7 @@ class SideDrawer extends React.Component {
     this.setState({
       mobileOpen: nextProps.UI.showMobileDrawer,
       incidents: nextProps.incidents.list,
+      selectedIncident: nextProps.incidents.selectedIncident,
     });
   }
 
@@ -40,7 +42,7 @@ class SideDrawer extends React.Component {
 
   // TODO: Refactor all of this
   render() {
-    const { mobileOpen, incidents } = this.state;
+    const { mobileOpen, incidents, selectedIncident } = this.state;
     return (
       <div>
         {/* Mobile Drawer */}
@@ -48,7 +50,10 @@ class SideDrawer extends React.Component {
           <Drawer variant="temporary" open={mobileOpen}>
             <DrawerHeader mobile closeMobileDrawer={this.closeMobileDrawer} />
             <DrawerBody mobile>
-              <DrawerList incidents={incidents} />
+              <DrawerList
+                incidents={incidents}
+                selectedIncident={selectedIncident}
+              />
             </DrawerBody>
           </Drawer>
         </Hidden>
@@ -57,7 +62,10 @@ class SideDrawer extends React.Component {
           <Drawer variant="permanent" open>
             <DrawerHeader mobile={false} />
             <DrawerBody mobile={false}>
-              <DrawerList incidents={incidents} />
+              <DrawerList
+                incidents={incidents}
+                selectedIncident={selectedIncident}
+              />
             </DrawerBody>
           </Drawer>
         </Hidden>

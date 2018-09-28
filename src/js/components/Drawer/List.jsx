@@ -11,10 +11,14 @@ const StyledDrawerList = styled.ul`
   margin: 0;
 `;
 
-const DrawerList = ({ incidents }) => (
+const DrawerList = ({ incidents, selectedIncident }) => (
   <StyledDrawerList>
     {incidents.map(incident => (
-      <DrawerListItem {...incident} key={incident.id} />
+      <DrawerListItem
+        {...incident}
+        selected={incident.id === selectedIncident.id}
+        key={incident.id}
+      />
     ))}
     <DrawerListItem />
   </StyledDrawerList>
@@ -22,10 +26,12 @@ const DrawerList = ({ incidents }) => (
 
 DrawerList.propTypes = {
   incidents: PropTypes.arrayOf(PropTypes.shape),
+  selectedIncident: PropTypes.objectOf(PropTypes.shape),
 };
 
 DrawerList.defaultProps = {
   incidents: [],
+  selectedIncident: {},
 };
 
 export default DrawerList;

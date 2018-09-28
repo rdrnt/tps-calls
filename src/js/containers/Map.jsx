@@ -19,12 +19,10 @@ class Map extends Component {
         longitude: -79.383186,
         zoom: 10.3,
       },
-      // Incidents is where we'll store all of the ongoing incidents
+      // Incidents is where we'll store all of the ongoing incidents (we get this info from the store)
       incidents: [],
-      // selectedIncident is for controlling the clicked on incident
-      selectedIncident: {
-        id: 0, // Used to show/hide popover
-      },
+      // selectedIncident is for controlling the clicked on incident (we get this info from the store)
+      selectedIncident: null,
     };
 
     this.updateViewport = this.updateViewport.bind(this);
@@ -69,16 +67,12 @@ class Map extends Component {
     }
   }
 
-  setSelectedIncident(incident) {
+  setSelectedIncident(newSelectedincident) {
     const { selectedIncident } = this.state;
     const { dispatch } = this.props;
-    if (incident.id !== selectedIncident.id) {
-      // console.log('Updating state', selectedIncident, currentTarget);
-      this.setState({
-        selectedIncident: {
-          ...incident,
-        },
-      });
+    if (!selectedIncident || newSelectedincident.id !== selectedIncident.id) {
+      // Set the new selcted incident in the store so we can use it in the drawer also if needed
+      dispatch(incidentActions.setSelectedIncident(newSelectedincident));
       dispatch(uiActions.toggleMobileDrawer(true));
     }
   }
@@ -88,7 +82,7 @@ class Map extends Component {
   }
 
   render() {
-    const { incidents, selectedIncident, viewport } = this.state;
+    const { incidents, viewport } = this.state;
     return (
       <ReactMapGL
         mapboxApiAccessToken={process.env.REACT_APP_MAP_APIKEY}
@@ -100,7 +94,6 @@ class Map extends Component {
           <MapMarker
             incident={incident}
             onClick={() => this.setSelectedIncident(incident)}
-            selected={selectedIncident.id === incident.id}
             key={incident.id}
           />
         ))}

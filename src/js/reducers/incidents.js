@@ -1,4 +1,7 @@
-function incidents(state = { isFetching: false, list: [] }, action) {
+function incidents(
+  state = { isFetching: false, list: [], selectedIncident: { id: 0 } },
+  action
+) {
   switch (action.type) {
     case 'REQUEST_INCIDENTS': {
       return {
@@ -11,6 +14,12 @@ function incidents(state = { isFetching: false, list: [] }, action) {
         ...state,
         isFetching: false,
         list: action.incidents,
+      };
+    }
+    case 'SET_SELECTED_INCIDENT': {
+      return {
+        ...state,
+        selectedIncident: action.incident,
       };
     }
     default: {

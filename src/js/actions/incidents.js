@@ -16,6 +16,11 @@ const incidentActions = {
       dispatch(incidentActions.receivedIncidents(incidents));
     });
   },
+
+  setSelectedIncident: incident => ({
+    type: 'SET_SELECTED_INCIDENT',
+    incident,
+  }),
 };
 
 export default incidentActions;
