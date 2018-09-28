@@ -1,4 +1,4 @@
-function policeApi(state = { isFetching: false, incidents: [] }, action) {
+function incidents(state = { isFetching: false, list: [] }, action) {
   switch (action.type) {
     case 'REQUEST_INCIDENTS': {
       return {
@@ -10,7 +10,7 @@ function policeApi(state = { isFetching: false, incidents: [] }, action) {
       return {
         ...state,
         isFetching: false,
-        incidents: action.incidents,
+        list: action.incidents,
       };
     }
     default: {
@@ -19,4 +19,4 @@ function policeApi(state = { isFetching: false, incidents: [] }, action) {
   }
 }
 
-export default policeApi;
+export default incidents;

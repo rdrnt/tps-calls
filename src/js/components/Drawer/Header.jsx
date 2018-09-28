@@ -6,9 +6,11 @@ import IconButton from '@material-ui/core/IconButton';
 
 import Icon from '../Icon';
 
+import globals from '../../globals';
+
 const StyledDrawerHeader = styled.div`
   padding: 20px;
-  background-color: blue;
+  background-color: ${globals.colors.materialWhite};
 `;
 
 const DrawerHeader = ({ mobile, closeMobileDrawer }) => (

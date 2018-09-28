@@ -5,7 +5,7 @@ import ReactMapGL from 'react-map-gl';
 import MapMarker from '../components/MapMarker';
 
 import store from '../store';
-import { policeApiActions, uiActions } from '../actions';
+import { incidentActions, uiActions } from '../actions';
 
 class Map extends Component {
   constructor() {
@@ -33,16 +33,16 @@ class Map extends Component {
   }
 
   componentDidMount() {
-    store.dispatch(policeApiActions.fetchIncidents());
+    store.dispatch(incidentActions.fetchIncidents());
 
     window.addEventListener('resize', this.onWindowResize);
   }
 
   componentWillReceiveProps(nextProps) {
     // Check if we're fetching and if we have any incidents
-    if (!nextProps.policeApi.isFetching && nextProps.policeApi.incidents) {
+    if (!nextProps.incidents.isFetching && nextProps.incidents.list) {
       this.setState({
-        incidents: nextProps.policeApi.incidents,
+        incidents: nextProps.incidents.list,
       });
     }
   }

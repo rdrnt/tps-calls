@@ -1,6 +1,6 @@
 import policeApi from '../helpers/policeApi';
 
-const policeApiActions = {
+const incidentActions = {
   requestIncidents: () => ({
     type: 'REQUEST_INCIDENTS',
   }),
@@ -11,11 +11,11 @@ const policeApiActions = {
   }),
 
   fetchIncidents: () => dispatch => {
-    dispatch(policeApiActions.receivedIncidents());
+    dispatch(incidentActions.requestIncidents());
     policeApi.getAllIncidents(incidents => {
-      dispatch(policeApiActions.receivedIncidents(incidents));
+      dispatch(incidentActions.receivedIncidents(incidents));
     });
   },
 };
 
-export default policeApiActions;
+export default incidentActions;

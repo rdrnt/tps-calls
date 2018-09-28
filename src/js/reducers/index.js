@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
 
 import UI from './ui';
-import policeApi from './policeApi';
+import incidents from './incidents';
 
 const rootReducer = combineReducers({
   UI,
-  policeApi,
+  incidents,
 });
 
 export default rootReducer;

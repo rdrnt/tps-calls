@@ -24,7 +24,7 @@ class SideDrawer extends React.Component {
     // Check if we're fetching and if we have any incidents
     this.setState({
       mobileOpen: nextProps.UI.showMobileDrawer,
-      incidents: nextProps.policeApi.incidents,
+      incidents: nextProps.incidents.list,
     });
   }
 
