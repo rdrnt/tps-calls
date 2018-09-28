@@ -38,6 +38,7 @@ class SideDrawer extends React.Component {
     }
   }
 
+  // TODO: Refactor all of this
   render() {
     const { mobileOpen, incidents } = this.state;
     return (
