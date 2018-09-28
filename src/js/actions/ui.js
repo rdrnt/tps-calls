@@ -1,6 +1,6 @@
 const uiActions = {
-  toggleSideDrawer: value => ({
-    type: 'TOGGLE_SIDE_DRAWER',
+  toggleMobileDrawer: value => ({
+    type: 'TOGGLE_MOBILE_DRAWER',
     value,
   }),
 };

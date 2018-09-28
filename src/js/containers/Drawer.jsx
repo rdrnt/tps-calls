@@ -4,41 +4,59 @@ import { connect } from 'react-redux';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
 
-import { DrawerList, DrawerBody } from '../components/Drawer';
+import { DrawerList, DrawerBody, DrawerHeader } from '../components/Drawer';
+
+import { uiActions } from '../actions';
 
 class SideDrawer extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      open: true,
+      mobileOpen: false,
+      incidents: [],
     };
+
+    this.closeMobileDrawer = this.closeMobileDrawer.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     // Check if we're fetching and if we have any incidents
     this.setState({
-      open: nextProps.UI.showSideDrawer,
+      mobileOpen: nextProps.UI.showMobileDrawer,
+      incidents: nextProps.policeApi.incidents,
     });
   }
 
+  closeMobileDrawer() {
+    const { mobileOpen } = this.state;
+
+    // Only close it if its open
+    if (mobileOpen) {
+      const { dispatch } = this.props;
+      dispatch(uiActions.toggleMobileDrawer(false));
+    }
+  }
+
   render() {
-    const { open } = this.state;
+    const { mobileOpen, incidents } = this.state;
     return (
       <div>
         {/* Mobile Drawer */}
         <Hidden mdUp>
-          <Drawer variant="temporary" open={open}>
+          <Drawer variant="temporary" open={mobileOpen}>
+            <DrawerHeader mobile closeMobileDrawer={this.closeMobileDrawer} />
             <DrawerBody mobile>
-              <DrawerList />
+              <DrawerList incidents={incidents} />
             </DrawerBody>
           </Drawer>
         </Hidden>
         {/* Desktop Drawer */}
         <Hidden smDown implementation="css">
           <Drawer variant="permanent" open>
+            <DrawerHeader mobile={false} />
             <DrawerBody mobile={false}>
-              <DrawerList />
+              <DrawerList incidents={incidents} />
             </DrawerBody>
           </Drawer>
         </Hidden>

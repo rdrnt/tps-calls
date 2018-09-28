@@ -8,9 +8,11 @@ const StyledDrawerListItem = styled.li`
   background-color: ${props => (props.selected ? 'blue' : 'red')};
 `;
 
-const DrawerListItem = ({ selected }) => (
+const DrawerListItem = ({ selected, street, type, date }) => (
   <StyledDrawerListItem onClick={() => console.log('Yo')}>
-    Item
+    <h2>{type}</h2>
+    <p>{street}</p>
+    <p>{date}</p>
   </StyledDrawerListItem>
 );
 

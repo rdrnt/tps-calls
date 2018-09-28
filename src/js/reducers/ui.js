@@ -1,13 +1,13 @@
 const initialState = {
-  showSideDrawer: false,
+  showMobileDrawer: false,
 };
 
 function UI(state = initialState, action) {
   switch (action.type) {
-    case 'TOGGLE_SIDE_DRAWER': {
+    case 'TOGGLE_MOBILE_DRAWER': {
       return {
         ...state,
-        showSideDrawer: action.value,
+        showMobileDrawer: action.value,
       };
     }
     default: {

@@ -79,7 +79,7 @@ class Map extends Component {
           ...incident,
         },
       });
-      dispatch(uiActions.toggleSideDrawer(true));
+      dispatch(uiActions.toggleMobileDrawer(true));
     }
   }
 
