@@ -85,8 +85,6 @@ class Map extends Component {
 
   updateViewport(viewport) {
     this.setState({ viewport });
-    const { dispatch } = this.props;
-    dispatch(uiActions.toggleSideDrawer(false));
   }
 
   render() {

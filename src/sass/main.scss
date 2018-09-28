@@ -1,5 +1,4 @@
 @import './components/MapPin';
-@import 'colors';
 
 body {
   margin: 0;
@@ -7,26 +6,10 @@ body {
   font-family: sans-serif;
 }
 
-.App {
-  width: auto;
-  height: auto;
-}
+.root {
+  min-height: 100%;
 
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  z-index: 1000;
-  pointer-events: none;
-  max-width: 100%;
-  max-height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  > * {
-    pointer-events: all;
+  > div {
+    min-height: 100%;
   }
 }

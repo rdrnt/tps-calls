@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
 
+import { DrawerList, DrawerBody } from '../components/Drawer';
+
 class SideDrawer extends React.Component {
   constructor(props) {
     super(props);
@@ -24,14 +26,20 @@ class SideDrawer extends React.Component {
     const { open } = this.state;
     return (
       <div>
+        {/* Mobile Drawer */}
         <Hidden mdUp>
           <Drawer variant="temporary" open={open}>
-            mobile
+            <DrawerBody mobile>
+              <DrawerList />
+            </DrawerBody>
           </Drawer>
         </Hidden>
+        {/* Desktop Drawer */}
         <Hidden smDown implementation="css">
           <Drawer variant="permanent" open>
-            desktop
+            <DrawerBody mobile={false}>
+              <DrawerList />
+            </DrawerBody>
           </Drawer>
         </Hidden>
       </div>
