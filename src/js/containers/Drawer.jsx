@@ -7,6 +7,8 @@ import DrawerContainer from '../components/DrawerContainer';
 
 import { uiActions } from '../actions';
 
+import { sorter } from '../helpers';
+
 class SideDrawer extends React.Component {
   constructor(props) {
     super(props);
@@ -22,9 +24,11 @@ class SideDrawer extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     // Check if we're fetching and if we have any incidents
+
+    const sortedDates = sorter.sortIncidentsByDate(nextProps.incidents.list);
     this.setState({
       mobileOpen: nextProps.UI.showMobileDrawer,
-      incidents: nextProps.incidents.list,
+      incidents: sortedDates,
       selectedIncident: nextProps.incidents.selectedIncident,
     });
   }

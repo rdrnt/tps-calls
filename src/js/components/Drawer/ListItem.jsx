@@ -6,6 +6,8 @@ import Typography from '@material-ui/core/Typography';
 
 import globals from '../../globals';
 
+import { dateHelper } from '../../helpers';
+
 const StyledDrawerListItem = styled.li`
   padding: 20px;
   list-style-type: none;
@@ -40,9 +42,14 @@ class DrawerListItem extends React.Component {
         selected={selected}
         innerRef={node => (this.ref = node)}
       >
-        <Typography variant="title">{type}</Typography>
-        <Typography variant="subheading">
-          {street}-{date}
+        <Typography variant="title" color="textSecondary">
+          {type}
+        </Typography>
+        <Typography variant="subheading" color="textSecondary">
+          {street}
+        </Typography>
+        <Typography variant="subheading" color="textSecondary">
+          {dateHelper.tidyFormat(date)}
         </Typography>
       </StyledDrawerListItem>
     );

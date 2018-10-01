@@ -1,4 +1,5 @@
 import { loadModules } from 'react-arcgis';
+import dateHelper from './dateHelper';
 
 const policeApi = {
   // converts x & y to Lat/Long
@@ -22,7 +23,7 @@ const policeApi = {
             type: attributes.TYP_ENG,
             id: attributes.OBJECTID,
             street: attributes.XSTREETS,
-            date: attributes.ATSCENE_TS,
+            date: dateHelper.parse(attributes.ATSCENE_TS),
           };
           resolve(incidentValues);
         })
