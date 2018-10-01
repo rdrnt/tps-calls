@@ -51,11 +51,17 @@ class SideDrawer extends React.Component {
             mobile
             closeMobileDrawer={this.closeMobileDrawer}
             incidents={incidents}
+            selectedIncident={selectedIncident}
           />
         </Hidden>
         {/* Desktop Drawer */}
         <Hidden smDown implementation="css">
-          <DrawerContainer open mobile={false} incidents={incidents} />
+          <DrawerContainer
+            open
+            mobile={false}
+            incidents={incidents}
+            selectedIncident={selectedIncident}
+          />
         </Hidden>
       </div>
     );

@@ -5,14 +5,20 @@ import Drawer from '@material-ui/core/Drawer';
 
 import { DrawerList, DrawerBody, DrawerHeader } from './Drawer';
 
-const DrawerContainer = ({ open, mobile, closeMobileDrawer, incidents }) => (
+const DrawerContainer = ({
+  open,
+  mobile,
+  closeMobileDrawer,
+  incidents,
+  selectedIncident,
+}) => (
   <Drawer
     variant={mobile ? 'temporary' : 'permanent'}
     open={mobile ? open : true}
   >
     <DrawerHeader mobile={mobile} closeMobileDrawer={closeMobileDrawer} />
     <DrawerBody mobile={mobile}>
-      <DrawerList incidents={incidents} />
+      <DrawerList incidents={incidents} selectedIncident={selectedIncident} />
     </DrawerBody>
   </Drawer>
 );

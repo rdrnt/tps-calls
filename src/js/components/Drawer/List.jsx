@@ -11,18 +11,47 @@ const StyledDrawerList = styled.ul`
   margin: 0;
 `;
 
-const DrawerList = ({ incidents, selectedIncident }) => (
-  <StyledDrawerList>
-    {incidents.map(incident => (
-      <DrawerListItem
-        {...incident}
-        selected={incident.id === selectedIncident.id}
-        key={incident.id}
-      />
-    ))}
-    <DrawerListItem />
-  </StyledDrawerList>
-);
+class DrawerList extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      selectedIndex: -1,
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { selectedIndex } = this.state;
+    const { incidents, selectedIncident } = nextProps;
+
+    const newIndex = incidents
+      .map(incident => incident.id)
+      .indexOf(selectedIncident.id);
+
+    if (newIndex !== selectedIndex) {
+      this.setState({
+        selectedIndex: newIndex,
+      });
+    }
+  }
+
+  render() {
+    const { incidents } = this.props;
+    const { selectedIndex } = this.state;
+    return (
+      <StyledDrawerList>
+        {incidents.map((incident, index) => (
+          <DrawerListItem
+            {...incident}
+            key={incident.id}
+            selected={index === selectedIndex}
+          />
+        ))}
+        <DrawerListItem />
+      </StyledDrawerList>
+    );
+  }
+}
 
 DrawerList.propTypes = {
   incidents: PropTypes.arrayOf(PropTypes.shape),
