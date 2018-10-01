@@ -1,5 +1,6 @@
 import { loadModules } from 'react-arcgis';
 import dateHelper from './dateHelper';
+import isValidIncident from './isValidIncident';
 
 const policeApi = {
   // converts x & y to Lat/Long
@@ -25,7 +26,10 @@ const policeApi = {
             street: attributes.XSTREETS,
             date: dateHelper.parse(attributes.ATSCENE_TS),
           };
-          resolve(incidentValues);
+
+          if (isValidIncident(incidentValues)) {
+            resolve(incidentValues);
+          }
         })
         .catch(err => console.error('Error!', err));
     }),
