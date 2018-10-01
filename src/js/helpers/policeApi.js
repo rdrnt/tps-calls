@@ -1,6 +1,7 @@
 import { loadModules } from 'react-arcgis';
 import dateHelper from './dateHelper';
 import isValidIncident from './isValidIncident';
+import stringToCamelCase from './stringToCamelCase';
 
 const policeApi = {
   // converts x & y to Lat/Long
@@ -21,14 +22,16 @@ const policeApi = {
               lat: coordinatesFromXY[1],
               lon: coordinatesFromXY[0],
             },
-            type: attributes.TYP_ENG,
+            type: stringToCamelCase(attributes.TYP_ENG),
             id: attributes.OBJECTID,
-            street: attributes.XSTREETS,
+            street: stringToCamelCase(attributes.XSTREETS),
             date: dateHelper.parse(attributes.ATSCENE_TS),
           };
-
+          console.log(incidentValues);
           if (isValidIncident(incidentValues)) {
             resolve(incidentValues);
+          } else {
+            console.log('Yo not valid', incidentValues);
           }
         })
         .catch(err => console.error('Error!', err));

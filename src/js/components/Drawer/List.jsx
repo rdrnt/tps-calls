@@ -47,7 +47,6 @@ class DrawerList extends React.Component {
             selected={index === selectedIndex}
           />
         ))}
-        <DrawerListItem />
       </StyledDrawerList>
     );
   }

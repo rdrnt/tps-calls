@@ -14,7 +14,12 @@ const StyledDrawerHeader = styled.div`
   background-color: ${globals.colors.materialWhite};
 `;
 
-const DrawerHeader = ({ mobile, closeMobileDrawer }) => (
+const DrawerHeader = ({
+  mobile,
+  closeMobileDrawer,
+  onSearchChange,
+  searchValue,
+}) => (
   <StyledDrawerHeader>
     {mobile && (
       <IconButton
@@ -30,7 +35,9 @@ const DrawerHeader = ({ mobile, closeMobileDrawer }) => (
       type="search"
       label="Search for Assualt, College St, etc..."
       margin="normal"
+      onChange={onSearchChange}
       fullWidth
+      value={searchValue}
     />
   </StyledDrawerHeader>
 );
@@ -38,10 +45,13 @@ const DrawerHeader = ({ mobile, closeMobileDrawer }) => (
 DrawerHeader.propTypes = {
   mobile: PropTypes.bool.isRequired,
   closeMobileDrawer: PropTypes.func,
+  onSearchChange: PropTypes.func.isRequired,
+  searchValue: PropTypes.string,
 };
 
 DrawerHeader.defaultProps = {
   closeMobileDrawer: () => {},
+  searchValue: '',
 };
 
 export default DrawerHeader;
