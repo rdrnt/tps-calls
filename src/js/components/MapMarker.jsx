@@ -11,12 +11,11 @@ const MapMarker = ({ incident, onClick, selected }) => (
     longitude={incident.coordinates.lon}
     offsetLeft={0}
     offsetTop={0}
-    className="MapPin__button"
   >
     <IconButton
       aria-label="Incident"
       onClick={onClick}
-      style={{ color: '#4d7ac2' }}
+      style={{ color: '#4d7ac2', height: 30, width: 30 }}
     >
       <Icon name="Dot" />
     </IconButton>

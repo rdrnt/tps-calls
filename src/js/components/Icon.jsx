@@ -13,25 +13,25 @@ import PlaceIcon from '@material-ui/icons/Place';
  Just import them once into here, and pass the icon name as a prop
 */
 
-const Icon = ({ name }) => {
+const Icon = ({ name, other }) => {
   switch (name) {
     case 'Close': {
-      return <CloseIcon />;
+      return <CloseIcon {...other} />;
     }
     case 'Dot': {
-      return <Brightness1 />;
+      return <Brightness1 {...other} />;
     }
     case 'Menu': {
-      return <MenuIcon />;
+      return <MenuIcon {...other} />;
     }
     case 'Place': {
-      return <PlaceIcon />;
+      return <PlaceIcon {...other} />;
     }
     case 'Refresh': {
-      return <RefreshIcon />;
+      return <RefreshIcon {...other} />;
     }
     case 'ViewList': {
-      return <ViewListIcon />;
+      return <ViewListIcon {...other} />;
     }
     default: {
       return null;

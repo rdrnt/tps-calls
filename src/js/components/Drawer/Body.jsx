@@ -6,7 +6,7 @@ import globals from '../../globals';
 
 const StyledDrawerBody = styled.div`
   background-color: ${globals.colors.materialWhite};
-  width: ${props => (props.mobile ? '100%' : '300px')};
+  width: ${props => (props.mobile ? '100%' : '350px')};
   height: 100%;
 `;
 
