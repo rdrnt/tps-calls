@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import IconButton from '@material-ui/core/IconButton';
+import TextField from '@material-ui/core/TextField';
 
 import Icon from '../Icon';
 
@@ -24,6 +25,13 @@ const DrawerHeader = ({ mobile, closeMobileDrawer }) => (
         <Icon name="Close" />
       </IconButton>
     )}
+    <TextField
+      id="search-header"
+      type="search"
+      label="Search for Assualt, College St, etc..."
+      margin="normal"
+      fullWidth
+    />
   </StyledDrawerHeader>
 );
 
