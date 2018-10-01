@@ -27,11 +27,9 @@ const policeApi = {
             street: stringToCamelCase(attributes.XSTREETS),
             date: dateHelper.parse(attributes.ATSCENE_TS),
           };
-          console.log(incidentValues);
+
           if (isValidIncident(incidentValues)) {
             resolve(incidentValues);
-          } else {
-            console.log('Yo not valid', incidentValues);
           }
         })
         .catch(err => console.error('Error!', err));
