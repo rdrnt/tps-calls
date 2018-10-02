@@ -1,14 +1,50 @@
 import parse from 'date-fns/parse';
 import format from 'date-fns/format';
-import isValid from 'date-fns/is_valid';
+import isValid from 'date-fns/isValid';
 
 const dateHelper = {
-  parse: date => parse(date),
   // Returns Feb 1, 10:12pm
   tidyFormat: date => format(date, 'MMM d - h:mma'),
 
   // Pass down a date to te
   isDateValid: date => isValid(date),
+
+  // For some reason date-fns and Date() dont play well with the dates we recieve from the police API
+  // Check if its a valid date
+  // If not, create our own little hacky date
+  convert: date => {
+    const vanillaDate = new Date(date);
+
+    // If a valid date
+    if (isValid(vanillaDate)) {
+      return parse(vanillaDate);
+    }
+
+    // if it's not a valid date
+    // Store the year month and date (e.x 2018.02.10)
+    const dateYMD = date.split(' ')[0];
+    // Store the time (e.x 9:10:31)
+    const dateTime = date.split(' ')[1];
+
+    // Parse the info from above
+    const dateInfo = {
+      year: dateYMD.split('.')[0],
+      month: dateYMD.split('.')[1],
+      day: dateYMD.split('.')[2],
+      hour: dateTime.split(':')[0],
+      minute: dateTime.split(':')[1],
+    };
+
+    // Create a new date from the parsed info
+    const newDate = new Date(
+      dateInfo.year,
+      dateInfo.month,
+      dateInfo.day,
+      dateInfo.hour,
+      dateInfo.minute
+    );
+    return parse(newDate);
+  },
 };
 
 export default dateHelper;

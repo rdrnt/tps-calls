@@ -27,9 +27,8 @@ const policeApi = {
             type: stringToCamelCase(attributes.TYP_ENG),
             id: attributes.OBJECTID,
             street: stringToCamelCase(attributes.XSTREETS),
-            date: dateHelper.parse(attributes.ATSCENE_TS),
+            date: dateHelper.convert(attributes.ATSCENE_TS),
           };
-          console.log('The date', dateHelper.parse(attributes.ATSCENE_TS));
 
           /*
           console.log(
