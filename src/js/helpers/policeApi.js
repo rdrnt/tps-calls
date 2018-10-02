@@ -1,4 +1,6 @@
 import { loadModules } from 'react-arcgis';
+import axios from 'axios';
+
 import dateHelper from './dateHelper';
 import isValidIncident from './isValidIncident';
 import stringToCamelCase from './stringToCamelCase';
@@ -27,7 +29,15 @@ const policeApi = {
             street: stringToCamelCase(attributes.XSTREETS),
             date: dateHelper.parse(attributes.ATSCENE_TS),
           };
+          console.log('The date', dateHelper.parse(attributes.ATSCENE_TS));
 
+          /*
+          console.log(
+            'The incident',
+            incidentValues,
+            isValidIncident(incidentValues)
+          );
+          */
           if (isValidIncident(incidentValues)) {
             resolve(incidentValues);
           }
@@ -40,9 +50,9 @@ const policeApi = {
     // Get the incidents from the API
 
     const fetchIncidents = () =>
-      fetch('/.netlify/functions/policeApi')
-        .then(response => response.json())
-        .then(json => json);
+      axios
+        .get('/.netlify/functions/policeApi', { responseType: 'json' })
+        .then(response => response.data);
 
     // Convert the incident to lat / lon
     const convertIncidentsToLatLon = (incidents, cb) => {

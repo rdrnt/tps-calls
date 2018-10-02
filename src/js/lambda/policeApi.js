@@ -38,7 +38,7 @@ const fetchAllIncidents = () =>
 */
 
 // Interate over fetch
-const fetchIncident = url => axios.get(url);
+const fetchIncident = url => axios.get(url, { responseType: 'json' });
 
 const fetchAllIncidents = () =>
   axios
@@ -55,10 +55,14 @@ const fetchAllIncidents = () =>
     });
 
 exports.handler = (event, context, callback) => {
-  fetchAllIncidents().then(incidents => {
-    callback(null, {
-      statusCode: 200,
-      body: JSON.stringify(incidents),
+  fetchAllIncidents()
+    .then(incidents => {
+      callback(null, {
+        statusCode: 200,
+        body: JSON.stringify(incidents),
+      });
+    })
+    .catch(error => {
+      console.log('error in lambda ', error);
     });
-  });
 };
