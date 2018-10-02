@@ -72,8 +72,8 @@ class Map extends Component {
     const { dispatch } = this.props;
     if (!selectedIncident || newSelectedincident.id !== selectedIncident.id) {
       // Set the new selcted incident in the store so we can use it in the drawer also if needed
-      dispatch(incidentActions.setSelectedIncident(newSelectedincident));
       dispatch(uiActions.toggleMobileDrawer(true));
+      dispatch(incidentActions.setSelectedIncident(newSelectedincident));
     }
   }
 

@@ -7,31 +7,35 @@ import MenuIcon from '@material-ui/icons/Menu';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import ViewListIcon from '@material-ui/icons/ViewList';
 import PlaceIcon from '@material-ui/icons/Place';
+import ArrowUpward from '@material-ui/icons/ArrowUpward';
 
 /*
  The purpose of this component is so we don't have a million icon imports in each file
  Just import them once into here, and pass the icon name as a prop
 */
 
-const Icon = ({ name, other }) => {
+const Icon = ({ name }) => {
   switch (name) {
+    case 'ArrowUpward': {
+      return <ArrowUpward />;
+    }
     case 'Close': {
-      return <CloseIcon {...other} />;
+      return <CloseIcon />;
     }
     case 'Dot': {
-      return <Brightness1 {...other} />;
+      return <Brightness1 />;
     }
     case 'Menu': {
-      return <MenuIcon {...other} />;
+      return <MenuIcon />;
     }
     case 'Place': {
-      return <PlaceIcon {...other} />;
+      return <PlaceIcon />;
     }
     case 'Refresh': {
-      return <RefreshIcon {...other} />;
+      return <RefreshIcon />;
     }
     case 'ViewList': {
-      return <ViewListIcon {...other} />;
+      return <ViewListIcon />;
     }
     default: {
       return null;

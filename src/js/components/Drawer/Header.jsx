@@ -9,10 +9,27 @@ import Icon from '../Icon';
 
 import globals from '../../globals';
 
-const StyledDrawerHeader = styled.div`
+const StyledHeader = styled.div`
   padding: 20px;
   background-color: ${globals.colors.materialWhite};
 `;
+
+const StyledHeaderClose = styled.div`
+  display: ${props => (props.show ? 'flex' : 'none')};
+  justify-content: flex-end;
+`;
+
+const styles = {
+  button: {
+    width: 25,
+    height: 25,
+    padding: 0,
+  },
+  icon: {
+    fontSize: 20,
+    color: '#fffff',
+  },
+};
 
 const DrawerHeader = ({
   mobile,
@@ -20,16 +37,18 @@ const DrawerHeader = ({
   onSearchChange,
   searchValue,
 }) => (
-  <StyledDrawerHeader>
-    {mobile && (
+  <StyledHeader>
+    <StyledHeaderClose show={mobile}>
       <IconButton
         aria-label="close"
         onClick={closeMobileDrawer}
-        color="secondary"
+        disableRipple
+        style={styles.button}
+        iconstyle={styles.icon}
       >
         <Icon name="Close" />
       </IconButton>
-    )}
+    </StyledHeaderClose>
     <TextField
       id="search-header"
       type="search"
@@ -39,7 +58,7 @@ const DrawerHeader = ({
       fullWidth
       value={searchValue}
     />
-  </StyledDrawerHeader>
+  </StyledHeader>
 );
 
 DrawerHeader.propTypes = {

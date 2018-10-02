@@ -15,7 +15,8 @@ const MapMarker = ({ incident, onClick, selected }) => (
     <IconButton
       aria-label="Incident"
       onClick={onClick}
-      style={{ color: '#4d7ac2', height: 30, width: 30 }}
+      style={{ height: 30, width: 30 }}
+      color="primary"
     >
       <Icon name="Dot" />
     </IconButton>
