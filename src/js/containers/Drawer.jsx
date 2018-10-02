@@ -22,14 +22,6 @@ class SideDrawer extends React.Component {
     this.closeMobileDrawer = this.closeMobileDrawer.bind(this);
   }
 
-  componentDidMount() {
-    console.log('mount');
-  }
-
-  componentWillMount() {
-    console.log('will mount');
-  }
-
   componentWillReceiveProps(nextProps) {
     // Check if we're fetching and if we have any incidents
 
@@ -55,7 +47,7 @@ class SideDrawer extends React.Component {
   render() {
     const { mobileOpen, incidents, selectedIncident } = this.state;
     return (
-      <div>
+      <React.Fragment>
         {/* Mobile Drawer */}
         <Hidden mdUp>
           <DrawerContainer
@@ -75,7 +67,7 @@ class SideDrawer extends React.Component {
             selectedIncident={selectedIncident}
           />
         </Hidden>
-      </div>
+      </React.Fragment>
     );
   }
 }

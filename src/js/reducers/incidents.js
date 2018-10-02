@@ -1,5 +1,5 @@
 function incidents(
-  state = { isFetching: false, list: [], selectedIncident: { id: 0 } },
+  state = { isFetching: false, list: [], selectedIncident: null },
   action
 ) {
   switch (action.type) {

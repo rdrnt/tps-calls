@@ -52,7 +52,7 @@ class DrawerContainer extends React.Component {
                   )
                 : incidents
             }
-            selectedIncident={selectedIncident}
+            selectedIncident={searchValue.length > 0 ? null : selectedIncident} // If we're searching dont show selectedIncident
           />
         </DrawerBody>
       </Drawer>
@@ -64,6 +64,7 @@ DrawerContainer.propTypes = {
   mobile: PropTypes.bool,
   closeMobileDrawer: PropTypes.func,
   incidents: PropTypes.arrayOf(PropTypes.shape),
+  selectedIncident: PropTypes.objectOf(PropTypes.shape),
 };
 
 DrawerContainer.defaultProps = {
@@ -71,6 +72,7 @@ DrawerContainer.defaultProps = {
   mobile: false,
   closeMobileDrawer: () => {},
   incidents: [],
+  selectedIncident: null,
 };
 
 export default DrawerContainer;

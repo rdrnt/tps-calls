@@ -23,67 +23,21 @@ const StyledBackToTop = styled.div`
   background-color: ${globals.colors.materialWhite};
 `;
 
-class DrawerList extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      selectedIndex: -1,
-    };
-
-    this.scrollToTop = this.scrollToTop.bind(this);
-    this.ref = null;
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { selectedIndex } = this.state;
-    const { incidents, selectedIncident } = nextProps;
-
-    const newIndex = incidents
-      .map(incident => incident.id)
-      .indexOf(selectedIncident.id);
-
-    if (newIndex !== selectedIndex) {
-      this.setState({
-        selectedIndex: newIndex,
-      });
-    }
-  }
-
-  scrollToTop() {
-    this.ref.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-      inline: 'start',
-    });
-  }
-
-  render() {
-    const { incidents } = this.props;
-    const { selectedIndex } = this.state;
-    return (
-      <StyledList innerRef={node => (this.ref = node)}>
-        {incidents.map((incident, index) => (
-          <DrawerListItem
-            {...incident}
-            key={incident.id}
-            selected={index === selectedIndex}
-          />
-        ))}
-        <StyledBackToTop>
-          <Button
-            aria-label="Back To Top"
-            variant="fab"
-            color="primary"
-            onClick={this.scrollToTop}
-          >
-            <Icon name="ArrowUpward" />
-          </Button>
-        </StyledBackToTop>
-      </StyledList>
-    );
-  }
-}
+const DrawerList = ({ incidents, selectedIncident }) => (
+  <StyledList>
+    {selectedIncident ? (
+      <DrawerListItem {...selectedIncident} selected />
+    ) : null}
+    {incidents.map(incident => (
+      <DrawerListItem {...incident} key={incident.id} />
+    ))}
+    <StyledBackToTop>
+      <Button aria-label="Back To Top" variant="fab" color="primary">
+        <Icon name="ArrowUpward" />
+      </Button>
+    </StyledBackToTop>
+  </StyledList>
+);
 
 DrawerList.propTypes = {
   incidents: PropTypes.arrayOf(PropTypes.shape),
@@ -92,7 +46,7 @@ DrawerList.propTypes = {
 
 DrawerList.defaultProps = {
   incidents: [],
-  selectedIncident: {},
+  selectedIncident: null,
 };
 
 export default DrawerList;
