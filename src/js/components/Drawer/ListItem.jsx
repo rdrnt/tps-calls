@@ -13,19 +13,19 @@ const StyledDrawerListItem = styled.li`
   list-style-type: none;
   background-color: ${props =>
     props.selected
-      ? globals.colors.materialDarkGrey
+      ? globals.materialTheme.primary.main
       : globals.colors.materialWhite};
 `;
 
 const DrawerListItem = ({ selected, street, type, date }) => (
   <StyledDrawerListItem selected={selected}>
-    <Typography variant="title" color="textSecondary">
+    <Typography variant="title" color="textPrimary">
       {type}
     </Typography>
-    <Typography variant="subheading" color="textSecondary">
+    <Typography variant="subheading" color="textPrimary">
       {street}
     </Typography>
-    <Typography variant="subheading" color="textSecondary">
+    <Typography variant="subheading" color="textPrimary">
       {dateHelper.tidyFormat(date)}
     </Typography>
   </StyledDrawerListItem>

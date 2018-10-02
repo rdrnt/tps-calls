@@ -41,6 +41,7 @@ class Map extends Component {
     if (!nextProps.incidents.isFetching && nextProps.incidents.list) {
       this.setState({
         incidents: nextProps.incidents.list,
+        selectedIncident: nextProps.incidents.selectedIncident,
       });
     }
   }
@@ -72,9 +73,10 @@ class Map extends Component {
     const { dispatch } = this.props;
     if (!selectedIncident || newSelectedincident.id !== selectedIncident.id) {
       // Set the new selcted incident in the store so we can use it in the drawer also if needed
-      dispatch(uiActions.toggleMobileDrawer(true));
       dispatch(incidentActions.setSelectedIncident(newSelectedincident));
     }
+    // Always toggle it open
+    dispatch(uiActions.toggleMobileDrawer(true));
   }
 
   updateViewport(viewport) {
@@ -82,7 +84,7 @@ class Map extends Component {
   }
 
   render() {
-    const { incidents, viewport } = this.state;
+    const { incidents, selectedIncident, viewport } = this.state;
     return (
       <ReactMapGL
         mapboxApiAccessToken={process.env.REACT_APP_MAP_APIKEY}
@@ -94,6 +96,9 @@ class Map extends Component {
           <MapMarker
             incident={incident}
             onClick={() => this.setSelectedIncident(incident)}
+            selected={
+              selectedIncident ? selectedIncident.id === incident.id : false
+            }
             key={incident.id}
           />
         ))}

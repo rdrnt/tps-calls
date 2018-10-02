@@ -18,6 +18,10 @@ When commiting, please try your best to use [this](http://karma-runner.github.io
 - Overlay
 - Ward Overlay
 
+## Features
+
+- Should take you to marker you tapped on
+
 # Libraries
 
 https://uber.github.io/react-map-gl/#/Documentation/advanced/viewport-transition
