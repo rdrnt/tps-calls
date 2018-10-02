@@ -14,10 +14,9 @@ const dateHelper = {
   // If not, create our own little hacky date
   convert: date => {
     const vanillaDate = new Date(date);
-
     // If a valid date
     if (isValid(vanillaDate)) {
-      return parse(vanillaDate);
+      return vanillaDate;
     }
 
     // if it's not a valid date

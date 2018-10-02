@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import ReactMapGL from 'react-map-gl';
+import ReactMapGL, {
+  LinearInterpolator,
+  FlyToInterpolator,
+} from 'react-map-gl';
+
+import { easeCubic } from 'd3-ease';
 
 import MapMarker from '../components/MapMarker';
 
@@ -68,13 +73,22 @@ class Map extends Component {
     }
   }
 
-  setSelectedIncident(newSelectedincident) {
+  setSelectedIncident(newSelectedIncident) {
     const { selectedIncident } = this.state;
     const { dispatch } = this.props;
-    if (!selectedIncident || newSelectedincident.id !== selectedIncident.id) {
+    if (!selectedIncident || newSelectedIncident.id !== selectedIncident.id) {
       // Set the new selcted incident in the store so we can use it in the drawer also if needed
-      dispatch(incidentActions.setSelectedIncident(newSelectedincident));
+      dispatch(incidentActions.setSelectedIncident(newSelectedIncident));
     }
+    this.updateViewport({
+      ...this.state.viewport,
+      longitude: newSelectedIncident.coordinates.lon,
+      latitude: newSelectedIncident.coordinates.lat,
+      zoom: 13,
+      transitionDuration: 500,
+      transitionInterpolator: new FlyToInterpolator(),
+      transitionEasing: easeCubic,
+    });
     // Always toggle it open
     dispatch(uiActions.toggleMobileDrawer(true));
   }

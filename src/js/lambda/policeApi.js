@@ -51,6 +51,7 @@ const fetchAllIncidents = () =>
       response.map(responseData =>
         allIncidents.push(...responseData.data.features)
       );
+      console.log('returning values');
       return allIncidents;
     });
 
@@ -63,6 +64,10 @@ exports.handler = (event, context, callback) => {
       });
     })
     .catch(error => {
-      console.log('error in lambda ', error);
+      console.log('Error in lambda ', error);
+      callback(null, {
+        statusCode: 404,
+        body: JSON.stringify({ error: 'Lambda issue' }),
+      });
     });
 };
