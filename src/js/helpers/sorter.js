@@ -1,5 +1,5 @@
-import compareAsc from 'date-fns/compare_asc';
-import compareDesc from 'date-fns/compare_desc';
+import compareAsc from 'date-fns/compareAsc';
+import compareDesc from 'date-fns/compareDesc';
 
 const sorter = {
   // pass isAsc as true if you want to sort by ascending, false for desc

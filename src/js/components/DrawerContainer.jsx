@@ -47,12 +47,14 @@ class DrawerContainer extends React.Component {
           <DrawerList
             incidents={
               searchValue.length > 0
-                ? incidents.filter(incident =>
-                    incident.type.includes(searchValue)
+                ? incidents.filter(
+                    incident =>
+                      incident.type.includes(searchValue) ||
+                      incident.street.includes(searchValue)
                   )
                 : incidents
             }
-            selectedIncident={searchValue.length > 0 ? null : selectedIncident} // If we're searching dont show selectedIncident
+            selectedIncident={selectedIncident} // If we're searching dont show selectedIncident
           />
         </DrawerBody>
       </Drawer>

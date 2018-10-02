@@ -12,6 +12,7 @@ import globals from '../../globals';
 const StyledList = styled.ul`
   height: 100%:
   width: 100%;
+  min-width: 100%;
   padding: 0;
   margin: 0;
 `;
@@ -25,9 +26,11 @@ const StyledBackToTop = styled.div`
 
 const DrawerList = ({ incidents, selectedIncident }) => (
   <StyledList>
+    {/* Highlight the selected incident */}
     {selectedIncident ? (
       <DrawerListItem {...selectedIncident} selected />
     ) : null}
+    {/* List all of the incidents */}
     {incidents.map(incident => (
       <DrawerListItem {...incident} key={incident.id} />
     ))}
