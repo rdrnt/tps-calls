@@ -94,6 +94,7 @@ class Map extends Component {
   }
 
   updateViewport(viewport) {
+    console.log('Viewport');
     this.setState({ viewport });
   }
 

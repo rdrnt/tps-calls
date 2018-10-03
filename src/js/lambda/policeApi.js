@@ -48,10 +48,11 @@ const fetchAllIncidents = () =>
     ])
     .then(response => {
       const allIncidents = [];
-      response.map(responseData =>
-        allIncidents.push(...responseData.data.features)
-      );
-      console.log('returning values');
+      response.map(responseData => {
+        if (responseData.status === 200) {
+          allIncidents.push(...responseData.data.features);
+        }
+      });
       return allIncidents;
     });
 
@@ -64,7 +65,6 @@ exports.handler = (event, context, callback) => {
       });
     })
     .catch(error => {
-      console.log('Error in lambda ', error);
       callback(null, {
         statusCode: 404,
         body: JSON.stringify({ error: 'Lambda issue' }),

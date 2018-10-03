@@ -67,11 +67,15 @@ const policeApi = {
       });
     };
 
-    fetchIncidents().then(incidents => {
-      convertIncidentsToLatLon(incidents, values => {
-        callback(values);
+    fetchIncidents()
+      .then(incidents => {
+        convertIncidentsToLatLon(incidents, values => {
+          callback(values);
+        });
+      })
+      .catch(error => {
+        callback([]);
       });
-    });
   },
 };
 
