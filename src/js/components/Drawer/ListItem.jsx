@@ -1,44 +1,38 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import IconButton from '@material-ui/core/IconButton';
 
-import globals from '../../globals';
+import Icon from '../Icon';
 
 import { dateHelper } from '../../helpers';
 
 // I know we should probably have this in the container, but I don't want to pass down props 4 levels
 import { incidentActions } from '../../actions';
 import store from '../../store';
-import incidents from '../../reducers/incidents';
-
-const StyledDrawerListItem = styled.li`
-  padding: 20px;
-  margin: ${props => (props.selected ? '20px 0px' : '0')};
-  list-style-type: none;
-  background-color: ${props =>
-    props.selected
-      ? globals.materialTheme.primary.main
-      : globals.colors.materialWhite};
-`;
 
 const DrawerListItem = ({ selected, incident }) => (
-  <StyledDrawerListItem
+  <ListItem
+    button
     selected={selected}
     onClick={() =>
       store.dispatch(incidentActions.setSelectedIncident(incident))
     }
   >
-    <Typography variant="title" color="textPrimary">
-      {incident.type}
-    </Typography>
-    <Typography variant="subheading" color="textPrimary">
-      {incident.street}
-    </Typography>
-    <Typography variant="subheading" color="textPrimary">
-      {dateHelper.tidyFormat(incident.date)}
-    </Typography>
-  </StyledDrawerListItem>
+    <ListItemText
+      primary={`${incident.type}`}
+      secondary={`${incident.street} (${dateHelper.tidyFormat(incident.date)})`}
+    />
+    {selected && (
+      <ListItemSecondaryAction>
+        <IconButton aria-label="Selected">
+          <Icon name="Place" />
+        </IconButton>
+      </ListItemSecondaryAction>
+    )}
+  </ListItem>
 );
 
 DrawerListItem.propTypes = {

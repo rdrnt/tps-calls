@@ -1,10 +1,9 @@
-import parse from 'date-fns/parse';
 import format from 'date-fns/format';
 import isValid from 'date-fns/isValid';
 
 const dateHelper = {
   // Returns Feb 1, 10:12pm
-  tidyFormat: date => format(date, 'MMM d - h:mma'),
+  tidyFormat: date => format(date, 'MMM d, h:mma'),
 
   // Pass down a date to te
   isDateValid: date => isValid(date),

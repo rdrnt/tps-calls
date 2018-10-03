@@ -5,6 +5,7 @@ import ReactMapGL, { FlyToInterpolator } from 'react-map-gl';
 import { easeCubic } from 'd3-ease';
 
 import MapMarker from '../components/MapMarker';
+import MapFloatingButton from '../components/MapFAButton';
 
 import store from '../store';
 import { incidentActions, uiActions } from '../actions';
@@ -25,12 +26,14 @@ class Map extends Component {
       incidents: [],
       // selectedIncident is for controlling the clicked on incident (we get this info from the store)
       selectedIncident: null,
+      showDrawer: false,
     };
 
     this.updateViewport = this.updateViewport.bind(this);
     this.setSelectedIncident = this.setSelectedIncident.bind(this);
     this.onWindowResize = this.onWindowResize.bind(this);
     this.animateToMarker = this.animateToMarker.bind(this);
+    this.toggleDrawer = this.toggleDrawer.bind(this);
   }
 
   componentDidMount() {
@@ -51,6 +54,7 @@ class Map extends Component {
       this.setState({
         incidents: nextProps.incidents.list,
         selectedIncident: nextProps.incidents.selectedIncident,
+        showDrawer: nextProps.UI.showDrawer,
       });
     }
   }
@@ -92,7 +96,7 @@ class Map extends Component {
     );
 
     // Always toggle it open
-    dispatch(uiActions.toggleMobileDrawer(true));
+    dispatch(uiActions.toggleDrawer(true));
   }
 
   animateToMarker(lat, lon) {
@@ -112,8 +116,14 @@ class Map extends Component {
     this.setState({ viewport });
   }
 
+  toggleDrawer(value) {
+    const { dispatch } = this.props;
+
+    dispatch(uiActions.toggleDrawer(value));
+  }
+
   render() {
-    const { incidents, selectedIncident, viewport } = this.state;
+    const { incidents, selectedIncident, viewport, showDrawer } = this.state;
     return (
       <ReactMapGL
         mapboxApiAccessToken={process.env.REACT_APP_MAP_APIKEY}
@@ -121,6 +131,7 @@ class Map extends Component {
         onViewportChange={newViewport => this.updateViewport(newViewport)}
         minZoom={8.5}
       >
+        {/* Markers on the map */}
         {incidents.map(incident => (
           <MapMarker
             incident={incident}
@@ -131,6 +142,11 @@ class Map extends Component {
             key={incident.id}
           />
         ))}
+        {/* Hide the button if the drawer is open */}
+        <MapFloatingButton
+          hidden={showDrawer}
+          onClick={() => this.toggleDrawer(true)}
+        />
       </ReactMapGL>
     );
   }

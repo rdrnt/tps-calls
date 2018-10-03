@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import Drawer from '@material-ui/core/Drawer';
 
-import { DrawerList, DrawerBody, DrawerHeader } from './Drawer';
+import { DrawerList, DrawerHeader } from './Drawer';
 
 class DrawerContainer extends React.Component {
   constructor(props) {
@@ -26,7 +26,7 @@ class DrawerContainer extends React.Component {
     const {
       open,
       mobile,
-      closeMobileDrawer,
+      closeDrawer,
       incidents,
       selectedIncident,
     } = this.props;
@@ -43,31 +43,34 @@ class DrawerContainer extends React.Component {
                   height: '60%',
                 },
               }
-            : null
+            : {
+                style: {
+                  width: '350px',
+                  height: '100%',
+                },
+              }
         }
         anchor={mobile ? 'bottom' : 'left'}
       >
         <DrawerHeader
           mobile={mobile}
-          closeMobileDrawer={closeMobileDrawer}
+          closeDrawer={closeDrawer}
           onSearchChange={this.onSearchChange}
           searchValue={searchValue}
         />
-        <DrawerBody mobile={mobile}>
-          {/* search through incidents if we have any */}
-          <DrawerList
-            incidents={
-              searchValue.length > 0
-                ? incidents.filter(
-                    incident =>
-                      incident.type.includes(searchValue) ||
-                      incident.street.includes(searchValue)
-                  )
-                : incidents
-            }
-            selectedIncident={searchValue.length > 0 ? null : selectedIncident} // If we're searching dont show selectedIncident
-          />
-        </DrawerBody>
+        {/* search through incidents if we have any */}
+        <DrawerList
+          incidents={
+            searchValue.length > 0
+              ? incidents.filter(
+                  incident =>
+                    incident.type.includes(searchValue) ||
+                    incident.street.includes(searchValue)
+                )
+              : incidents
+          }
+          selectedIncident={searchValue.length > 0 ? null : selectedIncident} // If we're searching dont show selectedIncident
+        />
       </Drawer>
     );
   }
@@ -75,7 +78,7 @@ class DrawerContainer extends React.Component {
 DrawerContainer.propTypes = {
   open: PropTypes.bool,
   mobile: PropTypes.bool,
-  closeMobileDrawer: PropTypes.func,
+  closeDrawer: PropTypes.func,
   incidents: PropTypes.arrayOf(PropTypes.shape),
   selectedIncident: PropTypes.objectOf(PropTypes.shape),
 };
@@ -83,7 +86,7 @@ DrawerContainer.propTypes = {
 DrawerContainer.defaultProps = {
   open: false,
   mobile: false,
-  closeMobileDrawer: () => {},
+  closeDrawer: () => {},
   incidents: [],
   selectedIncident: null,
 };

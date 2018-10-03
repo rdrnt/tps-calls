@@ -9,7 +9,7 @@ import { uiActions, incidentActions } from '../actions';
 
 import { sorter } from '../helpers';
 
-class SideDrawer extends React.Component {
+class Drawer extends React.Component {
   constructor(props) {
     super(props);
 
@@ -19,7 +19,7 @@ class SideDrawer extends React.Component {
       selectedIncident: null,
     };
 
-    this.closeMobileDrawer = this.closeMobileDrawer.bind(this);
+    this.closeDrawer = this.closeDrawer.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -27,19 +27,19 @@ class SideDrawer extends React.Component {
 
     const sortedDates = sorter.sortIncidentsByDate(nextProps.incidents.list);
     this.setState({
-      mobileOpen: nextProps.UI.showMobileDrawer,
+      mobileOpen: nextProps.UI.showDrawer,
       incidents: sortedDates,
       selectedIncident: nextProps.incidents.selectedIncident,
     });
   }
 
-  closeMobileDrawer() {
+  closeDrawer() {
     const { mobileOpen } = this.state;
 
     // Only close it if its open
     if (mobileOpen) {
       const { dispatch } = this.props;
-      dispatch(uiActions.toggleMobileDrawer(false));
+      dispatch(uiActions.toggleDrawer(false));
     }
   }
 
@@ -53,7 +53,7 @@ class SideDrawer extends React.Component {
           <DrawerContainer
             open={mobileOpen}
             mobile
-            closeMobileDrawer={this.closeMobileDrawer}
+            closeDrawer={this.closeDrawer}
             incidents={incidents}
             selectedIncident={selectedIncident}
           />
@@ -78,4 +78,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(SideDrawer);
+export default connect(mapStateToProps)(Drawer);

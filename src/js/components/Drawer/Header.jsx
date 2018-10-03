@@ -2,24 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
+import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
+import Paper from '@material-ui/core/Paper';
 
 import Icon from '../Icon';
 
 import globals from '../../globals';
 
-const StyledHeader = styled.div`
-  padding: 20px;
-  background-color: ${globals.colors.materialWhite};
-`;
-
-const StyledHeaderClose = styled.div`
-  display: ${props => (props.show ? 'flex' : 'none')};
-  justify-content: flex-end;
-`;
-
-const styles = {
+const styles = theme => ({
+  root: {
+    ...theme.mixins.gutters(),
+    padding: theme.spacing.unit * 2,
+  },
   button: {
     width: 25,
     height: 25,
@@ -29,19 +25,25 @@ const styles = {
     fontSize: 20,
     color: '#fffff',
   },
-};
+});
+
+const StyledHeaderClose = styled.div`
+  display: ${props => (props.show ? 'flex' : 'none')};
+  justify-content: flex-end;
+`;
 
 const DrawerHeader = ({
   mobile,
-  closeMobileDrawer,
+  closeDrawer,
   onSearchChange,
   searchValue,
+  classes,
 }) => (
-  <StyledHeader>
+  <Paper className={classes.root} elevation={0}>
     <StyledHeaderClose show={mobile}>
       <IconButton
         aria-label="close"
-        onClick={closeMobileDrawer}
+        onClick={closeDrawer}
         disableRipple
         style={styles.button}
         iconstyle={styles.icon}
@@ -58,19 +60,19 @@ const DrawerHeader = ({
       fullWidth
       value={searchValue}
     />
-  </StyledHeader>
+  </Paper>
 );
 
 DrawerHeader.propTypes = {
   mobile: PropTypes.bool.isRequired,
-  closeMobileDrawer: PropTypes.func,
+  closeDrawer: PropTypes.func,
   onSearchChange: PropTypes.func.isRequired,
   searchValue: PropTypes.string,
 };
 
 DrawerHeader.defaultProps = {
-  closeMobileDrawer: () => {},
+  closeDrawer: () => {},
   searchValue: '',
 };
 
-export default DrawerHeader;
+export default withStyles(styles)(DrawerHeader);
