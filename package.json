@@ -35,7 +35,6 @@
     "file-loader": "1.1.5",
     "fs-extra": "3.0.1",
     "html-webpack-plugin": "2.29.0",
-    "jest": "20.0.4",
     "netlify-lambda": "^0.4.0",
     "object-assign": "4.1.1",
     "postcss-flexbugs-fixes": "3.2.0",
@@ -68,6 +67,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-react": "^6.24.1",
     "eslint": "^5.6.0",
+    "jest": "^23.6.0",
     "node-sass": "^4.9.3",
     "sass-loader": "^7.1.0"
   },
@@ -78,9 +78,10 @@
     "build:lambda": "netlify-lambda build src/js/lambda",
     "netlify-deploy": " yarn build && yarn build:lambda && netlify deploy --dir build",
     "netlify-deploy:prod": "netlify deploy --prod",
-    "test": "node scripts/test.js --env=jsdom"
+    "test": "node scripts/test.js --updateSnapshot"
   },
   "jest": {
+    "verbose": true,
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,mjs}"
     ],
@@ -88,8 +89,7 @@
       "<rootDir>/config/polyfills.js"
     ],
     "testMatch": [
-      "<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs}",
-      "<rootDir>/src/**/?(*.)(spec|test).{js,jsx,mjs}"
+      "<rootDir>/src/js/tests/*.js"
     ],
     "testEnvironment": "node",
     "testURL": "http://localhost",
