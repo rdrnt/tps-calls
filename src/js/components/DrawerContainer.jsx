@@ -35,6 +35,15 @@ class DrawerContainer extends React.Component {
       <Drawer
         variant={mobile ? 'temporary' : 'permanent'}
         open={mobile ? open : true}
+        PaperProps={
+          mobile
+            ? {
+                style: {
+                  width: '100%',
+                },
+              }
+            : null
+        }
       >
         <DrawerHeader
           mobile={mobile}
@@ -54,7 +63,7 @@ class DrawerContainer extends React.Component {
                   )
                 : incidents
             }
-            selectedIncident={selectedIncident} // If we're searching dont show selectedIncident
+            selectedIncident={searchValue.length > 0 ? null : selectedIncident} // If we're searching dont show selectedIncident
           />
         </DrawerBody>
       </Drawer>

@@ -65,7 +65,6 @@ class SideDrawer extends React.Component {
             mobile={false}
             incidents={incidents}
             selectedIncident={selectedIncident}
-            setSelectedIncident={this.setSelectedIncident}
           />
         </Hidden>
       </React.Fragment>
