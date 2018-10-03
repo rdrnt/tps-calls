@@ -9,8 +9,6 @@ import Paper from '@material-ui/core/Paper';
 
 import Icon from '../Icon';
 
-import globals from '../../globals';
-
 const styles = theme => ({
   root: {
     ...theme.mixins.gutters(),
@@ -28,19 +26,18 @@ const styles = theme => ({
 });
 
 const StyledHeaderClose = styled.div`
-  display: ${props => (props.show ? 'flex' : 'none')};
+  display: 'flex';
   justify-content: flex-end;
 `;
 
 const DrawerHeader = ({
-  mobile,
   closeDrawer,
   onSearchChange,
   searchValue,
   classes,
 }) => (
   <Paper className={classes.root} elevation={0}>
-    <StyledHeaderClose show={mobile}>
+    <StyledHeaderClose>
       <IconButton
         aria-label="close"
         onClick={closeDrawer}
@@ -54,7 +51,7 @@ const DrawerHeader = ({
     <TextField
       id="search-header"
       type="search"
-      label="Search for Assualt, College St, etc..."
+      label="Search for Assault, College St, etc..."
       margin="normal"
       onChange={onSearchChange}
       fullWidth
@@ -64,7 +61,6 @@ const DrawerHeader = ({
 );
 
 DrawerHeader.propTypes = {
-  mobile: PropTypes.bool.isRequired,
   closeDrawer: PropTypes.func,
   onSearchChange: PropTypes.func.isRequired,
   searchValue: PropTypes.string,

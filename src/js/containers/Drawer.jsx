@@ -5,7 +5,7 @@ import Hidden from '@material-ui/core/Hidden';
 
 import DrawerContainer from '../components/DrawerContainer';
 
-import { uiActions, incidentActions } from '../actions';
+import { uiActions } from '../actions';
 
 import { sorter } from '../helpers';
 
@@ -14,12 +14,12 @@ class Drawer extends React.Component {
     super(props);
 
     this.state = {
-      mobileOpen: false,
+      showDrawer: false,
       incidents: [],
       selectedIncident: null,
     };
 
-    this.closeDrawer = this.closeDrawer.bind(this);
+    this.toggleDrawer = this.toggleDrawer.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -27,33 +27,29 @@ class Drawer extends React.Component {
 
     const sortedDates = sorter.sortIncidentsByDate(nextProps.incidents.list);
     this.setState({
-      mobileOpen: nextProps.UI.showDrawer,
+      showDrawer: nextProps.UI.showDrawer,
       incidents: sortedDates,
       selectedIncident: nextProps.incidents.selectedIncident,
     });
   }
 
-  closeDrawer() {
-    const { mobileOpen } = this.state;
-
-    // Only close it if its open
-    if (mobileOpen) {
-      const { dispatch } = this.props;
-      dispatch(uiActions.toggleDrawer(false));
-    }
+  toggleDrawer(value) {
+    console.log('toggled', value);
+    const { dispatch } = this.props;
+    dispatch(uiActions.toggleDrawer(value));
   }
 
   // TODO: Refactor all of this
   render() {
-    const { mobileOpen, incidents, selectedIncident } = this.state;
+    const { showDrawer, incidents, selectedIncident } = this.state;
     return (
       <React.Fragment>
         {/* Mobile Drawer */}
         <Hidden mdUp>
           <DrawerContainer
-            open={mobileOpen}
+            open={showDrawer}
             mobile
-            closeDrawer={this.closeDrawer}
+            toggleDrawer={value => this.toggleDrawer(value)}
             incidents={incidents}
             selectedIncident={selectedIncident}
           />
@@ -61,8 +57,9 @@ class Drawer extends React.Component {
         {/* Desktop Drawer */}
         <Hidden smDown implementation="css">
           <DrawerContainer
-            open
+            open={showDrawer}
             mobile={false}
+            toggleDrawer={value => this.toggleDrawer(value)}
             incidents={incidents}
             selectedIncident={selectedIncident}
           />

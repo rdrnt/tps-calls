@@ -18,7 +18,7 @@ const MapMarker = ({ incident, onClick, selected }) => (
       style={{ height: 30, width: 30 }}
       color="primary"
     >
-      {selected ? <Icon name="Place" /> : <Icon name="Dot" />}
+      {selected ? <Icon name="Dot" /> : <Icon name="Place" />}
     </IconButton>
   </Marker>
 );

@@ -26,15 +26,15 @@ class DrawerContainer extends React.Component {
     const {
       open,
       mobile,
-      closeDrawer,
+      toggleDrawer,
       incidents,
       selectedIncident,
     } = this.props;
     const { searchValue } = this.state;
     return (
       <Drawer
-        variant={mobile ? 'temporary' : 'permanent'}
-        open={mobile ? open : true}
+        variant={mobile ? 'temporary' : 'persistent'}
+        open={open}
         PaperProps={
           mobile
             ? {
@@ -54,7 +54,7 @@ class DrawerContainer extends React.Component {
       >
         <DrawerHeader
           mobile={mobile}
-          closeDrawer={closeDrawer}
+          closeDrawer={() => toggleDrawer(false)}
           onSearchChange={this.onSearchChange}
           searchValue={searchValue}
         />
@@ -78,7 +78,7 @@ class DrawerContainer extends React.Component {
 DrawerContainer.propTypes = {
   open: PropTypes.bool,
   mobile: PropTypes.bool,
-  closeDrawer: PropTypes.func,
+  toggleDrawer: PropTypes.func,
   incidents: PropTypes.arrayOf(PropTypes.shape),
   selectedIncident: PropTypes.objectOf(PropTypes.shape),
 };
@@ -86,7 +86,7 @@ DrawerContainer.propTypes = {
 DrawerContainer.defaultProps = {
   open: false,
   mobile: false,
-  closeDrawer: () => {},
+  toggleDrawer: () => {},
   incidents: [],
   selectedIncident: null,
 };

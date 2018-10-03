@@ -27,8 +27,8 @@ const DrawerListItem = ({ selected, incident }) => (
     />
     {selected && (
       <ListItemSecondaryAction>
-        <IconButton aria-label="Selected">
-          <Icon name="Place" />
+        <IconButton aria-label="Selected" disabled>
+          <Icon name="Dot" />
         </IconButton>
       </ListItemSecondaryAction>
     )}

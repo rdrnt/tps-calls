@@ -38,7 +38,6 @@ class Map extends Component {
 
   componentDidMount() {
     store.dispatch(incidentActions.fetchIncidents());
-
     window.addEventListener('resize', this.onWindowResize);
   }
 
