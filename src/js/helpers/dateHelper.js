@@ -34,15 +34,14 @@ const dateHelper = {
       minute: dateTime.split(':')[1],
     };
 
-    // Create a new date from the parsed info
-    const newDate = new Date(
+    // Return a new date from the parsed info
+    return new Date(
       dateInfo.year,
       dateInfo.month,
       dateInfo.day,
       dateInfo.hour,
       dateInfo.minute
     );
-    return parse(newDate);
   },
 };
 
