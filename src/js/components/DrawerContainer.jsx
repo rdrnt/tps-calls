@@ -40,10 +40,12 @@ class DrawerContainer extends React.Component {
             ? {
                 style: {
                   width: '100%',
+                  height: '60%',
                 },
               }
             : null
         }
+        anchor={mobile ? 'bottom' : 'left'}
       >
         <DrawerHeader
           mobile={mobile}
