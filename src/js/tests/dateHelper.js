@@ -9,8 +9,14 @@ const exampleDateFromApi = '2018.02.10 07:22:12';
 
 describe('Date Helper Convert', () => {
   const convertedDate = dateHelper.convert(exampleDateFromApi);
-  console.log('convetedDate', convertedDate);
   it(`Should return a converted date`, () => {
-    expect(convertedDate).toEqual('l');
+    expect(convertedDate).toEqual(new Date(convertedDate));
+  });
+});
+
+describe('Date Helper isValid', () => {
+  const convertedDate = dateHelper.convert(exampleDateFromApi);
+  it(`Should return a valid date`, () => {
+    expect(dateHelper.isDateValid(convertedDate)).toEqual(true);
   });
 });
