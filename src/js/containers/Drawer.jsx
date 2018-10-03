@@ -5,7 +5,7 @@ import Hidden from '@material-ui/core/Hidden';
 
 import DrawerContainer from '../components/DrawerContainer';
 
-import { uiActions } from '../actions';
+import { uiActions, incidentActions } from '../actions';
 
 import { sorter } from '../helpers';
 
@@ -65,6 +65,7 @@ class SideDrawer extends React.Component {
             mobile={false}
             incidents={incidents}
             selectedIncident={selectedIncident}
+            setSelectedIncident={this.setSelectedIncident}
           />
         </Hidden>
       </React.Fragment>

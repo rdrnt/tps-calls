@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import ReactMapGL, {
-  LinearInterpolator,
-  FlyToInterpolator,
-} from 'react-map-gl';
+import ReactMapGL, { FlyToInterpolator } from 'react-map-gl';
 
 import { easeCubic } from 'd3-ease';
 
@@ -33,6 +30,7 @@ class Map extends Component {
     this.updateViewport = this.updateViewport.bind(this);
     this.setSelectedIncident = this.setSelectedIncident.bind(this);
     this.onWindowResize = this.onWindowResize.bind(this);
+    this.animateToMarker = this.animateToMarker.bind(this);
   }
 
   componentDidMount() {
@@ -43,6 +41,12 @@ class Map extends Component {
 
   componentWillReceiveProps(nextProps) {
     // Check if we're fetching and if we have any incidents
+
+    // If we have a new selected incident, animate to it
+    if (nextProps.incidents.selectedIncident !== this.state.selectedIncident) {
+      const selectedCoords = nextProps.incidents.selectedIncident.coordinates;
+      this.animateToMarker(selectedCoords.lat, selectedCoords.lon);
+    }
     if (!nextProps.incidents.isFetching && nextProps.incidents.list) {
       this.setState({
         incidents: nextProps.incidents.list,
@@ -80,21 +84,31 @@ class Map extends Component {
       // Set the new selcted incident in the store so we can use it in the drawer also if needed
       dispatch(incidentActions.setSelectedIncident(newSelectedIncident));
     }
+
+    // Animate on the map
+    this.animateToMarker(
+      newSelectedIncident.coordinates.lat,
+      newSelectedIncident.coordinates.lon
+    );
+
+    // Always toggle it open
+    dispatch(uiActions.toggleMobileDrawer(true));
+  }
+
+  animateToMarker(lat, lon) {
     this.updateViewport({
       ...this.state.viewport,
-      longitude: newSelectedIncident.coordinates.lon,
-      latitude: newSelectedIncident.coordinates.lat,
+      longitude: lon,
+      latitude: lat,
       zoom: 13,
       transitionDuration: 500,
       transitionInterpolator: new FlyToInterpolator(),
       transitionEasing: easeCubic,
     });
-    // Always toggle it open
-    dispatch(uiActions.toggleMobileDrawer(true));
   }
 
   updateViewport(viewport) {
-    console.log('Viewport');
+    // console.log('Viewport');
     this.setState({ viewport });
   }
 
