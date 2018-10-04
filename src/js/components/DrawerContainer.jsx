@@ -50,6 +50,9 @@ class DrawerContainer extends React.Component {
                 },
               }
         }
+        ModalProps={{
+          onBackdropClick: () => toggleDrawer(false),
+        }}
         anchor={mobile ? 'bottom' : 'left'}
       >
         <DrawerHeader

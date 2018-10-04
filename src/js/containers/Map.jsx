@@ -34,6 +34,8 @@ class Map extends Component {
     this.onWindowResize = this.onWindowResize.bind(this);
     this.animateToMarker = this.animateToMarker.bind(this);
     this.toggleDrawer = this.toggleDrawer.bind(this);
+
+    this.mapRef = null;
   }
 
   componentDidMount() {
@@ -42,13 +44,13 @@ class Map extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // Check if we're fetching and if we have any incidents
-
     // If we have a new selected incident, animate to it
     if (nextProps.incidents.selectedIncident !== this.state.selectedIncident) {
       const selectedCoords = nextProps.incidents.selectedIncident.coordinates;
       this.animateToMarker(selectedCoords.lat, selectedCoords.lon);
     }
+
+    // Check if we're fetching and if we have any incidents
     if (!nextProps.incidents.isFetching && nextProps.incidents.list) {
       this.setState({
         incidents: nextProps.incidents.list,
@@ -112,7 +114,26 @@ class Map extends Component {
 
   updateViewport(viewport) {
     // console.log('Viewport');
-    this.setState({ viewport });
+    const mapGL = this.mapRef.getMap();
+    const bounds = mapGL.getBounds();
+
+    // Use props because we always want to use all the incidents
+    // And we cant do that if we edit the state
+    const chordsBeingShown = this.props.incidents.list.filter(
+      incident =>
+        incident.coordinates.lat <= bounds._ne.lat &&
+        incident.coordinates.lon <= bounds._ne.lng &&
+        (incident.coordinates.lat >= bounds._sw.lat &&
+          incident.coordinates.lon >= bounds._sw.lng)
+    );
+
+    /*
+    const coordsNotBeingShown = this.state.incidents.filter(
+      incident => !chordsBeingShown.includes(incident)
+    );
+    */
+
+    this.setState({ viewport, incidents: chordsBeingShown });
   }
 
   toggleDrawer(value) {
@@ -125,6 +146,7 @@ class Map extends Component {
     const { incidents, selectedIncident, viewport, showDrawer } = this.state;
     return (
       <ReactMapGL
+        ref={node => (this.mapRef = node)}
         mapboxApiAccessToken={process.env.REACT_APP_MAP_APIKEY}
         {...viewport}
         onViewportChange={newViewport => this.updateViewport(newViewport)}
