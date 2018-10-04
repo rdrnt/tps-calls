@@ -105,7 +105,7 @@ class Map extends Component {
       ...this.state.viewport,
       longitude: lon,
       latitude: lat,
-      zoom: 13,
+      zoom: this.state.viewport.zoom > 13 ? this.state.viewport.zoom : 13,
       transitionDuration: 500,
       transitionInterpolator: new FlyToInterpolator(),
       transitionEasing: easeCubic,
