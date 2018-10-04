@@ -13,6 +13,11 @@ const styles = theme => ({
   root: {
     ...theme.mixins.gutters(),
     padding: theme.spacing.unit * 2,
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    'z-index': 1000,
   },
   button: {
     width: 25,

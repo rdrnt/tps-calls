@@ -34,7 +34,6 @@ class Drawer extends React.Component {
   }
 
   toggleDrawer(value) {
-    console.log('toggled', value);
     const { dispatch } = this.props;
     dispatch(uiActions.toggleDrawer(value));
   }

@@ -35,21 +35,12 @@ class DrawerContainer extends React.Component {
       <Drawer
         variant={mobile ? 'temporary' : 'persistent'}
         open={open}
-        PaperProps={
-          mobile
-            ? {
-                style: {
-                  width: '100%',
-                  height: '60%',
-                },
-              }
-            : {
-                style: {
-                  width: '350px',
-                  height: '100%',
-                },
-              }
-        }
+        PaperProps={{
+          style: {
+            width: mobile ? '100%' : '350px',
+            height: mobile ? '70%' : '100%',
+          },
+        }}
         ModalProps={{
           onBackdropClick: () => toggleDrawer(false),
         }}

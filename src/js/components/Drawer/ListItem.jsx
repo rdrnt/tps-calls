@@ -13,9 +13,10 @@ import { dateHelper } from '../../helpers';
 import { incidentActions } from '../../actions';
 import store from '../../store';
 
+// This component is responsible for rendering data in the drawer
 const DrawerListItem = ({ selected, incident }) => (
   <ListItem
-    button
+    button={!selected}
     selected={selected}
     onClick={() =>
       store.dispatch(incidentActions.setSelectedIncident(incident))
