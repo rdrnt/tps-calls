@@ -13,19 +13,15 @@ const styles = theme => ({
   root: {
     ...theme.mixins.gutters(),
     padding: theme.spacing.unit * 2,
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    'z-index': 1000,
   },
   button: {
-    width: 25,
-    height: 25,
-    padding: 0,
+    width: 15,
+    height: 15,
   },
   icon: {
-    fontSize: 20,
+    width: 15,
+    height: 15,
+    fontSize: 10,
     color: '#fffff',
   },
 });
@@ -42,17 +38,6 @@ const DrawerHeader = ({
   classes,
 }) => (
   <Paper className={classes.root} elevation={0}>
-    <StyledHeaderClose>
-      <IconButton
-        aria-label="close"
-        onClick={closeDrawer}
-        disableRipple
-        style={styles.button}
-        iconstyle={styles.icon}
-      >
-        <Icon name="Close" />
-      </IconButton>
-    </StyledHeaderClose>
     <TextField
       id="search-header"
       type="search"

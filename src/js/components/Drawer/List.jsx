@@ -11,16 +11,13 @@ const DrawerList = ({ incidents, selectedIncident }) => (
       component="nav"
       style={{
         overflow: 'scroll', // Only allow scrolling on the list
-        paddingBottom: selectedIncident ? '68px' : '0px', // Set 68px so the selected incident at the bottom doesn't get hidden behind the selected incident
+        marginBottom: selectedIncident ? '68px' : '0px', // Set 68px so the selected incident at the bottom doesn't get hidden behind the selected incident
       }}
     >
       {/* List all of the incidents */}
-      {incidents.map(
-        incident =>
-          incident === selectedIncident ? null : (
-            <DrawerListItem incident={incident} key={incident.id} />
-          )
-      )}
+      {incidents.map(incident => (
+        <DrawerListItem incident={incident} key={incident.id} />
+      ))}
       {/* Highlight the selected incident */}
       {selectedIncident ? (
         <Paper

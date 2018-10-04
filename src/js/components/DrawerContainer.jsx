@@ -33,7 +33,7 @@ class DrawerContainer extends React.Component {
     const { searchValue } = this.state;
     return (
       <Drawer
-        variant={mobile ? 'temporary' : 'persistent'}
+        variant="temporary"
         open={open}
         PaperProps={{
           style: {
