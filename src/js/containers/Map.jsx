@@ -101,12 +101,13 @@ class Map extends Component {
   }
 
   animateToMarker(lat, lon) {
+    // Subtract 0.02 from the lat so it centers on mobile screens
     this.updateViewport({
       ...this.state.viewport,
       longitude: lon,
-      latitude: lat,
+      latitude: lat - 0.02,
       zoom: this.state.viewport.zoom > 13 ? this.state.viewport.zoom : 13,
-      transitionDuration: 500,
+      transitionDuration: 1000,
       transitionInterpolator: new FlyToInterpolator(),
       transitionEasing: easeCubic,
     });
@@ -165,8 +166,8 @@ class Map extends Component {
         ))}
         {/* Hide the button if the drawer is open */}
         <MapFloatingButton
-          hidden={showDrawer}
-          onClick={() => this.toggleDrawer(true)}
+          drawerOpen={showDrawer}
+          onClick={() => this.toggleDrawer(!showDrawer)}
         />
       </ReactMapGL>
     );

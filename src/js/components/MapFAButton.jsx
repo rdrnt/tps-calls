@@ -13,23 +13,22 @@ const styles = theme => ({
   },
 });
 
-const MapFloatingButton = ({ onClick, classes, hidden }) =>
-  hidden ? null : (
-    <Button
-      variant="fab"
-      color="primary"
-      aria-label="Open Menu"
-      onClick={onClick}
-      className={classes.fab}
-    >
-      <Icon name="Menu" />
-    </Button>
-  );
+const MapFloatingButton = ({ onClick, classes, drawerOpen }) => (
+  <Button
+    variant="fab"
+    color="primary"
+    aria-label="Open Menu"
+    onClick={onClick}
+    className={classes.fab}
+  >
+    {drawerOpen ? <Icon name="Close" /> : <Icon name="Menu" />}
+  </Button>
+);
 
 MapFloatingButton.propTypes = {
   onClick: PropTypes.func.isRequired,
   classes: PropTypes.objectOf(PropTypes.shape).isRequired,
-  hidden: PropTypes.bool.isRequired, // For hiding or showing the component
+  drawerOpen: PropTypes.bool.isRequired, // For hiding or showing the component
 };
 
 export default withStyles(styles)(MapFloatingButton);
