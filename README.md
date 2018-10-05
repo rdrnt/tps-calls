@@ -1,6 +1,8 @@
-# PolicePlot
+# tps-calls
 
-PolicePlot is is a revamped version of [this map](http://c4s.torontopolice.on.ca/). This project is used to track Toronto Police Services on-going calls in the Greater Toronto Area.
+tps-calls is is a revamped version of [this map](http://c4s.torontopolice.on.ca/). This project is used to track Toronto Police Services on-going calls in the Greater Toronto Area.
+
+Built with React + Redux + react-map-gl + material-ui.
 
 # Contributions
 
@@ -12,15 +14,9 @@ When commiting, please try your best to use [this](http://karma-runner.github.io
 
 ## UI
 
-- Mobile
-- Color scheme
-- Menu
-- Overlay
-- Ward Overlay
-
-## Features
-
-- Should take you to marker you tapped on
+- Mobile Layout
+- Ward Overlay (When the wards change)
+- Pulse animation on Map Marker
 
 # Libraries
 
@@ -31,3 +27,8 @@ https://material-ui.com/
 # Notes
 
 https://medium.muz.li/map-location-ui-inspiration-6eb9d6b5a99b
+
+# Schedule
+
+- October 11th
+  - Beta release
