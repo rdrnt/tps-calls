@@ -70,6 +70,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-react": "^6.24.1",
     "eslint": "^5.6.0",
+    "favicons-webpack-plugin": "^0.0.9",
     "jest": "^23.6.0",
     "node-sass": "^4.9.3",
     "regenerator-runtime": "^0.12.1",
