@@ -6711,6 +6711,19 @@ math.gl@^2.0.0:
     gl-vec3 "^1.0.3"
     gl-vec4 "^1.0.1"
 
+math.gl@^2.1.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/math.gl/-/math.gl-2.2.0.tgz#301dcda760ae235f5fdf471dd67ef2aa8c74d659"
+  integrity sha512-HIaDMt7zzeTx77k+9jrDpvpO6UTqrdMk+PkTmSLAIamnxAHTHmvnpxM7CYiJFP+SPNcD7Mp+y1wx8BlvJM+lmw==
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    gl-mat3 "^1.0.0"
+    gl-mat4 "^1.1.4"
+    gl-quat "^1.0.0"
+    gl-vec2 "^1.0.0"
+    gl-vec3 "^1.0.3"
+    gl-vec4 "^1.0.1"
+
 md5.js@^1.3.4:
   version "1.3.4"
   resolved "https://registry.yarnpkg.com/md5.js/-/md5.js-1.3.4.tgz#e9bdbde94a20a5ac18b04340fc5764d5b09d901d"
@@ -10391,6 +10404,14 @@ viewport-mercator-project@^5.1.0:
   integrity sha512-4PervetqEVuBhwch4TZf5P1gAsaAQhqOh8ZTQ4vw/Seu7rAqnYvc0P3zZv2kagD3dt+UABOFIH8p6NFh0koBUQ==
   dependencies:
     math.gl "^2.0.0"
+
+viewport-mercator-project@^5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/viewport-mercator-project/-/viewport-mercator-project-5.3.0.tgz#16b7c99813495ef951480893a5b7d82d9c49034b"
+  integrity sha512-jiLSirIXwwDp8c7/UcH5hoCprWx3OuenHaw+VB34Q56CUfO3EvXRgetnm8lVu+mFGBEzKsOSOND5XPjsA98gHw==
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    math.gl "^2.1.0"
 
 vlq@^0.2.2:
   version "0.2.3"

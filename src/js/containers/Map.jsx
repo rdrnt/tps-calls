@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactMapGL, { FlyToInterpolator } from 'react-map-gl';
+import WebMercatorViewport from 'viewport-mercator-project';
 
 import { easeCubic } from 'd3-ease';
 
@@ -102,11 +103,32 @@ class Map extends Component {
 
   animateToMarker(lat, lon) {
     // Subtract 0.02 from the lat so it centers on mobile screens
-    this.updateViewport({
+    const mapGL = this.mapRef.getMap();
+    const bounds = mapGL.getBounds();
+
+    console.log('', mapGL);
+
+    const viewport1 = new WebMercatorViewport({
       ...this.state.viewport,
+    });
+
+    console.log('', viewport1);
+
+    const bound = viewport1.fitBounds(
+      [[bounds._sw.lng, bounds._sw.lat], [bounds._ne.lng, bounds._ne.lat]],
+      {
+        padding: 0,
+        offset: [0, 0],
+      }
+    );
+
+    console.log('bound', bound);
+
+    this.updateViewport({
+      ...bound,
+      height: this.state.viewport.height,
+      latitude: lat,
       longitude: lon,
-      latitude: lat - 0.02,
-      zoom: this.state.viewport.zoom > 13 ? this.state.viewport.zoom : 13,
       transitionDuration: 1000,
       transitionInterpolator: new FlyToInterpolator(),
       transitionEasing: easeCubic,
