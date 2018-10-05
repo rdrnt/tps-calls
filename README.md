@@ -14,9 +14,13 @@ When commiting, please try your best to use [this](http://karma-runner.github.io
 
 ## UI
 
-- Mobile Layout
+- Information (what the project is, what does it do, etc)
 - Ward Overlay (When the wards change)
-- Pulse animation on Map Marker
+
+## Other
+
+- Analytics
+- Error reporting
 
 # Libraries
 
@@ -31,4 +35,4 @@ https://medium.muz.li/map-location-ui-inspiration-6eb9d6b5a99b
 # Schedule
 
 - October 11th
-  - Beta release
+  - Inital Public release
