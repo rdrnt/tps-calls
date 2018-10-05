@@ -14,7 +14,7 @@ import ArrowUpward from '@material-ui/icons/ArrowUpward';
  Just import them once into here, and pass the icon name as a prop
 */
 
-const Icon = ({ name }) => {
+const Icon = ({ name, ...other }) => {
   switch (name) {
     case 'ArrowUpward': {
       return <ArrowUpward />;
@@ -23,7 +23,7 @@ const Icon = ({ name }) => {
       return <CloseIcon />;
     }
     case 'Dot': {
-      return <Brightness1 />;
+      return <Brightness1 {...other} />;
     }
     case 'Menu': {
       return <MenuIcon />;

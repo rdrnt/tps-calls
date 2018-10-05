@@ -7,6 +7,7 @@ import { easeCubic } from 'd3-ease';
 
 import MapMarker from '../components/MapMarker';
 import MapFloatingButton from '../components/MapFAButton';
+import MapCurrentSelected from '../components/MapCurrentSelected';
 
 import store from '../store';
 import { incidentActions, uiActions } from '../actions';
@@ -33,7 +34,6 @@ class Map extends Component {
     this.updateViewport = this.updateViewport.bind(this);
     this.setSelectedIncident = this.setSelectedIncident.bind(this);
     this.onWindowResize = this.onWindowResize.bind(this);
-    this.animateToMarker = this.animateToMarker.bind(this);
     this.toggleDrawer = this.toggleDrawer.bind(this);
 
     this.mapRef = null;
@@ -48,7 +48,17 @@ class Map extends Component {
     // If we have a new selected incident, animate to it
     if (nextProps.incidents.selectedIncident !== this.state.selectedIncident) {
       const selectedCoords = nextProps.incidents.selectedIncident.coordinates;
-      this.animateToMarker(selectedCoords.lat, selectedCoords.lon);
+
+      // Animate to it on the map
+      this.updateViewport(
+        this.state.viewport,
+        true,
+        selectedCoords.lat,
+        selectedCoords.lon
+      );
+
+      // Close the drawer
+      this.toggleDrawer(false);
     }
 
     // Check if we're fetching and if we have any incidents
@@ -90,58 +100,44 @@ class Map extends Component {
       // Set the new selcted incident in the store so we can use it in the drawer also if needed
       dispatch(incidentActions.setSelectedIncident(newSelectedIncident));
     }
-
-    // Animate on the map
-    this.animateToMarker(
-      newSelectedIncident.coordinates.lat,
-      newSelectedIncident.coordinates.lon
-    );
-
-    // Always toggle it open
-    dispatch(uiActions.toggleDrawer(true));
   }
 
-  animateToMarker(lat, lon) {
-    // Subtract 0.02 from the lat so it centers on mobile screens
+  updateViewport(viewportToUpdate, animateToCentre, lat = 0, lon = 0) {
     const mapGL = this.mapRef.getMap();
     const bounds = mapGL.getBounds();
+    // This will be the viewport we use in the end
+    let newViewport = {};
 
-    console.log('', mapGL);
+    // If we want to animate to Center
+    if (animateToCentre) {
+      const { viewport } = this.state;
+      const webViewport = new WebMercatorViewport({
+        ...viewport,
+      });
 
-    const viewport1 = new WebMercatorViewport({
-      ...this.state.viewport,
-    });
+      const bound = webViewport.fitBounds(
+        [[bounds._sw.lng, bounds._sw.lat], [bounds._ne.lng, bounds._ne.lat]],
+        {
+          padding: 0,
+          offset: [0, 0],
+        }
+      );
 
-    console.log('', viewport1);
-
-    const bound = viewport1.fitBounds(
-      [[bounds._sw.lng, bounds._sw.lat], [bounds._ne.lng, bounds._ne.lat]],
-      {
-        padding: 0,
-        offset: [0, 0],
-      }
-    );
-
-    console.log('bound', bound);
-
-    this.updateViewport({
-      ...bound,
-      height: this.state.viewport.height,
-      latitude: lat,
-      longitude: lon,
-      transitionDuration: 1000,
-      transitionInterpolator: new FlyToInterpolator(),
-      transitionEasing: easeCubic,
-    });
-  }
-
-  updateViewport(viewport) {
-    // console.log('Viewport');
-    const mapGL = this.mapRef.getMap();
-    const bounds = mapGL.getBounds();
+      newViewport = {
+        ...bound,
+        latitude: lat,
+        longitude: lon,
+        transitionDuration: 1000,
+        transitionInterpolator: new FlyToInterpolator(),
+        transitionEasing: easeCubic,
+      };
+    } else {
+      newViewport = viewportToUpdate;
+    }
 
     // Use props because we always want to use all the incidents
     // And we cant do that if we edit the state
+    // But what we're doing is only rendering incidents that are on the map
     const chordsBeingShown = this.props.incidents.list.filter(
       incident =>
         incident.coordinates.lat <= bounds._ne.lat &&
@@ -150,13 +146,10 @@ class Map extends Component {
           incident.coordinates.lon >= bounds._sw.lng)
     );
 
-    /*
-    const coordsNotBeingShown = this.state.incidents.filter(
-      incident => !chordsBeingShown.includes(incident)
-    );
-    */
-
-    this.setState({ viewport, incidents: chordsBeingShown });
+    this.setState({
+      viewport: { ...newViewport },
+      incidents: chordsBeingShown,
+    });
   }
 
   toggleDrawer(value) {
@@ -186,6 +179,10 @@ class Map extends Component {
             key={incident.id}
           />
         ))}
+        <MapCurrentSelected
+          hidden={showDrawer}
+          selectedIncident={selectedIncident}
+        />
         {/* Hide the button if the drawer is open */}
         <MapFloatingButton
           drawerOpen={showDrawer}

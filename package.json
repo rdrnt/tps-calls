@@ -46,6 +46,7 @@
     "react-dev-utils": "^5.0.2",
     "react-dom": "^16.5.0",
     "react-map-gl": "^3.3.4",
+    "react-pose": "^3.3.6",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
     "redux-devtools-extension": "^2.13.5",

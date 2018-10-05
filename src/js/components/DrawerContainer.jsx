@@ -63,7 +63,6 @@ class DrawerContainer extends React.Component {
                 )
               : incidents
           }
-          selectedIncident={searchValue.length > 0 ? null : selectedIncident} // If we're searching dont show selectedIncident
         />
       </Drawer>
     );

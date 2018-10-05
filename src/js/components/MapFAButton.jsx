@@ -8,7 +8,7 @@ import Icon from './Icon';
 const styles = theme => ({
   fab: {
     position: 'absolute',
-    bottom: theme.spacing.unit * 2,
+    top: theme.spacing.unit * 2,
     right: theme.spacing.unit * 2,
   },
 });
@@ -17,7 +17,7 @@ const MapFloatingButton = ({ onClick, classes, drawerOpen }) => (
   <Button
     variant="fab"
     color="primary"
-    aria-label="Open Menu"
+    aria-label="Open Drawer"
     onClick={onClick}
     className={classes.fab}
   >

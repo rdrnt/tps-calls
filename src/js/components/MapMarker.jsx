@@ -4,6 +4,7 @@ import { Marker } from 'react-map-gl';
 import IconButton from '@material-ui/core/IconButton';
 
 import Icon from './Icon';
+import AnimatedDot from './AnimatedDot';
 
 const MapMarker = ({ incident, onClick, selected }) => (
   <Marker
@@ -12,13 +13,8 @@ const MapMarker = ({ incident, onClick, selected }) => (
     offsetLeft={0}
     offsetTop={0}
   >
-    <IconButton
-      aria-label="Incident"
-      onClick={onClick}
-      style={{ height: 30, width: 30 }}
-      color="primary"
-    >
-      {selected ? <Icon name="Dot" /> : <Icon name="Place" />}
+    <IconButton aria-label="Incident" onClick={onClick} color="primary">
+      {selected ? <AnimatedDot animating={selected} /> : <Icon name="Place" />}
     </IconButton>
   </Marker>
 );
