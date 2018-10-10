@@ -6,8 +6,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Icon from './Icon';
 import AnimatedDot from './AnimatedDot';
 
-const ICON_DEFAULT_SIZE = 48;
-
 const MapMarker = ({ incident, onClick, selected }) => (
   <Marker
     latitude={incident.coordinates.lat}
