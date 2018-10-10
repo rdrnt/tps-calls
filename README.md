@@ -19,7 +19,7 @@ When commiting, please try your best to use [this](http://karma-runner.github.io
 
 ## Core
 
-- Ability to download map of Toronto, since that's the only area of the map we use
+- Ability to download/cache map of the GTA
 
 ## Other
 
