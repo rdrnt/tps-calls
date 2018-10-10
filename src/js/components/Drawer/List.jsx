@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 
+import Typography from '@material-ui/core/Typography';
+
 import DrawerListItem from './ListItem';
 
 const DrawerList = ({ incidents }) => (
@@ -11,10 +13,24 @@ const DrawerList = ({ incidents }) => (
       overflow: 'scroll', // Only allow scrolling on the list
     }}
   >
-    {/* List all of the incidents */}
-    {incidents.map(incident => (
-      <DrawerListItem incident={incident} key={incident.id} />
-    ))}
+    {/* If we have no incidents show 'No results' */}
+    {incidents.length === 0 ? (
+      <Typography
+        style={{
+          paddingLeft: 24,
+          paddingRight: 24,
+          paddingBottom: 12,
+          paddingTop: 12,
+        }}
+        variant="subheading"
+      >
+        No results
+      </Typography>
+    ) : (
+      incidents.map(incident => (
+        <DrawerListItem incident={incident} key={incident.id} />
+      ))
+    )}
   </List>
 );
 
