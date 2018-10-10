@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import ReactMapGL, { FlyToInterpolator } from 'react-map-gl';
-import WebMercatorViewport from 'viewport-mercator-project';
-
-import { easeCubic } from 'd3-ease';
+import ReactMapGL from 'react-map-gl';
 
 import MapMarker from '../components/MapMarker';
 import MapFloatingButton from '../components/MapFAButton';
 import MapCurrentSelected from '../components/MapCurrentSelected';
+
+import { analyticsHelper, mapHelper } from '../helpers';
 
 import store from '../store';
 import { incidentActions, uiActions } from '../actions';
@@ -40,8 +39,12 @@ class Map extends Component {
   }
 
   componentDidMount() {
+    // Get the incidents
     store.dispatch(incidentActions.fetchIncidents());
+    // Create a listener if the window size changes
     window.addEventListener('resize', this.onWindowResize);
+    // Log a page view in the analytics (only in PROD)
+    analyticsHelper.pageView('Map');
   }
 
   componentWillReceiveProps(nextProps) {
@@ -49,13 +52,8 @@ class Map extends Component {
     if (nextProps.incidents.selectedIncident !== this.state.selectedIncident) {
       const selectedCoords = nextProps.incidents.selectedIncident.coordinates;
 
-      // Animate to it on the map
-      this.updateViewport(
-        this.state.viewport,
-        true,
-        selectedCoords.lat,
-        selectedCoords.lon
-      );
+      // Animate to the new selected incident on the map
+      this.updateViewport(this.state.viewport, true, selectedCoords);
 
       // Close the drawer
       this.toggleDrawer(false);
@@ -72,6 +70,7 @@ class Map extends Component {
   }
 
   componentWillUnmount() {
+    // Unmount the listener
     window.removeEventListener('resize', this.onWindowResize);
   }
 
@@ -102,48 +101,26 @@ class Map extends Component {
     }
   }
 
-  updateViewport(viewportToUpdate, animateToCentre, lat = 0, lon = 0) {
+  updateViewport(
+    oldViewport,
+    animateToCentre = false,
+    coordinates = { lat: 0, lon: 0 }
+  ) {
     const mapGL = this.mapRef.getMap();
     const bounds = mapGL.getBounds();
+
+    const { incidents } = this.props;
+
     // This will be the viewport we use in the end
-    let newViewport = {};
-
-    // If we want to animate to Center
-    if (animateToCentre) {
-      const { viewport } = this.state;
-      const webViewport = new WebMercatorViewport({
-        ...viewport,
-      });
-
-      const bound = webViewport.fitBounds(
-        [[bounds._sw.lng, bounds._sw.lat], [bounds._ne.lng, bounds._ne.lat]],
-        {
-          padding: 0,
-          offset: [0, 0],
-        }
-      );
-
-      newViewport = {
-        ...bound,
-        latitude: lat,
-        longitude: lon,
-        transitionDuration: 1000,
-        transitionInterpolator: new FlyToInterpolator(),
-        transitionEasing: easeCubic,
-      };
-    } else {
-      newViewport = viewportToUpdate;
-    }
+    const newViewport = animateToCentre
+      ? mapHelper.animateViewportToCentre(oldViewport, bounds, coordinates)
+      : oldViewport;
 
     // Use props because we always want to use all the incidents
     // And we cant do that if we edit the state
     // But what we're doing is only rendering incidents that are on the map
-    const chordsBeingShown = this.props.incidents.list.filter(
-      incident =>
-        incident.coordinates.lat <= bounds._ne.lat &&
-        incident.coordinates.lon <= bounds._ne.lng &&
-        (incident.coordinates.lat >= bounds._sw.lat &&
-          incident.coordinates.lon >= bounds._sw.lng)
+    const chordsBeingShown = incidents.list.filter(incident =>
+      mapHelper.isMarkerInBounds(bounds, incident)
     );
 
     this.setState({

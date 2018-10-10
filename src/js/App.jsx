@@ -1,11 +1,17 @@
 import React from 'react';
 import { Provider } from 'react-redux';
+
 import '../sass/main.scss';
 
 import Map from './containers/Map';
 import Drawer from './containers/Drawer';
 
 import store from './store';
+
+import { analyticsHelper } from './helpers';
+
+// Analytics setup
+analyticsHelper.initialize();
 
 const App = () => (
   <Provider store={store}>

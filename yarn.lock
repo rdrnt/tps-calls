@@ -834,6 +834,53 @@
   resolved "https://registry.yarnpkg.com/@popmotion/easing/-/easing-1.0.1.tgz#48336aea29542113df10aeb81b4fd10f0b95f937"
   integrity sha512-NbIEz9mZAem0F0sjg2v57LbU9Y2Xc50QEX434jYrwEQzXJuJipyUV48Qz4hjHqbB/8xiUj0JMQfRvP8K9nUbxg==
 
+"@sentry/browser@4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-4.1.0.tgz#f621c40ebc1c8930c76eef00a79992f7e287d00f"
+  integrity sha512-505sC3mQOem93Jqt5zZThthSonahqRqPvAVQIhndh/f6e+lHlTTpvxOjmLQmKH8yhgggDCA8A6OE2znE/T7gCQ==
+  dependencies:
+    "@sentry/core" "4.1.0"
+    "@sentry/types" "4.1.0"
+    "@sentry/utils" "4.1.0"
+
+"@sentry/core@4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-4.1.0.tgz#89cbdd4805d2763962e66735d5b540d0e8cbe352"
+  integrity sha512-K37H1FUBfvAz7d5TyeLkc5PeOTCgl+VEKNzdD9aQjRWd3eB8Wx1/mK1RY2JhS5SJAtv0MO80f2865j3ZpVbmjg==
+  dependencies:
+    "@sentry/hub" "4.1.0"
+    "@sentry/minimal" "4.1.0"
+    "@sentry/types" "4.1.0"
+    "@sentry/utils" "4.1.0"
+
+"@sentry/hub@4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@sentry/hub/-/hub-4.1.0.tgz#fc89c0139320fc8a3e124e253dc484316568a6fa"
+  integrity sha512-3XEbk8lsfdudkR1lEtJ3ilSFZNdlZXkiXMO+ZbcHgaO/6YmWdT1E1qN57F020U3Nw6zaw9uSgdKc5G4X8otXgA==
+  dependencies:
+    "@sentry/types" "4.1.0"
+    "@sentry/utils" "4.1.0"
+
+"@sentry/minimal@4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@sentry/minimal/-/minimal-4.1.0.tgz#4af78ff99022dc76d34c8ee486f524e860e4fe45"
+  integrity sha512-LVcRGHXU0qhXSMGxzuBG50i7UB1i0qA9TznLui0ojhYEEoSY/iD2PPBiSvlLoPzSVFOwmdSQqL44F7WJfjFeOA==
+  dependencies:
+    "@sentry/hub" "4.1.0"
+    "@sentry/types" "4.1.0"
+
+"@sentry/types@4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@sentry/types/-/types-4.1.0.tgz#ebffb9857abbecaad5d1c00152a50f72ac9757a5"
+  integrity sha512-KY7B9wYs1NACHlYzG4OuP6k4uQJkyDPJppftjj3NJYShfwdDTO1I2Swkhhb5dJMEMMMpBJGxXmiqZ2mX5ErISQ==
+
+"@sentry/utils@4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@sentry/utils/-/utils-4.1.0.tgz#bda3147b8f4b988680a7415ca64790f91f090acb"
+  integrity sha512-96Vp1hFaH8XPuWniIGSEhOn9hj5BEstT1CgoNEt7HxoYlCHqYrTvmrlaq9WZAJu7EWKqdqHeuzTd5pyzhATKLg==
+  dependencies:
+    "@sentry/types" "4.1.0"
+
 "@types/arcgis-js-api@^4.8.1":
   version "4.8.1"
   resolved "https://registry.yarnpkg.com/@types/arcgis-js-api/-/arcgis-js-api-4.8.1.tgz#ce267d0987063d377c7bcd31b78fce1ea15be373"
@@ -8890,6 +8937,14 @@ react-event-listener@^0.6.2:
     prop-types "^15.6.0"
     warning "^4.0.1"
 
+react-ga@^2.5.3:
+  version "2.5.3"
+  resolved "https://registry.yarnpkg.com/react-ga/-/react-ga-2.5.3.tgz#0f447c73664c069a5fc341f6f431262e3d4c23c4"
+  integrity sha512-25wvPv1PVLDLhw1gEYP33h0V2sJHahKMfUCAxhq8JPYmNQwx1fcjJAkJk+WmSqGN93lHLhExDkxy3SQizQnx3A==
+  optionalDependencies:
+    prop-types "^15.6.0"
+    react "^15.6.2 || ^16.0"
+
 react-is@^16.3.1, react-is@^16.5.1:
   version "16.5.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.5.2.tgz#e2a7b7c3f5d48062eb769fcb123505eb928722e3"
@@ -8958,7 +9013,7 @@ react-transition-group@^2.2.1:
     prop-types "^15.6.2"
     react-lifecycles-compat "^3.0.4"
 
-react@^16.4.2:
+"react@^15.6.2 || ^16.0", react@^16.4.2:
   version "16.5.2"
   resolved "https://registry.yarnpkg.com/react/-/react-16.5.2.tgz#19f6b444ed139baa45609eee6dc3d318b3895d42"
   integrity sha512-FDCSVd3DjVTmbEAjUNX6FgfAmQ+ypJfHUsqUJOYNCBUp1h8lqmtC+0mXJ+JjsWx4KAVTkk1vKd1hLQPvEviSuw==

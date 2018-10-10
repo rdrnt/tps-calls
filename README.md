@@ -23,8 +23,7 @@ When commiting, please try your best to use [this](http://karma-runner.github.io
 
 ## Other
 
-- Analytics (Google Analytics maybe?)
-- Error reporting (Probably going to use Sentry)
+- Error reporting with Sentry (semi-implemented)
 - Mapbox API key in props
 
 # Libraries
