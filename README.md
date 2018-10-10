@@ -17,10 +17,15 @@ When commiting, please try your best to use [this](http://karma-runner.github.io
 - Information (what the project is, what does it do, etc)
 - Ward Overlay (When the wards change)
 
+## Core
+
+- Ability to download map of Toronto, since that's the only area of the map we use
+
 ## Other
 
-- Analytics
-- Error reporting
+- Analytics (Google Analytics maybe?)
+- Error reporting (Probably going to use Sentry)
+- Mapbox API key in props
 
 # Libraries
 
