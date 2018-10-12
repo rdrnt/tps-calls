@@ -8,6 +8,7 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import ViewListIcon from '@material-ui/icons/ViewList';
 import PlaceIcon from '@material-ui/icons/Place';
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
+import SearchIcon from '@material-ui/icons/Search';
 
 /*
  The purpose of this component is so we don't have a million icon imports in each file
@@ -33,6 +34,9 @@ const Icon = ({ name, ...other }) => {
     }
     case 'Refresh': {
       return <RefreshIcon />;
+    }
+    case 'Search': {
+      return <SearchIcon {...other} />;
     }
     case 'ViewList': {
       return <ViewListIcon />;

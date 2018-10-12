@@ -1,6 +1,6 @@
 const DrawerLocale = {
   header: {
-    searchPlaceholder: 'Assualt, Dundas, etc...',
+    searchPlaceholder: 'Search for Assualt, Dundas, etc...',
   },
 };
 
