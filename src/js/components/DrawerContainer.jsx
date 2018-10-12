@@ -58,8 +58,12 @@ class DrawerContainer extends React.Component {
             searchValue.length > 0
               ? incidents.filter(
                   incident =>
-                    incident.type.includes(searchValue) ||
-                    incident.street.includes(searchValue)
+                    incident.type
+                      .toLowerCase()
+                      .includes(searchValue.toLowerCase()) ||
+                    incident.street
+                      .toLowerCase()
+                      .includes(searchValue.toLowerCase())
                 )
               : incidents
           }
