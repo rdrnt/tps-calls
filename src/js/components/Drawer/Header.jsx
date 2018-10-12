@@ -5,6 +5,8 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 
+import { DrawerLocale } from '../../locale';
+
 const styles = theme => ({
   root: {
     ...theme.mixins.gutters(),
@@ -18,7 +20,7 @@ const DrawerHeader = ({ onSearchChange, searchValue, classes }) => (
     <TextField
       id="search-header"
       type="search"
-      label="Search for Assault, College St, etc..."
+      label={DrawerLocale.header.searchPlaceholder}
       margin="none"
       onChange={onSearchChange}
       fullWidth
@@ -30,10 +32,10 @@ const DrawerHeader = ({ onSearchChange, searchValue, classes }) => (
 DrawerHeader.propTypes = {
   onSearchChange: PropTypes.func.isRequired,
   searchValue: PropTypes.string,
+  classes: PropTypes.objectOf(PropTypes.shape).isRequired,
 };
 
 DrawerHeader.defaultProps = {
-  closeDrawer: () => {},
   searchValue: '',
 };
 
