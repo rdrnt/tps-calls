@@ -16,10 +16,12 @@ When commiting, please try your best to use [this](http://karma-runner.github.io
 
 - Information (what the project is, what does it do, etc)
 - Ward Overlay (When the wards change)
+- Animation on first load
 
 ## Core
 
 - Ability to download/cache map of the GTA
+- Improve map performance
 
 ## Other
 
@@ -35,8 +37,3 @@ https://material-ui.com/
 # Notes
 
 https://medium.muz.li/map-location-ui-inspiration-6eb9d6b5a99b
-
-# Schedule
-
-- October 11th
-  - Inital Public release
