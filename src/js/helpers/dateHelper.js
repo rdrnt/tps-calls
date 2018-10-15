@@ -33,6 +33,9 @@ const dateHelper = {
       minute: dateTime.split(':')[1],
     };
 
+    // FIX: For some reason the date was being returned a month ahead from the API, so we have to remove a month from it
+    dateInfo.month = parseInt(dateInfo.month, 0) - 1;
+
     // Return a new date from the parsed info
     return new Date(
       dateInfo.year,
