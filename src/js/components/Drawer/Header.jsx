@@ -9,17 +9,13 @@ import Icon from '../Icon';
 
 import { DrawerLocale } from '../../locale';
 
-const styles = theme => {
-  console.log('theme', theme);
-
-  return {
-    root: {
-      ...theme.mixins.gutters(),
-      paddingTop: theme.spacing.unit * 2,
-      paddingBottom: theme.spacing.unit * 2,
-    },
-  };
-};
+const styles = theme => ({
+  root: {
+    ...theme.mixins.gutters(),
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
+  },
+});
 
 const DrawerHeader = ({ onSearchChange, searchValue, classes }) => (
   <Paper className={classes.root} elevation={0}>

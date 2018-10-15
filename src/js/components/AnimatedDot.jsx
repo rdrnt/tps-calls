@@ -4,6 +4,7 @@ import posed from 'react-pose';
 
 import Icon from './Icon';
 
+// This animation is used to create a 'pulse' animation
 const AnimationContainer = posed.div({
   pulse: {
     'box-shadow': '0px 0px 0px 0px rgba(64,84,178, 0.6)',
@@ -20,6 +21,7 @@ const AnimationContainer = posed.div({
   },
 });
 
+// This component is used to show the currently selected incident with a pretty animation
 const AnimatedDot = ({ animating }) => (
   <AnimationContainer
     style={{
