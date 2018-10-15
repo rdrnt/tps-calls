@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 
 import Drawer from '@material-ui/core/Drawer';
 
-import { DrawerList, DrawerHeader } from './Drawer';
+import { DrawerList, DrawerHeader, DrawerSortView } from './Drawer';
+
+import { sorter } from '../helpers';
 
 class DrawerContainer extends React.Component {
   constructor(props) {
@@ -11,6 +13,7 @@ class DrawerContainer extends React.Component {
 
     this.state = {
       searchValue: '',
+      sortType: sorter.types.DATE_ASC,
     };
 
     this.onSearchChange = this.onSearchChange.bind(this);
@@ -22,9 +25,15 @@ class DrawerContainer extends React.Component {
     });
   }
 
+  onSortTypeChange(newSortType) {
+    this.setState({
+      sortType: newSortType,
+    });
+  }
+
   render() {
     const { open, mobile, toggleDrawer, incidents } = this.props;
-    const { searchValue } = this.state;
+    const { searchValue, sortType } = this.state;
     return (
       <Drawer
         variant={mobile ? 'temporary' : 'persistent'}
@@ -46,6 +55,7 @@ class DrawerContainer extends React.Component {
           onSearchChange={this.onSearchChange}
           searchValue={searchValue}
         />
+        <DrawerSortView value={sortType} onChange={this.onSortTypeChange} />
         {/* search through incidents if we have any */}
         <DrawerList
           incidents={
@@ -59,7 +69,7 @@ class DrawerContainer extends React.Component {
                       .toLowerCase()
                       .includes(searchValue.toLowerCase())
                 )
-              : incidents
+              : sorter.sortForType(incidents, sortType)
           }
         />
       </Drawer>

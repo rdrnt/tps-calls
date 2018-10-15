@@ -7,8 +7,6 @@ import DrawerContainer from '../components/DrawerContainer';
 
 import { uiActions } from '../actions';
 
-import { sorter } from '../helpers';
-
 class Drawer extends React.Component {
   constructor(props) {
     super(props);
@@ -24,11 +22,9 @@ class Drawer extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     // Check if we're fetching and if we have any incidents
-
-    const sortedDates = sorter.sortIncidentsByDate(nextProps.incidents.list);
     this.setState({
       showDrawer: nextProps.UI.showDrawer,
-      incidents: sortedDates,
+      incidents: nextProps.incidents.list,
       selectedIncident: nextProps.incidents.selectedIncident,
     });
   }

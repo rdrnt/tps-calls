@@ -7,17 +7,17 @@ const IS_DEV = process.env.NODE_ENV === 'development';
 const analyticsHelper = {
   // Initialize the analytics
   initialize: () => {
-    Sentry.init({
-      dsn: process.env.REACT_APP_SENTRY_DSN,
-    });
+    if (!IS_DEV) {
+      Sentry.init({
+        dsn: process.env.REACT_APP_SENTRY_DSN,
+      });
 
-    ReactGA.initialize(process.env.REACT_APP_GANALYTICS_KEY);
+      ReactGA.initialize(process.env.REACT_APP_GANALYTICS_KEY);
+    }
   },
 
   pageView: path => {
-    if (!IS_DEV) {
-      ReactGA.pageview(path);
-    }
+    ReactGA.pageview(path);
   },
 };
 
