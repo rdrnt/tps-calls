@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
@@ -7,7 +8,7 @@ import Select from '@material-ui/core/Select';
 import { sorter } from '../../helpers';
 import { SorterLocale } from '../../locale';
 
-const styles = theme => ({
+const styles = () => ({
   root: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -31,5 +32,11 @@ const DrawerSortView = ({ classes, value, onChange }) => (
     </FormControl>
   </div>
 );
+
+DrawerSortView.propTypes = {
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  classes: PropTypes.objectOf(PropTypes.shape).isRequired,
+};
 
 export default withStyles(styles)(DrawerSortView);
