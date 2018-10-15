@@ -20,12 +20,26 @@ const sorter = {
           : compareDesc(firstDate.date, secondDate.date)
     ),
 
+  sortAlphabetic: (incidents, isAsc = false) =>
+    incidents.sort((firstIncident, secondIncident) => {
+      const firstIncidentLetter = firstIncident.type.charAt(0);
+      const secondIncidentLetter = secondIncident.type.charAt(0);
+
+      return isAsc
+        ? secondIncidentLetter.localeCompare(firstIncidentLetter)
+        : firstIncidentLetter.localeCompare(secondIncidentLetter);
+    }),
+
   sortForType: (incidents, type) => {
     switch (type) {
       case sorter.types.DATE_ASC:
         return sorter.sortIncidentsByDate(incidents, false);
       case sorter.types.DATE_DESC:
         return sorter.sortIncidentsByDate(incidents, true);
+      case sorter.types.ALPHABET_ASC:
+        return sorter.sortAlphabetic(incidents, false);
+      case sorter.types.ALPHABET_DESC:
+        return sorter.sortAlphabetic(incidents, true);
       default:
         break;
     }

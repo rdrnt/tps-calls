@@ -12,27 +12,29 @@ import { SorterLocale } from '../../locale';
 
 const styles = theme => ({
   root: {
-    ...theme.mixins.gutters(),
-    paddingBottom: theme.spacing.unit * 2,
-    paddingTop: theme.spacing.unit * 2,
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  formControl: {
+    marginLeft: theme.spacing.unit * 2,
+    marginRight: theme.spacing.unit * 2,
+    minWidth: 120,
   },
 });
 
 const DrawerSortView = ({ classes, value, onChange }) => (
-  <FormControl className={classes.root}>
-    <InputLabel htmlFor="sortType-native">Sort by</InputLabel>
-    <Select
-      native
-      value={value}
-      onChange={changeValue => onChange(changeValue)}
-    >
-      {Object.keys(sorter.types).map(sortType => (
-        <option value={sorter.types[sortType]} key={sortType}>
-          {SorterLocale.types[sortType]}
-        </option>
-      ))}
-    </Select>
-  </FormControl>
+  <div>
+    <FormControl className={classes.formControl}>
+      <InputLabel htmlFor="sortType-native">Sort by</InputLabel>
+      <Select native value={value} onChange={onChange}>
+        {Object.keys(sorter.types).map(sortType => (
+          <option value={sorter.types[sortType]} key={sortType}>
+            {SorterLocale.types[sortType]}
+          </option>
+        ))}
+      </Select>
+    </FormControl>
+  </div>
 );
 
 export default withStyles(styles)(DrawerSortView);

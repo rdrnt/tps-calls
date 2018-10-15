@@ -17,6 +17,7 @@ class DrawerContainer extends React.Component {
     };
 
     this.onSearchChange = this.onSearchChange.bind(this);
+    this.onSortTypeChange = this.onSortTypeChange.bind(this);
   }
 
   onSearchChange(event) {
@@ -25,9 +26,9 @@ class DrawerContainer extends React.Component {
     });
   }
 
-  onSortTypeChange(newSortType) {
+  onSortTypeChange(event) {
     this.setState({
-      sortType: newSortType,
+      sortType: event.target.value,
     });
   }
 
