@@ -12,6 +12,7 @@ const DrawerList = ({ incidents }) => (
     style={{
       overflow: 'scroll', // Only allow scrolling on the list
     }}
+    disablePadding
   >
     {/* If we have no incidents show 'No results' */}
     {incidents.length === 0 ? (

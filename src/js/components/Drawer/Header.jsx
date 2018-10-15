@@ -17,7 +17,7 @@ const styles = theme => ({
   },
 });
 
-const DrawerHeader = ({ onSearchChange, searchValue, classes }) => (
+const DrawerHeader = ({ onSearchChange, searchValue, classes, children }) => (
   <Paper className={classes.root} elevation={0}>
     <TextField
       id="search-header"
@@ -38,6 +38,7 @@ const DrawerHeader = ({ onSearchChange, searchValue, classes }) => (
           ) : null,
       }}
     />
+    {children}
   </Paper>
 );
 

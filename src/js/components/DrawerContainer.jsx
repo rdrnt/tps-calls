@@ -55,8 +55,9 @@ class DrawerContainer extends React.Component {
           closeDrawer={() => toggleDrawer(false)}
           onSearchChange={this.onSearchChange}
           searchValue={searchValue}
-        />
-        <DrawerSortView value={sortType} onChange={this.onSortTypeChange} />
+        >
+          <DrawerSortView value={sortType} onChange={this.onSortTypeChange} />
+        </DrawerHeader>
         {/* search through incidents if we have any */}
         <DrawerList
           incidents={
