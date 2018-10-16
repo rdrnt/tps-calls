@@ -2,49 +2,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-
-import AnimatedDot from './AnimatedDot';
-import Icon from './Icon';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
 
 import { dateHelper } from '../helpers';
 
 // TODO: Refactor
 
 const styles = theme => ({
-  root: {
+  card: {
     position: 'absolute',
     bottom: theme.spacing.unit * 4,
     right: 0,
     left: 0,
     'margin-left': 'auto',
     'margin-right': 'auto',
-    ...theme.mixins.gutters(),
-    padding: theme.spacing.unit * 2,
-    maxWidth: 325,
-    maxHeight: 200,
-  },
-  closeContainer: {
-    display: 'flex',
-    'justify-content': 'flex-end',
-    'align-items': 'center',
-  },
-  closeButton: {
-    height: 25,
-    width: 25,
-  },
-  infoContainer: {
-    display: 'flex',
-    'justify-content': 'space-between',
-    'align-items': 'center',
-    'flex-direction': 'row',
-  },
-  infoBlock: {
-    display: 'flex',
-    'justify-content': 'center',
-    'flex-direction': 'column',
+    maxWidth: 350,
   },
 });
 
@@ -55,30 +31,27 @@ const MapCurrentlySelected = ({
   setSelectedIncident,
 }) =>
   hidden || !selectedIncident ? null : (
-    <Paper elevation={2} className={classes.root}>
-      <div className={classes.closeContainer}>
-        <IconButton
-          onClick={() => setSelectedIncident(null)}
-          className={classes.closeButton}
-        >
-          <Icon name="Close" />
-        </IconButton>
-      </div>
-      <div className={classes.infoContainer}>
-        <div className={classes.infoBlock}>
-          <Typography variant="title" gutterBottom>
-            {selectedIncident.type}
+    <div className={classes.card}>
+      <Card raised>
+        <CardContent>
+          <Typography color="textSecondary" gutterBottom>
+            Currently selected
           </Typography>
-          <Typography variant="subheading" gutterBottom>
+          <Typography variant="title">{selectedIncident.type}</Typography>
+          <Typography variant="subheading">
             {selectedIncident.street}
           </Typography>
-          <Typography variant="body1" gutterBottom>
+          <Typography variant="body1">
             {dateHelper.tidyFormat(selectedIncident.date)}
           </Typography>
-        </div>
-        <AnimatedDot animating />
-      </div>
-    </Paper>
+        </CardContent>
+        <CardActions>
+          <Button size="small" onClick={() => setSelectedIncident(null)}>
+            Close
+          </Button>
+        </CardActions>
+      </Card>
+    </div>
   );
 
 MapCurrentlySelected.propTypes = {
