@@ -74,6 +74,7 @@ const policeApi = {
         });
       })
       .catch(error => {
+        console.log('The error is in policeApi', error);
         callback([]);
       });
   },

@@ -59,6 +59,14 @@ const fetchAllIncidents = () =>
 exports.handler = (event, context, callback) => {
   fetchAllIncidents()
     .then(incidents => {
+      // If we have no incidents, return a message instead of a list of items
+      if (incidents.length === 0) {
+        callback(null, {
+          statusCode: 203,
+          body: JSON.stringify({ message: 'No Content' }),
+        });
+      }
+      // If we have incidents, return 200 and the incidents in JSON
       callback(null, {
         statusCode: 200,
         body: JSON.stringify(incidents),
