@@ -21,7 +21,7 @@ const Icon = ({ name, ...other }) => {
       return <ArrowUpward />;
     }
     case 'Close': {
-      return <CloseIcon />;
+      return <CloseIcon {...other} />;
     }
     case 'Dot': {
       return <Brightness1 {...other} />;

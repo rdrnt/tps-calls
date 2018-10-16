@@ -49,14 +49,22 @@ class Map extends Component {
 
   componentWillReceiveProps(nextProps) {
     // If we have a new selected incident, animate to it
-    if (nextProps.incidents.selectedIncident !== this.state.selectedIncident) {
+    const { selectedIncident, showDrawer, viewport } = this.state;
+
+    // if the new selected incident is different & not null, animate to the new selected incident
+    if (
+      nextProps.incidents.selectedIncident !== selectedIncident &&
+      nextProps.incidents.selectedIncident !== null
+    ) {
       const selectedCoords = nextProps.incidents.selectedIncident.coordinates;
 
       // Animate to the new selected incident on the map
-      this.updateViewport(this.state.viewport, true, selectedCoords);
+      this.updateViewport(viewport, true, selectedCoords);
 
-      // Close the drawer
-      this.toggleDrawer(false);
+      // Close the drawer if it's opened
+      if (showDrawer) {
+        this.toggleDrawer(false);
+      }
     }
 
     // Check if we're fetching and if we have any incidents
@@ -95,7 +103,7 @@ class Map extends Component {
   setSelectedIncident(newSelectedIncident) {
     const { selectedIncident } = this.state;
     const { dispatch } = this.props;
-    if (!selectedIncident || newSelectedIncident.id !== selectedIncident.id) {
+    if (!selectedIncident || newSelectedIncident !== selectedIncident) {
       // Set the new selcted incident in the store so we can use it in the drawer also if needed
       dispatch(incidentActions.setSelectedIncident(newSelectedIncident));
     }
@@ -159,6 +167,7 @@ class Map extends Component {
         <MapCurrentSelected
           hidden={showDrawer}
           selectedIncident={selectedIncident}
+          setSelectedIncident={this.setSelectedIncident}
         />
         {/* Hide the button if the drawer is open */}
         <MapFloatingButton
