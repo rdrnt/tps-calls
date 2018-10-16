@@ -37,7 +37,9 @@ const MapCurrentlySelected = ({
           <Typography color="textSecondary" gutterBottom>
             Currently selected
           </Typography>
-          <Typography variant="title">{selectedIncident.type}</Typography>
+          <Typography variant="h5" component="h2">
+            {selectedIncident.type}
+          </Typography>
           <Typography variant="subheading">
             {selectedIncident.street}
           </Typography>
