@@ -23,7 +23,7 @@ const DrawerList = ({ incidents }) => (
           paddingBottom: 12,
           paddingTop: 12,
         }}
-        variant="subheading"
+        variant="h6"
       >
         No results
       </Typography>

@@ -40,10 +40,8 @@ const MapCurrentlySelected = ({
           <Typography variant="h5" component="h2">
             {selectedIncident.type}
           </Typography>
-          <Typography variant="subheading">
-            {selectedIncident.street}
-          </Typography>
-          <Typography variant="body1">
+          <Typography variant="subtitle1">{selectedIncident.street}</Typography>
+          <Typography variant="caption">
             {dateHelper.tidyFormat(selectedIncident.date)}
           </Typography>
         </CardContent>
