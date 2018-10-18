@@ -13,7 +13,9 @@ const incidentActions = {
   fetchIncidents: () => dispatch => {
     dispatch(incidentActions.requestIncidents());
     policeApi.getAllIncidents(incidents => {
-      dispatch(incidentActions.receivedIncidents(incidents));
+      if (incidents.status !== 500) {
+        dispatch(incidentActions.receivedIncidents(incidents.values));
+      }
     });
   },
 

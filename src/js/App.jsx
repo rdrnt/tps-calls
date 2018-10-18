@@ -6,6 +6,7 @@ import '../sass/main.scss';
 
 import Map from './containers/Map';
 import Drawer from './containers/Drawer';
+import ModalManager from './components/ModalManager';
 
 import store from './store';
 
@@ -25,6 +26,7 @@ const App = () => (
   <MuiThemeProvider theme={theme}>
     <Provider store={store}>
       <div className="App">
+        <ModalManager />
         <Drawer />
         <Map />
       </div>

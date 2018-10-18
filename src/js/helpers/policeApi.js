@@ -51,7 +51,7 @@ const policeApi = {
     const fetchIncidents = () =>
       axios
         .get('/.netlify/functions/policeApi', { responseType: 'json' })
-        .then(response => response.data);
+        .then(response => response);
 
     // Convert the incident to lat / lon
     const convertIncidentsToLatLon = (incidents, cb) => {
@@ -68,14 +68,23 @@ const policeApi = {
     };
 
     fetchIncidents()
-      .then(incidents => {
-        convertIncidentsToLatLon(incidents, values => {
-          callback(values);
-        });
+      .then(response => {
+        // Either 200, 203, 500, etc
+        const { status } = response;
+        // all of the incidents from the api
+        const incidents = response.data;
+
+        if (status === 200) {
+          convertIncidentsToLatLon(incidents, values => {
+            callback({ status, values });
+          });
+        } else {
+          callback({ status, values: [] });
+        }
       })
       .catch(error => {
         console.log('The error is in policeApi', error);
-        callback([]);
+        callback({ status: 500, values: [] });
       });
   },
 };
