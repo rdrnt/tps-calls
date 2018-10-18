@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { withStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import PropTypes from 'prop-types';
 
@@ -10,21 +11,39 @@ const modalReferenceTable = {
   networkError: NetworkErrorModal,
 };
 
+const styles = theme => ({
+  paper: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing.unit * 2,
+    maxWidth: 400,
+  },
+});
+
 const ModalManager = props => {
-  const { open, type } = props;
+  const { open, type, classes } = props;
 
   // Get the inner Modal from the reference table
   const InnerModalComponent = modalReferenceTable[type];
 
   // If we have a type, or have InnerModalComponent, show the modal
+
+  // TODO: Better accesibility
   if (type.length !== 0 || InnerModalComponent) {
     return (
       <Modal
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
+        aria-labelledby="Modal"
+        aria-describedby="Afocused box presenting info you cur"
+        disableAutoFocus
         open={open}
       >
-        <InnerModalComponent />
+        <div className={classes.paper}>
+          <InnerModalComponent />
+        </div>
       </Modal>
     );
   }
@@ -36,6 +55,7 @@ const ModalManager = props => {
 ModalManager.propTypes = {
   open: PropTypes.bool,
   type: PropTypes.string,
+  classes: PropTypes.objectOf(PropTypes.shape).isRequired,
 };
 
 ModalManager.defaultProps = {
@@ -49,4 +69,6 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(ModalManager);
+const ConnectedModalManager = connect(mapStateToProps)(ModalManager);
+
+export default withStyles(styles)(ConnectedModalManager);

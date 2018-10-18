@@ -2,7 +2,7 @@ const ModalLocale = {
   networkError: {
     title: 'Uh Oh!',
     description:
-      'An error occured when trying to fetch the data from the Toronto Police. Either check back later or report this to email@email.com.',
+      'An error occured when trying to fetch the data from the Toronto Police. Either come back later or you can report it to to contact@rileyyy.com.',
   },
 };
 

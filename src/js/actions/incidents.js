@@ -1,5 +1,7 @@
 import policeApi from '../helpers/policeApi';
 
+import uiActions from './ui';
+
 const incidentActions = {
   requestIncidents: () => ({
     type: 'REQUEST_INCIDENTS',
@@ -13,8 +15,10 @@ const incidentActions = {
   fetchIncidents: () => dispatch => {
     dispatch(incidentActions.requestIncidents());
     policeApi.getAllIncidents(incidents => {
-      if (incidents.status !== 500) {
+      if (incidents.status === 200) {
         dispatch(incidentActions.receivedIncidents(incidents.values));
+      } else {
+        dispatch(uiActions.toggleModal(true, 'networkError'));
       }
     });
   },

@@ -107,8 +107,6 @@ class Map extends Component {
       // Set the new selcted incident in the store so we can use it in the drawer also if needed
       dispatch(incidentActions.setSelectedIncident(newSelectedIncident));
     }
-
-    dispatch(uiActions.toggleModal(true, 'networkError'));
   }
 
   updateViewport(
