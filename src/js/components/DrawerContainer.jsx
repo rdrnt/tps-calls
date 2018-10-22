@@ -59,9 +59,6 @@ class DrawerContainer extends React.Component {
         variant="persistent"
         open={open}
         className={classes.drawer}
-        ModalProps={{
-          onBackdropClick: () => toggleDrawer(false),
-        }}
         anchor="left"
         classes={{
           paper: classes.drawerPaper,
@@ -72,6 +69,7 @@ class DrawerContainer extends React.Component {
           closeDrawer={() => toggleDrawer(false)}
           onSearchChange={this.onSearchChange}
           searchValue={searchValue}
+          toggleDrawer={toggleDrawer}
         >
           {/* Hide sorting if we're searching */}
           {searchValue.length > 0 ? null : (

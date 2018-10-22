@@ -47,7 +47,10 @@ class TopAppBar extends React.Component {
           toggleDrawer={this.toggleDrawer}
           drawerOpen={this.state.showDrawer}
         />
-        <DrawerContainer open={this.state.showDrawer} />
+        <DrawerContainer
+          open={this.state.showDrawer}
+          toggleDrawer={this.toggleDrawer}
+        />
       </>
     );
   }
