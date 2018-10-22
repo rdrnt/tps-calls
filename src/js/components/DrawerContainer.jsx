@@ -2,10 +2,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Drawer from '@material-ui/core/Drawer';
+import { withStyles } from '@material-ui/core/styles';
 
 import { DrawerList, DrawerHeader, DrawerSortView } from './Drawer';
 
 import { sorter } from '../helpers';
+
+import globals from '../globals';
+
+const styles = theme => ({
+  drawer: {
+    [theme.breakpoints.up('sm')]: {
+      width: globals.DRAWER_WIDTH,
+    },
+    width: '100%',
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    [theme.breakpoints.up('sm')]: {
+      width: globals.DRAWER_WIDTH,
+    },
+    width: '100%',
+  },
+});
 
 class DrawerContainer extends React.Component {
   constructor(props) {
@@ -33,22 +52,20 @@ class DrawerContainer extends React.Component {
   }
 
   render() {
-    const { open, mobile, toggleDrawer, incidents } = this.props;
+    const { open, mobile, toggleDrawer, incidents, classes } = this.props;
     const { searchValue, sortType } = this.state;
     return (
       <Drawer
-        variant={mobile ? 'temporary' : 'persistent'}
+        variant="persistent"
         open={open}
-        PaperProps={{
-          style: {
-            width: mobile ? '100%' : '350px',
-            height: mobile ? '70%' : '100%',
-          },
-        }}
+        className={classes.drawer}
         ModalProps={{
           onBackdropClick: () => toggleDrawer(false),
         }}
-        anchor={mobile ? 'bottom' : 'left'}
+        anchor="left"
+        classes={{
+          paper: classes.drawerPaper,
+        }}
       >
         <DrawerHeader
           mobile={mobile}
@@ -95,4 +112,4 @@ DrawerContainer.defaultProps = {
   incidents: [],
 };
 
-export default DrawerContainer;
+export default withStyles(styles)(DrawerContainer);

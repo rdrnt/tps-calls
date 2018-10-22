@@ -5,8 +5,8 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import '../sass/main.scss';
 
 import Map from './containers/Map';
-import Drawer from './containers/Drawer';
 import ModalManager from './components/ModalManager';
+import TopAppBar from './containers/TopAppBar';
 
 import store from './store';
 
@@ -26,8 +26,8 @@ const App = () => (
   <MuiThemeProvider theme={theme}>
     <Provider store={store}>
       <div className="App">
+        <TopAppBar />
         <ModalManager />
-        <Drawer />
         <Map />
       </div>
     </Provider>

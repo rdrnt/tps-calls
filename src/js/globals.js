@@ -1,4 +1,5 @@
 const globals = {
+  DRAWER_WIDTH: 350,
   colors: {
     materialWhite: '#eeeeee',
     materialDarkGrey: '#474c4e',

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import ReactMapGL from 'react-map-gl';
 
 import MapMarker from '../components/MapMarker';
-import MapFloatingButton from '../components/MapFAButton';
 import MapCurrentSelected from '../components/MapCurrentSelected';
 
 import { analyticsHelper, mapHelper } from '../helpers';
@@ -168,11 +167,6 @@ class Map extends Component {
           hidden={showDrawer}
           selectedIncident={selectedIncident}
           setSelectedIncident={this.setSelectedIncident}
-        />
-        {/* Hide the button if the drawer is open */}
-        <MapFloatingButton
-          drawerOpen={showDrawer}
-          onClick={() => this.toggleDrawer(!showDrawer)}
         />
       </ReactMapGL>
     );
