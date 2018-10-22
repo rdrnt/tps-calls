@@ -35,12 +35,14 @@ const DrawerHeader = ({
   children,
 }) => (
   <Paper elevation={0}>
+    {/* This is the close button with divider */}
     <div className={classes.headerClose}>
       <IconButton onClick={toggleDrawer}>
         <Icon name="ChevronLeft" />
       </IconButton>
     </div>
     <Divider />
+    {/* The actual contents of the header */}
     <div className={classes.root}>
       <TextField
         id="search-header"
@@ -71,6 +73,7 @@ DrawerHeader.propTypes = {
   searchValue: PropTypes.string,
   classes: PropTypes.objectOf(PropTypes.shape).isRequired,
   children: PropTypes.element,
+  toggleDrawer: PropTypes.func.isRequired,
 };
 
 DrawerHeader.defaultProps = {

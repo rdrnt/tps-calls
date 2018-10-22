@@ -52,7 +52,7 @@ class DrawerContainer extends React.Component {
   }
 
   render() {
-    const { open, mobile, toggleDrawer, incidents, classes } = this.props;
+    const { open, toggleDrawer, incidents, classes } = this.props;
     const { searchValue, sortType } = this.state;
     return (
       <Drawer
@@ -65,7 +65,6 @@ class DrawerContainer extends React.Component {
         }}
       >
         <DrawerHeader
-          mobile={mobile}
           closeDrawer={() => toggleDrawer(false)}
           onSearchChange={this.onSearchChange}
           searchValue={searchValue}
@@ -98,16 +97,15 @@ class DrawerContainer extends React.Component {
 }
 DrawerContainer.propTypes = {
   open: PropTypes.bool,
-  mobile: PropTypes.bool,
-  toggleDrawer: PropTypes.func,
+  toggleDrawer: PropTypes.func.isRequired,
   incidents: PropTypes.arrayOf(PropTypes.shape),
+  classes: PropTypes.objectOf(PropTypes.shape),
 };
 
 DrawerContainer.defaultProps = {
   open: false,
-  mobile: false,
-  toggleDrawer: () => {},
   incidents: [],
+  classes: {},
 };
 
 export default withStyles(styles)(DrawerContainer);

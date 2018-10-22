@@ -50,6 +50,7 @@ class TopAppBar extends React.Component {
         <DrawerContainer
           open={this.state.showDrawer}
           toggleDrawer={this.toggleDrawer}
+          incidents={this.state.incidents}
         />
       </>
     );
