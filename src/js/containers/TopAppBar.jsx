@@ -2,10 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { withStyles } from '@material-ui/core/styles';
-
-import Icon from '../components/Icon';
-
 import AppToolbar from '../components/AppToolbar';
 
 import DrawerContainer from '../components/DrawerContainer';
@@ -25,10 +21,10 @@ class TopAppBar extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { incidents, UI } = nextProps;
     this.setState({
-      incidents: nextProps.incidents.list,
-      selectedIncident: nextProps.incidents.selectedIncident,
-      showDrawer: nextProps.UI.showDrawer,
+      incidents: incidents.list,
+      showDrawer: UI.showDrawer,
     });
   }
 
@@ -40,17 +36,14 @@ class TopAppBar extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { incidents, showDrawer } = this.state;
     return (
       <>
-        <AppToolbar
-          toggleDrawer={this.toggleDrawer}
-          drawerOpen={this.state.showDrawer}
-        />
+        <AppToolbar toggleDrawer={this.toggleDrawer} drawerOpen={showDrawer} />
         <DrawerContainer
-          open={this.state.showDrawer}
+          open={showDrawer}
           toggleDrawer={this.toggleDrawer}
-          incidents={this.state.incidents}
+          incidents={incidents}
         />
       </>
     );
@@ -62,6 +55,18 @@ function mapStateToProps(state) {
     ...state,
   };
 }
+
+TopAppBar.propTypes = {
+  dispatch: PropTypes.func,
+  incidents: PropTypes.objectOf(PropTypes.shape),
+  UI: PropTypes.objectOf(PropTypes.shape),
+};
+
+TopAppBar.defaultProps = {
+  dispatch: () => {},
+  incidents: [],
+  UI: {},
+};
 
 const ConnectedTopAppBar = connect(mapStateToProps)(TopAppBar);
 export default ConnectedTopAppBar;

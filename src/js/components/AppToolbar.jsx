@@ -1,5 +1,5 @@
 import React from 'react';
-
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import AppBar from '@material-ui/core/AppBar';
@@ -48,14 +48,27 @@ const AppToolbar = ({ toggleDrawer, drawerOpen, classes }) => (
     })}
   >
     <Toolbar>
-      <IconButton color="inherit" aria-label="Menu" onClick={toggleDrawer}>
-        <Icon name="Menu" />
-      </IconButton>
+      {!drawerOpen && (
+        <IconButton color="inherit" aria-label="Menu" onClick={toggleDrawer}>
+          <Icon name="Menu" />
+        </IconButton>
+      )}
       <Typography variant="h6" color="inherit">
         {AppBarLocale.title}
       </Typography>
     </Toolbar>
   </AppBar>
 );
+
+AppToolbar.propTypes = {
+  toggleDrawer: PropTypes.func.isRequired,
+  drawerOpen: PropTypes.bool,
+  classes: PropTypes.objectOf(PropTypes.shape),
+};
+
+AppToolbar.defaultProps = {
+  drawerOpen: false,
+  classes: {},
+};
 
 export default withStyles(styles)(AppToolbar);
