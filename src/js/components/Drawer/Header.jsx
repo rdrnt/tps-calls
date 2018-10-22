@@ -46,10 +46,12 @@ DrawerHeader.propTypes = {
   onSearchChange: PropTypes.func.isRequired,
   searchValue: PropTypes.string,
   classes: PropTypes.objectOf(PropTypes.shape).isRequired,
+  children: PropTypes.element,
 };
 
 DrawerHeader.defaultProps = {
   searchValue: '',
+  children: null,
 };
 
 export default withStyles(styles)(DrawerHeader);

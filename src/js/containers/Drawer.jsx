@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Hidden from '@material-ui/core/Hidden';
@@ -22,10 +23,11 @@ class Drawer extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     // Check if we're fetching and if we have any incidents
+    const { UI, incidents } = nextProps;
     this.setState({
-      showDrawer: nextProps.UI.showDrawer,
-      incidents: nextProps.incidents.list,
-      selectedIncident: nextProps.incidents.selectedIncident,
+      showDrawer: UI.showDrawer,
+      incidents: incidents.list,
+      selectedIncident: incidents.selectedIncident,
     });
   }
 
@@ -63,6 +65,18 @@ class Drawer extends React.Component {
     );
   }
 }
+
+Drawer.propTypes = {
+  dispatch: PropTypes.func,
+  incidents: PropTypes.objectOf(PropTypes.shape),
+  UI: PropTypes.objectOf(PropTypes.shape),
+};
+
+Drawer.defaultProps = {
+  dispatch: () => {},
+  incidents: {},
+  UI: {},
+};
 
 function mapStateToProps(state) {
   return {

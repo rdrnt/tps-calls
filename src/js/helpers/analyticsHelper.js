@@ -5,7 +5,7 @@ import ReactGA from 'react-ga';
 const IS_DEV = process.env.NODE_ENV === 'development';
 
 const analyticsHelper = {
-  // Initialize the analytics
+  // Initialize the analytics only if we're in production
   initialize: () => {
     if (!IS_DEV) {
       Sentry.init({

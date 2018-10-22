@@ -29,14 +29,6 @@ const policeApi = {
             street: stringToCamelCase(attributes.XSTREETS),
             date: dateHelper.convert(attributes.ATSCENE_TS),
           };
-
-          /*
-          console.log(
-            'The incident',
-            incidentValues,
-            isValidIncident(incidentValues)
-          );
-          */
           if (isValidIncident(incidentValues)) {
             resolve(incidentValues);
           }
@@ -47,7 +39,6 @@ const policeApi = {
   // Get all the incidents from the API
   getAllIncidents: callback => {
     // Get the incidents from the API
-
     const fetchIncidents = () =>
       axios
         .get('/.netlify/functions/policeApi', { responseType: 'json' })
@@ -83,7 +74,6 @@ const policeApi = {
         }
       })
       .catch(error => {
-        console.log('The error is in policeApi', error);
         callback({ status: 500, values: [] });
       });
   },

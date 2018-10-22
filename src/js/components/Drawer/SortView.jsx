@@ -19,6 +19,7 @@ const styles = () => ({
   },
 });
 
+// This component is used for selecting the sorting type
 const DrawerSortView = ({ classes, value, onChange }) => (
   <div>
     <FormControl className={classes.formControl}>

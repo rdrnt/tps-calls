@@ -6,6 +6,7 @@ export default function isValidIncident(incident) {
     return false;
   }
 
+  // Check if the date is valid
   if (!dateHelper.isDateValid(incident.date)) {
     return false;
   }

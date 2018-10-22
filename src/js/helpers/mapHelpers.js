@@ -1,3 +1,5 @@
+/* eslint no-underscore-dangle: 0 */
+
 import { FlyToInterpolator } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 
