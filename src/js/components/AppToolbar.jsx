@@ -38,6 +38,9 @@ const styles = theme => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
+  grow: {
+    flexGrow: 1,
+  },
 });
 
 const AppToolbar = ({ toggleDrawer, drawerOpen, classes }) => (
@@ -53,9 +56,16 @@ const AppToolbar = ({ toggleDrawer, drawerOpen, classes }) => (
           <Icon name="Menu" />
         </IconButton>
       )}
-      <Typography variant="h6" color="inherit">
+      <Typography variant="h6" color="inherit" className={classes.grow}>
         {AppBarLocale.title}
       </Typography>
+      {/*
+      <div>
+        <IconButton color="inherit" aria-label="Menu" onClick={toggleDrawer}>
+          <Icon name="Place" />
+        </IconButton>
+      </div>
+      */}
     </Toolbar>
   </AppBar>
 );
