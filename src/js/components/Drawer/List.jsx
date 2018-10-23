@@ -14,24 +14,25 @@ const DrawerList = ({ incidents }) => (
     }}
     disablePadding
   >
-    {/* If we have no incidents show 'No results' */}
-    {incidents.length === 0 ? (
-      <Typography
-        style={{
-          paddingLeft: 24,
-          paddingRight: 24,
-          paddingBottom: 12,
-          paddingTop: 12,
-        }}
-        variant="h6"
-      >
-        No results
-      </Typography>
-    ) : (
-      incidents.map(incident => (
-        <DrawerListItem incident={incident} key={incident.id} />
-      ))
-    )}
+    {/* List of incidents */}
+    {incidents.map(incident => (
+      <DrawerListItem incident={incident} key={incident.id} />
+    ))}
+    {/* 
+      Show how many incidents there are in total
+      Also shows how many search results
+    */}
+    <Typography
+      style={{
+        paddingLeft: 24,
+        paddingRight: 24,
+        paddingBottom: 12,
+        paddingTop: 12,
+      }}
+      variant="h6"
+    >
+      {`${incidents.length} incidents`}
+    </Typography>
   </List>
 );
 
