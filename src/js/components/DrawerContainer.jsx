@@ -41,6 +41,15 @@ class DrawerContainer extends React.Component {
     this.sortOrSearchIncidents = this.sortOrSearchIncidents.bind(this);
   }
 
+  componentDidUpdate(prevProps) {
+    // If we receive new incidents in the props, as long as the length changed
+    // we need to re-sort it so the new incidents are in correct order
+    const { incidents } = this.props;
+    if (incidents.length !== prevProps.incidents.length) {
+      this.sortOrSearchIncidents();
+    }
+  }
+
   // If our search value changes
   // connected to DrawerHeader
   onSearchChange(event) {
@@ -76,7 +85,6 @@ class DrawerContainer extends React.Component {
           incident.type.toLowerCase().includes(searchValue.toLowerCase()) ||
           incident.street.toLowerCase().includes(searchValue.toLowerCase())
       );
-
       this.setState({
         filteredIncidents: incidentsWithSearchValue,
       });
@@ -115,13 +123,7 @@ class DrawerContainer extends React.Component {
           )}
         </DrawerHeader>
         {/* If we haven't filtered any incidents yet, sort through all the incidents */}
-        <DrawerList
-          incidents={
-            filteredIncidents.length > 0
-              ? filteredIncidents
-              : sorter.sortForType(incidents, sortType)
-          }
-        />
+        <DrawerList incidents={filteredIncidents} />
       </Drawer>
     );
   }
