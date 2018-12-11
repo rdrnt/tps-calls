@@ -7,9 +7,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
-import RootRef from '@material-ui/core/RootRef';
-
-import { AppToolbarInformation } from './Toolbar';
 
 import Icon from './Icon';
 
@@ -44,73 +41,47 @@ const styles = theme => ({
   grow: {
     flexGrow: 1,
   },
+  informationButton: {
+    color: 'white',
+  },
 });
 
-class AppToolbar extends React.PureComponent {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      informationPopoverOpen: false,
-    };
-
-    this.toggleInformationPopover = this.toggleInformationPopover.bind(this);
-
-    this.elementRef = React.createRef();
-  }
-
-  toggleInformationPopover() {
-    const { informationPopoverOpen } = this.state;
-    this.setState({
-      informationPopoverOpen: !informationPopoverOpen,
-    });
-  }
-
-  render() {
-    const { classes, toggleDrawer, drawerOpen } = this.props;
-    const { informationPopoverOpen } = this.state;
-    return (
-      <RootRef rootRef={this.elementRef}>
-        <AppBar
-          position="fixed"
-          className={classNames(classes.appBar, {
-            [classes.appBarShift]: drawerOpen,
-          })}
-        >
-          <Toolbar>
-            {!drawerOpen && (
-              <IconButton
-                color="inherit"
-                aria-label="Menu"
-                onClick={toggleDrawer}
-              >
-                <Icon name="Menu" />
-              </IconButton>
-            )}
-            <Typography variant="h6" color="inherit" className={classes.grow}>
-              {AppBarLocale.title}
-            </Typography>
-            <AppToolbarInformation
-              open={informationPopoverOpen}
-              parentAnchorEl={this.elementRef.current}
-              toggleOpen={this.toggleInformationPopover}
-            />
-            {/*
-      <div>
+const AppToolbar = ({ classes, toggleDrawer, drawerOpen, openModal }) => (
+  <AppBar
+    position="fixed"
+    className={classNames(classes.appBar, {
+      [classes.appBarShift]: drawerOpen,
+    })}
+  >
+    <Toolbar>
+      {!drawerOpen && (
         <IconButton color="inherit" aria-label="Menu" onClick={toggleDrawer}>
-          <Icon name="Place" />
+          <Icon name="Menu" />
         </IconButton>
-      </div>
-      */}
-          </Toolbar>
-        </AppBar>
-      </RootRef>
-    );
-  }
-}
+      )}
+      <Typography variant="h6" color="inherit" className={classes.grow}>
+        {AppBarLocale.title}
+      </Typography>
+      <IconButton
+        className={classes.informationButton}
+        onClick={() => openModal('projectInfo')}
+      >
+        <Icon name="Info" />
+      </IconButton>
+      {/*
+    <div>
+      <IconButton color="inherit" aria-label="Menu" onClick={toggleDrawer}>
+        <Icon name="Place" />
+      </IconButton>
+    </div>
+    */}
+    </Toolbar>
+  </AppBar>
+);
 
 AppToolbar.propTypes = {
   toggleDrawer: PropTypes.func.isRequired,
+  openModal: PropTypes.func.isRequired,
   drawerOpen: PropTypes.bool,
   classes: PropTypes.objectOf(PropTypes.shape),
 };

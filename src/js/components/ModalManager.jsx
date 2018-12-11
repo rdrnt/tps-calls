@@ -6,9 +6,11 @@ import Modal from '@material-ui/core/Modal';
 import PropTypes from 'prop-types';
 
 import NetworkErrorModal from './Modal/NetworkErrorModal';
+import ProjectInfoModal from './Modal/ProjectInfoModal';
 
 const modalReferenceTable = {
   networkError: NetworkErrorModal,
+  projectInfo: ProjectInfoModal,
 };
 
 const styles = theme => ({

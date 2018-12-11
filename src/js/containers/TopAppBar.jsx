@@ -18,6 +18,8 @@ class TopAppBar extends React.Component {
     };
 
     this.toggleDrawer = this.toggleDrawer.bind(this);
+
+    this.openModal = this.openModal.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -35,11 +37,21 @@ class TopAppBar extends React.Component {
     dispatch(uiActions.toggleDrawer(!showDrawer));
   }
 
+  openModal(modalName) {
+    const { dispatch } = this.props;
+
+    dispatch(uiActions.toggleModal(true, modalName));
+  }
+
   render() {
     const { incidents, showDrawer } = this.state;
     return (
       <>
-        <AppToolbar toggleDrawer={this.toggleDrawer} drawerOpen={showDrawer} />
+        <AppToolbar
+          toggleDrawer={this.toggleDrawer}
+          drawerOpen={showDrawer}
+          openModal={this.openModal}
+        />
         <DrawerContainer
           open={showDrawer}
           toggleDrawer={this.toggleDrawer}
