@@ -1,6 +1,6 @@
 {
   "name": "tps-calls",
-  "version": "0.3.0",
+  "version": "1.4.0",
   "private": true,
   "dependencies": {
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
