@@ -22,7 +22,7 @@ const styles = theme => ({
 
 const ProjectInfoModal = ({ classes }) => (
   <>
-    <Typography gutterBottom variant="h4" id="modal-title">
+    <Typography gutterBottom variant="h4" id="modal-title" color="primary">
       {ModalLocale.projectInfo.title}
     </Typography>
     {ModalLocale.projectInfo.body.map(bodyItem => (
@@ -43,6 +43,7 @@ const ProjectInfoModal = ({ classes }) => (
                 target="_blank"
                 rel="noopener noreferrer"
                 className={classes.link}
+                key={bodyItemLink.title}
               >
                 {bodyItemLink.title}
               </Typography>
@@ -51,15 +52,20 @@ const ProjectInfoModal = ({ classes }) => (
         )}
       </>
     ))}
-    <ModalActions alignment={AlignmentType.right}>
-      <Button
-        size="small"
-        onClick={() => store.dispatch(uiActions.toggleModal(false, ''))}
-      >
-        Close
-      </Button>
-    </ModalActions>
   </>
+);
+
+export const ProjectInfoModalActions = () => (
+  <ModalActions alignment={AlignmentType.center}>
+    <Button
+      size="small"
+      onClick={() => store.dispatch(uiActions.toggleModal(false, ''))}
+      color="primary"
+      style={{ backgroundColor: 'white' }}
+    >
+      Close
+    </Button>
+  </ModalActions>
 );
 
 export default withStyles(styles)(ProjectInfoModal);

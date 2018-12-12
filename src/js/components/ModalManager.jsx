@@ -5,37 +5,62 @@ import { withStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import PropTypes from 'prop-types';
 
-import NetworkErrorModal from './Modal/NetworkErrorModal';
-import ProjectInfoModal from './Modal/ProjectInfoModal';
+import NetworkErrorModal, {
+  NetworkErrorModalActions,
+} from './Modal/NetworkErrorModal';
+import ProjectInfoModal, {
+  ProjectInfoModalActions,
+} from './Modal/ProjectInfoModal';
 
 const modalReferenceTable = {
-  networkError: NetworkErrorModal,
-  projectInfo: ProjectInfoModal,
+  networkError: {
+    modal: NetworkErrorModal,
+    actions: NetworkErrorModalActions,
+  },
+  projectInfo: {
+    modal: ProjectInfoModal,
+    actions: ProjectInfoModalActions,
+  },
 };
 
 const styles = theme => ({
   paper: {
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing.unit * 2,
+    overflowY: 'auto',
+    height: '100%',
+    borderRadius: '4px',
+  },
+  modalRoot: {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing.unit * 2,
-    maxWidth: 400,
+    maxWidth: 800,
+    maxHeight: '70%',
+    width: '70%',
+    [theme.breakpoints.up('sm')]: {
+      width: '50%',
+      maxHeight: '50%',
+      minHeight: '40%',
+    },
+    overflowY: 'auto',
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
 });
 
 const ModalManager = props => {
   const { open, type, classes } = props;
 
-  // Get the inner Modal from the reference table
-  const InnerModalComponent = modalReferenceTable[type];
-
-  // If we have a type, or have InnerModalComponent, show the modal
-
   // TODO: Better accesibility
-  if (type.length !== 0 || InnerModalComponent) {
+  if (type.length !== 0) {
+    // Get the Modal from the reference table
+    const InnerModalComponent = modalReferenceTable[type].modal;
+    const InnerModalActionComponent = modalReferenceTable[type].actions;
     return (
       <Modal
         aria-labelledby="Modal"
@@ -43,8 +68,11 @@ const ModalManager = props => {
         disableAutoFocus
         open={open}
       >
-        <div className={classes.paper}>
-          <InnerModalComponent />
+        <div className={classes.modalRoot}>
+          <div className={classes.paper}>
+            <InnerModalComponent />
+          </div>
+          {InnerModalActionComponent && <InnerModalActionComponent />}
         </div>
       </Modal>
     );

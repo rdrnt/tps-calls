@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const StyledActionsContainer = styled.div`
-  width: '100%';
+  width: 100%;
   display: flex;
   justify-content: ${props => props.alignment};
   align-items: center;
+  min-height: 50px;
 `;
 
 export const AlignmentType = {

@@ -12,21 +12,33 @@ import { uiActions } from '../../actions';
 
 const NetworkErrorModal = () => (
   <>
-    <Typography gutterBottom variant="h6" id="modal-title">
+    <Typography gutterBottom variant="h4" id="modal-title" color="primary">
       {ModalLocale.networkError.title}
+      <Typography variant="subtitle1" id="modal-description">
+        {ModalLocale.networkError.description}
+      </Typography>
     </Typography>
-    <Typography variant="subtitle1" id="modal-description">
-      {ModalLocale.networkError.description}
-    </Typography>
-    <ModalActions alignment={AlignmentType.right}>
-      <Button
-        size="small"
-        onClick={() => store.dispatch(uiActions.toggleModal(false, ''))}
-      >
-        Close
-      </Button>
-    </ModalActions>
   </>
 );
 
+export const NetworkErrorModalActions = () => (
+  <ModalActions alignment={AlignmentType.center}>
+    <Button
+      size="small"
+      onClick={() => store.dispatch(uiActions.toggleModal(false, ''))}
+      color="primary"
+      style={{ backgroundColor: 'white', marginRight: 20 }}
+    >
+      Close
+    </Button>
+    <Button
+      size="small"
+      onClick={() => window.open('mailto:contact@rileyyy.com', '_blank')}
+      color="primary"
+      style={{ backgroundColor: 'white', marginLeft: 20 }}
+    >
+      Email
+    </Button>
+  </ModalActions>
+);
 export default NetworkErrorModal;
