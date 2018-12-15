@@ -1,5 +1,8 @@
 import axios from 'axios';
 
+if (!global._babelPolyfill) {
+  require('babel-polyfill');
+}
 const policeApiInfo = [
   {
     name: 'York-South Weston',
@@ -15,48 +18,42 @@ const policeApiInfo = [
   },
 ];
 
-/*
-// Simply just fetch from a URL
-const fetchIncident = url =>
-  fetch(url).then(response => response.json().then(json => json));
+const fetchAllIncidents = async () => {
+  try {
+    // Loop through each api endpoint
+    // And return the array of incidents from that endpoint
+    const allIncidents = await Promise.all(
+      policeApiInfo.map(async apiEndpoit => {
+        const incident = await axios.get(apiEndpoit.url, {
+          responseType: 'json',
+        });
+        return incident.data.features;
+      })
+    );
 
-// Go through each incident API endpoint and return all the incidents
-const fetchAllIncidents = () =>
-  // Promise to GET all
-  new Promise.all([
-    fetchIncident(policeApiInfo[0].url),
-    fetchIncident(policeApiInfo[1].url),
-  ]).then(response => {
-    // We'll store all of our incidents here
-    const allIncidents = [];
-    // Since we're hitting more than 1 endpoint, we have to use the spread operator ...
-    // To spread each array into allIncidents
-    response.map(resp => allIncidents.push(...resp.data.features));
-    return allIncidents;
-  });
+    // Flatten the array since it looks like [[], []]
+    // https://stackoverflow.com/questions/10865025/merge-flatten-an-array-of-arrays-in-javascript
+    return [].concat(...allIncidents);
+  } catch (error) {
+    throw new Error('Error fetching all incidents', error);
+  }
+};
 
-*/
-
-// Interate over fetch
-const fetchIncident = url => axios.get(url, { responseType: 'json' });
-
-const fetchAllIncidents = () =>
-  axios
-    .all([
-      fetchIncident(policeApiInfo[0].url),
-      fetchIncident(policeApiInfo[1].url),
-    ])
-    .then(response => {
-      const allIncidents = [];
-      response.map(responseData => {
-        if (responseData.status === 200) {
-          allIncidents.push(...responseData.data.features);
-        }
-      });
-      return allIncidents;
-    });
-
-exports.handler = (event, context, callback) => {
+exports.handler = async (event, context) => {
+  try {
+    const incidents = await fetchAllIncidents();
+    return {
+      statusCode: 200,
+      body: JSON.stringify(incidents),
+    };
+  } catch (error) {
+    console.log('Error', error);
+    return {
+      statusCode: 404,
+      body: JSON.stringify({ error: 'Lambda issue' }),
+    };
+  }
+  /*
   fetchAllIncidents()
     .then(incidents => {
       // If we have no incidents, return a message instead of a list of items
@@ -78,4 +75,5 @@ exports.handler = (event, context, callback) => {
         body: JSON.stringify({ error: 'Lambda issue' }),
       });
     });
+    */
 };

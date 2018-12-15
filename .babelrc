@@ -3,7 +3,8 @@
     "@babel/plugin-proposal-object-rest-spread",
     "syntax-dynamic-import",
     "transform-class-properties",
-    "styled-components"
+    "styled-components",
+    "transform-async-to-generator"
   ],
   "presets": [
     ["@babel/preset-env", {
