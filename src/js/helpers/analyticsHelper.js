@@ -1,15 +1,15 @@
 import * as Sentry from '@sentry/browser';
 import ReactGA from 'react-ga';
 
-// We use IS_DEV so we don't log analytics in development
-const IS_DEV = process.env.NODE_ENV === 'development';
+import environmentHelper from './environment';
 
 const analyticsHelper = {
   // Initialize the analytics only if we're in production
   initialize: () => {
-    if (!IS_DEV) {
+    if (!environmentHelper.isDevelopment()) {
       Sentry.init({
         dsn: process.env.REACT_APP_SENTRY_DSN,
+        release: environmentHelper.getCurrentVersion().toString(),
       });
 
       ReactGA.initialize(process.env.REACT_APP_GANALYTICS_KEY);

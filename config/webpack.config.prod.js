@@ -11,8 +11,11 @@ const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
+const SentryCliPlugin = require('@sentry/webpack-plugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
+
+const packageJson = require('../package.json');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -55,7 +58,8 @@ module.exports = {
   bail: true,
   // We generate sourcemaps in production. This is slow but gives good results.
   // You can exclude the *.map files from the build during deployment.
-  devtool: shouldUseSourceMap ? 'source-map' : false,
+  // devtool: shouldUseSourceMap ? 'source-map' : false,
+  devtool: 'source=map-hidden',
   // In production, we only want to load the polyfills and the app code.
   entry: [require.resolve('./polyfills'), paths.appIndexJs],
   output: {
@@ -371,6 +375,12 @@ module.exports = {
     // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
     // You can remove this if you don't use Moment.js:
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new SentryCliPlugin({
+      include: '/static/js',
+      ignore: ['node_modules'],
+      configFile: '.sentryclirc',
+      release: packageJson.version.toString(),
+    }),
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.

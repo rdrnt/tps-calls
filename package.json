@@ -67,6 +67,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
+    "@sentry/webpack-plugin": "^1.6.2",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^23.6.0",
     "babel-plugin-styled-components": "^1.7.1",
