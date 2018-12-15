@@ -14,8 +14,6 @@ When commiting, please try your best to use [this](http://karma-runner.github.io
 
 ## UI
 
-- Information (what the project is, what does it do, etc)
-- Add Creator information (i.e link to Github page, Email, etc)
 - Ward Overlay (When the wards change)
 - Animation on first load
 - Color code incidents
@@ -30,7 +28,6 @@ When commiting, please try your best to use [this](http://karma-runner.github.io
 
 ## Other
 
-- Error reporting with Sentry (semi-implemented)
 - Mapbox API key in props
 
 # Libraries
