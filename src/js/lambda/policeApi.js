@@ -1,7 +1,7 @@
 import axios from 'axios';
-import Sentry from '@sentry/node';
+// import Sentry from '@sentry/node';
 
-import { environmentHelper } from '../helpers';
+// import { environmentHelper } from '../helpers';
 
 // Load polyfills for async/await
 if (!global._babelPolyfill) {
@@ -9,13 +9,19 @@ if (!global._babelPolyfill) {
 }
 
 // Initialize Sentry
-
+/*
 if (process.env.NODE_ENV !== 'development') {
+  console.log('Sentry', Sentry);
+  console.log(
+    process.env.REACT_APP_SENTRY_DSN,
+    `Functions - ${environmentHelper.getCurrentVersion()}`
+  );
   Sentry.init({
     dsn: process.env.REACT_APP_SENTRY_DSN,
     release: `Functions - ${environmentHelper.getCurrentVersion()}`,
   });
 }
+*/
 
 const policeApiInfo = [
   {
@@ -62,7 +68,7 @@ exports.handler = async (event, context) => {
     };
   } catch (error) {
     console.log('Error', error);
-    Sentry.captureException(error);
+    // Sentry.captureException(error);
     return {
       statusCode: 404,
       body: JSON.stringify({ error: 'Lambda issue' }),
