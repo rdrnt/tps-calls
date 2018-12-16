@@ -85,9 +85,9 @@
   },
   "scripts": {
     "start": "NODE_ENV=development && node scripts/start.js",
-    "start:lambda": "NODE_ENV=development netlify-lambda -c ./config/webpackFunctions.config.dev.js serve src/js/lambda",
+    "start:lambda": "NODE_ENV=development netlify-lambda -c ./config/webpackFunctions.config.js serve src/js/lambda",
     "build": "node scripts/build.js",
-    "build:lambda": "netlify-lambda build src/js/lambda",
+    "build:lambda": "NODE_ENV=production netlify-lambda -c ./config/webpackFunctions.config.js build src/js/lambda",
     "netlify-deploy": "yarn version && yarn build && yarn build:lambda && netlify deploy --dir build",
     "netlify-deploy:prod": "netlify deploy --prod",
     "test": "node scripts/test.js --updateSnapshot"
