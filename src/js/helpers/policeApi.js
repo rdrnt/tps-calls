@@ -45,18 +45,19 @@ const policeApi = {
         .then(response => response);
 
     // Convert the incident to lat / lon
-    const convertIncidentsToLatLon = (incidents, cb) => {
-      Promise.all(
-        incidents.map(incident =>
-          policeApi
-            .convertXYToLatLon(incident)
-            .then(convertedIncident => convertedIncident)
-        )
-      ).then(results => {
-        // results is an array of names
-        cb(results);
+    const convertIncidentsToLatLon = (incidents, cb) =>
+      new Promise((resolve, reject) => {
+        Promise.all(
+          incidents.map(incident =>
+            policeApi
+              .convertXYToLatLon(incident)
+              .then(convertedIncident => convertedIncident)
+          )
+        ).then(results => {
+          // results is an array of names
+          resolve(results);
+        });
       });
-    };
 
     fetchIncidents()
       .then(response => {
@@ -66,8 +67,8 @@ const policeApi = {
         const incidents = response.data;
 
         if (status === 200) {
-          convertIncidentsToLatLon(incidents, values => {
-            callback({ status, values });
+          convertIncidentsToLatLon(incidents).then(convertedIncidents => {
+            callback({ status, values: convertedIncidents });
           });
         } else {
           callback({ status, values: [] });

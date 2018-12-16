@@ -1,8 +1,22 @@
 import axios from 'axios';
+import Sentry from '@sentry/node';
 
+import { environmentHelper } from '../helpers';
+
+// Load polyfills for async/await
 if (!global._babelPolyfill) {
   require('babel-polyfill');
 }
+
+// Initialize Sentry
+
+if (process.env.NODE_ENV !== 'development') {
+  Sentry.init({
+    dsn: process.env.REACT_APP_SENTRY_DSN,
+    release: `Functions - ${environmentHelper.getCurrentVersion()}`,
+  });
+}
+
 const policeApiInfo = [
   {
     name: 'York-South Weston',
@@ -48,32 +62,10 @@ exports.handler = async (event, context) => {
     };
   } catch (error) {
     console.log('Error', error);
+    Sentry.captureException(error);
     return {
       statusCode: 404,
       body: JSON.stringify({ error: 'Lambda issue' }),
     };
   }
-  /*
-  fetchAllIncidents()
-    .then(incidents => {
-      // If we have no incidents, return a message instead of a list of items
-      if (incidents.length === 0) {
-        callback(null, {
-          statusCode: 203,
-          body: JSON.stringify({ message: 'No Content' }),
-        });
-      }
-      // If we have incidents, return 200 and the incidents in JSON
-      callback(null, {
-        statusCode: 200,
-        body: JSON.stringify(incidents),
-      });
-    })
-    .catch(error => {
-      callback(null, {
-        statusCode: 404,
-        body: JSON.stringify({ error: 'Lambda issue' }),
-      });
-    });
-    */
 };

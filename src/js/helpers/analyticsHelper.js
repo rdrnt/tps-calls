@@ -19,6 +19,16 @@ const analyticsHelper = {
   pageView: path => {
     ReactGA.pageview(path);
   },
+
+  // An event for Google Analytics
+  gaEvent: ({ event, action, label, nonInteraction }) => {
+    ReactGA.event({
+      event,
+      action,
+      label,
+      nonInteraction,
+    });
+  },
 };
 
 export default analyticsHelper;
