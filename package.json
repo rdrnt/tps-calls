@@ -88,7 +88,7 @@
     "start:lambda": "NODE_ENV=development netlify-lambda -c ./config/webpackFunctions.config.js serve src/js/lambda",
     "build": "node scripts/build.js",
     "build:lambda": "NODE_ENV=production netlify-lambda -c ./config/webpackFunctions.config.js build src/js/lambda",
-    "netlify-deploy": "yarn version && yarn build && yarn build:lambda && netlify deploy --dir build",
+    "netlify-deploy": "yarn build && yarn build:lambda && yarn version && netlify deploy --dir build",
     "netlify-deploy:prod": "netlify deploy --prod",
     "test": "node scripts/test.js --updateSnapshot"
   },

@@ -11,6 +11,8 @@ import { ModalLocale } from '../../locale';
 import store from '../../store';
 import { uiActions } from '../../actions';
 
+import { environmentHelper } from '../../helpers';
+
 const styles = theme => ({
   link: {
     'text-decoration': 'none',
@@ -23,7 +25,9 @@ const styles = theme => ({
 const ProjectInfoModal = ({ classes }) => (
   <>
     <Typography gutterBottom variant="h4" id="modal-title" color="primary">
-      {ModalLocale.projectInfo.title}
+      {`${
+        ModalLocale.projectInfo.title
+      } (v${environmentHelper.getCurrentVersion()})`}
     </Typography>
     {ModalLocale.projectInfo.body.map(bodyItem => (
       <>
