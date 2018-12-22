@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactMapGL from 'react-map-gl';
+import { withRouter } from 'react-router-dom';
 
 import MapMarker from '../components/MapMarker';
 import MapCurrentSelected from '../components/MapCurrentSelected';
@@ -49,7 +50,30 @@ class Map extends Component {
 
   componentWillReceiveProps(nextProps) {
     // If we have a new selected incident, animate to it
-    const { selectedIncident, showDrawer, viewport } = this.state;
+    const { selectedIncident, showDrawer, viewport, incidents } = this.state;
+    const { match } = this.props;
+
+    // Check if we have any incidents loaded yet
+    if (incidents.length === 0 && nextProps.incidents.list.length > 0) {
+      // If we have a parameter in the URL
+      if (match.params.incidentId) {
+        const matchingIncident = nextProps.incidents.list.find(
+          incident => incident.id === Number(match.params.incidentId)
+        );
+        // If we found an incident matcing that ID
+        if (matchingIncident) {
+          // Set the selected incident
+          this.setSelectedIncident(matchingIncident);
+          // Add a zoom in
+          this.setState({
+            viewport: {
+              ...this.state.viewport,
+              zoom: 12,
+            },
+          });
+        }
+      }
+    }
 
     // if the new selected incident is different & not null, animate to the new selected incident
     if (
@@ -186,4 +210,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Map);
+export default withRouter(connect(mapStateToProps)(Map));

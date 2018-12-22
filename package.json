@@ -54,6 +54,8 @@
     "react-map-gl": "^3.3.4",
     "react-pose": "^3.3.6",
     "react-redux": "^5.0.7",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
     "redux": "^4.0.0",
     "redux-devtools-extension": "^2.13.5",
     "redux-thunk": "^2.3.0",

@@ -1,13 +1,13 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
 
 import '../sass/main.scss';
 
 import Map from './containers/Map';
-import ModalManager from './components/ModalManager';
-import SnackbarManager from './components/SnackbarManager';
-import TopAppBar from './containers/TopAppBar';
+
+import Template from './Template';
 
 import store from './store';
 
@@ -24,16 +24,19 @@ const theme = createMuiTheme({
 });
 
 const App = () => (
-  <MuiThemeProvider theme={theme}>
-    <Provider store={store}>
-      <div className="App">
-        <TopAppBar />
-        <ModalManager />
-        <SnackbarManager />
-        <Map />
-      </div>
-    </Provider>
-  </MuiThemeProvider>
+  <Router>
+    <MuiThemeProvider theme={theme}>
+      <Provider store={store}>
+        <div className="App">
+          <Template>
+            <Switch>
+              <Route path={['/:incidentId', '/']} component={Map} />
+            </Switch>
+          </Template>
+        </div>
+      </Provider>
+    </MuiThemeProvider>
+  </Router>
 );
 
 export default App;
