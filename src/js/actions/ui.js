@@ -9,6 +9,12 @@ const uiActions = {
     open: value,
     modalType: type,
   }),
+
+  openSnackbar: ({ message = '', open = true }) => ({
+    type: 'OPEN_SNACKBAR',
+    open,
+    message,
+  }),
 };
 
 export default uiActions;

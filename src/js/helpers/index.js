@@ -5,3 +5,4 @@ export { default as stringToCamelCase } from './stringToCamelCase';
 export { default as analyticsHelper } from './analyticsHelper';
 export { default as mapHelper } from './mapHelpers';
 export { default as environmentHelper } from './environment';
+export { default as createShareUrl } from './createShareUrl';

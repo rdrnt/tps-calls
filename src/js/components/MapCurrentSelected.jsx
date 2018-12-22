@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -8,7 +9,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 
-import { dateHelper } from '../helpers';
+import { dateHelper, createShareUrl } from '../helpers';
 
 // TODO: Refactor
 
@@ -29,6 +30,7 @@ const MapCurrentlySelected = ({
   selectedIncident,
   classes,
   setSelectedIncident,
+  openSnackbar,
 }) =>
   hidden || !selectedIncident ? null : (
     <div className={classes.card}>
@@ -49,6 +51,14 @@ const MapCurrentlySelected = ({
           <Button size="small" onClick={() => setSelectedIncident(null)}>
             Close
           </Button>
+          <CopyToClipboard text={createShareUrl(selectedIncident.id)}>
+            <Button
+              size="small"
+              onClick={() => openSnackbar({ message: 'Copied to clipboard' })}
+            >
+              Share
+            </Button>
+          </CopyToClipboard>
         </CardActions>
       </Card>
     </div>
@@ -59,6 +69,7 @@ MapCurrentlySelected.propTypes = {
   selectedIncident: PropTypes.objectOf(PropTypes.shape),
   classes: PropTypes.objectOf(PropTypes.shape).isRequired,
   setSelectedIncident: PropTypes.func.isRequired,
+  openSnackbar: PropTypes.func.isRequired,
 };
 
 MapCurrentlySelected.defaultProps = {

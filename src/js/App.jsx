@@ -6,6 +6,7 @@ import '../sass/main.scss';
 
 import Map from './containers/Map';
 import ModalManager from './components/ModalManager';
+import SnackbarManager from './components/SnackbarManager';
 import TopAppBar from './containers/TopAppBar';
 
 import store from './store';
@@ -28,6 +29,7 @@ const App = () => (
       <div className="App">
         <TopAppBar />
         <ModalManager />
+        <SnackbarManager />
         <Map />
       </div>
     </Provider>

@@ -11,8 +11,8 @@ import store from '../store';
 import { incidentActions, uiActions } from '../actions';
 
 class Map extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       // Viewport is used for updating the map
       viewport: {
@@ -31,6 +31,7 @@ class Map extends Component {
 
     this.updateViewport = this.updateViewport.bind(this);
     this.setSelectedIncident = this.setSelectedIncident.bind(this);
+    this.openSnackbar = this.openSnackbar.bind(this);
     this.onWindowResize = this.onWindowResize.bind(this);
     this.toggleDrawer = this.toggleDrawer.bind(this);
 
@@ -142,6 +143,11 @@ class Map extends Component {
     dispatch(uiActions.toggleDrawer(value));
   }
 
+  openSnackbar({ message }) {
+    const { dispatch } = this.props;
+    dispatch(uiActions.openSnackbar({ message }));
+  }
+
   render() {
     const { incidents, selectedIncident, viewport, showDrawer } = this.state;
     return (
@@ -167,6 +173,7 @@ class Map extends Component {
           hidden={showDrawer}
           selectedIncident={selectedIncident}
           setSelectedIncident={this.setSelectedIncident}
+          openSnackbar={this.openSnackbar}
         />
       </ReactMapGL>
     );

@@ -4,6 +4,10 @@ const initialState = {
     show: false,
     type: '',
   },
+  snackbar: {
+    show: false,
+    type: '',
+  },
 };
 
 function UI(state = initialState, action) {
@@ -20,6 +24,15 @@ function UI(state = initialState, action) {
         modal: {
           open: action.open,
           type: action.modalType,
+        },
+      };
+    }
+    case 'OPEN_SNACKBAR': {
+      return {
+        ...state,
+        snackbar: {
+          open: action.open,
+          message: action.message,
         },
       };
     }
