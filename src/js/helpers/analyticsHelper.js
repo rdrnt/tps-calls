@@ -28,6 +28,7 @@ const analyticsHelper = {
   // An event for Google Analytics
   gaEvent: ({ category, event, action, label, nonInteraction }) => {
     ReactGA.event({
+      category,
       event,
       action,
       label,
