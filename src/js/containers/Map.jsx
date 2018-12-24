@@ -163,12 +163,23 @@ class Map extends Component {
 
   toggleDrawer(value) {
     const { dispatch } = this.props;
-
+    analyticsHelper.gaEvent({
+      category: analyticsHelper.categories.UI,
+      action: `Toggled drawer ${value}`,
+      label: 'Map',
+    });
     dispatch(uiActions.toggleDrawer(value));
   }
 
   openSnackbar({ message }) {
     const { dispatch } = this.props;
+
+    analyticsHelper.gaEvent({
+      category: analyticsHelper.categories.UI,
+      action: `Opened snackbar with message ${message}`,
+      label: 'Map',
+    });
+
     dispatch(uiActions.openSnackbar({ message }));
   }
 

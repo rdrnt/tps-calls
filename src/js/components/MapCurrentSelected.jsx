@@ -9,7 +9,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 
-import { dateHelper, createShareUrl } from '../helpers';
+import { dateHelper, createShareUrl, analyticsHelper } from '../helpers';
 
 // TODO: Refactor
 
@@ -54,7 +54,14 @@ const MapCurrentlySelected = ({
           <CopyToClipboard text={createShareUrl(selectedIncident.id)}>
             <Button
               size="small"
-              onClick={() => openSnackbar({ message: 'Copied to clipboard' })}
+              onClick={() => {
+                analyticsHelper.gaEvent({
+                  category: analyticsHelper.categories.UI,
+                  action: 'Share incident',
+                  label: 'MapCurrentlySelected',
+                });
+                openSnackbar({ message: 'Copied to clipboard' });
+              }}
             >
               Share
             </Button>

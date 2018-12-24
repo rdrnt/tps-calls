@@ -4,6 +4,11 @@ import ReactGA from 'react-ga';
 import environmentHelper from './environment';
 
 const analyticsHelper = {
+  categories: {
+    UI: 'UI',
+    User: 'User',
+  },
+
   // Initialize the analytics only if we're in production
   initialize: () => {
     if (!environmentHelper.isDevelopment()) {
@@ -21,7 +26,7 @@ const analyticsHelper = {
   },
 
   // An event for Google Analytics
-  gaEvent: ({ event, action, label, nonInteraction }) => {
+  gaEvent: ({ category, event, action, label, nonInteraction }) => {
     ReactGA.event({
       event,
       action,

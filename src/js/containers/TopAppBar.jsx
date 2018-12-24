@@ -8,6 +8,8 @@ import DrawerContainer from '../components/DrawerContainer';
 
 import { uiActions } from '../actions';
 
+import { analyticsHelper } from '../helpers';
+
 class TopAppBar extends React.Component {
   constructor(props) {
     super(props);
@@ -34,11 +36,22 @@ class TopAppBar extends React.Component {
     const { dispatch } = this.props;
     const { showDrawer } = this.state;
 
+    analyticsHelper.gaEvent({
+      category: analyticsHelper.categories.UI,
+      action: `Toggled drawer ${!showDrawer}`,
+      label: 'TopAppBar',
+    });
+
     dispatch(uiActions.toggleDrawer(!showDrawer));
   }
 
   openModal(modalName) {
     const { dispatch } = this.props;
+    analyticsHelper.gaEvent({
+      category: analyticsHelper.categories.UI,
+      action: `Opened ${modalName} modal`,
+      label: 'TopAppBar',
+    });
 
     dispatch(uiActions.toggleModal(true, modalName));
   }
