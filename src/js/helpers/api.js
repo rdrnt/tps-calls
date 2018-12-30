@@ -49,7 +49,7 @@ const api = {
       new Promise((resolve, reject) => {
         Promise.all(
           incidents.map(incident =>
-            policeApi
+            api
               .convertXYToLatLon(incident)
               .then(convertedIncident => convertedIncident)
           )
@@ -64,8 +64,7 @@ const api = {
         // Either 200, 203, 500, etc
         const { status } = response;
         // all of the incidents from the api
-        const incidents = response.data;
-
+        const incidents = JSON.parse(response.data.body);
         if (status === 200) {
           convertIncidentsToLatLon(incidents).then(convertedIncidents => {
             callback({ status, values: convertedIncidents });
