@@ -1,4 +1,4 @@
-import policeApi from '../helpers/policeApi';
+import api from '../helpers/api';
 
 import uiActions from './ui';
 
@@ -14,7 +14,7 @@ const incidentActions = {
 
   fetchIncidents: () => dispatch => {
     dispatch(incidentActions.requestIncidents());
-    policeApi.getAllIncidents(incidents => {
+    api.getAllIncidents(incidents => {
       if (incidents.status === 200) {
         dispatch(incidentActions.receivedIncidents(incidents.values));
       } else {

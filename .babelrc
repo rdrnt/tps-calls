@@ -4,7 +4,8 @@
     "syntax-dynamic-import",
     "transform-class-properties",
     "styled-components",
-    "transform-async-to-generator"
+    "transform-async-to-generator",
+    "@babel/plugin-transform-runtime"
   ],
   "presets": [
     ["@babel/preset-env", {

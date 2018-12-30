@@ -2,12 +2,6 @@ import axios from 'axios';
 // import Sentry from '@sentry/node';
 
 // import { environmentHelper } from '../helpers';
-
-// Load polyfills for async/await
-if (!global._babelPolyfill) {
-  require('babel-polyfill');
-}
-
 // Initialize Sentry
 /*
 if (process.env.NODE_ENV !== 'development') {
@@ -59,7 +53,7 @@ const fetchAllIncidents = async () => {
   }
 };
 
-exports.handler = async (event, context) => {
+async function getTorontoPoliceIncidents() {
   try {
     const incidents = await fetchAllIncidents();
     return {
@@ -74,4 +68,6 @@ exports.handler = async (event, context) => {
       body: JSON.stringify({ error: 'Lambda issue' }),
     };
   }
-};
+}
+
+export default getTorontoPoliceIncidents;

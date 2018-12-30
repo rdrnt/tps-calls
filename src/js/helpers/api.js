@@ -5,7 +5,7 @@ import dateHelper from './dateHelper';
 import isValidIncident from './isValidIncident';
 import stringToCamelCase from './stringToCamelCase';
 
-const policeApi = {
+const api = {
   // converts x & y to Lat/Long
   // Returns and array like [87.11, 28.11]
   convertXYToLatLon: incident =>
@@ -41,7 +41,7 @@ const policeApi = {
     // Get the incidents from the API
     const fetchIncidents = () =>
       axios
-        .get('/.netlify/functions/policeApi', { responseType: 'json' })
+        .get('/.netlify/functions/all', { responseType: 'json' })
         .then(response => response);
 
     // Convert the incident to lat / lon
@@ -75,9 +75,10 @@ const policeApi = {
         }
       })
       .catch(error => {
+        console.log('Error getting incidents', error);
         callback({ status: 500, values: [] });
       });
   },
 };
 
-export default policeApi;
+export default api;
