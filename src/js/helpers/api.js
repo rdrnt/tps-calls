@@ -5,78 +5,76 @@ import dateHelper from './dateHelper';
 import isValidIncident from './isValidIncident';
 import stringToCamelCase from './stringToCamelCase';
 
+import convertXYLatLon from './convertLatLonToXY';
+
 const api = {
-  // converts x & y to Lat/Long
-  // Returns and array like [87.11, 28.11]
-  convertXYToLatLon: incident =>
-    new Promise(resolve => {
-      loadModules(['esri/geometry/support/webMercatorUtils'])
-        .then(([webMercatorUtils]) => {
-          const { geometry, attributes } = incident;
-          // coordinatesFromXY is an array that holds two numbers
-          // At 0 it stores the longitude & at 1 it stores latitude
-          const coordinatesFromXY = webMercatorUtils.xyToLngLat(
-            geometry.x,
-            geometry.y
-          );
-          const incidentValues = {
-            coordinates: {
-              lat: coordinatesFromXY[1],
-              lon: coordinatesFromXY[0],
-            },
-            type: stringToCamelCase(attributes.TYP_ENG),
-            id: attributes.OBJECTID,
-            street: stringToCamelCase(attributes.XSTREETS),
-            date: dateHelper.convert(attributes.ATSCENE_TS),
-          };
-          if (isValidIncident(incidentValues)) {
-            resolve(incidentValues);
-          }
-        })
-        .catch(err => console.error('Error!', err));
-    }),
-
   // Get all the incidents from the API
-  getAllIncidents: callback => {
+  getAllIncidents: async () => {
     // Get the incidents from the API
-    const fetchIncidents = () =>
-      axios
-        .get('/.netlify/functions/all', { responseType: 'json' })
-        .then(response => response);
-
-    // Convert the incident to lat / lon
-    const convertIncidentsToLatLon = (incidents, cb) =>
-      new Promise((resolve, reject) => {
-        Promise.all(
-          incidents.map(incident =>
-            api
-              .convertXYToLatLon(incident)
-              .then(convertedIncident => convertedIncident)
-          )
-        ).then(results => {
-          // results is an array of names
-          resolve(results);
+    const fetchIncidents = async () => {
+      try {
+        const fetchedResults = await axios.get('/.netlify/functions/all', {
+          responseType: 'json',
         });
-      });
+        return JSON.parse(fetchedResults.data.body);
+      } catch (error) {
+        console.log('Error getting incidents');
+        return [];
+      }
+    };
 
+    const convertPoliceIncidentsXY = async incidents => {
+      try {
+        const promiseconvertedTPSIncidents = await incidents.map(
+          async incident => {
+            const convertedIncident = await convertXYLatLon(incident);
+            return convertedIncident;
+          }
+        );
+        const convertedTPSIncidents = await Promise.all(
+          promiseconvertedTPSIncidents
+        ).then(convertedIncidents => convertedIncidents);
+        return convertedTPSIncidents;
+      } catch (error) {
+        console.log('Error converting police incidents XY', error);
+      }
+    };
+
+    const allIncidents = await fetchIncidents();
+
+    const convertedTPSIncidents = await convertPoliceIncidentsXY(allIncidents);
+
+    return { status: 200, values: convertedTPSIncidents || [] };
+    /*
     fetchIncidents()
       .then(response => {
-        // Either 200, 203, 500, etc
-        const { status } = response;
-        // all of the incidents from the api
-        const incidents = JSON.parse(response.data.body);
-        if (status === 200) {
-          convertIncidentsToLatLon(incidents).then(convertedIncidents => {
-            callback({ status, values: convertedIncidents });
-          });
-        } else {
-          callback({ status, values: [] });
+        try {
+          const { status } = response;
+          // all of the incidents from the api
+          const incidents = JSON.parse(response.data.body);
+          if (status === 200) {
+            const promiseconvertedTPSIncidents = incidents.map(
+              async incident => {
+                const convertedIncident = await convertXYLatLon(incident);
+                return convertedIncident;
+              }
+            );
+            const converted = await Promise.all(promiseconvertedTPSIncidents);
+            console.log('convert', convertedPoliceIncidents);
+            callback({ status, values: convertedPoliceIncidents });
+          } else {
+            callback({ status, values: [] });
+          }
+        } catch (error) {
+          console.log('Error getting incidents', error);
         }
+        // Either 200, 203, 500, etc
       })
       .catch(error => {
         console.log('Error getting incidents', error);
         callback({ status: 500, values: [] });
       });
+      */
   },
 };
 

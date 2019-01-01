@@ -12,15 +12,16 @@ const incidentActions = {
     incidents,
   }),
 
-  fetchIncidents: () => dispatch => {
+  fetchIncidents: () => async dispatch => {
     dispatch(incidentActions.requestIncidents());
-    api.getAllIncidents(incidents => {
-      if (incidents.status === 200) {
-        dispatch(incidentActions.receivedIncidents(incidents.values));
-      } else {
-        dispatch(uiActions.toggleModal(true, 'networkError'));
-      }
-    });
+
+    const incidents = await api.getAllIncidents();
+
+    if (incidents.status === 200) {
+      dispatch(incidentActions.receivedIncidents(incidents.values));
+    } else {
+      dispatch(uiActions.toggleModal(true, 'networkError'));
+    }
   },
 
   setSelectedIncident: incident => ({
