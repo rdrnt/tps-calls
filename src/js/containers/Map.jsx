@@ -67,7 +67,7 @@ class Map extends Component {
           // Add a zoom in
           this.setState({
             viewport: {
-              ...this.state.viewport,
+              ...viewport,
               zoom: 12,
             },
           });
