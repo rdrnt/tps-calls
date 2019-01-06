@@ -3,9 +3,11 @@ import styled from 'styled-components';
 
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
-import Icon from '../Icon';
 
 import DrawerHeaderControlsItem from './HeaderControls/Item';
+import DrawerHeaderControlsSubItem from './HeaderControls/SubItem';
+
+import { DrawerLocale } from '../../locale';
 
 class HeaderControls extends React.Component {
   constructor(props) {
@@ -15,6 +17,7 @@ class HeaderControls extends React.Component {
   }
 
   render() {
+    const { setSortType } = this.props;
     return (
       <List>
         <DrawerHeaderControlsItem
@@ -22,8 +25,19 @@ class HeaderControls extends React.Component {
           iconName="Refresh"
           onClick={() => console.log('hello')}
         />
-        <Divider />
-        <DrawerHeaderControlsItem title="Sort By" iconName="Filter" />
+        <DrawerHeaderControlsItem
+          title="Sort By"
+          iconName="Filter"
+          subItems={DrawerLocale.header.sortItems}
+        >
+          {DrawerLocale.header.sortItems.map(sortItem => (
+            <DrawerHeaderControlsSubItem
+              key={sortItem.name}
+              onClick={() => setSortType(sortItem.type)}
+              title={sortItem.name}
+            />
+          ))}
+        </DrawerHeaderControlsItem>
       </List>
     );
   }

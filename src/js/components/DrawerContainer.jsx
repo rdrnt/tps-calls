@@ -68,10 +68,10 @@ class DrawerContainer extends React.Component {
 
   // If our sort type changes
   // connected to DrawerHeader
-  onSortTypeChange(event) {
+  onSortTypeChange(sortType) {
     this.setState(
       {
-        sortType: event.target.value,
+        sortType,
       },
       () => this.sortOrSearchIncidents()
     );
@@ -122,7 +122,7 @@ class DrawerContainer extends React.Component {
           searchValue={searchValue}
           toggleDrawer={toggleDrawer}
         >
-          <HeaderControls />
+          <HeaderControls setSortType={this.onSortTypeChange} />
           {/* Hide sorting if we're searching
           {searchValue.length > 0 ? null : (
             <DrawerSortView value={sortType} onChange={this.onSortTypeChange} />
