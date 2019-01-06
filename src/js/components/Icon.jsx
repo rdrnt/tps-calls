@@ -12,6 +12,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import InfoIcon from '@material-ui/icons/Info';
+import FilterListIcon from '@material-ui/icons/FilterList';
 
 /*
  The purpose of this component is so we don't have a million icon imports in each file
@@ -31,6 +32,9 @@ const Icon = ({ name, ...other }) => {
     }
     case 'Dot': {
       return <Brightness1 {...other} />;
+    }
+    case 'Filter': {
+      return <FilterListIcon {...other} />;
     }
     case 'Menu': {
       return <MenuIcon />;

@@ -14,7 +14,7 @@ import { DrawerLocale } from '../../locale';
 
 const styles = theme => ({
   root: {
-    ...theme.mixins.gutters(),
+    // ...theme.mixins.gutters(),
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
   },
@@ -24,6 +24,9 @@ const styles = theme => ({
     padding: '0 8px',
     ...theme.mixins.toolbar,
     justifyContent: 'flex-end',
+  },
+  controls: {
+    width: '100%',
   },
 });
 
@@ -63,7 +66,14 @@ const DrawerHeader = ({
             ) : null,
         }}
       />
-      {children}
+      <div className={classes.controls}>
+        {children}
+        {/* 
+        <IconButton>
+          <Icon name="Refresh" />
+        </IconButton>
+        */}
+      </div>
     </div>
   </Paper>
 );

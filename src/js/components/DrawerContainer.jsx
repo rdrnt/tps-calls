@@ -4,7 +4,12 @@ import PropTypes from 'prop-types';
 import Drawer from '@material-ui/core/Drawer';
 import { withStyles } from '@material-ui/core/styles';
 
-import { DrawerList, DrawerHeader, DrawerSortView } from './Drawer';
+import {
+  DrawerList,
+  DrawerHeader,
+  DrawerSortView,
+  HeaderControls,
+} from './Drawer';
 
 import { sorter } from '../helpers';
 
@@ -117,10 +122,12 @@ class DrawerContainer extends React.Component {
           searchValue={searchValue}
           toggleDrawer={toggleDrawer}
         >
-          {/* Hide sorting if we're searching */}
+          <HeaderControls />
+          {/* Hide sorting if we're searching
           {searchValue.length > 0 ? null : (
             <DrawerSortView value={sortType} onChange={this.onSortTypeChange} />
           )}
+          */}
         </DrawerHeader>
         {/* If we haven't filtered any incidents yet, sort through all the incidents */}
         <DrawerList incidents={filteredIncidents} />
