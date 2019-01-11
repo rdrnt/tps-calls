@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Debounce } from 'react-throttle';
 
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
