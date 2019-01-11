@@ -15,9 +15,7 @@ import Icon from '../Icon';
 import { DrawerLocale } from '../../locale';
 
 const styles = theme => ({
-  contents: {
-    paddingBottom: theme.spacing.unit * 2,
-  },
+  contents: {},
   headerClose: {
     display: 'flex',
     alignItems: 'center',

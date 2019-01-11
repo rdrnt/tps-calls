@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import debounce from 'lodash.debounce';
 
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -31,7 +32,7 @@ class HeaderControls extends React.Component {
         <DrawerHeaderControlsItem
           title="Refresh"
           iconName="Refresh"
-          onClick={fetchIncidents}
+          onClick={debounce(fetchIncidents, 2000)}
         />
         <DrawerHeaderControlsItem
           title="Sort By"
