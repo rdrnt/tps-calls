@@ -41,7 +41,6 @@ class DrawerContainer extends React.Component {
       filteredIncidents: [],
     };
 
-    this.onSearchChange = this.onSearchChange.bind(this);
     this.onSortTypeChange = this.onSortTypeChange.bind(this);
     this.sortOrSearchIncidents = this.sortOrSearchIncidents.bind(this);
   }
@@ -55,16 +54,19 @@ class DrawerContainer extends React.Component {
     }
   }
 
-  // If our search value changes
-  // connected to DrawerHeader
-  onSearchChange(event) {
-    this.setState(
-      {
-        searchValue: event.target.value,
-      },
-      () => this.sortOrSearchIncidents()
-    );
-  }
+  onSearchChange = event => {
+    const { target } = event;
+    const { searchValue } = this.state;
+
+    if (searchValue !== target.value) {
+      this.setState(
+        {
+          searchValue: target.value,
+        },
+        () => this.sortOrSearchIncidents()
+      );
+    }
+  };
 
   // If our sort type changes
   // connected to DrawerHeader
@@ -104,7 +106,13 @@ class DrawerContainer extends React.Component {
   }
 
   render() {
-    const { open, toggleDrawer, incidents, classes } = this.props;
+    const {
+      open,
+      toggleDrawer,
+      incidents,
+      classes,
+      fetchIncidents,
+    } = this.props;
     const { searchValue, sortType, filteredIncidents } = this.state;
     return (
       <Drawer
@@ -122,7 +130,11 @@ class DrawerContainer extends React.Component {
           searchValue={searchValue}
           toggleDrawer={toggleDrawer}
         >
-          <HeaderControls setSortType={this.onSortTypeChange} />
+          <HeaderControls
+            setSortType={this.onSortTypeChange}
+            fetchIncidents={fetchIncidents}
+            sortType={sortType}
+          />
           {/* Hide sorting if we're searching
           {searchValue.length > 0 ? null : (
             <DrawerSortView value={sortType} onChange={this.onSortTypeChange} />
@@ -140,6 +152,7 @@ DrawerContainer.propTypes = {
   toggleDrawer: PropTypes.func.isRequired,
   incidents: PropTypes.arrayOf(PropTypes.shape).isRequired,
   classes: PropTypes.objectOf(PropTypes.shape),
+  fetchIncidents: PropTypes.func.isRequired,
 };
 
 DrawerContainer.defaultProps = {

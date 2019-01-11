@@ -13,16 +13,31 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import InfoIcon from '@material-ui/icons/Info';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
+import FiberNewIcon from '@material-ui/icons/FiberNew';
+import AlphabetDownIcon from '@material-ui/icons/TextRotationDown';
+import AlphabetUpIcon from '@material-ui/icons/TextRotateUp';
 
 /*
  The purpose of this component is so we don't have a million icon imports in each file
  Just import them once into here, and pass the icon name as a prop
+
+ https://material.io/tools/icons/?style=baseline
 */
 
 const Icon = ({ name, ...other }) => {
   switch (name) {
+    case 'AlphaDown': {
+      return <AlphabetDownIcon {...other} />;
+    }
+    case 'AlphaUp': {
+      return <AlphabetUpIcon {...other} />;
+    }
     case 'ArrowUpward': {
       return <ArrowUpward />;
+    }
+    case 'Back': {
+      return <SkipPreviousIcon {...other} />;
     }
     case 'Close': {
       return <CloseIcon {...other} />;
@@ -35,6 +50,9 @@ const Icon = ({ name, ...other }) => {
     }
     case 'Filter': {
       return <FilterListIcon {...other} />;
+    }
+    case 'New': {
+      return <FiberNewIcon {...other} />;
     }
     case 'Menu': {
       return <MenuIcon />;

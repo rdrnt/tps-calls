@@ -6,7 +6,7 @@ import AppToolbar from '../components/AppToolbar';
 
 import DrawerContainer from '../components/DrawerContainer';
 
-import { uiActions } from '../actions';
+import { uiActions, incidentActions } from '../actions';
 
 import { analyticsHelper } from '../helpers';
 
@@ -31,6 +31,11 @@ class TopAppBar extends React.Component {
       showDrawer: UI.showDrawer,
     });
   }
+
+  fetchIncidents = () => {
+    const { dispatch } = this.props;
+    dispatch(incidentActions.fetchIncidents());
+  };
 
   toggleDrawer() {
     const { dispatch } = this.props;
@@ -69,6 +74,7 @@ class TopAppBar extends React.Component {
           open={showDrawer}
           toggleDrawer={this.toggleDrawer}
           incidents={incidents}
+          fetchIncidents={this.fetchIncidents}
         />
       </>
     );

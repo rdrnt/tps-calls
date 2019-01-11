@@ -31,11 +31,9 @@ class DrawerHeaderControlsItem extends React.PureComponent {
       <>
         <ListItem button onClick={onClick || this.toggleSelectedState}>
           <ListItemText>{title}</ListItemText>
-          {iconName && (
-            <ListItemIcon>
-              <Icon name={iconName} color={selected ? 'primary' : 'inherit'} />
-            </ListItemIcon>
-          )}
+          <ListItemIcon>
+            <Icon name={iconName} />
+          </ListItemIcon>
         </ListItem>
         {children && (
           <Collapse in={selected} timeout="auto" unmountOnExit>

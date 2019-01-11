@@ -8,14 +8,14 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import Divider from '@material-ui/core/Divider';
 
+import HeaderSearch from './Header/Search';
+
 import Icon from '../Icon';
 
 import { DrawerLocale } from '../../locale';
 
 const styles = theme => ({
-  root: {
-    // ...theme.mixins.gutters(),
-    paddingTop: theme.spacing.unit * 2,
+  contents: {
     paddingBottom: theme.spacing.unit * 2,
   },
   headerClose: {
@@ -46,34 +46,14 @@ const DrawerHeader = ({
     </div>
     <Divider />
     {/* The actual contents of the header */}
-    <div className={classes.root}>
-      <TextField
-        id="search-header"
-        type="search"
-        label={DrawerLocale.header.searchPlaceholder}
-        margin="none"
+    <div className={classes.contents}>
+      <div className={classes.controls}>{children}</div>
+      <HeaderSearch
         onChange={onSearchChange}
-        fullWidth
         value={searchValue}
-        InputProps={{
-          endAdornment:
-            // Only return the search icon if they have nothing typed in
-            // Set the search icon color to the primary color since the TextField color changes color in focus
-            searchValue.length === 0 ? (
-              <InputAdornment position="end">
-                <Icon name="Search" color="action" />
-              </InputAdornment>
-            ) : null,
-        }}
+        placeholder={DrawerLocale.header.searchPlaceholder}
       />
-      <div className={classes.controls}>
-        {children}
-        {/* 
-        <IconButton>
-          <Icon name="Refresh" />
-        </IconButton>
-        */}
-      </div>
+      <Divider />
     </div>
   </Paper>
 );

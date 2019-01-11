@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Debounce } from 'react-throttle';
 
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -16,18 +17,26 @@ class HeaderControls extends React.Component {
     this.state = {};
   }
 
+  getSortControlIcon = () => {
+    const { sortType } = this.props;
+    const currentSortItem = DrawerLocale.header.sortItems.find(
+      sortItem => sortItem.type === sortType
+    );
+    return currentSortItem.iconName || '';
+  };
+
   render() {
-    const { setSortType } = this.props;
+    const { setSortType, fetchIncidents, sortType } = this.props;
     return (
       <List>
         <DrawerHeaderControlsItem
           title="Refresh"
           iconName="Refresh"
-          onClick={() => console.log('hello')}
+          onClick={fetchIncidents}
         />
         <DrawerHeaderControlsItem
           title="Sort By"
-          iconName="Filter"
+          iconName={this.getSortControlIcon()}
           subItems={DrawerLocale.header.sortItems}
         >
           {DrawerLocale.header.sortItems.map(sortItem => (
@@ -35,6 +44,8 @@ class HeaderControls extends React.Component {
               key={sortItem.name}
               onClick={() => setSortType(sortItem.type)}
               title={sortItem.name}
+              iconName={sortItem.iconName}
+              selected={sortType === sortItem.type}
             />
           ))}
         </DrawerHeaderControlsItem>
