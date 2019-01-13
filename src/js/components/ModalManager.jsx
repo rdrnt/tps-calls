@@ -42,7 +42,7 @@ const styles = theme => ({
     width: '70%',
     [theme.breakpoints.up('sm')]: {
       width: '50%',
-      maxHeight: '50%',
+      maxHeight: '70%',
       minHeight: '40%',
     },
     overflowY: 'auto',
