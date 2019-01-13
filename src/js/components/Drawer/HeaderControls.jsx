@@ -28,7 +28,7 @@ class HeaderControls extends React.Component {
   render() {
     const { setSortType, fetchIncidents, sortType } = this.props;
     return (
-      <List>
+      <List disablePadding>
         <DrawerHeaderControlsItem
           title="Refresh"
           iconName="Refresh"
