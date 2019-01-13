@@ -23,7 +23,7 @@ const ModalLocale = {
           {
             title: 'Release Notes',
             url:
-              'https://github.com/rdrnt/tps-calls/blob/master/patch_notes.md',
+              'https://github.com/rdrnt/tps-calls/blob/master/release_notes.md',
           },
           {
             title: 'Project Github',
