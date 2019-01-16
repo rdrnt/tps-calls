@@ -1,3 +1,7 @@
+# v1.5.1 (Too small of a change)
+
+- Added page title
+
 # v1.5.1
 
 - Added polyfills to support older browsers
