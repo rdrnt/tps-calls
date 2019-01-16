@@ -26,16 +26,12 @@ const ModalLocale = {
               'https://github.com/rdrnt/tps-calls/blob/master/release_notes.md',
           },
           {
-            title: 'Project Github',
+            title: 'Source Code',
             url: 'https://github.com/rdrnt/tps-calls',
           },
           {
             title: 'Email',
             url: 'mailto:contact@rileyyy.com',
-          },
-          {
-            title: 'Tweet at me',
-            url: 'https://twitter.com/onlineriley',
           },
           {
             title: 'Inspiration for the project',
