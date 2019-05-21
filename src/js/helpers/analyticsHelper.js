@@ -12,10 +12,12 @@ const analyticsHelper = {
   // Initialize the analytics only if we're in production
   initialize: () => {
     if (!environmentHelper.isDevelopment()) {
+      /*
       Sentry.init({
         dsn: process.env.REACT_APP_SENTRY_DSN,
         release: environmentHelper.getCurrentVersion().toString(),
       });
+      */
 
       ReactGA.initialize(process.env.REACT_APP_GANALYTICS_KEY);
     }
