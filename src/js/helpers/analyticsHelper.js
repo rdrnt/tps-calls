@@ -18,8 +18,7 @@ const analyticsHelper = {
         release: environmentHelper.getCurrentVersion().toString(),
       });
       */
-
-      ReactGA.initialize(process.env.REACT_APP_GANALYTICS_KEY);
+      // ReactGA.initialize(process.env.REACT_APP_GANALYTICS_KEY);
     }
   },
 
