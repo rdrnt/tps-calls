@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 const paths = {
   src: path.resolve('./src'),
@@ -10,6 +11,8 @@ const paths = {
 const isDevelopment = process.env.NODE_ENV === 'development';
 
 var dotenv = require('dotenv').config({ path: __dirname + '/.env.local' });
+
+console.log('dot', dotenv.parsed);
 
 module.exports = {
   entry: path.join(paths.src, '/index.tsx'),
@@ -20,6 +23,10 @@ module.exports = {
         use: 'ts-loader',
         include: paths.src,
         exclude: /node_modules/,
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
       },
     ],
   },
@@ -41,9 +48,8 @@ module.exports = {
         minifyURLs: true,
       },
     }),
-    // new webpack.DefinePlugin(env.stringified),
     new webpack.DefinePlugin({
-      'process.env': dotenv.parsed,
+      'process.env': JSON.stringify(dotenv.parsed),
     }),
   ],
   output: {
@@ -71,16 +77,6 @@ module.exports = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.json'],
-    alias: {
-      'mapbox-gl/js/geo/transform': path.join(
-        __dirname,
-        '/node_modules/mapbox-gl/js/geo/transform'
-      ),
-      'mapbox-gl': path.join(
-        __dirname,
-        '/node_modules/mapbox-gl/dist/mapbox-gl.js'
-      ),
-    },
   },
   devServer: {
     host: 'localhost',

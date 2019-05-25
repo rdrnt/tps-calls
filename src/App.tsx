@@ -5,7 +5,6 @@ import Map from './containers/Map';
 
 const App: React.FunctionComponent = () => (
   <div>
-    <p>Jeff</p>
     <Map />
   </div>
 );

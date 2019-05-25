@@ -1,9 +1,15 @@
 import * as React from 'react';
-import ReactMapGL from 'react-map-gl';
+import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
+
+import { Environment } from '../helpers';
 
 interface MapState {
   viewport: any;
 }
+
+const MapboxMap = ReactMapboxGl({
+  accessToken: process.env.MAPBOX_API_KEY as string,
+});
 
 class Map extends React.Component<{}, MapState> {
   constructor(props: any) {
@@ -18,12 +24,13 @@ class Map extends React.Component<{}, MapState> {
 
   public render() {
     return (
-      <div>
-        <ReactMapGL
-          {...this.state.viewport}
-          onViewportChange={this.setViewport}
-        />
-      </div>
+      <MapboxMap
+        style="mapbox://styles/drnt/cjmwb7zbo1f5b2ro8sqfdkaql"
+        containerStyle={{
+          height: '100vh',
+          width: '100vw',
+        }}
+      />
     );
   }
 }
