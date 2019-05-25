@@ -9,6 +9,8 @@ const paths = {
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
+var dotenv = require('dotenv').config({ path: __dirname + '/.env.local' });
+
 module.exports = {
   entry: path.join(paths.src, '/index.tsx'),
   module: {
@@ -40,6 +42,9 @@ module.exports = {
       },
     }),
     // new webpack.DefinePlugin(env.stringified),
+    new webpack.DefinePlugin({
+      'process.env': dotenv.parsed,
+    }),
   ],
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -66,6 +71,16 @@ module.exports = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.json'],
+    alias: {
+      'mapbox-gl/js/geo/transform': path.join(
+        __dirname,
+        '/node_modules/mapbox-gl/js/geo/transform'
+      ),
+      'mapbox-gl': path.join(
+        __dirname,
+        '/node_modules/mapbox-gl/dist/mapbox-gl.js'
+      ),
+    },
   },
   devServer: {
     host: 'localhost',
