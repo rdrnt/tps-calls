@@ -2,9 +2,18 @@
   "compilerOptions": {
     "outDir": "./dist/",
     "noImplicitAny": true,
+    "allowJs": true,
     "module": "es6",
-    "target": "es5",
     "jsx": "react",
-    "allowJs": true
-  }
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "lib": ["es2016"],
+    "target": "es2016",
+    "moduleResolution": "node",
+    "strict": true,
+    "importHelpers": true
+  },
+  "exclude": ["node_modules"],
+  "include": ["src/**/*"],
 }

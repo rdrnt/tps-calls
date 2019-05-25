@@ -1,0 +1,47 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:latest",
+    "tslint-config-prettier",
+    "tslint-plugin-prettier",
+    "tslint-config-airbnb",
+    "tslint-react"
+  ],
+  "jsRules": {},
+  "rulesDirectory": ["tslint-plugin-prettier"],
+  "linterOptions": {
+    "exclude": ["**/node_modules/**", "node_modules"]
+  },
+  "rules": {
+    "prettier": true,
+    "jsx-no-multiline-js": false,
+    "interface-name": [true, "never-prefix"],
+    "ordered-imports": [
+      true,
+      {
+        "import-sources-order": "any",
+        "named-imports-order": "case-insensitive"
+      }
+    ],
+    "ter-arrow-parens": [true, "as-needed"],
+    "trailing-comma": [
+      true,
+      {
+        "esSpecCompliant": true
+      }
+    ],
+    "jsx-no-lambda": false,
+    "variable-name": [
+      true,
+      "ban-keywords",
+      "check-format",
+      "allow-leading-underscore",
+      "allow-pascal-case"
+    ],
+    "object-literal-sort-keys": false,
+    "array-type": [true, "array"],
+    "import-name": false,
+    "semicolon": [true, "always", "ignore-bound-class-methods"],
+    "align": false
+  }
+}
