@@ -21,12 +21,6 @@ class Map extends React.Component<{}, MapState> {
     super(props);
   }
 
-  public setViewport = (viewport: any) => {
-    this.setState({
-      viewport,
-    });
-  };
-
   public render() {
     return (
       <MapboxMap
