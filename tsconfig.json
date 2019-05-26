@@ -12,7 +12,8 @@
     "target": "es2016",
     "moduleResolution": "node",
     "strict": true,
-    "importHelpers": true
+    "importHelpers": true,
+    "resolveJsonModule": true,
   },
   "exclude": ["node_modules"],
   "include": ["src/**/*"],

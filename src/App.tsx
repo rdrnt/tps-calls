@@ -3,6 +3,8 @@ import { createGlobalStyle } from 'styled-components';
 import { Provider } from 'react-redux';
 // import { Router } from '@reach/router';
 
+import { Firebase } from './helpers';
+
 import Map from './containers/Map';
 
 import store from './store';
@@ -12,6 +14,8 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
   }
 `;
+
+Firebase.initialize();
 
 const App: React.FunctionComponent = () => (
   <>
