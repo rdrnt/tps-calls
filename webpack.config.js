@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 
@@ -12,15 +11,19 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 
 var dotenv = require('dotenv').config({ path: __dirname + '/.env.local' });
 
-console.log('dot', dotenv.parsed);
-
 module.exports = {
-  entry: path.join(paths.src, '/index.tsx'),
+  entry: ['babel-polyfill', './src/index.tsx'],
+  devtool: isDevelopment ? 'cheap-module-inline-source-map' : 'source-map',
+  output: {
+    path: path.join(__dirname, '/dist'),
+    filename: '[name].[hash].js',
+    sourceMapFilename: '[name].[hash].map',
+  },
   module: {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        use: ['babel-loader', 'ts-loader'],
         include: paths.src,
         exclude: /node_modules/,
       },
@@ -28,6 +31,7 @@ module.exports = {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
       },
+      { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
     ],
   },
   plugins: [
@@ -52,29 +56,6 @@ module.exports = {
       'process.env': JSON.stringify(dotenv.parsed),
     }),
   ],
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: isDevelopment
-      ? path.join('assets', 'js', '[name].js')
-      : path.join('assets', 'js', '[name].[hash:8].js'),
-    chunkFilename: isDevelopment
-      ? path.join('assets', 'js', '[name].chunk.js')
-      : path.join('assets', 'js', '[name].[hash:8].chunk.js'),
-  },
-  optimization: {
-    minimizer: [
-      new UglifyJsPlugin({
-        cache: true,
-        parallel: true,
-        uglifyOptions: {
-          compress: false,
-          ecma: 6,
-          mangle: true,
-        },
-        sourceMap: true,
-      }),
-    ],
-  },
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.json'],
   },

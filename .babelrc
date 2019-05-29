@@ -1,5 +1,5 @@
 {
-  "presets": ["@babel/typescript"],
+  "presets": ["@babel/typescript", "@babel/preset-env"],
   "plugins": [
     "babel-plugin-styled-components"
   ],

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 
-import { Environment } from '../helpers';
+import { Firebase } from '../helpers';
 
 interface MapState {
   viewport: any;
@@ -19,6 +19,10 @@ const DEFAULT_CENTER: [number, number] = [-79.3757384, 43.6858119];
 class Map extends React.Component<{}, MapState> {
   constructor(props: any) {
     super(props);
+  }
+
+  public async componentDidMount() {
+    console.log(await Firebase.getIncidents());
   }
 
   public render() {
