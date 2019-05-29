@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
+import MapGL from 'react-map-gl';
 
 import { Firebase } from '../helpers';
 
@@ -7,18 +7,25 @@ interface MapState {
   viewport: any;
 }
 
-const MapboxMap = ReactMapboxGl({
-  accessToken: process.env.MAPBOX_API_KEY as string,
-  minZoom: 11,
-});
-
-const DEFAULT_CENTER: [number, number] = [-79.3757384, 43.6858119];
-
 // https://github.com/alex3165/react-mapbox-gl/blob/master/docs/API.md
+
+const DEFAULTS = {
+  latitude: 43.653225,
+  longitude: -79.383186,
+  zoom: 10.3,
+};
 
 class Map extends React.Component<{}, MapState> {
   constructor(props: any) {
     super(props);
+
+    this.state = {
+      viewport: {
+        width: window.innerWidth,
+        height: window.innerHeight,
+        ...DEFAULTS,
+      },
+    };
   }
 
   public async componentDidMount() {
@@ -26,14 +33,12 @@ class Map extends React.Component<{}, MapState> {
   }
 
   public render() {
+    const { viewport } = this.state;
     return (
-      <MapboxMap
-        style="mapbox://styles/drnt/cjmwb7zbo1f5b2ro8sqfdkaql"
-        center={DEFAULT_CENTER}
-        containerStyle={{
-          height: '100vh',
-          width: '100vw',
-        }}
+      <MapGL
+        {...viewport}
+        onViewportChange={viewport => this.setState({ viewport })}
+        mapboxApiAccessToken={process.env.MAPBOX_API_KEY}
       />
     );
   }

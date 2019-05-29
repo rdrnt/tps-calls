@@ -6,7 +6,7 @@ import productionConfig from '../../config/firebase/production.json';
 const firebase = {
   initialize: () => {
     // Initialize Firebase
-    firebaseApp.initializeApp(productionConfig);
+    firebaseApp.initializeApp({ ...productionConfig });
   },
   getIncidents: async () => {
     try {
