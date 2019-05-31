@@ -9,3 +9,12 @@ export function toggleDrawer(value: boolean): UIActionType {
     },
   };
 }
+
+export function setInteractingMap(isInteracting: boolean): UIActionType {
+  return {
+    type: UIActions.SET_INTERACTING_MAP,
+    payload: {
+      isInteracting,
+    },
+  };
+}

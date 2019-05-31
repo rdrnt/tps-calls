@@ -1,7 +1,17 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import posed from 'react-pose';
 
-const Container = styled.div`
+const AnimatedContainer = posed.div({
+  enter: {
+    opacity: 1,
+  },
+  exit: {
+    opacity: 0,
+  },
+});
+
+const Container = styled(AnimatedContainer)`
   position: absolute;
   top: 0;
   left: 0;

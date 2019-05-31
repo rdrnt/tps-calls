@@ -10,6 +10,11 @@ export function uiReducer(
         ...state,
         drawerOpen: action.payload.value,
       };
+    case UIActions.SET_INTERACTING_MAP:
+      return {
+        ...state,
+        isInteractingWithMap: action.payload.isInteracting,
+      };
     default:
       return state;
   }

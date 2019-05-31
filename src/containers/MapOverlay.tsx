@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import { toggleDrawer } from '../store/ui/actions';
 import { AppState } from '../store';
 
+import posed, { PoseGroup } from 'react-pose';
+
 import Drawer from '../components/Drawer';
 
 const Container = styled.div`
@@ -41,26 +43,31 @@ const DrawerOpenButton = styled.button`
 interface MapOverlayProps {
   toggleDrawerState: (value: boolean) => void;
   drawerOpen: boolean;
+  isInteractingWithMap: boolean;
 }
 
 const MapOverlay: React.FunctionComponent<MapOverlayProps> = ({
   toggleDrawerState,
   drawerOpen,
+  isInteractingWithMap,
 }) => (
   <Container>
     <Content>
       {!drawerOpen && (
-        <DrawerOpenButton onClick={() => toggleDrawerState(true)}>
+        <DrawerOpenButton
+          key="drawer-button"
+          onClick={() => toggleDrawerState(true)}
+        >
           <FiMenu />
         </DrawerOpenButton>
       )}
-      {drawerOpen && <Drawer />}
+      <PoseGroup>{drawerOpen && <Drawer key="muppet" />}</PoseGroup>
     </Content>
   </Container>
 );
 
 export const mapStateToProps = (state: AppState) => ({
-  drawerOpen: state.ui.drawerOpen,
+  ...state.ui,
 });
 
 export const mapDispatchToProps = (dispatch: any) => ({
