@@ -1,8 +1,6 @@
 import * as React from 'react';
 import MapGL from 'react-map-gl';
 
-import { Firebase } from '../helpers';
-
 interface MapState {
   viewport: any;
 }
@@ -12,7 +10,7 @@ interface MapState {
 const DEFAULTS = {
   latitude: 43.653225,
   longitude: -79.383186,
-  zoom: 10.3,
+  zoom: 11.0,
 };
 
 class Map extends React.Component<{}, MapState> {
@@ -26,10 +24,6 @@ class Map extends React.Component<{}, MapState> {
         ...DEFAULTS,
       },
     };
-  }
-
-  public async componentDidMount() {
-    console.log(await Firebase.getIncidents());
   }
 
   public render() {

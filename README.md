@@ -38,9 +38,7 @@ When commiting, please try your best to use [this](http://karma-runner.github.io
 
 [viewport-mercator-project](http://uber-common.github.io/viewport-mercator-project/#/documentation/overview)
 
-[Material-UI](https://material-ui.com/)
-
-[react-arcgis](https://github.com/nicksenger/react-arcgis)
+[react-icons](https://react-icons.netlify.com/#/icons/fi)
 
 # Notes
 
