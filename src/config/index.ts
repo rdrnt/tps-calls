@@ -4,3 +4,7 @@ export enum Colors {
   TEXT_PRIMARY = '#000000',
   TEXT_SECONDARY = '#919191',
 }
+
+export enum Size {
+  SPACING = 22,
+}

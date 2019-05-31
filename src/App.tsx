@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { Firebase } from './helpers';
 
 import Map from './containers/Map';
+import MapOverlay from './containers/MapOverlay';
 
 import store from './store';
 
@@ -18,14 +19,11 @@ const GlobalStyle = createGlobalStyle`
 Firebase.initialize();
 
 const App: React.FunctionComponent = () => (
-  <>
-    <Provider store={store}>
-      <GlobalStyle />
-      <div>
-        <Map />
-      </div>
-    </Provider>
-  </>
+  <Provider store={store}>
+    <GlobalStyle />
+    <MapOverlay />
+    <Map />
+  </Provider>
 );
 
 export default App;
