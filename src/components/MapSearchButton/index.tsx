@@ -12,6 +12,9 @@ const AnimatedContainer = posed.button({
   exit: {
     opacity: 0,
   },
+  dim: {
+    opacity: 0.3,
+  },
 });
 
 const Container = styled(AnimatedContainer)`
@@ -49,12 +52,48 @@ const IconContainer = styled.div`
 
 interface SearchButtonProps {
   toggleDrawer: (value: boolean) => void;
+  isInteractingWithMap: boolean;
+  drawerOpen: boolean;
 }
+
+const determineAnimation = ({
+  drawerOpen,
+  isInteractingWithMap,
+}: {
+  isInteractingWithMap: boolean;
+  drawerOpen: boolean;
+}): string => {
+  if (isInteractingWithMap) {
+    return 'dim';
+  }
+
+  if (!drawerOpen && !isInteractingWithMap) {
+    return 'enter';
+  }
+
+  if (drawerOpen) {
+    return 'enter';
+  }
+
+  if (!drawerOpen) {
+    return 'close';
+  }
+
+  return '';
+};
 
 const SearchButton: React.FunctionComponent<SearchButtonProps> = ({
   toggleDrawer,
+  isInteractingWithMap,
+  drawerOpen,
 }) => (
-  <Container onClick={() => toggleDrawer(true)}>
+  <Container
+    pose={determineAnimation({
+      isInteractingWithMap,
+      drawerOpen,
+    })}
+    onClick={() => toggleDrawer(true)}
+  >
     <Content>
       <Text>Search for stabbing, theft, etc...</Text>
       <IconContainer>

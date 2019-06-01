@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import posed from 'react-pose';
+import { Colors } from '../../config';
 
 const AnimatedContainer = posed.div({
   enter: {
@@ -17,11 +18,15 @@ const Container = styled(AnimatedContainer)`
   left: 0;
   height: 100%;
   width: 300px;
-  background-color: white;
+  background-color: ${Colors.BACKGROUND};
 `;
 
-const Drawer: React.FunctionComponent = ({}) => {
-  return <Container />;
+interface DrawerProps {
+  open: boolean;
+}
+
+const Drawer: React.FunctionComponent<DrawerProps> = ({ open }) => {
+  return <Container pose={open ? 'enter' : 'exit'} />;
 };
 
 export default Drawer;

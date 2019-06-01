@@ -19,7 +19,7 @@ const AnimatedContainer = posed.div({
   },
 });
 
-const Container = styled(AnimatedContainer)`
+const Container = styled.div`
   position: absolute;
   top: 0;
   left: 0;
@@ -47,12 +47,17 @@ const MapOverlay: React.FunctionComponent<MapOverlayProps> = ({
   drawerOpen,
   isInteractingWithMap,
 }) => (
-  <Container pose={isInteractingWithMap ? 'dim' : 'show'}>
+  <Container>
     <Content>
       {!drawerOpen && (
-        <SearchButton key="search-button" toggleDrawer={toggleDrawerState} />
+        <SearchButton
+          key="search-button"
+          toggleDrawer={toggleDrawerState}
+          isInteractingWithMap={isInteractingWithMap}
+          drawerOpen={drawerOpen}
+        />
       )}
-      {drawerOpen && <Drawer key="drawer" />}
+      <Drawer key="drawer" open={drawerOpen} />
     </Content>
   </Container>
 );
