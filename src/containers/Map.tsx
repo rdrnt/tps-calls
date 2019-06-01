@@ -1,10 +1,10 @@
 import * as React from 'react';
-import MapGL, { InteractiveState } from 'react-map-gl';
+import MapGL, { InteractiveState, ExtraState } from 'react-map-gl';
 import { AppState } from '../store';
 import { connect } from 'react-redux';
 import { UIState } from '../store/ui';
 
-import { setInteractingMap } from '../store/ui/actions';
+import { setInteractingMap, toggleDrawer } from '../store/ui/actions';
 import { Dispatch } from 'redux';
 
 const DEFAULTS = {
@@ -18,8 +18,9 @@ interface MapState {
 }
 
 interface MapProps {
+  setInteractingWithMap: (isInteracting: boolean) => void;
+  toggleDrawerState: (value: boolean) => void;
   ui: UIState;
-  dispatch: Dispatch;
 }
 
 class Map extends React.Component<MapProps, MapState> {
@@ -41,12 +42,17 @@ class Map extends React.Component<MapProps, MapState> {
     });
   };
 
-  public onMapInteraction = interactionState => {
-    const { dispatch, ui } = this.props;
+  public onMapInteraction = (
+    interactionState: InteractiveState & ExtraState
+  ) => {
+    const { toggleDrawerState, setInteractingWithMap, ui } = this.props;
     if (interactionState.isDragging && !ui.isInteractingWithMap) {
-      dispatch(setInteractingMap(true));
+      setInteractingWithMap(true);
+      if (ui.drawerOpen) {
+        toggleDrawerState(false);
+      }
     } else if (!interactionState.isDragging && ui.isInteractingWithMap) {
-      dispatch(setInteractingMap(false));
+      setInteractingWithMap(false);
     }
   };
 
@@ -67,7 +73,13 @@ export const mapStateToProps = (state: AppState) => ({
   ui: state.ui,
 });
 
+export const mapDispatchToProps = (dispatch: Dispatch) => ({
+  setInteractingWithMap: (isInteracting: boolean) =>
+    dispatch(setInteractingMap(isInteracting)),
+  toggleDrawerState: (value: boolean) => dispatch(toggleDrawer(value)),
+});
+
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(Map);

@@ -3,8 +3,10 @@ export enum Colors {
   SECONDARY = '#343d82',
   TEXT_PRIMARY = '#000000',
   TEXT_SECONDARY = '#919191',
+  BACKGROUND = '#fefefe',
+  BACKGROUND_SECONDARY = '#eeeded',
 }
 
-export enum Size {
+export enum Sizes {
   SPACING = 22,
 }

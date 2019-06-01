@@ -8,8 +8,18 @@ import { AppState } from '../store';
 import posed, { PoseGroup } from 'react-pose';
 
 import Drawer from '../components/Drawer';
+import SearchButton from '../components/MapSearchButton';
 
-const Container = styled.div`
+const AnimatedContainer = posed.div({
+  dim: {
+    opacity: 0.2,
+  },
+  show: {
+    opacity: 1,
+  },
+});
+
+const Container = styled(AnimatedContainer)`
   position: absolute;
   top: 0;
   left: 0;
@@ -26,20 +36,6 @@ const Content = styled.div`
   pointer-events: none;
 `;
 
-const DrawerOpenButton = styled.button`
-  height: 50px;
-  width: 50px;
-  background-color: transparent;
-  border: none;
-  pointer-events: auto;
-  margin: 22px;
-
-  svg {
-    height: 100%;
-    width: 100%;
-  }
-`;
-
 interface MapOverlayProps {
   toggleDrawerState: (value: boolean) => void;
   drawerOpen: boolean;
@@ -51,17 +47,12 @@ const MapOverlay: React.FunctionComponent<MapOverlayProps> = ({
   drawerOpen,
   isInteractingWithMap,
 }) => (
-  <Container>
+  <Container pose={isInteractingWithMap ? 'dim' : 'show'}>
     <Content>
       {!drawerOpen && (
-        <DrawerOpenButton
-          key="drawer-button"
-          onClick={() => toggleDrawerState(true)}
-        >
-          <FiMenu />
-        </DrawerOpenButton>
+        <SearchButton key="search-button" toggleDrawer={toggleDrawerState} />
       )}
-      <PoseGroup>{drawerOpen && <Drawer key="muppet" />}</PoseGroup>
+      {drawerOpen && <Drawer key="drawer" />}
     </Content>
   </Container>
 );
