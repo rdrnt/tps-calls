@@ -23,7 +23,8 @@
     "redux-thunk": "^2.3.0",
     "styled-components": "^4.2.1",
     "terser": "3.14.1",
-    "tslib": "^1.9.3"
+    "tslib": "^1.9.3",
+    "tps-calls-shared": "git+ssh://git@github.com:rdrnt/tps-calls-shared.git"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-0",

@@ -51,13 +51,12 @@ const MapOverlay: React.FunctionComponent<MapOverlayProps> = ({
     <Content>
       {!drawerOpen && (
         <SearchButton
-          key="search-button"
           toggleDrawer={toggleDrawerState}
           isInteractingWithMap={isInteractingWithMap}
           drawerOpen={drawerOpen}
         />
       )}
-      <Drawer key="drawer" open={drawerOpen} />
+      <Drawer open={drawerOpen} />
     </Content>
   </Container>
 );
