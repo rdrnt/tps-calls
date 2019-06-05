@@ -1,8 +1,8 @@
 import {
-  INITIAL_STATE,
+  IncidentActions,
   IncidentActionsType,
   IncidentsState,
-  IncidentActions,
+  INITIAL_STATE,
 } from '.';
 
 export function incidentReducer(

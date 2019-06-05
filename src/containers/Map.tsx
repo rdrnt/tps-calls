@@ -6,6 +6,8 @@ import { UIState } from '../store/ui';
 
 import { setInteractingMap, toggleDrawer } from '../store/ui/actions';
 import { Dispatch } from 'redux';
+import MapMarker from '../components/MapMarker';
+import { IncidentsState } from '../store/incidents';
 
 const DEFAULTS = {
   latitude: 43.653225,
@@ -21,6 +23,7 @@ interface MapProps {
   setInteractingWithMap: (isInteracting: boolean) => void;
   toggleDrawerState: (value: boolean) => void;
   ui: UIState;
+  incidents: IncidentsState;
 }
 
 class Map extends React.Component<MapProps, MapState> {
@@ -58,19 +61,28 @@ class Map extends React.Component<MapProps, MapState> {
 
   public render() {
     const { viewport } = this.state;
+    const { incidents } = this.props;
     return (
       <MapGL
         {...viewport}
         onViewportChange={viewport => this.setState({ viewport })}
         mapboxApiAccessToken={process.env.MAPBOX_API_KEY}
         onInteractionStateChange={this.onMapInteraction}
-      />
+      >
+        {incidents.list.map(incident => (
+          <MapMarker
+            latitude={incident.coordinates.latitude}
+            longitude={incident.coordinates.longitude}
+          />
+        ))}
+      </MapGL>
     );
   }
 }
 
 export const mapStateToProps = (state: AppState) => ({
   ui: state.ui,
+  incidents: state.incidents,
 });
 
 export const mapDispatchToProps = (dispatch: Dispatch) => ({

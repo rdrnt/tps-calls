@@ -1,14 +1,16 @@
+import { Incident } from 'tps-calls-shared';
+
 /*
  INCIDENTS
 */
 export interface IncidentsState {
-  list: any[];
-  selected: any;
+  list: Incident<any>[];
+  selected?: Incident<any>;
 }
 
 export const INITIAL_STATE: IncidentsState = {
   list: [],
-  selected: null,
+  selected: undefined,
 };
 
 export enum IncidentActions {
@@ -18,7 +20,7 @@ export enum IncidentActions {
 export interface SetIncidentListAction {
   type: IncidentActions;
   payload: {
-    list: any[];
+    list: Incident<any>[];
   };
 }
 

@@ -2,6 +2,7 @@ import firebaseApp from 'firebase/app';
 import 'firebase/firestore';
 
 import productionConfig from '../../config/firebase/production.json';
+import { Incident } from 'tps-calls-shared';
 
 export const initialize = () => {
   firebaseApp.initializeApp({ ...productionConfig });
@@ -10,7 +11,7 @@ export const initialize = () => {
 export const incidentListener = ({
   onChange,
 }: {
-  onChange: (incidents: any[]) => void;
+  onChange: (incidents: Incident<any>[]) => void;
 }) =>
   firebaseApp
     .firestore()
@@ -18,8 +19,10 @@ export const incidentListener = ({
     .limit(100)
     .orderBy('date', 'desc')
     .onSnapshot(incidentsSnapshot => {
-      const incidents: any[] = incidentsSnapshot.docs.map(incidentDoc => ({
-        ...incidentDoc.data(),
-      }));
+      const incidents: Incident<any>[] = incidentsSnapshot.docs.map(
+        incidentDoc => ({
+          ...(incidentDoc.data() as Incident<any>),
+        })
+      );
       onChange(incidents);
     });
