@@ -5,6 +5,7 @@ const Dotenv = require('dotenv-webpack');
 
 const paths = {
   src: path.resolve('./src'),
+  indexHtml: path.resolve('./public/index.html'),
 };
 
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -37,7 +38,7 @@ module.exports = {
   plugins: [
     new HtmlWebPackPlugin({
       inject: true,
-      template: path.join(paths.src, '/index.html'),
+      template: paths.indexHtml,
       filename: './index.html',
       minify: {
         removeComments: true,
