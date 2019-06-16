@@ -18,3 +18,19 @@ export function setInteractingMap(isInteracting: boolean): UIActionType {
     },
   };
 }
+
+export function openLoader(message?: string): UIActionType {
+  return {
+    type: UIActions.OPEN_LOADER,
+    payload: {
+      message,
+    },
+  };
+}
+
+export function closeLoader(): UIActionType {
+  return {
+    type: UIActions.CLOSE_LOADER,
+    payload: {},
+  };
+}

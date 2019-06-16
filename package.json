@@ -2,10 +2,15 @@
   "name": "tps-calls",
   "version": "1.5.1",
   "private": true,
+  "scripts": {
+    "start": "NODE_ENV=development && webpack-dev-server --mode development",
+    "build": "NODE_ENV=production && webpack --mode production --progress",
+    "netlify-deploy": "yarn version && sh scripts/release_notes.sh && yarn build && netlify deploy --dir build",
+    "netlify-deploy:prod": "netlify deploy --prod",
+    "test": "node scripts/test.js --updateSnapshot"
+  },
   "dependencies": {
     "@reach/router": "^1.2.1",
-    "@types/react-redux": "^7.0.9",
-    "@types/redux": "^3.6.0",
     "firebase": "^6.0.4",
     "global": "^4.3.2",
     "mapbox-gl": "^1.0.0",
@@ -35,6 +40,8 @@
     "@types/react-icons": "^3.0.0",
     "@types/react-map-gl": "^4.1.2",
     "@types/styled-components": "^4.1.16",
+    "@types/react-redux": "^7.0.9",
+    "@types/redux": "^3.6.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-styled-components": "^1.10.0",
     "babel-polyfill": "^6.26.0",
@@ -57,13 +64,6 @@
     "webpack-cli": "^3.3.2",
     "webpack-dev-server": "^3.4.1",
     "webpack-pwa-manifest": "^4.0.0"
-  },
-  "scripts": {
-    "start": "NODE_ENV=development && webpack-dev-server --mode development",
-    "build": "NODE_ENV=production && webpack -p --progress",
-    "netlify-deploy": "yarn version && sh scripts/release_notes.sh && yarn build && netlify deploy --dir build",
-    "netlify-deploy:prod": "netlify deploy --prod",
-    "test": "node scripts/test.js --updateSnapshot"
   },
   "jest": {
     "verbose": true,

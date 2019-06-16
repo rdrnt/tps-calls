@@ -15,6 +15,22 @@ export function uiReducer(
         ...state,
         isInteractingWithMap: action.payload.isInteracting,
       };
+    case UIActions.OPEN_LOADER:
+      return {
+        ...state,
+        loader: {
+          open: true,
+          message: action.payload.message,
+        },
+      };
+    case UIActions.CLOSE_LOADER:
+      return {
+        ...state,
+        loader: {
+          open: false,
+          message: undefined,
+        },
+      };
     default:
       return state;
   }

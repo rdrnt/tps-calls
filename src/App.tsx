@@ -11,6 +11,7 @@ import Template from './components/Template';
 
 import store from './store';
 import Drawer from './components/Drawer';
+import Loader from './components/Loader';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -27,6 +28,7 @@ const App: React.FunctionComponent = () => (
   <Provider store={store}>
     <GlobalStyle />
     <IncidentListener />
+    <Loader />
     <Drawer />
     <Template>
       <Map />

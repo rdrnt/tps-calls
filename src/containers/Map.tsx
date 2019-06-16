@@ -3,9 +3,14 @@ import MapGL, { InteractiveState, ExtraState } from 'react-map-gl';
 import { AppState } from '../store';
 import { connect } from 'react-redux';
 import { UIState } from '../store/ui';
-
-import { setInteractingMap, toggleDrawer } from '../store/ui/actions';
 import { Dispatch } from 'redux';
+
+import {
+  setInteractingMap,
+  toggleDrawer,
+  openLoader,
+  closeLoader,
+} from '../store/ui/actions';
 import MapMarker from '../components/MapMarker';
 import { IncidentsState } from '../store/incidents';
 import SearchButton from '../components/MapSearchButton';
@@ -23,6 +28,8 @@ interface MapState {
 interface MapProps {
   setInteractingWithMap: (isInteracting: boolean) => void;
   toggleDrawerState: (value: boolean) => void;
+  showLoader: (message?: string) => void;
+  dismissLoader: () => void;
   ui: UIState;
   incidents: IncidentsState;
 }
@@ -38,6 +45,11 @@ class Map extends React.Component<MapProps, MapState> {
         ...DEFAULTS,
       },
     };
+  }
+
+  public componentDidMount() {
+    const { showLoader } = this.props;
+    showLoader('Loading map...');
   }
 
   public updateViewport = (viewport: any) => {
@@ -62,13 +74,14 @@ class Map extends React.Component<MapProps, MapState> {
 
   public render() {
     const { viewport } = this.state;
-    const { incidents, toggleDrawerState, ui } = this.props;
+    const { incidents, toggleDrawerState, ui, dismissLoader } = this.props;
     return (
       <MapGL
         {...viewport}
         onViewportChange={viewport => this.setState({ viewport })}
         mapboxApiAccessToken={process.env.MAPBOX_API_KEY}
         onInteractionStateChange={this.onMapInteraction}
+        onLoad={() => dismissLoader()}
       >
         <SearchButton
           toggleDrawer={toggleDrawerState}
@@ -96,6 +109,8 @@ export const mapDispatchToProps = (dispatch: Dispatch) => ({
   setInteractingWithMap: (isInteracting: boolean) =>
     dispatch(setInteractingMap(isInteracting)),
   toggleDrawerState: (value: boolean) => dispatch(toggleDrawer(value)),
+  showLoader: (message?: string) => dispatch(openLoader(message)),
+  dismissLoader: () => dispatch(closeLoader()),
 });
 
 export default connect(
