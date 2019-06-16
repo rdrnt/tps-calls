@@ -1,20 +1,23 @@
 import * as React from 'react';
 import { createGlobalStyle } from 'styled-components';
 import { Provider } from 'react-redux';
-// import { Router } from '@reach/router';
 
 import { Firebase } from './helpers';
 
 import Map from './containers/Map';
-import MapOverlay from './containers/MapOverlay';
 
 import IncidentListener from './components/IncidentListener';
+import Template from './components/Template';
 
 import store from './store';
+import Drawer from './components/Drawer';
 
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
   }
 `;
 
@@ -24,10 +27,10 @@ const App: React.FunctionComponent = () => (
   <Provider store={store}>
     <GlobalStyle />
     <IncidentListener />
-    <>
-      <MapOverlay />
+    <Drawer />
+    <Template>
       <Map />
-    </>
+    </Template>
   </Provider>
 );
 

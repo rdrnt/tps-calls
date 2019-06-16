@@ -23,8 +23,8 @@
     "redux-thunk": "^2.3.0",
     "styled-components": "^4.2.1",
     "terser": "3.14.1",
-    "tslib": "^1.9.3",
-    "tps-calls-shared": "git+ssh://git@github.com:rdrnt/tps-calls-shared.git"
+    "tps-calls-shared": "git+ssh://git@github.com:rdrnt/tps-calls-shared.git",
+    "tslib": "^1.9.3"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-0",
@@ -34,7 +34,7 @@
     "@types/react-dom": "^16.8.4",
     "@types/react-icons": "^3.0.0",
     "@types/react-map-gl": "^4.1.2",
-    "@types/styled-components": "^4.1.15",
+    "@types/styled-components": "^4.1.16",
     "babel-loader": "^8.0.6",
     "babel-plugin-styled-components": "^1.10.0",
     "babel-polyfill": "^6.26.0",
