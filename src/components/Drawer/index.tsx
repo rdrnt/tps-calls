@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import posed from 'react-pose';
+import posed, { PoseGroup } from 'react-pose';
 import { Colors, Sizes } from '../../config';
 import { Incident } from 'tps-calls-shared';
 
@@ -11,22 +11,27 @@ import { UIState } from '../../store/ui';
 import { IncidentsState } from '../../store/incidents';
 
 const AnimatedContainer = posed.div({
-  enter: {
-    width: Sizes.DRAWER_WIDTH,
-    opacity: 1,
-  },
-  exit: {
-    width: 0,
-    opacity: 0,
-  },
+  enter: {},
+  exit: {},
 });
 
 const Container = styled(AnimatedContainer)`
-  height: 100%;
-  background-color: ${Colors.BACKGROUND};
+  height: 100vh;
+  width: ${Sizes.DRAWER_WIDTH}px;
+  position: fixed;
+  top: 0;
+  left: 0;
   transition: 0.5s;
   z-index: 999;
   margin: 0;
+  overflow-y: scroll;
+`;
+
+const List = styled.ul`
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 `;
 
 interface DrawerProps {
@@ -35,13 +40,17 @@ interface DrawerProps {
 }
 
 const Drawer: React.FunctionComponent<DrawerProps> = ({ ui, incidents }) => (
-  <Container pose={ui.drawerOpen ? 'enter' : 'exit'}>
-    {/*
-      {incidents.list.map(incident => (
-        <Item key={incident.id} incident={incident} />
-      ))}
-       */}
-  </Container>
+  <PoseGroup>
+    {ui.drawerOpen && (
+      <Container key="drawer">
+        <List>
+          {incidents.list.map(incident => (
+            <Item key={incident.id} incident={incident} />
+          ))}
+        </List>
+      </Container>
+    )}
+  </PoseGroup>
 );
 
 const mapStateToProps = (state: AppState) => ({

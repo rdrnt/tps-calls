@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
+const WebpackPwaManifest = require('webpack-pwa-manifest');
 
 const paths = {
   src: path.resolve('./src'),
@@ -52,6 +53,14 @@ module.exports = {
         minifyCSS: true,
         minifyURLs: true,
       },
+    }),
+    new WebpackPwaManifest({
+      name: 'tpscalls.live',
+      short_name: 'tpscalls',
+      description: 'live map of police',
+      background_color: '#ffffff',
+      crossorigin: null,
+      icons: [],
     }),
     new webpack.DefinePlugin({
       'process.env': JSON.stringify(dotenv.parsed),
