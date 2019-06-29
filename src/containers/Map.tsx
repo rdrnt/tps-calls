@@ -50,7 +50,22 @@ class Map extends React.Component<MapProps, MapState> {
   public componentDidMount() {
     const { showLoader } = this.props;
     showLoader('Loading map...');
+    window.addEventListener('resize', this.manageWindowResizeListener);
   }
+
+  public componentWillUnmount() {
+    window.removeEventListener('resize', this.manageWindowResizeListener);
+  }
+
+  public manageWindowResizeListener = ({ target }: any) => {
+    this.setState(prevState => ({
+      viewport: {
+        ...prevState.viewport,
+        height: target.innerHeight,
+        width: target.innerWidth,
+      },
+    }));
+  };
 
   public updateViewport = (viewport: any) => {
     this.setState({

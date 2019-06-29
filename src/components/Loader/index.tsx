@@ -3,7 +3,10 @@ import styled from 'styled-components';
 import posed, { PoseGroup } from 'react-pose';
 import { AppState } from '../../store';
 import { connect } from 'react-redux';
+
 import { Colors } from '../../config';
+
+import Text, { TextType } from '../Text';
 
 const AnimatedContainer = posed.div({
   enter: {
@@ -27,11 +30,6 @@ const Container = styled(AnimatedContainer)`
   align-items: center;
 `;
 
-const Text = styled.h1`
-  font-size: 26px;
-  color: ${Colors.TEXT_PRIMARY};
-`;
-
 export interface Loader {
   open: boolean;
   message?: string;
@@ -40,7 +38,9 @@ export interface Loader {
 const Loader: React.FunctionComponent<Loader> = ({ open, message }) => (
   <PoseGroup>
     {open && (
-      <Container key="loader">{message && <Text>{message}</Text>}</Container>
+      <Container key="loader">
+        {message && <Text type={TextType.H1}>{message}</Text>}
+      </Container>
     )}
   </PoseGroup>
 );
