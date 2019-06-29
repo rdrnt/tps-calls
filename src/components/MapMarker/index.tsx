@@ -1,11 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Marker } from 'react-map-gl';
+import { Colors } from '../../config';
 
 const Container = styled.div`
   height: 15px;
   width: 15px;
-  background-color: red;
+  background-color: ${Colors.SECONDARY};
   border-radius: 7.5px;
 `;
 
