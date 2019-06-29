@@ -24,7 +24,6 @@ const Container = styled(AnimatedContainer)`
   transition: 0.5s;
   z-index: 999;
   margin: 0;
-  overflow-y: scroll;
 `;
 
 const List = styled.ul`
@@ -32,6 +31,7 @@ const List = styled.ul`
   width: 100%;
   margin: 0;
   padding: 0;
+  overflow-y: auto;
 `;
 
 interface DrawerProps {

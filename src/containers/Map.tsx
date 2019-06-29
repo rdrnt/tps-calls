@@ -78,7 +78,7 @@ class Map extends React.Component<MapProps, MapState> {
     return (
       <MapGL
         {...viewport}
-        onViewportChange={viewport => this.setState({ viewport })}
+        onViewportChange={this.updateViewport}
         mapboxApiAccessToken={process.env.MAPBOX_API_KEY}
         onInteractionStateChange={this.onMapInteraction}
         onLoad={() => dismissLoader()}

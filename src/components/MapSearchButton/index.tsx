@@ -72,7 +72,7 @@ const determineAnimation = ({
   }
 
   if (drawerOpen) {
-    return 'enter';
+    return 'exit';
   }
 
   if (!drawerOpen) {
