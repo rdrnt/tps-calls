@@ -14,17 +14,12 @@ import Drawer from './components/Drawer';
 import Loader from './components/Loader';
 
 const GlobalStyle = createGlobalStyle`
-@font-face {
-  font-family: 'Raleway';
-  src: url('./fonts/Raleway-Regular.ttf') format('ttf');
-  font-weight: normal;
-  font-style: normal;
-}
   body {
     margin: 0;
     overflow: hidden;
     width: 100vw;
     height: 100vh;
+    font-family: 'Raleway';
   }
 `;
 

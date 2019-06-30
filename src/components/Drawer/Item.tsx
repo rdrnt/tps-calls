@@ -4,6 +4,7 @@ import { Incident } from 'tps-calls-shared';
 import { Colors } from '../../config';
 
 import Text, { TextType } from '../Text';
+import { DateHelper } from '../../helpers';
 
 const Container = styled.li`
   height: 75px;
@@ -15,6 +16,10 @@ const Container = styled.li`
   display: flex;
   flex-direction: row;
   align-items: center;
+
+  div {
+    flex-direction: column;
+  }
 `;
 
 interface DrawerItemProps {
@@ -23,7 +28,12 @@ interface DrawerItemProps {
 
 const Item: React.FunctionComponent<DrawerItemProps> = ({ incident }) => (
   <Container>
-    <Text type={TextType.H3}>{incident.name}</Text>
+    <div>
+      <Text type={TextType.H3}>{incident.name}</Text>
+      <Text type={TextType.P}>
+        {DateHelper.formatIncidentDate(incident.date)}
+      </Text>
+    </div>
   </Container>
 );
 

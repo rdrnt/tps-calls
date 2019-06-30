@@ -21,7 +21,7 @@ const Container = styled(AnimatedContainer)`
   position: fixed;
   top: 0;
   left: 0;
-  transition: 0.5s;
+  transition: 0.3s;
   z-index: 999;
   margin: 0;
 `;
