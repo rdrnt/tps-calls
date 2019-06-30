@@ -11,6 +11,7 @@ export enum TextType {
 interface StyledText {
   color?: string;
   textAlign?: string;
+  bold?: boolean;
 }
 
 export interface Text extends StyledText {
@@ -20,6 +21,7 @@ export interface Text extends StyledText {
 /*
   color: ${(props: any) => props.color ? props.color : Colors.PRIMARY};
   text-align: ${(props: any) => props.textAlign ? props.textAlign : 'left'};
+  font-weight: ${(props: any) => props.bold ? 'bold' : 'normal'};
 */
 
 const H1 = styled.h1<StyledText>`
@@ -28,6 +30,7 @@ const H1 = styled.h1<StyledText>`
   font-weight: normal;
   text-align: ${(props: any) => (props.textAlign ? props.textAlign : 'left')};
   color: ${(props: any) => (props.color ? props.color : Colors.TEXT_PRIMARY)};
+  font-weight: ${(props: any) => (props.bold ? 'bold' : 'normal')};
 `;
 
 const H3 = styled.h3<StyledText>`

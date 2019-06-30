@@ -33,6 +33,7 @@ module.exports = {
         use: ['style-loader', 'css-loader'],
       },
       { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
+      { test: /.(eot|ttf|woff|woff2)(\?.+)?$/, loader: 'file-loader' },
     ],
   },
   plugins: [
