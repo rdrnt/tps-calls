@@ -23,7 +23,9 @@ export interface Text extends StyledText {
 */
 
 const H1 = styled.h1<StyledText>`
+  font-family: 'Raleway';
   font-size: 62px;
+  font-weight: normal;
   text-align: ${(props: any) => (props.textAlign ? props.textAlign : 'left')};
   color: ${(props: any) => (props.color ? props.color : Colors.TEXT_PRIMARY)};
 `;

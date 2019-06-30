@@ -14,6 +14,12 @@ import Drawer from './components/Drawer';
 import Loader from './components/Loader';
 
 const GlobalStyle = createGlobalStyle`
+@font-face {
+  font-family: 'Raleway';
+  src: url('./fonts/Raleway-Regular.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+}
   body {
     margin: 0;
     overflow: hidden;
@@ -25,15 +31,17 @@ const GlobalStyle = createGlobalStyle`
 Firebase.initialize();
 
 const App: React.FunctionComponent = () => (
-  <Provider store={store}>
+  <>
     <GlobalStyle />
-    <IncidentListener />
-    <Loader />
-    <Drawer />
-    <Template>
-      <Map />
-    </Template>
-  </Provider>
+    <Provider store={store}>
+      <IncidentListener />
+      <Loader />
+      <Drawer />
+      <Template>
+        <Map />
+      </Template>
+    </Provider>
+  </>
 );
 
 export default App;
