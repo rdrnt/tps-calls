@@ -13,10 +13,10 @@ const AnimatedContainer = posed.div({
 });
 
 const Container = styled(AnimatedContainer)`
-  height: 15px;
-  width: 15px;
+  height: 10px;
+  width: 10px;
   background-color: ${Colors.PRIMARY};
-  border-radius: 7.5px;
+  border-radius: 5px;
 `;
 
 interface MapMarkerProps {
