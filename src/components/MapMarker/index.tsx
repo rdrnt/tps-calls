@@ -1,12 +1,21 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Marker } from 'react-map-gl';
+import posed from 'react-pose';
+
 import { Colors } from '../../config';
 
-const Container = styled.div`
+const AnimatedContainer = posed.div({
+  hoverable: true,
+  hover: {
+    scale: 1.2,
+  },
+});
+
+const Container = styled(AnimatedContainer)`
   height: 15px;
   width: 15px;
-  background-color: ${Colors.SECONDARY};
+  background-color: ${Colors.PRIMARY};
   border-radius: 7.5px;
 `;
 

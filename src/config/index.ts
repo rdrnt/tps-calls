@@ -11,3 +11,6 @@ export enum Sizes {
   SPACING = 22,
   DRAWER_WIDTH = 375,
 }
+
+export const MAPBOX_THEME_URL =
+  'mapbox://styles/drnt/cjmwb7zbo1f5b2ro8sqfdkaql';

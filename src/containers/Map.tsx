@@ -1,9 +1,10 @@
 import * as React from 'react';
 import MapGL, { InteractiveState, ExtraState } from 'react-map-gl';
 import { AppState } from '../store';
-import { connect, DispatchProp } from 'react-redux';
+import { connect } from 'react-redux';
 import { UIState } from '../store/ui';
 import { Dispatch } from 'redux';
+import { Incident } from 'tps-calls-shared';
 
 import {
   setInteractingMap,
@@ -14,8 +15,8 @@ import {
 import MapMarker from '../components/MapMarker';
 import { IncidentsState } from '../store/incidents';
 import MapInfo from '../components/MapInfo';
-import { Incident } from 'tps-calls-shared';
 import { setSelectedIncident } from '../store/incidents/actions';
+import { MAPBOX_THEME_URL } from '../config';
 
 const DEFAULTS = {
   latitude: 43.653225,
@@ -104,6 +105,7 @@ class Map extends React.Component<MapProps, MapState> {
         {...viewport}
         onViewportChange={this.updateViewport}
         mapboxApiAccessToken={process.env.MAPBOX_API_KEY}
+        mapStyle={MAPBOX_THEME_URL}
         onInteractionStateChange={this.onMapInteraction}
         onLoad={() => dismissLoader()}
       >
