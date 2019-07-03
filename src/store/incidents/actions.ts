@@ -1,12 +1,22 @@
-import { IncidentActions, IncidentActionsType } from '.';
+import { IncidentActions, IncidentActionType } from '.';
 import { Incident } from 'tps-calls-shared';
 
-// TypeScript infers that this function is returning SendMessageAction
-export function setIncidentList(list: Incident<any>[]): IncidentActionsType {
+export function setIncidentList(list: Incident<any>[]): IncidentActionType {
   return {
     type: IncidentActions.SET_INCIDENT_LIST,
     payload: {
       list,
+    },
+  };
+}
+
+export function setSelectedIncident(
+  selected?: Incident<any>
+): IncidentActionType {
+  return {
+    type: IncidentActions.SET_SELECTED_INCIDENT,
+    payload: {
+      selected,
     },
   };
 }

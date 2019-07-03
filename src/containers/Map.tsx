@@ -1,7 +1,7 @@
 import * as React from 'react';
 import MapGL, { InteractiveState, ExtraState } from 'react-map-gl';
 import { AppState } from '../store';
-import { connect } from 'react-redux';
+import { connect, DispatchProp } from 'react-redux';
 import { UIState } from '../store/ui';
 import { Dispatch } from 'redux';
 
@@ -13,7 +13,9 @@ import {
 } from '../store/ui/actions';
 import MapMarker from '../components/MapMarker';
 import { IncidentsState } from '../store/incidents';
-import SearchButton from '../components/MapSearchButton';
+import MapInfo from '../components/MapInfo';
+import { Incident } from 'tps-calls-shared';
+import { setSelectedIncident } from '../store/incidents/actions';
 
 const DEFAULTS = {
   latitude: 43.653225,
@@ -27,6 +29,7 @@ interface MapState {
 
 interface MapProps {
   setInteractingWithMap: (isInteracting: boolean) => void;
+  setSelectedMapIncident: (incident: Incident<any>) => void;
   toggleDrawerState: (value: boolean) => void;
   showLoader: (message?: string) => void;
   dismissLoader: () => void;
@@ -89,7 +92,13 @@ class Map extends React.Component<MapProps, MapState> {
 
   public render() {
     const { viewport } = this.state;
-    const { incidents, toggleDrawerState, ui, dismissLoader } = this.props;
+    const {
+      incidents,
+      toggleDrawerState,
+      ui,
+      dismissLoader,
+      setSelectedMapIncident,
+    } = this.props;
     return (
       <MapGL
         {...viewport}
@@ -98,16 +107,18 @@ class Map extends React.Component<MapProps, MapState> {
         onInteractionStateChange={this.onMapInteraction}
         onLoad={() => dismissLoader()}
       >
-        <SearchButton
+        <MapInfo
           toggleDrawer={toggleDrawerState}
           isInteractingWithMap={ui.isInteractingWithMap}
           drawerOpen={ui.drawerOpen}
+          selectedIncident={incidents.selected}
         />
         {incidents.list.map(incident => (
           <MapMarker
             key={incident.id}
             latitude={incident.coordinates.latitude}
             longitude={incident.coordinates.longitude}
+            onClick={() => setSelectedMapIncident(incident)}
           />
         ))}
       </MapGL>
@@ -123,6 +134,8 @@ export const mapStateToProps = (state: AppState) => ({
 export const mapDispatchToProps = (dispatch: Dispatch) => ({
   setInteractingWithMap: (isInteracting: boolean) =>
     dispatch(setInteractingMap(isInteracting)),
+  setSelectedMapIncident: (incident: Incident<any>) =>
+    dispatch(setSelectedIncident(incident)),
   toggleDrawerState: (value: boolean) => dispatch(toggleDrawer(value)),
   showLoader: (message?: string) => dispatch(openLoader(message)),
   dismissLoader: () => dispatch(closeLoader()),

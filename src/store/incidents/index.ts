@@ -15,13 +15,23 @@ export const INITIAL_STATE: IncidentsState = {
 
 export enum IncidentActions {
   SET_INCIDENT_LIST = 'SET_INCIDENT_LIST',
+  SET_SELECTED_INCIDENT = 'SET_SELECTED_INCIDENT',
 }
 
 export interface SetIncidentListAction {
-  type: IncidentActions;
+  type: IncidentActions.SET_INCIDENT_LIST;
   payload: {
     list: Incident<any>[];
   };
 }
 
-export type IncidentActionsType = SetIncidentListAction;
+export interface SetSelectedIncidentAction {
+  type: IncidentActions.SET_SELECTED_INCIDENT;
+  payload: {
+    selected?: Incident<any>;
+  };
+}
+
+export type IncidentActionType =
+  | SetIncidentListAction
+  | SetSelectedIncidentAction;

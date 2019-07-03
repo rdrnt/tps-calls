@@ -4,6 +4,7 @@ import posed from 'react-pose';
 import { FaSearch } from 'react-icons/fa';
 
 import { Sizes, Colors } from '../../config';
+import { Incident } from 'tps-calls-shared';
 
 const AnimatedContainer = posed.button({
   enter: {
@@ -50,12 +51,6 @@ const IconContainer = styled.div`
   justify-content: center;
 `;
 
-interface SearchButtonProps {
-  toggleDrawer: (value: boolean) => void;
-  isInteractingWithMap: boolean;
-  drawerOpen: boolean;
-}
-
 const determineAnimation = ({
   drawerOpen,
   isInteractingWithMap,
@@ -82,25 +77,40 @@ const determineAnimation = ({
   return '';
 };
 
-const SearchButton: React.FunctionComponent<SearchButtonProps> = ({
+interface MapInfo {
+  toggleDrawer: (value: boolean) => void;
+  isInteractingWithMap: boolean;
+  drawerOpen: boolean;
+  selectedIncident?: Incident<any>;
+}
+
+const MapInfo: React.FunctionComponent<MapInfo> = ({
   toggleDrawer,
   isInteractingWithMap,
   drawerOpen,
-}) => (
-  <Container
-    pose={determineAnimation({
-      isInteractingWithMap,
-      drawerOpen,
-    })}
-    onClick={() => toggleDrawer(true)}
-  >
-    <Content>
-      <Text>Search for stabbing, theft, etc...</Text>
-      <IconContainer>
-        <FaSearch />
-      </IconContainer>
-    </Content>
-  </Container>
-);
+  selectedIncident,
+}) => {
+  return (
+    <Container
+      pose={determineAnimation({
+        isInteractingWithMap,
+        drawerOpen,
+      })}
+      onClick={() => toggleDrawer(true)}
+    >
+      {selectedIncident && (
+        <Content>
+          <Text>{selectedIncident.name}</Text>
+        </Content>
+      )}
+      <Content>
+        <Text>Search for stabbing, theft, etc...</Text>
+        <IconContainer>
+          <FaSearch />
+        </IconContainer>
+      </Content>
+    </Container>
+  );
+};
 
-export default SearchButton;
+export default MapInfo;

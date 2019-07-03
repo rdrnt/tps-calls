@@ -39,7 +39,11 @@ const Loader: React.FunctionComponent<Loader> = ({ open, message }) => (
   <PoseGroup>
     {open && (
       <Container key="loader">
-        {message && <Text type={TextType.H1}>{message}</Text>}
+        {message && (
+          <Text type={TextType.H1} bold={true}>
+            {message}
+          </Text>
+        )}
       </Container>
     )}
   </PoseGroup>

@@ -13,13 +13,15 @@ const Container = styled.div`
 interface MapMarkerProps {
   latitude: number;
   longitude: number;
+  onClick: () => void;
 }
 const MapMarker: React.FunctionComponent<MapMarkerProps> = ({
   latitude,
   longitude,
+  onClick,
 }) => (
   <Marker latitude={latitude} longitude={longitude}>
-    <Container />
+    <Container onClick={onClick} />
   </Marker>
 );
 
