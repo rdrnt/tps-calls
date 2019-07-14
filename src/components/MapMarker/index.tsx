@@ -6,9 +6,11 @@ import posed from 'react-pose';
 import { Colors } from '../../config';
 
 const AnimatedContainer = posed.div({
-  hoverable: true,
   hover: {
     scale: 1.2,
+  },
+  default: {
+    scale: 1.0,
   },
 });
 
@@ -28,10 +30,18 @@ const MapMarker: React.FunctionComponent<MapMarkerProps> = ({
   latitude,
   longitude,
   onClick,
-}) => (
-  <Marker latitude={latitude} longitude={longitude}>
-    <Container onClick={onClick} />
-  </Marker>
-);
+}) => {
+  const [isHovering, setIsHovering] = React.useState<boolean>(false);
 
+  return (
+    <Marker latitude={latitude} longitude={longitude}>
+      <Container
+        onClick={onClick}
+        pose={isHovering ? 'hover' : 'default'}
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseOut={() => setIsHovering(false)}
+      />
+    </Marker>
+  );
+};
 export default MapMarker;

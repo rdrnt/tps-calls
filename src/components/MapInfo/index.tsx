@@ -28,6 +28,7 @@ const Container = styled(AnimatedContainer)`
   border: none;
   padding: 7px;
   pointer-events: auto;
+  border-radius: 3px;
 `;
 
 const Content = styled.div`
