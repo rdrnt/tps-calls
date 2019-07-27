@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import posed, { PoseGroup } from 'react-pose';
 import { Colors, Sizes } from '../../config';
 import { Incident } from 'tps-calls-shared';
-
-import Item from './Item';
-import { AppState } from '../../store';
 import { connect } from 'react-redux';
+
+import IncidentCard from '../Card/Incident';
+import { AppState } from '../../store';
 import { UIState } from '../../store/ui';
 import { IncidentsState } from '../../store/incidents';
 
@@ -45,7 +45,7 @@ const Drawer: React.FunctionComponent<DrawerProps> = ({ ui, incidents }) => (
       <Container key="drawer">
         <List>
           {incidents.list.map(incident => (
-            <Item key={incident.id} incident={incident} />
+            <IncidentCard key={incident.id} incident={incident} />
           ))}
         </List>
       </Container>

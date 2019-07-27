@@ -12,5 +12,8 @@ export enum Sizes {
   DRAWER_WIDTH = 375,
 }
 
+export enum Defaults {
+  SECONDARY_FONT = 'Helvetica',
+}
 export const MAPBOX_THEME_URL =
   'mapbox://styles/drnt/cjmwb7zbo1f5b2ro8sqfdkaql';

@@ -11,6 +11,7 @@ import SelectedIncident, {
   HEIGHT as SELECTED_INCIDENT_HEIGHT,
 } from './SelectedIncident';
 import { setSelectedIncident } from '../../store/incidents/actions';
+import IncidentCard from '../Card/Incident';
 
 const HEIGHT = 35;
 
@@ -42,7 +43,7 @@ const Container = styled(AnimatedContainer)`
 `;
 
 const Content = styled.button`
-  height: 100%;
+  height: ${HEIGHT}px; /* Dont use 100% because it will be max height during the animation*/
   width: 100%;
   background-color: ${Colors.BACKGROUND_SECONDARY};
   display: flex;
@@ -127,15 +128,10 @@ const MapInfo: React.FunctionComponent<MapInfo> = ({
   return (
     <Container pose={animationState}>
       {selectedIncident ? (
-        <SelectedIncident close={() => dispatch(setSelectedIncident())}>
-          <Text>{selectedIncident.name}</Text>
-          <button
-            type="button"
-            onClick={() => setAnimationState(Animation.DEFAULT)}
-          >
-            close
-          </button>
-        </SelectedIncident>
+        <SelectedIncident
+          incident={selectedIncident}
+          close={() => dispatch(setSelectedIncident())}
+        />
       ) : (
         <Content type="button" onClick={() => toggleDrawer(true)}>
           <Text>Search for stabbing, theft, etc...</Text>

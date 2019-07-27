@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Colors } from '../../config';
+import { Colors, Defaults } from '../../config';
 
 export enum TextType {
   H1 = 'h1',
@@ -13,6 +13,7 @@ interface StyledText {
   color?: string;
   textAlign?: string;
   bold?: boolean;
+  secondaryFont?: boolean;
 }
 
 export interface Text extends StyledText {
@@ -23,6 +24,8 @@ export interface Text extends StyledText {
   color: ${(props: any) => props.color ? props.color : Colors.PRIMARY};
   text-align: ${(props: any) => props.textAlign ? props.textAlign : 'left'};
   font-weight: ${(props: any) => props.bold ? 'bold' : 'normal'};
+  margin: 0;
+  padding: 0;
 */
 
 const H1 = styled.h1<StyledText>`
@@ -31,6 +34,8 @@ const H1 = styled.h1<StyledText>`
   text-align: ${(props: any) => (props.textAlign ? props.textAlign : 'left')};
   color: ${(props: any) => (props.color ? props.color : Colors.TEXT_PRIMARY)};
   font-weight: ${(props: any) => (props.bold ? 'bold' : 'normal')};
+  margin: 0;
+  padding: 0;
 `;
 
 const H3 = styled.h3<StyledText>`
@@ -38,6 +43,8 @@ const H3 = styled.h3<StyledText>`
   font-weight: 500;
   text-align: ${(props: any) => (props.textAlign ? props.textAlign : 'left')};
   color: ${(props: any) => (props.color ? props.color : Colors.TEXT_PRIMARY)};
+  margin: 0;
+  padding: 0;
 `;
 
 const P = styled.p<StyledText>`
@@ -45,6 +52,23 @@ const P = styled.p<StyledText>`
   font-weight: normal;
   text-align: ${(props: any) => (props.textAlign ? props.textAlign : 'left')};
   color: ${(props: any) => (props.color ? props.color : Colors.TEXT_SECONDARY)};
+  ${({ secondaryFont }) =>
+    secondaryFont &&
+    `
+    font-family: ${Defaults.SECONDARY_FONT};
+  `};
+  margin: 0;
+  padding: 0;
+`;
+
+const Caption = styled.span<StyledText>`
+  font-size: 10px;
+  font-weight: normal;
+  text-align: ${(props: any) => (props.textAlign ? props.textAlign : 'left')};
+  color: ${(props: any) => (props.color ? props.color : Colors.TEXT_SECONDARY)};
+  margin: 0;
+  padding: 0;
+  text-transform: uppercase;
 `;
 
 const Text: React.FunctionComponent<Text> = ({ children, type, ...rest }) => {
@@ -55,6 +79,8 @@ const Text: React.FunctionComponent<Text> = ({ children, type, ...rest }) => {
       return <H3 {...rest}>{children}</H3>;
     case TextType.P:
       return <P {...rest}>{children}</P>;
+    case TextType.CAPTION:
+      return <Caption {...rest}>{children}</Caption>;
     default:
       return null;
   }
