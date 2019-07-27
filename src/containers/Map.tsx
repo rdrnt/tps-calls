@@ -104,7 +104,7 @@ class Map extends React.Component<MapProps, MapState> {
       <MapGL
         {...viewport}
         onViewportChange={this.updateViewport}
-        mapboxApiAccessToken={process.env.MAPBOX_API_KEY}
+        mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_API_KEY}
         mapStyle={MAPBOX_THEME_URL}
         onInteractionStateChange={this.onMapInteraction}
         onLoad={() => dismissLoader()}

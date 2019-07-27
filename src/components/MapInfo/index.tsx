@@ -2,19 +2,29 @@ import * as React from 'react';
 import styled from 'styled-components';
 import posed from 'react-pose';
 import { FaSearch } from 'react-icons/fa';
+import { Incident } from 'tps-calls-shared';
+import { useDispatch } from 'react-redux';
 
 import { Sizes, Colors } from '../../config';
-import { Incident } from 'tps-calls-shared';
 
-const AnimatedContainer = posed.button({
-  enter: {
+import SelectedIncident, {
+  HEIGHT as SELECTED_INCIDENT_HEIGHT,
+} from './SelectedIncident';
+import { setSelectedIncident } from '../../store/incidents/actions';
+
+const HEIGHT = 35;
+
+const AnimatedContainer = posed.div({
+  default: {
+    height: HEIGHT,
     opacity: 1,
-  },
-  exit: {
-    opacity: 0,
   },
   dim: {
     opacity: 0.3,
+  },
+  expand: {
+    height: SELECTED_INCIDENT_HEIGHT,
+    opacity: 1,
   },
 });
 
@@ -23,20 +33,25 @@ const Container = styled(AnimatedContainer)`
   bottom: ${Sizes.SPACING * 2}px;
   left: calc(50% - 150px);
   width: 300px;
-  height: 50px;
+  height: ${HEIGHT}px;
+  display: flex;
   background-color: ${Colors.BACKGROUND};
   border: none;
   padding: 7px;
-  pointer-events: auto;
   border-radius: 3px;
 `;
 
-const Content = styled.div`
+const Content = styled.button`
+  height: 100%;
+  width: 100%;
   background-color: ${Colors.BACKGROUND_SECONDARY};
   display: flex;
   align-items: center;
   justify-content: space-between;
+  justify-self: center;
+  border: none;
   padding: 7px;
+  pointer-events: auto;
 `;
 
 const Text = styled.span`
@@ -52,31 +67,14 @@ const IconContainer = styled.div`
   justify-content: center;
 `;
 
-const determineAnimation = ({
-  drawerOpen,
-  isInteractingWithMap,
-}: {
-  isInteractingWithMap: boolean;
-  drawerOpen: boolean;
-}): string => {
-  if (isInteractingWithMap) {
-    return 'dim';
-  }
-
-  if (!drawerOpen && !isInteractingWithMap) {
-    return 'enter';
-  }
-
-  if (drawerOpen) {
-    return 'exit';
-  }
-
-  if (!drawerOpen) {
-    return 'close';
-  }
-
-  return '';
-};
+export enum Animation {
+  DEFAULT = 'default',
+  DIM = 'dim',
+  ENTER = 'enter',
+  EXIT = 'exit',
+  CLOSE = 'close',
+  EXPAND = 'expand',
+}
 
 interface MapInfo {
   toggleDrawer: (value: boolean) => void;
@@ -91,25 +89,61 @@ const MapInfo: React.FunctionComponent<MapInfo> = ({
   drawerOpen,
   selectedIncident,
 }) => {
+  const dispatch = useDispatch();
+
+  const [animationState, setAnimationState] = React.useState<Animation>(
+    Animation.DEFAULT
+  );
+
+  React.useEffect(() => {
+    // If they're moving the map and we don't have a selected incident
+    // Dim the map info search box
+    if (isInteractingWithMap && !selectedIncident) {
+      setAnimationState(Animation.DIM);
+    }
+    // If the drawer is closed & not interacting with the map
+    // Reset to defaults
+    if (!drawerOpen && !isInteractingWithMap) {
+      setAnimationState(Animation.DIM);
+    }
+    // if the drawer is open, dim
+    if (drawerOpen) {
+      setAnimationState(Animation.DIM);
+    }
+    // If we have a new selected incident, expand the box
+    if (selectedIncident) {
+      setAnimationState(Animation.EXPAND);
+    }
+    // If we have no selected incident & we're not interacting with the map, set to defaults
+    if (!selectedIncident && !isInteractingWithMap) {
+      setAnimationState(Animation.DEFAULT);
+    }
+  }, [isInteractingWithMap, drawerOpen, selectedIncident]);
+
+  React.useEffect(() => {
+    console.log(animationState);
+  }, [animationState]);
+
   return (
-    <Container
-      pose={determineAnimation({
-        isInteractingWithMap,
-        drawerOpen,
-      })}
-      onClick={() => toggleDrawer(true)}
-    >
-      {selectedIncident && (
-        <Content>
+    <Container pose={animationState}>
+      {selectedIncident ? (
+        <SelectedIncident close={() => dispatch(setSelectedIncident())}>
           <Text>{selectedIncident.name}</Text>
+          <button
+            type="button"
+            onClick={() => setAnimationState(Animation.DEFAULT)}
+          >
+            close
+          </button>
+        </SelectedIncident>
+      ) : (
+        <Content type="button" onClick={() => toggleDrawer(true)}>
+          <Text>Search for stabbing, theft, etc...</Text>
+          <IconContainer>
+            <FaSearch />
+          </IconContainer>
         </Content>
       )}
-      <Content>
-        <Text>Search for stabbing, theft, etc...</Text>
-        <IconContainer>
-          <FaSearch />
-        </IconContainer>
-      </Content>
     </Container>
   );
 };
