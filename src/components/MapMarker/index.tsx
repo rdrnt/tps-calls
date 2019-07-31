@@ -6,6 +6,12 @@ import posed from 'react-pose';
 import { Colors } from '../../config';
 
 const AnimatedContainer = posed.div({
+  enter: {
+    opacity: 1,
+  },
+  exit: {
+    opacity: 0,
+  },
   hover: {
     scale: 1.2,
   },
@@ -19,6 +25,7 @@ const Container = styled(AnimatedContainer)`
   width: 10px;
   background-color: ${Colors.PRIMARY};
   border-radius: 5px;
+  z-index: 1;
 `;
 
 interface MapMarkerProps {

@@ -1,10 +1,15 @@
 import * as React from 'react';
-import MapGL, { InteractiveState, ExtraState } from 'react-map-gl';
+import MapGL, {
+  InteractiveState,
+  ExtraState,
+  FlyToInterpolator,
+} from 'react-map-gl';
 import { AppState } from '../store';
 import { connect } from 'react-redux';
 import { UIState } from '../store/ui';
 import { Dispatch } from 'redux';
 import { Incident } from 'tps-calls-shared';
+import { easeCubic } from 'd3-ease';
 
 import {
   setInteractingMap,
@@ -17,16 +22,13 @@ import { IncidentsState } from '../store/incidents';
 import MapInfo from '../components/MapInfo';
 import { setSelectedIncident } from '../store/incidents/actions';
 import { MAPBOX_THEME_URL } from '../config';
+import { PoseGroup } from 'react-pose';
 
 const DEFAULTS = {
   latitude: 43.653225,
   longitude: -79.383186,
   zoom: 11.0,
 };
-
-interface MapState {
-  viewport: any;
-}
 
 interface MapProps {
   setInteractingWithMap: (isInteracting: boolean) => void;
@@ -38,31 +40,24 @@ interface MapProps {
   incidents: IncidentsState;
 }
 
-class Map extends React.Component<MapProps, MapState> {
-  constructor(props: any) {
-    super(props);
+const Map: React.FunctionComponent<MapProps> = ({
+  incidents,
+  toggleDrawerState,
+  ui,
+  dismissLoader,
+  setSelectedMapIncident,
+  setInteractingWithMap,
+  showLoader,
+}) => {
+  const mapRef = React.useRef<MapGL>();
+  const [viewport, setViewport] = React.useState<any>({
+    width: window.innerWidth,
+    height: window.innerHeight,
+    ...DEFAULTS,
+  });
 
-    this.state = {
-      viewport: {
-        width: window.innerWidth,
-        height: window.innerHeight,
-        ...DEFAULTS,
-      },
-    };
-  }
-
-  public componentDidMount() {
-    const { showLoader } = this.props;
-    showLoader('Loading map...');
-    window.addEventListener('resize', this.manageWindowResizeListener);
-  }
-
-  public componentWillUnmount() {
-    window.removeEventListener('resize', this.manageWindowResizeListener);
-  }
-
-  public manageWindowResizeListener = ({ target }: any) => {
-    this.setState(prevState => ({
+  const onWindowResize = ({ target }: any) => {
+    setViewport((prevState: any) => ({
       viewport: {
         ...prevState.viewport,
         height: target.innerHeight,
@@ -71,16 +66,9 @@ class Map extends React.Component<MapProps, MapState> {
     }));
   };
 
-  public updateViewport = (viewport: any) => {
-    this.setState({
-      viewport,
-    });
-  };
-
-  public onMapInteraction = (
+  const onMapInteraction = (
     interactionState: InteractiveState & ExtraState
   ) => {
-    const { toggleDrawerState, setInteractingWithMap, ui } = this.props;
     if (interactionState.isDragging && !ui.isInteractingWithMap) {
       setInteractingWithMap(true);
       if (ui.drawerOpen) {
@@ -91,30 +79,47 @@ class Map extends React.Component<MapProps, MapState> {
     }
   };
 
-  public render() {
-    const { viewport } = this.state;
-    const {
-      incidents,
-      toggleDrawerState,
-      ui,
-      dismissLoader,
-      setSelectedMapIncident,
-    } = this.props;
-    return (
-      <MapGL
-        {...viewport}
-        onViewportChange={this.updateViewport}
-        mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_API_KEY}
-        mapStyle={MAPBOX_THEME_URL}
-        onInteractionStateChange={this.onMapInteraction}
-        onLoad={() => dismissLoader()}
-      >
-        <MapInfo
-          toggleDrawer={toggleDrawerState}
-          isInteractingWithMap={ui.isInteractingWithMap}
-          drawerOpen={ui.drawerOpen}
-          selectedIncident={incidents.selected}
-        />
+  React.useEffect(() => {
+    showLoader('Loading map...');
+    window.addEventListener('resize', onWindowResize);
+    return () => {
+      window.removeEventListener('resize', onWindowResize);
+    };
+  }, []);
+
+  React.useEffect(() => {
+    if (incidents.selected && mapRef.current) {
+      const newViewport = {
+        ...viewport,
+        ...incidents.selected.coordinates,
+        transitionDuration: 5000,
+        transitionInterpolator: new FlyToInterpolator(),
+        transitionEasing: easeCubic,
+      };
+
+      setViewport(newViewport);
+    }
+  }, [incidents.selected]);
+
+  return (
+    <MapGL
+      {...viewport}
+      ref={mapRef}
+      onViewportChange={(newViewport: any) => {
+        setViewport(newViewport);
+      }}
+      mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_API_KEY}
+      mapStyle={MAPBOX_THEME_URL}
+      onInteractionStateChange={onMapInteraction}
+      onLoad={() => dismissLoader()}
+    >
+      <MapInfo
+        toggleDrawer={toggleDrawerState}
+        isInteractingWithMap={ui.isInteractingWithMap}
+        drawerOpen={ui.drawerOpen}
+        selectedIncident={incidents.selected}
+      />
+      <PoseGroup>
         {incidents.list.map(incident => (
           <MapMarker
             key={incident.id}
@@ -123,10 +128,10 @@ class Map extends React.Component<MapProps, MapState> {
             onClick={() => setSelectedMapIncident(incident)}
           />
         ))}
-      </MapGL>
-    );
-  }
-}
+      </PoseGroup>
+    </MapGL>
+  );
+};
 
 export const mapStateToProps = (state: AppState) => ({
   ui: state.ui,

@@ -22,12 +22,22 @@ const Container = styled.li`
   }
 `;
 
-const Icon = styled.img`
+const Icon = styled.div`
   height: 35px;
   width: 35px;
   background-color: ${Colors.PRIMARY};
   border-radius: 17.5px;
   margin-right: 7px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  > svg {
+    height: 20px;
+    width: 20px;
+    color: white;
+  }
 `;
 
 interface IncidentCard {
@@ -36,16 +46,15 @@ interface IncidentCard {
 
 const IncidentCard: React.FunctionComponent<IncidentCard> = ({ incident }) => (
   <Container>
-    <Icon />
+    <Icon>{Translate.getIconForIncidentType(incident.type)}</Icon>
     <div>
       <Text type={TextType.H3}>{incident.name}</Text>
       <Text type={TextType.P} secondaryFont={true}>
-        {DateHelper.formatIncidentDate(incident.date)}
+        {`${incident.location} - ${DateHelper.formatIncidentDate(
+          incident.date
+        )}`}
       </Text>
     </div>
-    <Text type={TextType.CAPTION}>
-      {Translate.getNameForIncidentSource(incident.source)}
-    </Text>
   </Container>
 );
 

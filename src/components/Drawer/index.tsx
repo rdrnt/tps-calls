@@ -16,7 +16,7 @@ const AnimatedContainer = posed.div({
 });
 
 const Container = styled(AnimatedContainer)`
-  height: 100vh;
+  height: 100%;
   width: ${Sizes.DRAWER_WIDTH}px;
   position: fixed;
   top: 0;
@@ -24,14 +24,15 @@ const Container = styled(AnimatedContainer)`
   transition: 0.3s;
   z-index: 999;
   margin: 0;
+  overflow-y: scroll;
+  overflow-x: hidden;
 `;
 
 const List = styled.ul`
-  height: 100%;
   width: 100%;
+  height: 100%;
   margin: 0;
   padding: 0;
-  overflow-y: auto;
 `;
 
 interface DrawerProps {

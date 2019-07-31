@@ -8,5 +8,5 @@ export const formatIncidentDate = (
   incidentTimestamp: firebase.firestore.Timestamp
 ) => {
   const timestampToDate = convertTimestampToDate(incidentTimestamp);
-  return format(timestampToDate, 'MMM Do YYYY @ H:mma');
+  return format(timestampToDate, 'MMM Do YYYY @ h:mma');
 };

@@ -1,9 +1,11 @@
+import * as React from 'react';
 import { IncidentType, IncidentSourceType } from 'tps-calls-shared';
+import { GiKnifeThrust } from 'react-icons/gi';
 
-export const getIconForIncidentType = (incidentType: IncidentType): string => {
+export const getIconForIncidentType = (incidentType: IncidentType) => {
   switch (incidentType) {
     case IncidentType.STABBING:
-      return '';
+      return <GiKnifeThrust />;
     default:
       return '';
   }

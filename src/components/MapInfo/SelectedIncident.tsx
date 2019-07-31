@@ -5,7 +5,7 @@ import { Sizes, Colors } from '../../config';
 import IncidentCard from '../Card/Incident';
 import { Incident } from 'tps-calls-shared';
 
-export const HEIGHT = 250;
+export const HEIGHT = 100;
 
 const Container = styled.div`
   height: 100%;
@@ -25,6 +25,11 @@ const CloseButton = styled.button`
   height: 35px;
   border-radius: 3px;
   justify-self: flex-end;
+  opacity: 1;
+
+  :hover {
+    opacity: 0.9;
+  }
 `;
 
 interface SelectedIncident {
