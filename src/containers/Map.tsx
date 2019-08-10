@@ -10,7 +10,7 @@ import { UIState } from '../store/ui';
 import { Dispatch } from 'redux';
 import { Incident } from 'tps-calls-shared';
 import { easeCubic } from 'd3-ease';
-import ReactMapboxGl, { Layer } from 'react-mapbox-gl';
+import ReactMapboxGl, { Layer, Feature, Marker } from 'react-mapbox-gl';
 
 import {
   setInteractingMap,
@@ -22,7 +22,7 @@ import MapMarker from '../components/MapMarker';
 import { IncidentsState } from '../store/incidents';
 import MapInfo from '../components/MapInfo';
 import { setSelectedIncident } from '../store/incidents/actions';
-import { MAPBOX_THEME_URL } from '../config';
+import { MAPBOX_THEME_URL, Colors } from '../config';
 import { PoseGroup } from 'react-pose';
 
 const DEFAULTS = {
@@ -121,8 +121,28 @@ const Map: React.FunctionComponent<MapProps> = ({
         drawerOpen={ui.drawerOpen}
         selectedIncident={incidents.selected}
       />
-      */}
-      <Layer type="symbol" layout={{ 'icon-image': 'harbor-15' }} />
+*/}
+      <Layer
+        type="symbol"
+        id="marker"
+        layout={{
+          'icon-image': 'circle-15',
+
+          visibility: 'visible',
+          'icon-allow-overlap': true,
+          'icon-ignore-placement': true,
+        }}
+      >
+        {incidents.list.map(temmpIncident => (
+          <Feature
+            key={temmpIncident.id}
+            coordinates={[
+              temmpIncident.coordinates.longitude,
+              temmpIncident.coordinates.latitude,
+            ]}
+          />
+        ))}
+      </Layer>
     </MapMapbox>
   );
 };

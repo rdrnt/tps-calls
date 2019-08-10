@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Marker } from 'react-map-gl';
+import { Feature } from 'react-mapbox-gl';
 import posed from 'react-pose';
 
 import { Colors } from '../../config';
@@ -39,16 +40,7 @@ const MapMarker: React.FunctionComponent<MapMarkerProps> = ({
   onClick,
 }) => {
   const [isHovering, setIsHovering] = React.useState<boolean>(false);
-
-  return (
-    <Marker latitude={latitude} longitude={longitude}>
-      <Container
-        onClick={onClick}
-        pose={isHovering ? 'hover' : 'default'}
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseOut={() => setIsHovering(false)}
-      />
-    </Marker>
-  );
+  console.log(longitude, latitude);
+  return <Feature coordinates={[longitude, latitude]} />;
 };
 export default MapMarker;
