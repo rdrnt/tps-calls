@@ -10,6 +10,7 @@ import { UIState } from '../store/ui';
 import { Dispatch } from 'redux';
 import { Incident } from 'tps-calls-shared';
 import { easeCubic } from 'd3-ease';
+import ReactMapboxGl, { Layer } from 'react-mapbox-gl';
 
 import {
   setInteractingMap,
@@ -40,6 +41,10 @@ interface MapProps {
   incidents: IncidentsState;
 }
 
+const MapMapbox = ReactMapboxGl({
+  accessToken: process.env.REACT_APP_MAPBOX_API_KEY as string,
+});
+
 const Map: React.FunctionComponent<MapProps> = ({
   incidents,
   toggleDrawerState,
@@ -49,7 +54,6 @@ const Map: React.FunctionComponent<MapProps> = ({
   setInteractingWithMap,
   showLoader,
 }) => {
-  const mapRef = React.useRef<MapGL>();
   const [viewport, setViewport] = React.useState<any>({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -80,7 +84,7 @@ const Map: React.FunctionComponent<MapProps> = ({
   };
 
   React.useEffect(() => {
-    showLoader('Loading map...');
+    //showLoader('Loading map...');
     window.addEventListener('resize', onWindowResize);
     return () => {
       window.removeEventListener('resize', onWindowResize);
@@ -88,7 +92,7 @@ const Map: React.FunctionComponent<MapProps> = ({
   }, []);
 
   React.useEffect(() => {
-    if (incidents.selected && mapRef.current) {
+    if (incidents.selected) {
       const newViewport = {
         ...viewport,
         ...incidents.selected.coordinates,
@@ -102,34 +106,24 @@ const Map: React.FunctionComponent<MapProps> = ({
   }, [incidents.selected]);
 
   return (
-    <MapGL
-      {...viewport}
-      ref={mapRef}
-      onViewportChange={(newViewport: any) => {
-        setViewport(newViewport);
+    <MapMapbox
+      style={MAPBOX_THEME_URL}
+      containerStyle={{
+        height: '100vh',
+        width: '100vw',
       }}
-      mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_API_KEY}
-      mapStyle={MAPBOX_THEME_URL}
-      onInteractionStateChange={onMapInteraction}
-      onLoad={() => dismissLoader()}
+      center={[DEFAULTS.longitude, DEFAULTS.latitude]}
     >
+      {/*
       <MapInfo
         toggleDrawer={toggleDrawerState}
         isInteractingWithMap={ui.isInteractingWithMap}
         drawerOpen={ui.drawerOpen}
         selectedIncident={incidents.selected}
       />
-      <PoseGroup>
-        {incidents.list.map(incident => (
-          <MapMarker
-            key={incident.id}
-            latitude={incident.coordinates.latitude}
-            longitude={incident.coordinates.longitude}
-            onClick={() => setSelectedMapIncident(incident)}
-          />
-        ))}
-      </PoseGroup>
-    </MapGL>
+      */}
+      <Layer type="symbol" layout={{ 'icon-image': 'harbor-15' }} />
+    </MapMapbox>
   );
 };
 
