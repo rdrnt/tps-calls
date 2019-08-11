@@ -32,15 +32,13 @@ const Container = styled(AnimatedContainer)`
 interface MapMarkerProps {
   latitude: number;
   longitude: number;
-  onClick: () => void;
 }
 const MapMarker: React.FunctionComponent<MapMarkerProps> = ({
   latitude,
   longitude,
-  onClick,
 }) => {
   const [isHovering, setIsHovering] = React.useState<boolean>(false);
-  console.log(longitude, latitude);
+
   return <Feature coordinates={[longitude, latitude]} />;
 };
 export default MapMarker;

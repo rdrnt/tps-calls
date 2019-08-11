@@ -84,7 +84,7 @@ const Map: React.FunctionComponent<MapProps> = ({
   };
 
   React.useEffect(() => {
-    //showLoader('Loading map...');
+    showLoader('Loading map...');
     window.addEventListener('resize', onWindowResize);
     return () => {
       window.removeEventListener('resize', onWindowResize);
@@ -113,21 +113,19 @@ const Map: React.FunctionComponent<MapProps> = ({
         width: '100vw',
       }}
       center={[DEFAULTS.longitude, DEFAULTS.latitude]}
+      onStyleLoad={() => dismissLoader()}
     >
-      {/*
       <MapInfo
         toggleDrawer={toggleDrawerState}
         isInteractingWithMap={ui.isInteractingWithMap}
         drawerOpen={ui.drawerOpen}
         selectedIncident={incidents.selected}
       />
-*/}
       <Layer
         type="symbol"
         id="marker"
         layout={{
           'icon-image': 'circle-15',
-
           visibility: 'visible',
           'icon-allow-overlap': true,
           'icon-ignore-placement': true,

@@ -5,7 +5,7 @@
   "scripts": {
     "start": "NODE_ENV=development && webpack-dev-server --config webpack.config.js --content-base=/public --mode development",
     "build": "NODE_ENV=production && webpack --mode production --progress",
-    "netlify-deploy": "yarn version && sh scripts/release_notes.sh && yarn build && netlify deploy --dir build",
+    "netlify-deploy": "yarn build && netlify deploy --dir dist",
     "netlify-deploy:prod": "netlify deploy --prod",
     "test": "node scripts/test.js --updateSnapshot"
   },
