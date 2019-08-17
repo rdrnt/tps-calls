@@ -114,6 +114,8 @@ const Map: React.FunctionComponent<MapProps> = ({
       }}
       center={[DEFAULTS.longitude, DEFAULTS.latitude]}
       onStyleLoad={() => dismissLoader()}
+      onDragStart={() => setInteractingWithMap(true)}
+      onDragEnd={() => setInteractingWithMap(false)}
     >
       <MapInfo
         toggleDrawer={toggleDrawerState}

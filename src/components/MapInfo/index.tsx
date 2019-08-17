@@ -38,8 +38,8 @@ const Container = styled(AnimatedContainer)`
   display: flex;
   background-color: ${Colors.BACKGROUND};
   border: none;
-  padding: 7px;
-  border-radius: 3px;
+  padding: 5px;
+  border-radius: 2px;
 `;
 
 const Content = styled.button`
@@ -121,9 +121,11 @@ const MapInfo: React.FunctionComponent<MapInfo> = ({
     }
   }, [isInteractingWithMap, drawerOpen, selectedIncident]);
 
+  /*
   React.useEffect(() => {
     console.log(animationState);
   }, [animationState]);
+  */
 
   return (
     <Container pose={animationState}>

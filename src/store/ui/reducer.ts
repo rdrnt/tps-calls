@@ -14,6 +14,7 @@ export function uiReducer(
       return {
         ...state,
         isInteractingWithMap: action.payload.isInteracting,
+        ...(action.payload.isInteracting && { drawerOpen: false }),
       };
     case UIActions.OPEN_LOADER:
       return {
