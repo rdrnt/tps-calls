@@ -1,16 +1,9 @@
 import * as React from 'react';
-import MapGL, {
-  InteractiveState,
-  ExtraState,
-  FlyToInterpolator,
-} from 'react-map-gl';
 import { AppState } from '../store';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { UIState } from '../store/ui';
-import { Dispatch } from 'redux';
 import { Incident } from 'tps-calls-shared';
-import { easeCubic } from 'd3-ease';
-import ReactMapboxGl, { Layer, Feature, Marker } from 'react-mapbox-gl';
+import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 
 import {
   setInteractingMap,
@@ -18,7 +11,6 @@ import {
   openLoader,
   closeLoader,
 } from '../store/ui/actions';
-import MapMarker from '../components/MapMarker';
 import { IncidentsState } from '../store/incidents';
 import MapInfo from '../components/MapInfo';
 import { setSelectedIncident } from '../store/incidents/actions';
@@ -32,76 +24,48 @@ const DEFAULTS = {
 };
 
 interface MapProps {
-  setInteractingWithMap: (isInteracting: boolean) => void;
-  setSelectedMapIncident: (incident: Incident<any>) => void;
-  toggleDrawerState: (value: boolean) => void;
-  showLoader: (message?: string) => void;
-  dismissLoader: () => void;
   ui: UIState;
   incidents: IncidentsState;
 }
 
 const MapMapbox = ReactMapboxGl({
   accessToken: process.env.REACT_APP_MAPBOX_API_KEY as string,
+  minZoom: 9,
 });
 
-const Map: React.FunctionComponent<MapProps> = ({
-  incidents,
-  toggleDrawerState,
-  ui,
-  dismissLoader,
-  setSelectedMapIncident,
-  setInteractingWithMap,
-  showLoader,
-}) => {
-  const [viewport, setViewport] = React.useState<any>({
-    width: window.innerWidth,
-    height: window.innerHeight,
-    ...DEFAULTS,
-  });
+const Map: React.FunctionComponent<MapProps> = ({ incidents, ui }) => {
+  const dispatch = useDispatch();
+  const mapRef = React.useRef<any>();
 
-  const onWindowResize = ({ target }: any) => {
-    setViewport((prevState: any) => ({
-      viewport: {
-        ...prevState.viewport,
-        height: target.innerHeight,
-        width: target.innerWidth,
-      },
-    }));
-  };
-
-  const onMapInteraction = (
-    interactionState: InteractiveState & ExtraState
-  ) => {
-    if (interactionState.isDragging && !ui.isInteractingWithMap) {
-      setInteractingWithMap(true);
-      if (ui.drawerOpen) {
-        toggleDrawerState(false);
+  const onMapInteraction = (isDragging: boolean) => {
+    /*
+    if (isDragging) {
+      if (!ui.isInteractingWithMap) {
+        dispatch(setInteractingMap(true));
       }
-    } else if (!interactionState.isDragging && ui.isInteractingWithMap) {
-      setInteractingWithMap(false);
+      if (ui.drawerOpen) {
+        dispatch(setInteractingMap(false));
+      }
+    } else if (!isDragging) {
+      dispatch(setInteractingMap(false));
     }
+    */
   };
 
   React.useEffect(() => {
-    showLoader('Loading map...');
-    window.addEventListener('resize', onWindowResize);
-    return () => {
-      window.removeEventListener('resize', onWindowResize);
-    };
+    dispatch(openLoader('Loading map...'));
   }, []);
 
   React.useEffect(() => {
-    if (incidents.selected) {
-      const newViewport = {
-        ...viewport,
-        ...incidents.selected.coordinates,
-        transitionDuration: 5000,
-        transitionInterpolator: new FlyToInterpolator(),
-        transitionEasing: easeCubic,
-      };
-
-      setViewport(newViewport);
+    if (incidents.selected && mapRef.current) {
+      mapRef.current.flyTo({
+        center: [
+          incidents.selected.coordinates.longitude,
+          incidents.selected.coordinates.latitude,
+        ],
+        speed: 1,
+        zoom: 14,
+      });
     }
   }, [incidents.selected]);
 
@@ -113,12 +77,15 @@ const Map: React.FunctionComponent<MapProps> = ({
         width: '100vw',
       }}
       center={[DEFAULTS.longitude, DEFAULTS.latitude]}
-      onStyleLoad={() => dismissLoader()}
-      onDragStart={() => setInteractingWithMap(true)}
-      onDragEnd={() => setInteractingWithMap(false)}
+      onStyleLoad={map => {
+        mapRef.current = map;
+        dispatch(closeLoader());
+      }}
+      onDragStart={() => onMapInteraction(true)}
+      onDragEnd={() => onMapInteraction(false)}
     >
       <MapInfo
-        toggleDrawer={toggleDrawerState}
+        toggleDrawer={(value: boolean) => dispatch(toggleDrawer(value))}
         isInteractingWithMap={ui.isInteractingWithMap}
         drawerOpen={ui.drawerOpen}
         selectedIncident={incidents.selected}
@@ -133,13 +100,16 @@ const Map: React.FunctionComponent<MapProps> = ({
           'icon-ignore-placement': true,
         }}
       >
-        {incidents.list.map(temmpIncident => (
+        {incidents.list.map(incident => (
           <Feature
-            key={temmpIncident.id}
+            key={incident.id}
             coordinates={[
-              temmpIncident.coordinates.longitude,
-              temmpIncident.coordinates.latitude,
+              incident.coordinates.longitude,
+              incident.coordinates.latitude,
             ]}
+            onClick={() => {
+              dispatch(setSelectedIncident(incident));
+            }}
           />
         ))}
       </Layer>
@@ -152,17 +122,7 @@ export const mapStateToProps = (state: AppState) => ({
   incidents: state.incidents,
 });
 
-export const mapDispatchToProps = (dispatch: Dispatch) => ({
-  setInteractingWithMap: (isInteracting: boolean) =>
-    dispatch(setInteractingMap(isInteracting)),
-  setSelectedMapIncident: (incident: Incident<any>) =>
-    dispatch(setSelectedIncident(incident)),
-  toggleDrawerState: (value: boolean) => dispatch(toggleDrawer(value)),
-  showLoader: (message?: string) => dispatch(openLoader(message)),
-  dismissLoader: () => dispatch(closeLoader()),
-});
-
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  null
 )(Map);
