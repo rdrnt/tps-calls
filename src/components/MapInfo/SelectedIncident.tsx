@@ -9,27 +9,13 @@ export const HEIGHT = 100;
 
 const Container = styled.div`
   height: 100%;
-  width: 100%;
+  width: 325px;
   background-color: ${Colors.BACKGROUND};
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
   pointer-events: auto;
-`;
-
-const CloseButton = styled.button`
-  width: 100%;
-  background-color: ${Colors.PRIMARY};
-  color: white;
-  height: 35px;
-  border-radius: 3px;
-  justify-self: flex-end;
-  opacity: 1;
-
-  :hover {
-    opacity: 0.9;
-  }
 `;
 
 interface SelectedIncident {
@@ -43,7 +29,6 @@ const SelectedIncident: React.FunctionComponent<SelectedIncident> = ({
   return (
     <Container>
       <IncidentCard incident={incident} />
-      <CloseButton onClick={close}>Close</CloseButton>
     </Container>
   );
 };

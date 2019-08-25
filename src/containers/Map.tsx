@@ -16,6 +16,12 @@ import MapInfo from '../components/MapInfo';
 import { setSelectedIncident } from '../store/incidents/actions';
 import { MAPBOX_THEME_URL, Colors } from '../config';
 import { PoseGroup } from 'react-pose';
+import { MapEvent } from 'react-mapbox-gl/lib/map-events';
+
+interface MapState {
+  center: Position;
+  zoom: number;
+}
 
 const DEFAULTS = {
   latitude: 43.653225,
@@ -36,28 +42,40 @@ const MapMapbox = ReactMapboxGl({
 const Map: React.FunctionComponent<MapProps> = ({ incidents, ui }) => {
   const dispatch = useDispatch();
   const mapRef = React.useRef<any>();
+  const [map, setMap] = React.useState<MapState | undefined>();
+
+  React.useEffect(() => {
+    dispatch(openLoader('Loading map...'));
+  }, []);
 
   const onMapInteraction = (isDragging: boolean) => {
-    /*
-    if (isDragging) {
-      if (!ui.isInteractingWithMap) {
-        dispatch(setInteractingMap(true));
-      }
+    if (isDragging && !ui.isInteractingWithMap) {
+      dispatch(setInteractingMap(true));
       if (ui.drawerOpen) {
         dispatch(setInteractingMap(false));
       }
     } else if (!isDragging) {
       dispatch(setInteractingMap(false));
     }
-    */
+  };
+
+  const closeDrawer = React.useCallback(() => {
+    dispatch(toggleDrawer(false));
+  }, [dispatch]);
+
+  const onZoomChanged = (mapObj: any) => {
+    console.log('selected', incidents.selected);
+    if (mapObj.isZooming()) {
+      console.log('Zooming');
+    } else if (!mapObj.isZooming()) {
+      console.log('Not zooming');
+    }
   };
 
   React.useEffect(() => {
-    dispatch(openLoader('Loading map...'));
-  }, []);
-
-  React.useEffect(() => {
     if (incidents.selected && mapRef.current) {
+      // Save the previous position
+      console.log('mapref', mapRef.current);
       mapRef.current.flyTo({
         center: [
           incidents.selected.coordinates.longitude,
@@ -66,6 +84,7 @@ const Map: React.FunctionComponent<MapProps> = ({ incidents, ui }) => {
         speed: 1,
         zoom: 14,
       });
+    } else if (!incidents.selected && mapRef.current) {
     }
   }, [incidents.selected]);
 
@@ -81,14 +100,22 @@ const Map: React.FunctionComponent<MapProps> = ({ incidents, ui }) => {
         mapRef.current = map;
         dispatch(closeLoader());
       }}
-      onDragStart={() => onMapInteraction(true)}
+      onDragStart={e => {
+        onMapInteraction(true);
+      }}
       onDragEnd={() => onMapInteraction(false)}
+      onClick={closeDrawer}
+      onZoomStart={onZoomChanged}
+      onZoomEnd={onZoomChanged}
     >
       <MapInfo
         toggleDrawer={(value: boolean) => dispatch(toggleDrawer(value))}
         isInteractingWithMap={ui.isInteractingWithMap}
         drawerOpen={ui.drawerOpen}
         selectedIncident={incidents.selected}
+        setSelectedIncident={incident =>
+          dispatch(setSelectedIncident(incident))
+        }
       />
       <Layer
         type="symbol"

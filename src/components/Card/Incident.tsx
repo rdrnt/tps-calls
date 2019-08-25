@@ -25,6 +25,8 @@ const Container = styled.li`
 const Icon = styled.div`
   height: 35px;
   width: 35px;
+  min-height: 35px;
+  min-width: 35px;
   background-color: ${Colors.PRIMARY};
   border-radius: 17.5px;
   margin-right: 7px;
