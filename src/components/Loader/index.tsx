@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import { Colors } from '../../config';
 
-import Text, { TextType } from '../Text';
+import Text from '../Text';
 
 const AnimatedContainer = posed.div({
   enter: {
@@ -40,7 +40,7 @@ const Loader: React.FunctionComponent<Loader> = ({ open, message }) => (
     {open && (
       <Container key="loader">
         {message && (
-          <Text type={TextType.H1} bold={true}>
+          <Text as="h1" weight="bold">
             {message}
           </Text>
         )}

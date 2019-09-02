@@ -19,7 +19,7 @@ const GlobalStyle = createGlobalStyle`
     overflow: hidden;
     width: 100vw;
     height: 100vh;
-    font-family: 'Raleway';
+    font-family: 'Roboto';
   }
 `;
 

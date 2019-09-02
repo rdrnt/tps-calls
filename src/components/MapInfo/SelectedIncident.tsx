@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Sizes, Colors } from '../../config';
 import IncidentCard from '../Card/Incident';
 import { Incident } from 'tps-calls-shared';
+import Text from '../Text';
 
 export const HEIGHT = 100;
 
@@ -28,7 +29,7 @@ const SelectedIncident: React.FunctionComponent<SelectedIncident> = ({
 }) => {
   return (
     <Container>
-      <IncidentCard incident={incident} />
+      <Text as="h2">{incident.name}</Text>
     </Container>
   );
 };

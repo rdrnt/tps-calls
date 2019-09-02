@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Incident } from 'tps-calls-shared';
 import { Colors } from '../../config';
 
-import Text, { TextType } from '../Text';
+import Text from '../Text';
 import { DateHelper, Translate } from '../../helpers';
 
 const Container = styled.li`
@@ -50,8 +50,8 @@ const IncidentCard: React.FunctionComponent<IncidentCard> = ({ incident }) => (
   <Container>
     <Icon>{Translate.getIconForIncidentType(incident.type)}</Icon>
     <div>
-      <Text type={TextType.H3}>{incident.name}</Text>
-      <Text type={TextType.P} secondaryFont={true}>
+      <Text as="h3">{incident.name}</Text>
+      <Text as="span">
         {`${incident.location} - ${DateHelper.formatIncidentDate(
           incident.date
         )}`}

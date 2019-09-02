@@ -156,7 +156,12 @@ const MapInfo: React.FunctionComponent<MapInfo> = ({
     <>
       <Container pose={animationState}>
         {selectedIncident ? (
-          <Content />
+          <Content>
+            <SelectedIncident
+              incident={selectedIncident}
+              close={() => setSelectedIncident(undefined)}
+            />
+          </Content>
         ) : (
           <ButtonContent type="button" onClick={() => toggleDrawer(true)}>
             <Text>Search for stabbing, theft, etc...</Text>
