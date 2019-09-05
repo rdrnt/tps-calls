@@ -118,13 +118,15 @@ const Map: React.FunctionComponent<MapProps> = ({ incidents, ui }) => {
         }
       />
       <Layer
-        type="symbol"
+        type="circle"
         id="marker"
-        layout={{
-          'icon-image': 'circle-15',
-          visibility: 'visible',
-          'icon-allow-overlap': true,
-          'icon-ignore-placement': true,
+        paint={{
+          'circle-radius': {
+            property: 'task-priority',
+            type: 'categorical',
+            stops: [[1, 5], [5, 5], [10, 10]],
+          },
+          'circle-color': Colors.PRIMARY,
         }}
       >
         {incidents.list.map(incident => (
@@ -134,6 +136,9 @@ const Map: React.FunctionComponent<MapProps> = ({ incidents, ui }) => {
               incident.coordinates.longitude,
               incident.coordinates.latitude,
             ]}
+            properties={{
+              id: incident.id,
+            }}
             onClick={() => {
               dispatch(setSelectedIncident(incident));
             }}
