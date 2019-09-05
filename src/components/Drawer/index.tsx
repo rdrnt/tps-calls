@@ -3,19 +3,16 @@ import styled from 'styled-components';
 import posed, { PoseGroup } from 'react-pose';
 import { Colors, Sizes } from '../../config';
 import { Incident } from 'tps-calls-shared';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 
 import IncidentCard from '../Card/Incident';
 import { AppState } from '../../store';
 import { UIState } from '../../store/ui';
 import { IncidentsState } from '../../store/incidents';
+import { toggleDrawer } from '../../store/ui/actions';
+import IncidentView from './Incident';
 
-const AnimatedContainer = posed.div({
-  enter: {},
-  exit: {},
-});
-
-const Container = styled(AnimatedContainer)`
+const Container = styled.div`
   height: 100%;
   width: ${Sizes.DRAWER_WIDTH}px;
   position: fixed;
@@ -40,19 +37,47 @@ interface DrawerProps {
   ui: UIState;
 }
 
-const Drawer: React.FunctionComponent<DrawerProps> = ({ ui, incidents }) => (
-  <PoseGroup>
-    {ui.drawerOpen && (
-      <Container key="drawer">
-        <List>
-          {incidents.list.map(incident => (
-            <IncidentCard key={incident.id} incident={incident} />
-          ))}
-        </List>
+enum DrawerViews {
+  INCIDENT = 'incident',
+  DEFAULT = 'default',
+}
+
+const Drawer: React.FunctionComponent<DrawerProps> = ({ ui, incidents }) => {
+  const dispatch = useDispatch();
+
+  const [currentView, setView] = React.useState<DrawerViews>(
+    DrawerViews.DEFAULT
+  );
+
+  React.useEffect(() => {
+    if (incidents.selected) {
+      setView(DrawerViews.INCIDENT);
+      dispatch(toggleDrawer(true));
+    } else if (!incidents.selected) {
+      setView(DrawerViews.DEFAULT);
+    }
+  }, [incidents.selected]);
+
+  if (ui.drawerOpen) {
+    return (
+      <Container>
+        {currentView === DrawerViews.DEFAULT && (
+          <List>
+            {incidents.list.map(incident => (
+              <IncidentCard key={incident.id} incident={incident} />
+            ))}
+          </List>
+        )}
+
+        {currentView === DrawerViews.INCIDENT && incidents.selected && (
+          <IncidentView incident={incidents.selected} />
+        )}
       </Container>
-    )}
-  </PoseGroup>
-);
+    );
+  }
+
+  return null;
+};
 
 const mapStateToProps = (state: AppState) => ({
   incidents: state.incidents,

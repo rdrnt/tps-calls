@@ -7,25 +7,16 @@ import { useDispatch } from 'react-redux';
 
 import { Sizes, Colors } from '../../config';
 
-import SelectedIncident, {
-  HEIGHT as SELECTED_INCIDENT_HEIGHT,
-} from './SelectedIncident';
 import { setSelectedIncident } from '../../store/incidents/actions';
-import IncidentCard from '../Card/Incident';
 
 const HEIGHT = 35;
 
 const AnimatedContainer = posed.div({
   default: {
-    height: HEIGHT,
     opacity: 1,
   },
   dim: {
     opacity: 0.3,
-  },
-  expand: {
-    height: SELECTED_INCIDENT_HEIGHT,
-    opacity: 1,
   },
 });
 
@@ -41,17 +32,6 @@ const Container = styled(AnimatedContainer)`
   border: none;
   padding: 5px;
   border-radius: 4px;
-`;
-
-const CloseButton = styled.button`
-  position: absolute;
-  bottom: ${Sizes.SPACING}px;
-  left: calc(50% - 150px);
-  width: 325px;
-  height: 30px;
-  background-color: ${Colors.PRIMARY};
-  color: white;
-  border-radius: 5px;
 `;
 
 const DefaultContentStyles = css`
@@ -93,10 +73,6 @@ const IconContainer = styled.div`
 export enum Animation {
   DEFAULT = 'default',
   DIM = 'dim',
-  ENTER = 'enter',
-  EXIT = 'exit',
-  CLOSE = 'close',
-  EXPAND = 'expand',
 }
 
 interface MapInfo {
@@ -138,8 +114,9 @@ const MapInfo: React.FunctionComponent<MapInfo> = ({
     // If we have a new selected incident, expand the box
     if (selectedIncident) {
       // setAnimationState(Animation.EXPAND);
-      setAnimationState(Animation.DEFAULT);
+      setAnimationState(Animation.DIM);
     }
+
     // If we have no selected incident & we're not interacting with the map, set to defaults
     if (!selectedIncident && !isInteractingWithMap) {
       setAnimationState(Animation.DEFAULT);
@@ -153,33 +130,14 @@ const MapInfo: React.FunctionComponent<MapInfo> = ({
   */
 
   return (
-    <>
-      <Container pose={animationState}>
-        {selectedIncident ? (
-          <Content>
-            <SelectedIncident
-              incident={selectedIncident}
-              close={() => setSelectedIncident(undefined)}
-            />
-          </Content>
-        ) : (
-          <ButtonContent type="button" onClick={() => toggleDrawer(true)}>
-            <Text>Search for stabbing, theft, etc...</Text>
-            <IconContainer>
-              <FaSearch />
-            </IconContainer>
-          </ButtonContent>
-        )}
-      </Container>
-      {selectedIncident && (
-        <CloseButton
-          type="button"
-          onClick={() => setSelectedIncident(undefined)}
-        >
-          Close
-        </CloseButton>
-      )}
-    </>
+    <Container pose={animationState}>
+      <ButtonContent type="button" onClick={() => toggleDrawer(true)}>
+        <Text>Search for stabbing, theft, etc...</Text>
+        <IconContainer>
+          <FaSearch />
+        </IconContainer>
+      </ButtonContent>
+    </Container>
   );
 };
 

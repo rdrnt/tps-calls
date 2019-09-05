@@ -1,18 +1,8 @@
 import firebaseApp from 'firebase/app';
 import 'firebase/firestore';
-
-import productionConfig from '../../config/firebase/production.json';
 import { Incident } from 'tps-calls-shared';
 
-export const initialize = () => {
-  firebaseApp.initializeApp({ ...productionConfig });
-};
-
-export const incidentListener = ({
-  onChange,
-}: {
-  onChange: (incidents: Incident<any>[]) => void;
-}) =>
+export const listener = (onChange: (incidents: Incident<any>[]) => void) =>
   firebaseApp
     .firestore()
     .collection('incidents')

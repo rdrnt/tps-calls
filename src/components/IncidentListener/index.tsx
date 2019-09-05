@@ -8,39 +8,23 @@ interface IncidentListenerProps {
   dispatch: Dispatch;
 }
 
-class IncidentListener extends React.PureComponent<IncidentListenerProps, {}> {
-  private incidientListener?: () => void;
-
-  public componentDidMount() {
-    this.createListener();
-  }
-
-  public componentWillUnmount() {
-    this.disableListener();
-  }
-
-  public createListener() {
-    const { dispatch } = this.props;
-
-    this.disableListener();
-
-    this.incidientListener = Firebase.incidentListener({
-      onChange: incidents => {
-        dispatch(setIncidentList(incidents));
-      },
+const IncidentListener: React.FunctionComponent<IncidentListenerProps> = ({
+  dispatch,
+}) => {
+  React.useEffect(() => {
+    const incidentListener = Firebase.incidents.listener(newIncidents => {
+      dispatch(setIncidentList(newIncidents));
     });
-  }
 
-  public disableListener() {
-    if (this.incidientListener) {
-      this.incidientListener();
-      this.incidientListener = undefined;
-    }
-  }
+    return () => {
+      // Remove the listener
+      if (incidentListener) {
+        incidentListener();
+      }
+    };
+  }, []);
 
-  public render() {
-    return null;
-  }
-}
+  return null;
+};
 
 export default connect()(IncidentListener);
