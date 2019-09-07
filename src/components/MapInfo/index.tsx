@@ -130,7 +130,7 @@ const MapInfo: React.FunctionComponent<MapInfo> = ({
   */
 
   return (
-    <Container pose={animationState}>
+    <Container>
       <ButtonContent type="button" onClick={() => toggleDrawer(true)}>
         <Text>Search for stabbing, theft, etc...</Text>
         <IconContainer>

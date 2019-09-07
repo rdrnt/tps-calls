@@ -49,10 +49,14 @@ const Map: React.FunctionComponent<MapProps> = ({ incidents, ui }) => {
   }, []);
 
   const onMapInteraction = (isDragging: boolean) => {
-    if (isDragging && !ui.isInteractingWithMap) {
+    console.log('Dragging?', isDragging);
+    // If the map is being dragged and we haven't set the state in redux
+    // Set the state to interacting
+    if (isDragging) {
       dispatch(setInteractingMap(true));
+      // If the drawer is open, close it
       if (ui.drawerOpen) {
-        dispatch(setInteractingMap(false));
+        dispatch(toggleDrawer(false));
       }
     } else if (!isDragging) {
       dispatch(setInteractingMap(false));
@@ -76,6 +80,7 @@ const Map: React.FunctionComponent<MapProps> = ({ incidents, ui }) => {
     if (incidents.selected && mapRef.current) {
       // Save the previous position
       console.log('mapref', mapRef.current);
+
       mapRef.current.flyTo({
         center: [
           incidents.selected.coordinates.longitude,
@@ -126,7 +131,8 @@ const Map: React.FunctionComponent<MapProps> = ({ incidents, ui }) => {
             type: 'categorical',
             stops: [[1, 5], [5, 5], [10, 10]],
           },
-          'circle-color': Colors.PRIMARY,
+          // Gets the color from the feature properties
+          'circle-color': ['get', 'color'],
         }}
       >
         {incidents.list.map(incident => (
@@ -137,7 +143,11 @@ const Map: React.FunctionComponent<MapProps> = ({ incidents, ui }) => {
               incident.coordinates.latitude,
             ]}
             properties={{
-              id: incident.id,
+              // https://docs.mapbox.com/mapbox-gl-js/example/data-driven-lines/
+              color:
+                incidents.selected && incidents.selected.id === incident.id
+                  ? Colors.SECONDARY
+                  : Colors.PRIMARY,
             }}
             onClick={() => {
               dispatch(setSelectedIncident(incident));
