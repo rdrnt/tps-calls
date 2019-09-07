@@ -16,10 +16,13 @@ const Container = styled.li`
   display: flex;
   flex-direction: row;
   align-items: center;
+`;
 
-  div {
-    flex-direction: column;
-  }
+const IncidentInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  word-break: break-all;
 `;
 
 const Icon = styled.div`
@@ -49,14 +52,14 @@ interface IncidentCard {
 const IncidentCard: React.FunctionComponent<IncidentCard> = ({ incident }) => (
   <Container>
     <Icon>{Translate.getIconForIncidentType(incident.type)}</Icon>
-    <div>
-      <Text as="h3">{incident.name}</Text>
-      <Text as="span">
-        {`${incident.location} - ${DateHelper.formatIncidentDate(
-          incident.date
-        )}`}
-      </Text>
-    </div>
+    <IncidentInfo>
+      {/*
+      <Text as="h5">{incident.name}</Text>
+      <Text as="p">{incident.location}</Text>
+      <Text as="span">{DateHelper.formatIncidentDate(incident.date)}</Text>
+      */}
+      <p style={{ fontSize: '2vw' }}>testing</p>
+    </IncidentInfo>
   </Container>
 );
 

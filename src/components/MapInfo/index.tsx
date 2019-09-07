@@ -10,6 +10,7 @@ import { Sizes, Colors } from '../../config';
 import { setSelectedIncident } from '../../store/incidents/actions';
 
 const HEIGHT = 35;
+const WIDTH = 275;
 
 const AnimatedContainer = posed.div({
   default: {
@@ -23,8 +24,8 @@ const AnimatedContainer = posed.div({
 const Container = styled(AnimatedContainer)`
   position: absolute;
   bottom: ${Sizes.SPACING * 3}px;
-  left: calc(50% - 150px);
-  width: 325px;
+  left: calc(50% - ${WIDTH / 2}px);
+  width: ${WIDTH}px;
   height: auto;
   min-height: ${HEIGHT}px;
   display: flex;
