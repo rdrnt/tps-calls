@@ -11,6 +11,8 @@ import { UIState } from '../../store/ui';
 import { IncidentsState } from '../../store/incidents';
 import { toggleDrawer } from '../../store/ui/actions';
 import IncidentView from './Incident';
+import DrawerControls from './Controls';
+import DrawerList from './List';
 
 const Container = styled.div`
   height: 100%;
@@ -23,13 +25,6 @@ const Container = styled.div`
   margin: 0;
   overflow-y: scroll;
   overflow-x: hidden;
-`;
-
-const List = styled.ul`
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
 `;
 
 interface DrawerProps {
@@ -62,11 +57,10 @@ const Drawer: React.FunctionComponent<DrawerProps> = ({ ui, incidents }) => {
     return (
       <Container>
         {currentView === DrawerViews.DEFAULT && (
-          <List>
-            {incidents.list.map(incident => (
-              <IncidentCard key={incident.id} incident={incident} />
-            ))}
-          </List>
+          <>
+            <DrawerControls />
+            <DrawerList incidents={incidents.list} />
+          </>
         )}
 
         {currentView === DrawerViews.INCIDENT && incidents.selected && (

@@ -23,7 +23,7 @@ const AnimatedContainer = posed.div({
 
 const Container = styled(AnimatedContainer)`
   position: absolute;
-  bottom: ${Sizes.SPACING * 3}px;
+  bottom: ${Sizes.SPACING * 6}px;
   left: calc(50% - ${WIDTH / 2}px);
   width: ${WIDTH}px;
   height: auto;

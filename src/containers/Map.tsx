@@ -105,10 +105,12 @@ const Map: React.FunctionComponent<MapProps> = ({ incidents, ui }) => {
         mapRef.current = map;
         dispatch(closeLoader());
       }}
+      /*
       onDragStart={e => {
         onMapInteraction(true);
       }}
       onDragEnd={() => onMapInteraction(false)}
+      */
       onClick={closeDrawer}
       onZoomStart={onZoomChanged}
       onZoomEnd={onZoomChanged}
@@ -133,6 +135,8 @@ const Map: React.FunctionComponent<MapProps> = ({ incidents, ui }) => {
           },
           // Gets the color from the feature properties
           'circle-color': ['get', 'color'],
+          'circle-stroke-width': 1,
+          'circle-stroke-color': '#FFFFFF',
         }}
       >
         {incidents.list.map(incident => (
