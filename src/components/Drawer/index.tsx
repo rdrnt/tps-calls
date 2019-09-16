@@ -5,13 +5,12 @@ import { Colors, Sizes } from '../../config';
 import { Incident } from 'tps-calls-shared';
 import { connect, useDispatch } from 'react-redux';
 
-import IncidentCard from '../Card/Incident';
 import { AppState } from '../../store';
 import { UIState } from '../../store/ui';
 import { IncidentsState } from '../../store/incidents';
 import { toggleDrawer } from '../../store/ui/actions';
+
 import IncidentView from './Incident';
-import DrawerControls from './Controls';
 import DrawerList from './List';
 
 const Container = styled.div`
@@ -57,10 +56,7 @@ const Drawer: React.FunctionComponent<DrawerProps> = ({ ui, incidents }) => {
     return (
       <Container>
         {currentView === DrawerViews.DEFAULT && (
-          <>
-            <DrawerControls />
-            <DrawerList incidents={incidents.list} />
-          </>
+          <DrawerList incidents={incidents.list} />
         )}
 
         {currentView === DrawerViews.INCIDENT && incidents.selected && (
