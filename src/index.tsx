@@ -1,9 +1,11 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import 'typeface-raleway';
+import { hot } from 'react-hot-ts';
 import 'typeface-roboto';
 
 import App from './App';
 
-// @ts-ignore
-ReactDOM.render(<App />, document.getElementById('root'));
+const root = document.createElement('div');
+document.body.appendChild(root);
+
+hot(module)(ReactDOM.render(<App />, root));

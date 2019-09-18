@@ -1,7 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
-const WebpackPwaManifest = require('webpack-pwa-manifest');
+const rhTransformer = require('react-hot-ts/lib/transformer');
+const ForkTsCheckerPlugin = require('fork-ts-checker-webpack-plugin');
 
 const paths = {
   src: path.resolve('./src'),
@@ -13,20 +14,24 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 var dotenv = require('dotenv').config({ path: __dirname + '/.env.local' });
 
 module.exports = {
-  entry: ['babel-polyfill', './src/index.tsx'],
-  devtool: isDevelopment ? 'cheap-module-inline-source-map' : 'source-map',
+  entry: './src/index.tsx',
+  devtool: isDevelopment ? 'source-map' : 'source-map',
   output: {
     path: path.join(__dirname, '/dist'),
-    filename: '[name].[hash].js',
-    sourceMapFilename: '[name].[hash].map',
+    filename: 'app.js',
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js', '.json'],
   },
   module: {
     rules: [
       {
         test: /\.tsx?$/,
-        use: ['babel-loader', 'ts-loader'],
-        include: paths.src,
-        exclude: /node_modules/,
+        loader: 'ts-loader',
+        options: {
+          transpileOnly: true, // -> ForkTsCheckerPlugin
+          getCustomTransformers,
+        },
       },
       {
         test: /\.css$/,
@@ -37,51 +42,21 @@ module.exports = {
     ],
   },
   plugins: [
-    new HtmlWebPackPlugin({
-      inject: true,
-      template: paths.indexHtml,
-      filename: './index.html',
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: true,
-        minifyCSS: true,
-        minifyURLs: true,
+    new HtmlWebPackPlugin(),
+    new ForkTsCheckerPlugin({
+      watch: path.resolve('src'),
+      compilerOptions: {
+        noUnusedLocals: false,
       },
-    }),
-    new WebpackPwaManifest({
-      name: 'tpscalls.live',
-      short_name: 'tpscalls',
-      description: 'live map of police',
-      background_color: '#ffffff',
-      crossorigin: null,
-      icons: [],
     }),
     new webpack.DefinePlugin({
       'process.env': JSON.stringify(dotenv.parsed),
     }),
   ],
-  resolve: {
-    extensions: ['.tsx', '.ts', '.js', '.json'],
-  },
-  devServer: {
-    host: '0.0.0.0',
-    port: 8080,
-    // https: true,
-    disableHostCheck: true,
-    contentBase: paths.src,
-    hot: true,
-    watchContentBase: true,
-    historyApiFallback: true,
-    stats: {
-      colors: true,
-      context: paths.src,
-      timings: true,
-    },
-  },
 };
+
+function getCustomTransformers() {
+  return {
+    before: [rhTransformer()],
+  };
+}

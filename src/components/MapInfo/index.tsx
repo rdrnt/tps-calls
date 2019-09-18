@@ -31,7 +31,7 @@ const Container = styled(AnimatedContainer)`
   border-radius: 4px;
 `;
 
-const DefaultContentStyles = css`
+const ButtonContent = styled.button`
   height: auto; /* Dont use 100% because it will be max height during the animation*/
   width: 100%;
   background-color: ${Colors.BACKGROUND_SECONDARY};
@@ -42,10 +42,6 @@ const DefaultContentStyles = css`
   border: none;
   pointer-events: auto;
   border-radius: 4px;
-`;
-
-const ButtonContent = styled.button`
-  ${DefaultContentStyles};
   flex-grow: 1;
 `;
 
