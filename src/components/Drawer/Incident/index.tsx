@@ -41,12 +41,6 @@ const StreetviewImage = styled.div`
 const IncidentView: React.FunctionComponent<IncidentView> = ({ incident }) => {
   const dispatch = useDispatch();
 
-  React.useEffect(() => {
-    return () => {
-      dispatch(setSelectedIncident(undefined));
-    };
-  }, []);
-
   return (
     <Container>
       <StreetviewImage />

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { AppState } from '../store';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { UIState } from '../store/ui';
-import { Incident } from 'tps-calls-shared';
+import { Incident, Coordinates } from 'tps-calls-shared';
 import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 
 import { toggleDrawer, openLoader, closeLoader } from '../store/ui/actions';
@@ -14,7 +14,7 @@ import { PoseGroup } from 'react-pose';
 import { MapEvent } from 'react-mapbox-gl/lib/map-events';
 
 interface MapState {
-  center: Position;
+  position: Coordinates;
   zoom: number;
 }
 
@@ -35,14 +35,15 @@ const Map: React.FunctionComponent<MapProps> = ({}) => {
   const dispatch = useDispatch();
   const incidentsState = useSelector((state: AppState) => state.incidents);
   const uiState = useSelector((state: AppState) => state.ui);
+
   // https://github.com/alex3165/react-mapbox-gl/issues/461
   const [center, setCenter] = React.useState<[number, number]>([
     DEFAULTS.longitude,
     DEFAULTS.latitude,
   ]);
+  const [mapState, setMapState] = React.useState<MapState | undefined>();
 
   const mapRef = React.useRef<any>();
-  const [map, setMap] = React.useState<MapState | undefined>();
   const [isInteracting, setIsInteracting] = React.useState<boolean>(false);
 
   React.useEffect(() => {
@@ -56,21 +57,20 @@ const Map: React.FunctionComponent<MapProps> = ({}) => {
     }
   }, [isInteracting]);
 
-  const onZoomChanged = (mapObj: any) => {
-    /*
-    console.log('selected', incidents.selected);
-    if (mapObj.isZooming()) {
-      console.log('Zooming');
-    } else if (!mapObj.isZooming()) {
-      console.log('Not zooming');
-    }
-    */
-  };
-
   React.useEffect(() => {
     if (incidentsState.selected && mapRef.current) {
       // Save the previous position
-      console.log('mapref', mapRef.current);
+      const currentPosition: {
+        lat: number;
+        lng: number;
+      } = mapRef.current.getCenter();
+      setMapState({
+        zoom: mapRef.current.getZoom(),
+        position: {
+          latitude: currentPosition.lat,
+          longitude: currentPosition.lng,
+        },
+      });
 
       mapRef.current.flyTo({
         center: [
@@ -80,6 +80,15 @@ const Map: React.FunctionComponent<MapProps> = ({}) => {
         speed: 1,
         zoom: 15,
       });
+    } else if (!incidentsState.selected && mapRef.current && mapState) {
+      // if the incident is unselected, and we have the map state
+      // go back to their original position before they selected the incident
+      mapRef.current.flyTo({
+        center: [mapState.position.longitude, mapState.position.latitude],
+        speed: 1,
+        zoom: mapState.zoom,
+      });
+      setMapState(undefined);
     }
   }, [incidentsState.selected]);
 
@@ -106,8 +115,6 @@ const Map: React.FunctionComponent<MapProps> = ({}) => {
       onClick={
         uiState.drawerOpen ? () => dispatch(toggleDrawer(false)) : undefined
       }
-      onZoomStart={onZoomChanged}
-      onZoomEnd={onZoomChanged}
     >
       <MapInfo
         toggleDrawer={(value: boolean) => dispatch(toggleDrawer(value))}
