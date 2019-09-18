@@ -45,9 +45,6 @@ module.exports = {
     new HtmlWebPackPlugin(),
     new ForkTsCheckerPlugin({
       watch: path.resolve('src'),
-      compilerOptions: {
-        noUnusedLocals: false,
-      },
     }),
     new webpack.DefinePlugin({
       'process.env': JSON.stringify(dotenv.parsed),

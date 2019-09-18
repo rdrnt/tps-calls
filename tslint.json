@@ -1,19 +1,16 @@
 {
-  "defaultSeverity": "error",
+  "defaultSeverity": "warning",
   "extends": [
     "tslint:latest",
     "tslint-config-prettier",
-    "tslint-plugin-prettier",
     "tslint-config-airbnb",
     "tslint-react"
   ],
   "jsRules": {},
-  "rulesDirectory": ["tslint-plugin-prettier"],
   "linterOptions": {
-    "exclude": ["**/node_modules/**", "node_modules"]
+    "exclude": ["node_modules/**", "./src/**/*.json"]
   },
   "rules": {
-    "prettier": true,
     "jsx-no-multiline-js": false,
     "interface-name": [true, "never-prefix"],
     "ordered-imports": [

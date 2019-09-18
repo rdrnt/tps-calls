@@ -17,6 +17,7 @@
     "baseUrl": "src",
     "sourceMap": true,
     "inlineSources": true,
+    "skipLibCheck": true,
     "typeRoots": [
       "./node_modules/@types",
       "./node_modules/tps-calls-shared/dist"
