@@ -2,12 +2,8 @@ import * as React from 'react';
 import styled, { css } from 'styled-components';
 import posed from 'react-pose';
 import { FaSearch } from 'react-icons/fa';
-import { Incident } from 'tps-calls-shared';
-import { useDispatch } from 'react-redux';
 
 import { Sizes, Colors } from '../../config';
-
-import { setSelectedIncident } from '../../store/incidents/actions';
 
 const HEIGHT = 35;
 const WIDTH = 275;
@@ -17,7 +13,7 @@ const AnimatedContainer = posed.div({
     opacity: 1,
   },
   dim: {
-    opacity: 0.3,
+    opacity: 0.2,
   },
 });
 
@@ -48,11 +44,6 @@ const DefaultContentStyles = css`
   border-radius: 4px;
 `;
 
-const Content = styled.div`
-  ${DefaultContentStyles};
-  flex-grow: 1;
-`;
-
 const ButtonContent = styled.button`
   ${DefaultContentStyles};
   flex-grow: 1;
@@ -78,21 +69,10 @@ export enum Animation {
 
 interface MapInfo {
   toggleDrawer: (value: boolean) => void;
-  isInteractingWithMap: boolean;
-  drawerOpen: boolean;
-  selectedIncident?: Incident<any>;
-  setSelectedIncident: typeof setSelectedIncident;
+  dim: boolean;
 }
 
-const MapInfo: React.FunctionComponent<MapInfo> = ({
-  toggleDrawer,
-  isInteractingWithMap,
-  drawerOpen,
-  selectedIncident,
-  setSelectedIncident,
-}) => {
-  const dispatch = useDispatch();
-
+const MapInfo: React.FunctionComponent<MapInfo> = ({ toggleDrawer, dim }) => {
   const [animationState, setAnimationState] = React.useState<Animation>(
     Animation.DEFAULT
   );
@@ -100,29 +80,14 @@ const MapInfo: React.FunctionComponent<MapInfo> = ({
   React.useEffect(() => {
     // If they're moving the map and we don't have a selected incident
     // Dim the map info search box
-    if (isInteractingWithMap && !selectedIncident) {
-      setAnimationState(Animation.DIM);
-    }
-    // If the drawer is closed & not interacting with the map
-    // Reset to defaults
-    if (!drawerOpen && !isInteractingWithMap) {
-      setAnimationState(Animation.DIM);
-    }
-    // if the drawer is open, dim
-    if (drawerOpen) {
-      setAnimationState(Animation.DIM);
-    }
-    // If we have a new selected incident, expand the box
-    if (selectedIncident) {
-      // setAnimationState(Animation.EXPAND);
-      setAnimationState(Animation.DIM);
-    }
-
-    // If we have no selected incident & we're not interacting with the map, set to defaults
-    if (!selectedIncident && !isInteractingWithMap) {
+    if (!dim) {
       setAnimationState(Animation.DEFAULT);
     }
-  }, [isInteractingWithMap, drawerOpen, selectedIncident]);
+
+    if (dim) {
+      setAnimationState(Animation.DIM);
+    }
+  }, [dim]);
 
   /*
   React.useEffect(() => {

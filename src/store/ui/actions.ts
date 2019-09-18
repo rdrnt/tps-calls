@@ -10,15 +10,6 @@ export function toggleDrawer(value: boolean): UIActionType {
   };
 }
 
-export function setInteractingMap(isInteracting: boolean): UIActionType {
-  return {
-    type: UIActions.SET_INTERACTING_MAP,
-    payload: {
-      isInteracting,
-    },
-  };
-}
-
 export function openLoader(message?: string): UIActionType {
   return {
     type: UIActions.OPEN_LOADER,
