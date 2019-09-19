@@ -23,7 +23,16 @@ const DesktopDrawerStyles = css`
   box-shadow: 1px 2px rgba(0, 0, 0, 0.2);
 `;
 
-const Container = styled.div`
+const Container = styled(
+  posed.div({
+    enter: {
+      opacity: 1,
+    },
+    exit: {
+      opacity: 0,
+    },
+  })
+)`
   position: absolute;
   ${DesktopDrawerStyles};
   background-color: ${Colors.BACKGROUND};
@@ -69,24 +78,24 @@ const Drawer: React.FunctionComponent<DrawerProps> = ({}) => {
     }
   }, [incidentsState.selected]);
 
-  if (uiState.drawerOpen) {
-    return (
-      <Container>
-        {currentView === DrawerViews.DEFAULT && (
-          <DrawerList
-            incidents={incidentsState.list}
-            filter={incidentsState.filter}
-          />
-        )}
+  return (
+    <PoseGroup>
+      {uiState.drawerOpen && (
+        <Container key="drawer">
+          {currentView === DrawerViews.DEFAULT && (
+            <DrawerList
+              incidents={incidentsState.list}
+              filter={incidentsState.filter}
+            />
+          )}
 
-        {currentView === DrawerViews.INCIDENT && incidentsState.selected && (
-          <IncidentView incident={incidentsState.selected} />
-        )}
-      </Container>
-    );
-  }
-
-  return null;
+          {currentView === DrawerViews.INCIDENT && incidentsState.selected && (
+            <IncidentView incident={incidentsState.selected} />
+          )}
+        </Container>
+      )}
+    </PoseGroup>
+  );
 };
 
 export default Drawer;
