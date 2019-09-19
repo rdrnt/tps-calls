@@ -1,5 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import { useDebouncedCallback } from 'use-debounce';
+
 import { Colors, Sizes } from '../../../config';
 import Text from '../../../components/Text';
 import { IncidentFilterState } from 'store/incidents';
@@ -41,16 +43,16 @@ const DrawerListControls: React.FunctionComponent<DrawerListControls> = ({
   const [showFilterOptions, setShowFilterOptions] = React.useState<boolean>(
     false
   );
-
-  const onSearchValueChanged = (value: string) => {
+  const [setSearchValue] = useDebouncedCallback((value: string) => {
     const searchValue: string | undefined = Boolean(value) ? value : undefined;
     setFilter({ search: searchValue });
-  };
+  }, 200);
+
   return (
     <Container>
       <SearchBar
         placeholder="Search for Arrest, Front St, etc."
-        onChange={event => onSearchValueChanged(event.target.value)}
+        onChange={event => setSearchValue(event.target.value)}
       />
       <ToggleFilterOptionsButton
         onClick={() => setShowFilterOptions(!showFilterOptions)}

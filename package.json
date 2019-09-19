@@ -30,7 +30,8 @@
     "tps-calls-shared": "git+ssh://git@github.com:rdrnt/tps-calls-shared.git",
     "tslib": "^1.9.3",
     "typeface-raleway": "^0.0.54",
-    "typeface-roboto": "^0.0.75"
+    "typeface-roboto": "^0.0.75",
+    "use-debounce": "^3.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-0",
