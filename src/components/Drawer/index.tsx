@@ -53,17 +53,12 @@ const Container = styled(
   overflow: hidden;
 `;
 
-interface DrawerProps {
-  incidents: IncidentsState;
-  ui: UIState;
-}
-
 enum DrawerViews {
   INCIDENT = 'incident',
   DEFAULT = 'default',
 }
 
-const Drawer: React.FunctionComponent<DrawerProps> = ({}) => {
+const Drawer: React.FunctionComponent = ({}) => {
   const dispatch = useDispatch();
   const incidentsState = useSelector((state: AppState) => state.incidents);
   const uiState = useSelector((state: AppState) => state.ui);
