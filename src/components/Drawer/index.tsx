@@ -1,8 +1,7 @@
 import * as React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import posed, { PoseGroup } from 'react-pose';
 import { Colors, Sizes } from '../../config';
-import { Incident } from 'tps-calls-shared';
 import { connect, useDispatch } from 'react-redux';
 
 import { AppState } from '../../store';
@@ -12,18 +11,25 @@ import { toggleDrawer } from '../../store/ui/actions';
 
 import IncidentView from './Incident';
 import DrawerList from './List';
+import { setSelectedIncident } from '../../store/incidents/actions';
+
+const DesktopDrawerStyles = css`
+  left: ${Sizes.SPACING}px;
+  top: 12.5%;
+  height: 75%;
+  width: ${Sizes.DRAWER_WIDTH}px;
+  max-width: ${Sizes.DRAWER_WIDTH}px;
+  border-radius: 8px;
+  box-shadow: 2px 2px black;
+`;
 
 const Container = styled.div`
-  height: 100%;
-  width: ${Sizes.DRAWER_WIDTH}px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  transition: 0.3s;
+  position: absolute;
+  ${DesktopDrawerStyles};
+  background-color: ${Colors.BACKGROUND};
   z-index: 999;
   margin: 0;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  overflow: hidden;
 `;
 
 interface DrawerProps {
@@ -44,9 +50,18 @@ const Drawer: React.FunctionComponent<DrawerProps> = ({ ui, incidents }) => {
   );
 
   React.useEffect(() => {
+    // if the drawer is closing and we were looking at an incident, unselect it
+    if (!ui.drawerOpen && currentView === DrawerViews.INCIDENT) {
+      dispatch(setSelectedIncident(undefined));
+    }
+  }, [ui.drawerOpen]);
+
+  React.useEffect(() => {
     if (incidents.selected) {
       setView(DrawerViews.INCIDENT);
-      dispatch(toggleDrawer(true));
+      if (!ui.drawerOpen) {
+        dispatch(toggleDrawer(true));
+      }
     } else if (!incidents.selected) {
       setView(DrawerViews.DEFAULT);
     }

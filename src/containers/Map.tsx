@@ -97,9 +97,7 @@ const Map: React.FunctionComponent<MapProps> = ({}) => {
       style={MAPBOX_THEME_URL}
       containerStyle={{
         height: '100vh',
-        width: uiState.drawerOpen
-          ? `${window.innerWidth - Sizes.DRAWER_WIDTH}px`
-          : '100vw',
+        width: '100vw',
       }}
       center={center}
       onStyleLoad={map => {
