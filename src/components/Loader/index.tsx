@@ -28,6 +28,13 @@ const Container = styled(AnimatedContainer)`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  /* Make the loader message smaller on mobile devices */
+  > h1 {
+    @media only screen and (max-width: 600px) {
+      font-size: 50px;
+    }
+  }
 `;
 
 export interface Loader {

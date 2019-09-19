@@ -1,17 +1,17 @@
 import * as React from 'react';
 import styled, { css } from 'styled-components';
 import posed, { PoseGroup } from 'react-pose';
-import { Colors, Sizes } from '../../config';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { Colors, Sizes } from '../../config';
 import { AppState } from '../../store';
 import { UIState } from '../../store/ui';
 import { IncidentsState } from '../../store/incidents';
 import { toggleDrawer } from '../../store/ui/actions';
+import { setSelectedIncident } from '../../store/incidents/actions';
 
 import IncidentView from './Incident';
 import DrawerList from './List';
-import { setSelectedIncident } from '../../store/incidents/actions';
 
 const DesktopDrawerStyles = css`
   left: ${Sizes.SPACING}px;
@@ -21,6 +21,13 @@ const DesktopDrawerStyles = css`
   max-width: ${Sizes.DRAWER_WIDTH}px;
   border-radius: 8px;
   box-shadow: 1px 2px rgba(0, 0, 0, 0.2);
+`;
+
+const MobileDrawerStyles = css`
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 `;
 
 const Container = styled(
@@ -34,7 +41,12 @@ const Container = styled(
   })
 )`
   position: absolute;
-  ${DesktopDrawerStyles};
+  @media only screen and (max-width: 600px) {
+    ${MobileDrawerStyles};
+  }
+  @media only screen and (min-width: 600px) {
+    ${DesktopDrawerStyles};
+  }
   background-color: ${Colors.BACKGROUND};
   z-index: 999;
   margin: 0;
