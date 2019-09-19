@@ -19,6 +19,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-evenly;
+  transition: height 1s ease-in-out;
 `;
 
 const SearchBar = styled.input`
@@ -28,13 +29,20 @@ const SearchBar = styled.input`
   border-bottom: 1px solid ${Colors.BACKGROUND};
   border-radius: 3px;
   padding: ${Sizes.SPACING / 2}px;
-  margin-bottom: ${Sizes.SPACING / 2}px;
+  margin-bottom: ${Sizes.SPACING}px;
 `;
 
 const ToggleFilterOptionsButton = styled.button`
   background-color: transparent;
   border: none;
   padding-left: 0px;
+  width: 100%;
+  text-align: left;
+`;
+
+const FilterContent = styled.div`
+  width: 100%;
+  height: 150px;
 `;
 
 const DrawerListControls: React.FunctionComponent<DrawerListControls> = ({
@@ -61,6 +69,7 @@ const DrawerListControls: React.FunctionComponent<DrawerListControls> = ({
           Show filters
         </Text>
       </ToggleFilterOptionsButton>
+      {showFilterOptions && <FilterContent />}
     </Container>
   );
 };
