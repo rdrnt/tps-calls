@@ -21,6 +21,10 @@ const GlobalStyle = createGlobalStyle`
     height: 100vh;
     font-family: 'Roboto';
   }
+
+  * {
+    box-sizing: border-box;
+  }
 `;
 
 Firebase.initialize();

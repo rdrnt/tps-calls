@@ -20,6 +20,11 @@ export function incidentReducer(
         ...state,
         selected: action.payload.selected,
       };
+    case IncidentActions.SET_INCIDENT_FILTER:
+      return {
+        ...state,
+        filter: { ...state.filter, ...action.payload },
+      };
     default:
       return state;
   }

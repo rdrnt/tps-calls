@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled, { css } from 'styled-components';
 import posed, { PoseGroup } from 'react-pose';
 import { Colors, Sizes } from '../../config';
-import { connect, useDispatch } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 
 import { AppState } from '../../store';
 import { UIState } from '../../store/ui';
@@ -20,7 +20,7 @@ const DesktopDrawerStyles = css`
   width: ${Sizes.DRAWER_WIDTH}px;
   max-width: ${Sizes.DRAWER_WIDTH}px;
   border-radius: 8px;
-  box-shadow: 2px 2px black;
+  box-shadow: 1px 2px rgba(0, 0, 0, 0.2);
 `;
 
 const Container = styled.div`
@@ -42,8 +42,10 @@ enum DrawerViews {
   DEFAULT = 'default',
 }
 
-const Drawer: React.FunctionComponent<DrawerProps> = ({ ui, incidents }) => {
+const Drawer: React.FunctionComponent<DrawerProps> = ({}) => {
   const dispatch = useDispatch();
+  const incidentsState = useSelector((state: AppState) => state.incidents);
+  const uiState = useSelector((state: AppState) => state.ui);
 
   const [currentView, setView] = React.useState<DrawerViews>(
     DrawerViews.DEFAULT
@@ -51,31 +53,34 @@ const Drawer: React.FunctionComponent<DrawerProps> = ({ ui, incidents }) => {
 
   React.useEffect(() => {
     // if the drawer is closing and we were looking at an incident, unselect it
-    if (!ui.drawerOpen && currentView === DrawerViews.INCIDENT) {
+    if (!uiState.drawerOpen && currentView === DrawerViews.INCIDENT) {
       dispatch(setSelectedIncident(undefined));
     }
-  }, [ui.drawerOpen]);
+  }, [uiState.drawerOpen]);
 
   React.useEffect(() => {
-    if (incidents.selected) {
+    if (incidentsState.selected) {
       setView(DrawerViews.INCIDENT);
-      if (!ui.drawerOpen) {
+      if (!uiState.drawerOpen) {
         dispatch(toggleDrawer(true));
       }
-    } else if (!incidents.selected) {
+    } else if (!incidentsState.selected) {
       setView(DrawerViews.DEFAULT);
     }
-  }, [incidents.selected]);
+  }, [incidentsState.selected]);
 
-  if (ui.drawerOpen) {
+  if (uiState.drawerOpen) {
     return (
       <Container>
         {currentView === DrawerViews.DEFAULT && (
-          <DrawerList incidents={incidents.list} />
+          <DrawerList
+            incidents={incidentsState.list}
+            filter={incidentsState.filter}
+          />
         )}
 
-        {currentView === DrawerViews.INCIDENT && incidents.selected && (
-          <IncidentView incident={incidents.selected} />
+        {currentView === DrawerViews.INCIDENT && incidentsState.selected && (
+          <IncidentView incident={incidentsState.selected} />
         )}
       </Container>
     );
@@ -84,9 +89,4 @@ const Drawer: React.FunctionComponent<DrawerProps> = ({ ui, incidents }) => {
   return null;
 };
 
-const mapStateToProps = (state: AppState) => ({
-  incidents: state.incidents,
-  ui: state.ui,
-});
-
-export default connect(mapStateToProps)(Drawer);
+export default Drawer;

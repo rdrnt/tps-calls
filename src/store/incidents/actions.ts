@@ -1,4 +1,4 @@
-import { IncidentActions, IncidentActionType } from '.';
+import { IncidentActions, IncidentActionType, IncidentFilterState } from '.';
 import { Incident } from 'tps-calls-shared';
 
 export function setIncidentList(list: Incident<any>[]): IncidentActionType {
@@ -18,5 +18,12 @@ export function setSelectedIncident(
     payload: {
       selected,
     },
+  };
+}
+
+export function setIncidentFilter({ ...options }: IncidentFilterState) {
+  return {
+    type: IncidentActions.SET_INCIDENT_FILTER,
+    payload: options,
   };
 }

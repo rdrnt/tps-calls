@@ -12,7 +12,7 @@ export interface DrawerListItem {
 }
 
 const Container = styled.li`
-  height: 60px;
+  height: 75px;
   background-color: ${Colors.BACKGROUND};
   border-bottom: 1px solid ${Colors.BACKGROUND_SECONDARY};
   padding: ${Sizes.SPACING / 2}px;

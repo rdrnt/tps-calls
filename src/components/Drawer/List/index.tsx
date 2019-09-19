@@ -1,12 +1,17 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Incident } from 'tps-calls-shared';
+import { useDispatch } from 'react-redux';
+
 import DrawerListItem from './Item';
-import DrawerControls from '../Controls';
+import DrawerListControls from './Controls';
 import { Colors } from '../../../config';
+import { IncidentFilterState } from '../../../store/incidents';
+import { setIncidentFilter } from '../../../store/incidents/actions';
 
 export interface DrawerList {
   incidents: Incident<any>[];
+  filter: IncidentFilterState;
 }
 
 const Container = styled.div`
@@ -29,9 +34,19 @@ const List = styled.ul`
   overflow-y: scroll;
 `;
 
-const DrawerList: React.FunctionComponent<DrawerList> = ({ incidents }) => {
+const DrawerList: React.FunctionComponent<DrawerList> = ({
+  incidents,
+  filter,
+}) => {
+  const dispatch = useDispatch();
+
+  const setFilter = (newFilterOptions: IncidentFilterState) => {
+    dispatch(setIncidentFilter({ ...filter, ...newFilterOptions }));
+  };
+
   return (
     <Container>
+      <DrawerListControls setFilter={setFilter} />
       <List>
         {incidents.map(incident => (
           <DrawerListItem key={incident.id} incident={incident} />
