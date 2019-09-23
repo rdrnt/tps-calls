@@ -1,17 +1,14 @@
 import * as React from 'react';
 import { AppState } from '../store';
-import { connect, useDispatch, useSelector } from 'react-redux';
-import { UIState } from '../store/ui';
-import { Incident, Coordinates } from 'tps-calls-shared';
+import { useDispatch, useSelector } from 'react-redux';
+import { Coordinates } from 'tps-calls-shared';
 import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 
 import { toggleDrawer, openLoader, closeLoader } from '../store/ui/actions';
-import { IncidentsState } from '../store/incidents';
 import MapInfo from '../components/MapInfo';
 import { setSelectedIncident } from '../store/incidents/actions';
 import { MAPBOX_THEME_URL, Colors, Sizes } from '../config';
-import { PoseGroup } from 'react-pose';
-import { MapEvent } from 'react-mapbox-gl/lib/map-events';
+import { useScreenSize } from '../helpers/hooks';
 
 interface MapState {
   position: Coordinates;
@@ -35,6 +32,7 @@ const Map: React.FunctionComponent<MapProps> = ({}) => {
   const dispatch = useDispatch();
   const incidentsState = useSelector((state: AppState) => state.incidents);
   const uiState = useSelector((state: AppState) => state.ui);
+  const screenDimensions = useScreenSize();
 
   // https://github.com/alex3165/react-mapbox-gl/issues/461
   const [center, setCenter] = React.useState<[number, number]>([
@@ -96,8 +94,8 @@ const Map: React.FunctionComponent<MapProps> = ({}) => {
     <MapMapbox
       style={MAPBOX_THEME_URL}
       containerStyle={{
-        height: '100vh',
-        width: '100vw',
+        height: screenDimensions.height,
+        width: screenDimensions.width,
       }}
       center={center}
       onStyleLoad={map => {
