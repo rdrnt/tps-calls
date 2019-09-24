@@ -9,9 +9,13 @@ import Icon from '../../Icon';
 
 interface DrawerHeader {
   setFilter: (value: IncidentFilterState) => void;
+  isScrolling: boolean;
 }
 
-const Container = styled.div`
+const Container = styled.div<{ isScrolling: boolean }>`
+  position: sticky;
+  top: 0;
+  left: 0;
   width: 100%;
   background-color: ${Colors.BACKGROUND_SECONDARY};
   padding: ${Sizes.SPACING / 2}px;
@@ -19,6 +23,9 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   transition: height 1s ease-in-out;
+
+  box-shadow: ${props =>
+    props.isScrolling ? '8px 8px rgba(0, 0, 0, 0.5)' : 'none'};
 `;
 
 const DefaultContent = styled.div`
@@ -29,7 +36,6 @@ const DefaultContent = styled.div`
   justify-content: space-between;
 
   > div {
-    width: 90px;
     height: 100%;
     display: flex;
     align-items: center;
@@ -47,7 +53,10 @@ const DefaultContent = styled.div`
   }
 `;
 
-const DrawerHeader: React.FunctionComponent<DrawerHeader> = ({ setFilter }) => {
+const DrawerHeader: React.FunctionComponent<DrawerHeader> = ({
+  setFilter,
+  isScrolling,
+}) => {
   const [showFilterOptions, setShowFilterOptions] = React.useState<boolean>(
     false
   );
@@ -57,17 +66,17 @@ const DrawerHeader: React.FunctionComponent<DrawerHeader> = ({ setFilter }) => {
   }, 200);
 
   return (
-    <Container>
+    <Container isScrolling={isScrolling}>
       <DefaultContent>
         <Text as="h1" size={24} lineHeight={28} weight="bold">
           Incidents
         </Text>
         <div>
           <button type="button" onClick={() => {}}>
-            <Icon name="slider" size={25} />
+            <Icon name="slider" size={20} />
           </button>
           <button type="button" onClick={() => {}}>
-            <Icon name="search" size={25} />
+            <Icon name="search" size={20} />
           </button>
         </div>
       </DefaultContent>
