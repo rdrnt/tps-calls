@@ -22,14 +22,21 @@ const Container = styled.div`
   transition: height 1s ease-in-out;
 `;
 
-const SearchBar = styled.input`
-  height: 25px;
+const SearchContainer = styled.div`
+  height: 45px;
   width: 100%;
-  border: none;
   border-bottom: 1px solid ${Colors.BACKGROUND};
   border-radius: 3px;
-  padding: ${Sizes.SPACING / 2}px;
   margin-bottom: ${Sizes.SPACING}px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const SearchBar = styled.input`
+  height: 100%;
+  border: none;
+  flex-grow: 1;
 `;
 
 const ToggleFilterOptionsButton = styled.button`
@@ -58,17 +65,12 @@ const DrawerListControls: React.FunctionComponent<DrawerListControls> = ({
 
   return (
     <Container>
-      <SearchBar
-        placeholder="Search for Arrest, Front St, etc."
-        onChange={event => setSearchValue(event.target.value)}
-      />
-      <ToggleFilterOptionsButton
-        onClick={() => setShowFilterOptions(!showFilterOptions)}
-      >
-        <Text as="p" size={12} weight="bold">
-          Show filters
-        </Text>
-      </ToggleFilterOptionsButton>
+      <SearchContainer>
+        <SearchBar
+          placeholder="Search for Arrest, Front St, etc."
+          onChange={event => setSearchValue(event.target.value)}
+        />
+      </SearchContainer>
       {showFilterOptions && <FilterContent />}
     </Container>
   );

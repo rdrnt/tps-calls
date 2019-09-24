@@ -42,7 +42,9 @@ module.exports = {
     ],
   },
   plugins: [
-    new HtmlWebPackPlugin(),
+    new HtmlWebPackPlugin({
+      template: paths.indexHtml,
+    }),
     new ForkTsCheckerPlugin({
       watch: path.resolve('src'),
     }),

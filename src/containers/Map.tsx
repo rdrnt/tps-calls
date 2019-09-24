@@ -90,6 +90,13 @@ const Map: React.FunctionComponent<MapProps> = ({}) => {
     }
   }, [incidentsState.selected]);
 
+  // if the screen size changes, resize the map
+  React.useEffect(() => {
+    if (mapRef.current) {
+      mapRef.current.resize();
+    }
+  }, [screenDimensions]);
+
   return (
     <MapMapbox
       style={MAPBOX_THEME_URL}
