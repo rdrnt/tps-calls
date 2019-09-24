@@ -14,14 +14,15 @@ export interface DrawerListItem {
 const Container = styled.li`
   height: 75px;
   background-color: ${Colors.BACKGROUND};
-  border-bottom: 1px solid ${Colors.BACKGROUND_SECONDARY};
   padding: ${Sizes.SPACING / 2}px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  margin: ${Sizes.SPACING / 2}px;
+  border-radius: 10px;
 
   :hover {
-    background-color: ${Colors.BACKGROUND_SECONDARY};
+    background-color: white;
   }
 `;
 
@@ -33,7 +34,7 @@ const DrawerListItem: React.FunctionComponent<DrawerListItem> = ({
   return (
     <Container onClick={() => dispatch(setSelectedIncident(incident))}>
       <Text as="h5">{incident.name}</Text>
-      <Text as="p" size={12}>
+      <Text as="p" size={12} lineHeight={14}>
         {incident.location}
       </Text>
       <Text as="span">{DateHelper.formatIncidentDate(incident.date)}</Text>

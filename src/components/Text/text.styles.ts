@@ -49,7 +49,7 @@ let DEFAULT_TEXT_STYLES: { [key in ValidTextTypes]: StyledTextProps } = {
   p: {
     size: 16,
     weight: 'normal',
-    lineHeight: 20,
+    lineHeight: 18,
   },
 };
 

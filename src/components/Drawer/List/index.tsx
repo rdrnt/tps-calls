@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 
 import DrawerListItem from './Item';
 import DrawerListControls from './Controls';
-import { Colors } from '../../../config';
+import { Colors, Sizes } from '../../../config';
 import { IncidentFilterState } from '../../../store/incidents';
 import { setIncidentFilter } from '../../../store/incidents/actions';
 
@@ -23,6 +23,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  background-color: ${Colors.BACKGROUND_SECONDARY};
 `;
 
 const List = styled.ul`
@@ -46,7 +47,7 @@ const DrawerList: React.FunctionComponent<DrawerList> = ({
 
   return (
     <Container>
-      <DrawerListControls setFilter={setFilter} />
+      {/* <DrawerListControls setFilter={setFilter} /> */}
       <List>
         {incidents.map(incident => (
           <DrawerListItem key={incident.id} incident={incident} />

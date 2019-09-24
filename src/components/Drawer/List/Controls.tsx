@@ -38,7 +38,7 @@ const SearchBar = styled.input`
   height: 100%;
   border: none;
   flex-grow: 1;
-  padding: ${Sizes.SPACING / 2}px;
+  padding: 0 3px;
 `;
 
 const ToggleFilterButton = styled.button`
