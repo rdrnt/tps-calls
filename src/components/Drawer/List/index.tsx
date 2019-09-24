@@ -4,7 +4,7 @@ import { Incident } from 'tps-calls-shared';
 import { useDispatch } from 'react-redux';
 
 import DrawerListItem from './Item';
-import DrawerListControls from './Controls';
+import DrawerHeader from './Header';
 import { Colors, Sizes } from '../../../config';
 import { IncidentFilterState } from '../../../store/incidents';
 import { setIncidentFilter } from '../../../store/incidents/actions';
@@ -47,7 +47,7 @@ const DrawerList: React.FunctionComponent<DrawerList> = ({
 
   return (
     <Container>
-      {/* <DrawerListControls setFilter={setFilter} /> */}
+      <DrawerHeader setFilter={setFilter} />
       <List>
         {incidents.map(incident => (
           <DrawerListItem key={incident.id} incident={incident} />

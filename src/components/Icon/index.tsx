@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { FiSliders } from 'react-icons/fi';
+import { FiSliders, FiSearch } from 'react-icons/fi';
 
-type IconNames = 'slider';
+type IconNames = 'slider' | 'search';
 
 const AllIcons: { [key in IconNames]?: React.ReactElement } = {
   slider: <FiSliders />,
+  search: <FiSearch />,
 };
 
 interface IconProps {
