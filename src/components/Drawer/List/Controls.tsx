@@ -5,6 +5,7 @@ import { useDebouncedCallback } from 'use-debounce';
 import { Colors, Sizes } from '../../../config';
 import Text from '../../../components/Text';
 import { IncidentFilterState } from 'store/incidents';
+import Icon from '../../../components/Icon';
 
 interface DrawerListControls {
   setFilter: (value: IncidentFilterState) => void;
@@ -13,7 +14,7 @@ interface DrawerListControls {
 const Container = styled.div`
   width: 100%;
   background-color: ${Colors.BACKGROUND_SECONDARY};
-  padding: ${Sizes.SPACING}px ${Sizes.SPACING / 2}px;
+  padding: ${Sizes.SPACING / 2}px;
   border-bottom: 1px solid ${Colors.BACKGROUND};
   display: flex;
   flex-direction: column;
@@ -23,11 +24,11 @@ const Container = styled.div`
 `;
 
 const SearchContainer = styled.div`
-  height: 45px;
+  height: 40px;
   width: 100%;
+  background-color: ${Colors.BACKGROUND};
   border-bottom: 1px solid ${Colors.BACKGROUND};
   border-radius: 3px;
-  margin-bottom: ${Sizes.SPACING}px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -37,14 +38,18 @@ const SearchBar = styled.input`
   height: 100%;
   border: none;
   flex-grow: 1;
+  padding: ${Sizes.SPACING / 2}px;
 `;
 
-const ToggleFilterOptionsButton = styled.button`
+const ToggleFilterButton = styled.button`
   background-color: transparent;
   border: none;
-  padding-left: 0px;
-  width: 100%;
-  text-align: left;
+  padding: 0;
+  height: 45px;
+  width: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const FilterContent = styled.div`
@@ -70,6 +75,18 @@ const DrawerListControls: React.FunctionComponent<DrawerListControls> = ({
           placeholder="Search for Arrest, Front St, etc."
           onChange={event => setSearchValue(event.target.value)}
         />
+        <ToggleFilterButton
+          type="button"
+          onClick={() => setShowFilterOptions(!showFilterOptions)}
+        >
+          <Icon
+            name="slider"
+            size={25}
+            color={
+              showFilterOptions ? Colors.PRIMARY : Colors.BACKGROUND_SECONDARY
+            }
+          />
+        </ToggleFilterButton>
       </SearchContainer>
       {showFilterOptions && <FilterContent />}
     </Container>
