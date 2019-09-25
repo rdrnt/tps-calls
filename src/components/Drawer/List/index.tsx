@@ -44,26 +44,27 @@ const DrawerList: React.FunctionComponent<DrawerList> = ({
   const dispatch = useDispatch();
   const listRef = React.useRef<HTMLUListElement>(null);
 
-  const [isScrolling, setIsScrolling] = React.useState<boolean>(false);
+  const [scrollPosition, setScrollPosition] = React.useState<number>(0);
 
   const setFilter = (newFilterOptions: IncidentFilterState) => {
     dispatch(setIncidentFilter({ ...filter, ...newFilterOptions }));
   };
 
   const [onScroll] = useDebouncedCallback(() => {
-    if (listRef.current && listRef.current.scrollTop >= 75) {
-      setIsScrolling(true);
-    } else if (isScrolling) {
-      setIsScrolling(false);
+    if (listRef.current) {
+      setScrollPosition(listRef.current.scrollTop);
     }
   }, 200);
 
   return (
     <Container>
-      <DrawerHeader setFilter={setFilter} isScrolling={isScrolling} />
       <List ref={listRef} onScroll={onScroll}>
         {incidents.map(incident => (
-          <DrawerListItem key={incident.id} incident={incident} />
+          <DrawerListItem
+            key={incident.id}
+            incident={incident}
+            scrollPosition={scrollPosition}
+          />
         ))}
       </List>
     </Container>
