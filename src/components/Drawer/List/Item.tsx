@@ -57,6 +57,7 @@ const DrawerListItem: React.FunctionComponent<DrawerListItem> = ({
       onChange={isVisible => {
         setAnimationState(isVisible ? 'visible' : 'hidden');
       }}
+      partialVisibility={true}
     >
       <Container
         pose={animationState}

@@ -9,10 +9,9 @@ import Icon from '../../Icon';
 
 interface DrawerHeader {
   setFilter: (value: IncidentFilterState) => void;
-  isScrolling: boolean;
 }
 
-const Container = styled.div<{ isScrolling: boolean }>`
+const Container = styled.div`
   position: sticky;
   top: 0;
   left: 0;
@@ -23,9 +22,6 @@ const Container = styled.div<{ isScrolling: boolean }>`
   align-items: center;
   justify-content: center;
   transition: height 1s ease-in-out;
-
-  box-shadow: ${props =>
-    props.isScrolling ? '8px 8px rgba(0, 0, 0, 0.5)' : 'none'};
 `;
 
 const DefaultContent = styled.div`
@@ -53,10 +49,7 @@ const DefaultContent = styled.div`
   }
 `;
 
-const DrawerHeader: React.FunctionComponent<DrawerHeader> = ({
-  setFilter,
-  isScrolling,
-}) => {
+const DrawerHeader: React.FunctionComponent<DrawerHeader> = ({ setFilter }) => {
   const [showFilterOptions, setShowFilterOptions] = React.useState<boolean>(
     false
   );
@@ -66,7 +59,7 @@ const DrawerHeader: React.FunctionComponent<DrawerHeader> = ({
   }, 200);
 
   return (
-    <Container isScrolling={isScrolling}>
+    <Container>
       <DefaultContent>
         <Text as="h1" size={24} lineHeight={28} weight="bold">
           Incidents

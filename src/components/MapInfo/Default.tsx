@@ -13,7 +13,7 @@ interface DefaultViewProps {
 const Button = styled.button`
   height: 40px;
   width: 100%;
-  background-color: ${Colors.PRIMARY};
+  background-color: ${darken(0.2, Colors.SECONDARY)};
   border: none;
   border-radius: 4px;
   padding: 0;
@@ -23,7 +23,7 @@ const Button = styled.button`
   box-shadow: 2px 1px rgba(0, 0, 0, 0.2);
 
   :hover {
-    background-color: ${darken(0.2, Colors.PRIMARY)};
+    background-color: ${darken(0.4, Colors.SECONDARY)};
   }
 `;
 
@@ -33,7 +33,7 @@ const DefaultView: React.FunctionComponent<DefaultViewProps> = ({
   return (
     <Button type="button" onClick={onClick}>
       <Text as="p" size={14} lineHeight={16} color="white">
-        Search for stabbing, bloor st, etc.
+        Search for stabbing, bloor st, etc...
       </Text>
       <Icon color="white" name="search" size={20} />
     </Button>

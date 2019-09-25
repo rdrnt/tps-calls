@@ -5,11 +5,11 @@ import { FaSearch } from 'react-icons/fa';
 import { Incident } from 'tps-calls-shared';
 
 import { Sizes, Colors } from '../../config';
-import IncidentView from './Incident';
+import IncidentView, { WIDTH as IncidentViewWidth } from './Incident';
 import DefaultView from './Default';
 
 const HEIGHT = 35;
-const WIDTH = 275;
+const DEFAULT_WIDTH = 275;
 
 const AnimatedContainer = posed.div({
   default: {
@@ -20,14 +20,17 @@ const AnimatedContainer = posed.div({
   },
 });
 
-const Container = styled(AnimatedContainer)`
+const Container = styled(AnimatedContainer)<{ width: number }>`
   position: absolute;
-  bottom: ${Sizes.SPACING * 6}px;
-  left: calc(50% - ${WIDTH / 2}px);
-  width: ${WIDTH}px;
+  bottom: ${Sizes.SPACING * 4}px;
+  left: ${props => `calc(50% - ${props.width / 2}px)`};
+  width: auto;
+  min-width: ${DEFAULT_WIDTH}px;
+  max-width: 350px;
   height: auto;
   min-height: ${HEIGHT}px;
-  transition: 1s height ease-in-out;
+  transition: 1s height;
+  transition: 1s width;
 `;
 
 export enum Animation {
@@ -49,12 +52,14 @@ const MapInfo: React.FunctionComponent<MapInfo> = ({
   const [animationState, setAnimationState] = React.useState<Animation>(
     Animation.DEFAULT
   );
+  const [width, setWidth] = React.useState<number>(DEFAULT_WIDTH);
 
   React.useEffect(() => {
     // If they're moving the map and we don't have a selected incident
     // Dim the map info search box
     if (!dim) {
       setAnimationState(Animation.DEFAULT);
+      setWidth(DEFAULT_WIDTH);
     }
 
     if (dim) {
@@ -69,10 +74,15 @@ const MapInfo: React.FunctionComponent<MapInfo> = ({
   */
 
   return (
-    <Container pose={animationState}>
+    <Container pose={animationState} width={width}>
       {!selectedIncident && <DefaultView onClick={openDrawer} />}
 
-      {selectedIncident && <IncidentView key="incident" />}
+      {selectedIncident && (
+        <IncidentView
+          key="incident"
+          onOpen={() => setWidth(IncidentViewWidth)}
+        />
+      )}
     </Container>
   );
 };

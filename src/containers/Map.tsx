@@ -5,10 +5,12 @@ import { Coordinates } from 'tps-calls-shared';
 import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 
 import { toggleDrawer, openLoader, closeLoader } from '../store/ui/actions';
-import MapInfo from '../components/MapInfo';
 import { setSelectedIncident } from '../store/incidents/actions';
 import { MAPBOX_THEME_URL, Colors, Sizes } from '../config';
 import { useScreenSize } from '../helpers/hooks';
+
+import MapInfo from '../components/MapInfo';
+import MapDrawerButton from '../components/MapDrawerButton';
 
 interface MapState {
   position: Coordinates;
@@ -123,10 +125,9 @@ const Map: React.FunctionComponent<MapProps> = ({}) => {
         uiState.drawerOpen ? () => dispatch(toggleDrawer(false)) : undefined
       }
     >
-      <MapInfo
+      <MapDrawerButton
+        hidden={uiState.drawerOpen}
         openDrawer={() => dispatch(toggleDrawer(true))}
-        dim={uiState.drawerOpen || isInteracting}
-        selectedIncident={incidentsState.selected}
       />
       <Layer
         type="circle"
