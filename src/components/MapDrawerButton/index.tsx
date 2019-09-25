@@ -1,14 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import posed, { PoseGroup } from 'react-pose';
-import { darken } from 'polished';
+import posed from 'react-pose';
 
 import { Colors } from '../../config';
 import Icon from '../Icon';
 
 interface MapDrawerButton {
   openDrawer: () => void;
-  hidden: boolean;
 }
 
 const AnimatedContainer = posed.button({
@@ -39,28 +37,22 @@ const Container = styled(AnimatedContainer)`
 `;
 
 const MapDrawerButton: React.FunctionComponent<MapDrawerButton> = ({
-  hidden,
   openDrawer,
 }) => {
   const [isHovering, setIsHovering] = React.useState<boolean>(false);
   return (
-    <PoseGroup>
-      {!hidden && (
-        <Container
-          key="button"
-          type="button"
-          onClick={openDrawer}
-          onMouseOver={() => setIsHovering(true)}
-          onMouseOut={() => setIsHovering(false)}
-        >
-          <Icon
-            name="menu"
-            size={25}
-            color={isHovering ? Colors.BACKGROUND : Colors.SECONDARY}
-          />
-        </Container>
-      )}
-    </PoseGroup>
+    <Container
+      type="button"
+      onClick={openDrawer}
+      onMouseOver={() => setIsHovering(true)}
+      onMouseOut={() => setIsHovering(false)}
+    >
+      <Icon
+        name="menu"
+        size={25}
+        color={isHovering ? Colors.BACKGROUND : Colors.SECONDARY}
+      />
+    </Container>
   );
 };
 

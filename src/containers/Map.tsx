@@ -11,6 +11,7 @@ import { useScreenSize } from '../helpers/hooks';
 
 import MapInfo from '../components/MapInfo';
 import MapDrawerButton from '../components/MapDrawerButton';
+import { PoseGroup } from 'react-pose';
 
 interface MapState {
   position: Coordinates;
@@ -125,10 +126,15 @@ const Map: React.FunctionComponent<MapProps> = ({}) => {
         uiState.drawerOpen ? () => dispatch(toggleDrawer(false)) : undefined
       }
     >
-      <MapDrawerButton
-        hidden={uiState.drawerOpen}
-        openDrawer={() => dispatch(toggleDrawer(true))}
-      />
+      <PoseGroup>
+        {!uiState.drawerOpen && (
+          <MapDrawerButton
+            key="drawerButton"
+            openDrawer={() => dispatch(toggleDrawer(true))}
+          />
+        )}
+      </PoseGroup>
+
       <Layer
         type="circle"
         id="marker"
