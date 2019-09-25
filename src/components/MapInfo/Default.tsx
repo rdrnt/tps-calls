@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import { darken } from 'polished';
 
 import { Colors } from '../../config';
 import Text from '../Text';
@@ -19,6 +20,11 @@ const Button = styled.button`
   display: flex;
   justify-content: space-around;
   align-items: center;
+  box-shadow: 2px 1px rgba(0, 0, 0, 0.2);
+
+  :hover {
+    background-color: ${darken(0.2, Colors.PRIMARY)};
+  }
 `;
 
 const DefaultView: React.FunctionComponent<DefaultViewProps> = ({
@@ -27,7 +33,7 @@ const DefaultView: React.FunctionComponent<DefaultViewProps> = ({
   return (
     <Button type="button" onClick={onClick}>
       <Text as="p" size={14} lineHeight={16} color="white">
-        Search for assualt, bloor st, etc.
+        Search for stabbing, bloor st, etc.
       </Text>
       <Icon color="white" name="search" size={20} />
     </Button>
