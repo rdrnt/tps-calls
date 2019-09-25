@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { createGlobalStyle } from 'styled-components';
 import { Provider } from 'react-redux';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import { Firebase } from './helpers';
 
 import Map from './containers/Map';
 
 import IncidentListener from './components/IncidentListener';
-import Template from './components/Template';
 
 import store from './store';
 import Drawer from './components/Drawer';
@@ -36,9 +36,9 @@ const App: React.FunctionComponent = () => (
       <IncidentListener />
       <Loader />
       <Drawer />
-      <Template>
-        <Map />
-      </Template>
+      <Router>
+        <Route path="/" component={Map} />
+      </Router>
     </Provider>
   </>
 );
