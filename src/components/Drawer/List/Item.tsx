@@ -35,7 +35,11 @@ const Container = styled(AnimatedContainer)`
   border-radius: 10px;
 
   :hover {
-    background-color: white;
+    background-color: ${Colors.PRIMARY};
+
+    * {
+      color: white;
+    }
   }
 `;
 
