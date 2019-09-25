@@ -26,11 +26,11 @@ const Container = styled(AnimatedContainer)`
 `;
 
 interface MapInfo {
-  selectedIncident?: Incident<any>;
+  incident?: Incident<any>;
 }
 
-const MapInfo: React.FunctionComponent<MapInfo> = ({ selectedIncident }) => {
-  return <Container />;
+const MapInfo: React.FunctionComponent<MapInfo> = ({ incident }) => {
+  return <PoseGroup>{incident && <Container key="info" />}</PoseGroup>;
 };
 
 export default MapInfo;

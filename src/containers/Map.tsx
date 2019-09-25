@@ -126,15 +126,11 @@ const Map: React.FunctionComponent<MapProps> = ({}) => {
         uiState.drawerOpen ? () => dispatch(toggleDrawer(false)) : undefined
       }
     >
-      <PoseGroup>
-        {!uiState.drawerOpen && (
-          <MapDrawerButton
-            key="drawerButton"
-            openDrawer={() => dispatch(toggleDrawer(true))}
-          />
-        )}
-        {incidentsState.selected && <MapInfo key="incidentInfo" />}
-      </PoseGroup>
+      <MapDrawerButton
+        hidden={uiState.drawerOpen}
+        openDrawer={() => dispatch(toggleDrawer(true))}
+      />
+      <MapInfo incident={incidentsState.selected} />
 
       <Layer
         type="circle"
