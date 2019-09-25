@@ -53,6 +53,10 @@ const Map: React.FunctionComponent<MapProps> = ({}) => {
     if (isInteracting && uiState.drawerOpen) {
       dispatch(toggleDrawer(false));
     }
+
+    if (isInteracting) {
+      dispatch(setSelectedIncident(undefined));
+    }
   }, [isInteracting]);
 
   React.useEffect(() => {
@@ -120,8 +124,9 @@ const Map: React.FunctionComponent<MapProps> = ({}) => {
       }
     >
       <MapInfo
-        toggleDrawer={(value: boolean) => dispatch(toggleDrawer(value))}
+        openDrawer={() => dispatch(toggleDrawer(true))}
         dim={uiState.drawerOpen || isInteracting}
+        selectedIncident={incidentsState.selected}
       />
       <Layer
         type="circle"

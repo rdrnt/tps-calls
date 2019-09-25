@@ -1,9 +1,12 @@
 import * as React from 'react';
 import styled, { css } from 'styled-components';
-import posed from 'react-pose';
+import posed, { PoseGroup } from 'react-pose';
 import { FaSearch } from 'react-icons/fa';
+import { Incident } from 'tps-calls-shared';
 
 import { Sizes, Colors } from '../../config';
+import IncidentView from './Incident';
+import DefaultView from './Default';
 
 const HEIGHT = 35;
 const WIDTH = 275;
@@ -24,38 +27,7 @@ const Container = styled(AnimatedContainer)`
   width: ${WIDTH}px;
   height: auto;
   min-height: ${HEIGHT}px;
-  display: flex;
-  background-color: ${Colors.BACKGROUND};
-  border: none;
-  padding: 5px;
-  border-radius: 4px;
-`;
-
-const ButtonContent = styled.button`
-  height: auto; /* Dont use 100% because it will be max height during the animation*/
-  width: 100%;
-  background-color: ${Colors.BACKGROUND_SECONDARY};
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  justify-self: center;
-  border: none;
-  pointer-events: auto;
-  border-radius: 4px;
-  flex-grow: 1;
-`;
-
-const Text = styled.span`
-  color: black;
-  font-size: 14px;
-`;
-
-const IconContainer = styled.div`
-  height: 100%;
-  width: 25px;
-  border-left: 1px solid black;
-  display: flex;
-  justify-content: center;
+  transition: 1s height ease-in-out;
 `;
 
 export enum Animation {
@@ -64,11 +36,16 @@ export enum Animation {
 }
 
 interface MapInfo {
-  toggleDrawer: (value: boolean) => void;
+  openDrawer: () => void;
   dim: boolean;
+  selectedIncident?: Incident<any>;
 }
 
-const MapInfo: React.FunctionComponent<MapInfo> = ({ toggleDrawer, dim }) => {
+const MapInfo: React.FunctionComponent<MapInfo> = ({
+  openDrawer,
+  dim,
+  selectedIncident,
+}) => {
   const [animationState, setAnimationState] = React.useState<Animation>(
     Animation.DEFAULT
   );
@@ -93,12 +70,9 @@ const MapInfo: React.FunctionComponent<MapInfo> = ({ toggleDrawer, dim }) => {
 
   return (
     <Container pose={animationState}>
-      <ButtonContent type="button" onClick={() => toggleDrawer(true)}>
-        <Text>Search for stabbing, theft, etc...</Text>
-        <IconContainer>
-          <FaSearch />
-        </IconContainer>
-      </ButtonContent>
+      {!selectedIncident && <DefaultView onClick={openDrawer} />}
+
+      {selectedIncident && <IncidentView key="incident" />}
     </Container>
   );
 };

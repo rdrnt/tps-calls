@@ -5,12 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Colors, Sizes } from '../../config';
 import { AppState } from '../../store';
-import { UIState } from '../../store/ui';
-import { IncidentsState } from '../../store/incidents';
 import { toggleDrawer } from '../../store/ui/actions';
 import { setSelectedIncident } from '../../store/incidents/actions';
 
-import IncidentView from './Incident';
 import DrawerList from './List';
 
 const DesktopDrawerStyles = css`
@@ -54,35 +51,16 @@ const Container = styled(
   border: none;
 `;
 
-enum DrawerViews {
-  INCIDENT = 'incident',
-  DEFAULT = 'default',
-}
-
 const Drawer: React.FunctionComponent = ({}) => {
   const dispatch = useDispatch();
   const incidentsState = useSelector((state: AppState) => state.incidents);
   const uiState = useSelector((state: AppState) => state.ui);
 
-  const [currentView, setView] = React.useState<DrawerViews>(
-    DrawerViews.DEFAULT
-  );
-
-  React.useEffect(() => {
-    // if the drawer is closing and we were looking at an incident, unselect it
-    if (!uiState.drawerOpen && currentView === DrawerViews.INCIDENT) {
-      dispatch(setSelectedIncident(undefined));
-    }
-  }, [uiState.drawerOpen]);
-
   React.useEffect(() => {
     if (incidentsState.selected) {
-      setView(DrawerViews.INCIDENT);
-      if (!uiState.drawerOpen) {
-        dispatch(toggleDrawer(true));
+      if (uiState.drawerOpen) {
+        dispatch(toggleDrawer(false));
       }
-    } else if (!incidentsState.selected) {
-      setView(DrawerViews.DEFAULT);
     }
   }, [incidentsState.selected]);
 
@@ -90,16 +68,10 @@ const Drawer: React.FunctionComponent = ({}) => {
     <PoseGroup>
       {uiState.drawerOpen && (
         <Container key="drawer">
-          {currentView === DrawerViews.DEFAULT && (
-            <DrawerList
-              incidents={incidentsState.list}
-              filter={incidentsState.filter}
-            />
-          )}
-
-          {currentView === DrawerViews.INCIDENT && incidentsState.selected && (
-            <IncidentView incident={incidentsState.selected} />
-          )}
+          <DrawerList
+            incidents={incidentsState.list}
+            filter={incidentsState.filter}
+          />
         </Container>
       )}
     </PoseGroup>
