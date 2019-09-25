@@ -57,7 +57,7 @@ const Map: React.FunctionComponent<MapProps> = ({}) => {
       dispatch(toggleDrawer(false));
     }
 
-    if (isInteracting) {
+    if (isInteracting && incidentsState.selected) {
       dispatch(setSelectedIncident(undefined));
     }
   }, [isInteracting]);
@@ -133,6 +133,7 @@ const Map: React.FunctionComponent<MapProps> = ({}) => {
             openDrawer={() => dispatch(toggleDrawer(true))}
           />
         )}
+        {incidentsState.selected && <MapInfo key="incidentInfo" />}
       </PoseGroup>
 
       <Layer
