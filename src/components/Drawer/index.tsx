@@ -14,9 +14,9 @@ import IncidentView from './Incident';
 import DrawerList from './List';
 
 const DesktopDrawerStyles = css`
-  left: ${Sizes.SPACING}px;
-  top: 12.5%;
-  height: 75%;
+  left: 0;
+  top: 0;
+  height: 100%;
   width: ${Sizes.DRAWER_WIDTH}px;
   max-width: ${Sizes.DRAWER_WIDTH}px;
   border-radius: 8px;
@@ -33,10 +33,10 @@ const MobileDrawerStyles = css`
 const Container = styled(
   posed.div({
     enter: {
-      opacity: 1,
+      x: 0,
     },
     exit: {
-      opacity: 0,
+      x: -375,
     },
   })
 )`
@@ -51,6 +51,7 @@ const Container = styled(
   z-index: 999;
   margin: 0;
   overflow: hidden;
+  border: none;
 `;
 
 enum DrawerViews {
