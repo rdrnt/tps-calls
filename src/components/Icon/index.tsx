@@ -1,15 +1,17 @@
 import * as React from 'react';
-import { FiSliders, FiSearch, FiSidebar } from 'react-icons/fi';
+import { FiSliders, FiSidebar, FiXCircle } from 'react-icons/fi';
+import { GoSearch } from 'react-icons/go';
 
-type IconNames = 'slider' | 'search' | 'menu';
+type IconNames = 'slider' | 'search' | 'menu' | 'x-circle';
 
 const AllIcons: { [key in IconNames]?: React.ReactElement } = {
   slider: <FiSliders />,
-  search: <FiSearch />,
+  search: <GoSearch />,
   menu: <FiSidebar />,
+  'x-circle': <FiXCircle />,
 };
 
-interface IconProps {
+export interface IconProps {
   name: IconNames;
   color?: string;
   size?: number;

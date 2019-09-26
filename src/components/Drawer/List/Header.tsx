@@ -8,6 +8,7 @@ import { Colors, Sizes } from '../../../config';
 import Text, { createTextStyles, DEFAULT_TEXT_STYLES } from '../../Text';
 import { IncidentFilterState } from '../../../store/incidents';
 import Icon from '../../Icon';
+import { IconButton } from '../../Button';
 
 interface DrawerHeader {
   setFilter: (value: IncidentFilterState) => void;
@@ -72,14 +73,21 @@ const FilterContent = styled(
   display: flex;
 `;
 
-const SearchBar = styled.input`
+const SearchBar = styled.div`
   background-color: ${Colors.BACKGROUND};
   height: 35px;
   width: 100%;
-  border: none;
   border-radius: 10px;
   ${createTextStyles({ ...DEFAULT_TEXT_STYLES.p, size: 12, lineHeight: 14 })};
   padding: ${Sizes.SPACING / 2}px;
+  display: flex;
+  align-items: center;
+
+  > input {
+    background-color: inherit;
+    border: none;
+    flex-grow: 1;
+  }
 `;
 
 const DrawerHeader: React.FunctionComponent<DrawerHeader> = ({ setFilter }) => {
@@ -115,12 +123,14 @@ const DrawerHeader: React.FunctionComponent<DrawerHeader> = ({ setFilter }) => {
         </div>
       </DefaultContent>
       <FilterContent pose={showFilters ? 'open' : 'closed'}>
-        <SearchBar
-          type="text"
-          placeholder="Dundas St, Stabbing, etc..."
-          onChange={event => setSearchValue(event.target.value)}
-          value={searchValue}
-        />
+        <SearchBar>
+          <input
+            type="text"
+            placeholder="Dundas St, Stabbing, etc..."
+            onChange={event => setSearchValue(event.target.value)}
+            value={searchValue}
+          />
+        </SearchBar>
       </FilterContent>
     </Container>
   );
