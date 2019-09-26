@@ -31,6 +31,7 @@ const Container = styled(AnimatedContainer)`
   display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: 1px 2px rgba(0, 0, 0, 0.2);
 
   &:hover {
     background-color: ${Colors.SECONDARY};

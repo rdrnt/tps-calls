@@ -31,9 +31,17 @@ const Container = styled(
   posed.div({
     enter: {
       x: 0,
+      opacity: 1,
+      transition: {
+        x: {
+          duration: 150,
+          ease: 'easeInOut',
+        },
+      },
     },
     exit: {
-      x: -375,
+      x: -Sizes.DRAWER_WIDTH,
+      opacity: 0,
     },
   })
 )`

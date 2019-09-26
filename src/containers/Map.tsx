@@ -122,15 +122,24 @@ const Map: React.FunctionComponent<MapProps> = ({}) => {
       onDragEnd={() => {
         setIsInteracting(false);
       }}
-      onClick={
-        uiState.drawerOpen ? () => dispatch(toggleDrawer(false)) : undefined
-      }
+      onClick={() => {
+        if (uiState.drawerOpen) {
+          dispatch(toggleDrawer(false));
+        }
+
+        if (incidentsState.selected) {
+          dispatch(setSelectedIncident(undefined));
+        }
+      }}
     >
       <MapDrawerButton
         hidden={uiState.drawerOpen}
         openDrawer={() => dispatch(toggleDrawer(true))}
       />
-      <MapInfo incident={incidentsState.selected} />
+      <MapInfo
+        incident={incidentsState.selected}
+        drawerOpen={uiState.drawerOpen}
+      />
 
       <Layer
         type="circle"
