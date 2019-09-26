@@ -58,7 +58,7 @@ const DrawerList: React.FunctionComponent<DrawerList> = ({
 
   return (
     <Container>
-      <DrawerHeader setFilter={setFilter} />
+      <DrawerHeader setFilter={setFilter} filters={filter} />
       <List ref={listRef} onScroll={onScroll}>
         {incidents.map(incident => (
           <DrawerListItem

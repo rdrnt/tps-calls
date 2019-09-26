@@ -12,6 +12,7 @@ import { IconButton } from '../../Button';
 
 interface DrawerHeader {
   setFilter: (value: IncidentFilterState) => void;
+  filters: IncidentFilterState;
 }
 
 const Container = styled.div<{ showBottomBorder?: boolean }>`
@@ -90,17 +91,27 @@ const SearchBar = styled.div`
   }
 `;
 
-const DrawerHeader: React.FunctionComponent<DrawerHeader> = ({ setFilter }) => {
+const DrawerHeader: React.FunctionComponent<DrawerHeader> = ({
+  setFilter,
+  filters,
+}) => {
   const [showFilters, setFilterVisibility] = React.useState<boolean>(false);
   const [searchValue, setSearchValue] = React.useState<string>('');
 
-  const [updateStoreSearchValue] = useDebouncedCallback((value: string) => {
-    const searchValue: string | undefined = Boolean(value) ? value : undefined;
-    setFilter({ search: searchValue });
-  }, 200);
+  const [updateStoreSearchValue] = useDebouncedCallback(
+    (value: string | undefined) => {
+      setFilter({ search: value });
+    },
+    200
+  );
 
   React.useEffect(() => {
-    updateStoreSearchValue(searchValue);
+    const newSearchValue: string | undefined = Boolean(searchValue)
+      ? searchValue
+      : undefined;
+    if (newSearchValue !== filters.search) {
+      updateStoreSearchValue(newSearchValue);
+    }
   }, [searchValue]);
 
   return (

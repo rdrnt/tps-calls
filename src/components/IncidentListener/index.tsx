@@ -12,7 +12,7 @@ const IncidentListener: React.FunctionComponent = ({}) => {
   const { filter, list } = useSelector((state: AppState) => state.incidents);
 
   // Store the default incidents
-  const [originalIncidentList, setOriginalIncidentList] = React.useState<
+  const [defaultIncidentList, setDefaultIncidentList] = React.useState<
     Incident<any>[]
   >([]);
 
@@ -24,7 +24,7 @@ const IncidentListener: React.FunctionComponent = ({}) => {
   React.useEffect(() => {
     const incidentListener = Firebase.incidents.listener(newIncidents => {
       setIncidents(newIncidents);
-      setOriginalIncidentList(newIncidents);
+      setDefaultIncidentList(newIncidents);
     });
 
     return () => {
@@ -37,31 +37,37 @@ const IncidentListener: React.FunctionComponent = ({}) => {
 
   // Filtering
   React.useEffect(() => {
-    let filteredIncidents: Incident<any>[] = [];
-    if (filter.search) {
-      const matchingIncidents = list.filter(incident =>
-        incident.name.toLowerCase().includes(filter.search!.toLowerCase())
-      );
-      filteredIncidents.push(...matchingIncidents);
-    }
+    // if we have any filter options
+    const doesHaveFilter = Object.keys(filter).length > 0;
 
-    // if we have incidents to filter, remove the duplicates that may arise
-    if (filteredIncidents.length > 0) {
-      const filteredDuplicateIncidents = filteredIncidents.reduce(
-        (acc: Incident<any>[], current) => {
-          const x = acc.find(item => item.id === current.id);
-          if (!x) {
-            return acc.concat([current]);
-          } else {
-            return acc;
-          }
-        },
-        []
-      );
-
-      setIncidents(filteredDuplicateIncidents);
+    // if we don't have any filter options, and the lists aren't equal, set the default list
+    if (!doesHaveFilter && list.length !== defaultIncidentList.length) {
+      setIncidents(defaultIncidentList);
     } else {
-      setIncidents(originalIncidentList);
+      let filteredIncidents: Incident<any>[] = [];
+
+      if (filter.search) {
+        const matchingIncidents = list.filter(incident =>
+          incident.name.toLowerCase().includes(filter.search!.toLowerCase())
+        );
+        filteredIncidents.push(...matchingIncidents);
+      }
+
+      // if we have incidents to filter, remove the duplicates that may arise
+      if (filteredIncidents.length > 0) {
+        const filteredDuplicateIncidents = filteredIncidents.reduce(
+          (acc: Incident<any>[], current) => {
+            const x = acc.find(item => item.id === current.id);
+            if (!x) {
+              return acc.concat([current]);
+            } else {
+              return acc;
+            }
+          },
+          []
+        );
+        setIncidents(filteredDuplicateIncidents);
+      }
     }
   }, [filter]);
 
