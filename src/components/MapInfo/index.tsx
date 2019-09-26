@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import posed, { PoseGroup } from 'react-pose';
 import { Incident } from 'tps-calls-shared';
 
+import { DateHelper } from '../../helpers';
 import { Sizes, Colors } from '../../config';
 import Text from '../Text';
 
@@ -23,14 +24,17 @@ const Container = styled(AnimatedContainer)`
   height: auto;
   min-height: 50px;
   background-color: ${Colors.BACKGROUND};
+  border-radius: 10px;
 `;
 
 const Content = styled.div`
   height: 100%;
   width: 100%;
+  padding: ${Sizes.SPACING / 2}px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: center;
+  align-items: flex-start;
 `;
 
 interface MapInfo {
@@ -48,6 +52,12 @@ const MapInfo: React.FunctionComponent<MapInfo> = ({
         <Container key="info">
           <Content>
             <Text as="h5">{incident.name}</Text>
+            <Text as="p" size={12} lineHeight={14}>
+              {incident.location}
+            </Text>
+            <Text as="span">
+              {DateHelper.formatIncidentDate(incident.date)}
+            </Text>
           </Content>
         </Container>
       )}
