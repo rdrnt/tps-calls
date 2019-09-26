@@ -10,6 +10,8 @@ import {
   P,
   Span,
   StyledTextProps,
+  createTextStyles,
+  DEFAULT_TEXT_STYLES,
 } from './text.styles';
 
 export type ValidTextTypes =
@@ -52,5 +54,7 @@ const Text: React.FunctionComponent<
 
   return React.cloneElement(TextComponent, { ...rest }, children);
 };
+
+export { createTextStyles, DEFAULT_TEXT_STYLES };
 
 export default Text;

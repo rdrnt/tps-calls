@@ -53,7 +53,7 @@ let DEFAULT_TEXT_STYLES: { [key in ValidTextTypes]: StyledTextProps } = {
   },
 };
 
-const createStyles = (props: StyledTextProps) => css<typeof props>`
+const createTextStyles = (props: StyledTextProps) => css<typeof props>`
   margin: 0;
   padding: 0;
   color: ${props.color ? props.color : Colors.TEXT_PRIMARY};
@@ -65,7 +65,7 @@ const createStyles = (props: StyledTextProps) => css<typeof props>`
 
 const H1 = styled.h1<StyledTextProps>`
   ${props =>
-    createStyles({
+    createTextStyles({
       ...DEFAULT_TEXT_STYLES.h1,
       ...props,
     })};
@@ -73,7 +73,7 @@ const H1 = styled.h1<StyledTextProps>`
 
 const H2 = styled.h2<StyledTextProps>`
   ${props =>
-    createStyles({
+    createTextStyles({
       ...DEFAULT_TEXT_STYLES.h2,
       ...props,
     })};
@@ -81,7 +81,7 @@ const H2 = styled.h2<StyledTextProps>`
 
 const H3 = styled.h3<StyledTextProps>`
   ${props =>
-    createStyles({
+    createTextStyles({
       ...DEFAULT_TEXT_STYLES.h3,
       ...props,
     })};
@@ -89,7 +89,7 @@ const H3 = styled.h3<StyledTextProps>`
 
 const H4 = styled.h4<StyledTextProps>`
   ${props =>
-    createStyles({
+    createTextStyles({
       ...DEFAULT_TEXT_STYLES.h4,
       ...props,
     })};
@@ -97,7 +97,7 @@ const H4 = styled.h4<StyledTextProps>`
 
 const H5 = styled.h5<StyledTextProps>`
   ${props =>
-    createStyles({
+    createTextStyles({
       ...DEFAULT_TEXT_STYLES.h5,
       ...props,
     })};
@@ -105,7 +105,7 @@ const H5 = styled.h5<StyledTextProps>`
 
 const H6 = styled.h6<StyledTextProps>`
   ${props =>
-    createStyles({
+    createTextStyles({
       ...DEFAULT_TEXT_STYLES.h6,
       ...props,
     })};
@@ -113,7 +113,7 @@ const H6 = styled.h6<StyledTextProps>`
 
 const P = styled.p<StyledTextProps>`
   ${props =>
-    createStyles({
+    createTextStyles({
       ...DEFAULT_TEXT_STYLES.p,
       ...props,
     })};
@@ -121,10 +121,21 @@ const P = styled.p<StyledTextProps>`
 
 const Span = styled.span<StyledTextProps>`
   ${props =>
-    createStyles({
+    createTextStyles({
       ...DEFAULT_TEXT_STYLES.span,
       ...props,
     })};
 `;
 
-export { H1, H2, H3, H4, H5, H6, P, Span, DEFAULT_TEXT_STYLES };
+export {
+  H1,
+  H2,
+  H3,
+  H4,
+  H5,
+  H6,
+  P,
+  Span,
+  DEFAULT_TEXT_STYLES,
+  createTextStyles,
+};
