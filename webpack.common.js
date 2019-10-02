@@ -15,10 +15,9 @@ var dotenv = require('dotenv').config({ path: __dirname + '/.env.local' });
 
 module.exports = {
   entry: './src/index.tsx',
-  devtool: isDevelopment ? 'source-map' : 'source-map',
   output: {
-    path: path.join(__dirname, '/dist'),
-    filename: 'app.js',
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].bundle.js',
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.json'],
@@ -28,6 +27,7 @@ module.exports = {
       {
         test: /\.tsx?$/,
         loader: 'ts-loader',
+        exclude: /node_modules/,
         options: {
           transpileOnly: true, // -> ForkTsCheckerPlugin
           getCustomTransformers,

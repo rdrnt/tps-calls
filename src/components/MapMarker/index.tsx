@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Marker } from 'react-map-gl';
 import { Feature } from 'react-mapbox-gl';
 import posed from 'react-pose';
 

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "NODE_ENV=development && webpack-dev-server --hot --config webpack.dev.js",
-    "build": "NODE_ENV=production && webpack --config webpack.prod.js --progress",
+    "build": "rm -rf dist && webpack --config webpack.prod.js --progress",
     "netlify-deploy": "yarn build && netlify deploy --dir dist",
     "netlify-deploy:prod": "netlify deploy --prod",
     "test": "node scripts/test.js --updateSnapshot"
@@ -31,7 +31,6 @@
     "styled-components": "^4.2.1",
     "tps-calls-shared": "git+ssh://git@github.com:rdrnt/tps-calls-shared.git",
     "tslib": "^1.9.3",
-    "typeface-raleway": "^0.0.54",
     "typeface-roboto": "^0.0.75",
     "use-debounce": "^3.0.1"
   },
@@ -58,6 +57,7 @@
     "json-loader": "^0.5.7",
     "react-hot-ts": "^0.7.3",
     "redux-devtools-extension": "^2.13.8",
+    "source-map-explorer": "^2.1.0",
     "source-map-loader": "^0.2.4",
     "style-loader": "^0.23.1",
     "ts-loader": "^6.0.1",
