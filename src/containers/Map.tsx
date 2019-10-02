@@ -3,6 +3,7 @@ import { AppState } from '../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { Coordinates } from 'tps-calls-shared';
 import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
+import { darken } from 'polished';
 
 import { toggleDrawer, openLoader, closeLoader } from '../store/ui/actions';
 import { setSelectedIncident } from '../store/incidents/actions';
@@ -145,37 +146,36 @@ const Map: React.FunctionComponent<MapProps> = ({}) => {
         type="circle"
         id="marker"
         paint={{
-          'circle-radius': {
-            property: 'task-priority',
-            type: 'categorical',
-            stops: [[1, 5], [5, 5], [10, 10]],
-          },
+          'circle-radius': ['get', 'size'],
           // Gets the color from the feature properties
           'circle-color': ['get', 'color'],
           'circle-stroke-width': 1,
           'circle-stroke-color': '#FFFFFF',
         }}
       >
-        {incidentsState.list.map(incident => (
-          <Feature
-            key={incident.id}
-            coordinates={[
-              incident.coordinates.longitude,
-              incident.coordinates.latitude,
-            ]}
-            properties={{
-              // https://docs.mapbox.com/mapbox-gl-js/example/data-driven-lines/
-              color:
-                incidentsState.selected &&
-                incidentsState.selected.id === incident.id
-                  ? Colors.SECONDARY
-                  : Colors.PRIMARY,
-            }}
-            onClick={() => {
-              dispatch(setSelectedIncident(incident));
-            }}
-          />
-        ))}
+        {incidentsState.list.map(incident => {
+          const selected = Boolean(
+            incidentsState.selected &&
+              incidentsState.selected.id === incident.id
+          );
+          return (
+            <Feature
+              key={incident.id}
+              coordinates={[
+                incident.coordinates.longitude,
+                incident.coordinates.latitude,
+              ]}
+              properties={{
+                // https://docs.mapbox.com/mapbox-gl-js/example/data-driven-lines/
+                color: selected ? darken(0.2, Colors.PRIMARY) : Colors.PRIMARY,
+                size: selected ? 8 : 6,
+              }}
+              onClick={() => {
+                dispatch(setSelectedIncident(incident));
+              }}
+            />
+          );
+        })}
       </Layer>
     </MapMapbox>
   );
