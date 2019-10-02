@@ -13,6 +13,7 @@ import { IconButton } from '../../Button';
 interface DrawerHeader {
   setFilter: (value: IncidentFilterState) => void;
   filters: IncidentFilterState;
+  closeDrawer: () => void;
 }
 
 const Container = styled.div<{ showBottomBorder?: boolean }>`
@@ -45,16 +46,6 @@ const DefaultContent = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-
-    button {
-      height: 40px;
-      width: 40px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border: none;
-      background-color: transparent;
-    }
   }
 `;
 
@@ -95,6 +86,7 @@ const SearchBar = styled.div`
 const DrawerHeader: React.FunctionComponent<DrawerHeader> = ({
   setFilter,
   filters,
+  closeDrawer,
 }) => {
   const [showFilters, setFilterVisibility] = React.useState<boolean>(false);
   const [searchValue, setSearchValue] = React.useState<string>('');
@@ -122,16 +114,26 @@ const DrawerHeader: React.FunctionComponent<DrawerHeader> = ({
           Incidents
         </Text>
         <div>
-          <button
-            type="button"
+          <IconButton
             onClick={() => setFilterVisibility(!showFilters)}
-          >
-            <Icon
-              name="slider"
-              size={20}
-              color={showFilters ? Colors.PRIMARY : 'black'}
-            />
-          </button>
+            size={40}
+            hoverColor={Colors.PRIMARY}
+            iconProps={{
+              size: 20,
+              name: 'slider',
+              color: showFilters ? Colors.PRIMARY : 'black',
+            }}
+          />
+          <IconButton
+            onClick={closeDrawer}
+            size={40}
+            hoverColor={Colors.PRIMARY}
+            iconProps={{
+              size: 20,
+              name: 'x',
+              color: 'black',
+            }}
+          />
         </div>
       </DefaultContent>
       <FilterContent pose={showFilters ? 'open' : 'closed'}>

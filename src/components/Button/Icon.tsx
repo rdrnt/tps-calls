@@ -8,6 +8,7 @@ interface IconButtonProps {
   onClick?: () => void;
   size: number;
   borderRadius?: number;
+  hoverColor?: string;
 }
 
 const Button = styled.button<{
@@ -32,7 +33,17 @@ const IconButton: React.FunctionComponent<IconButtonProps> = ({
   onClick,
   size,
   borderRadius,
+  hoverColor,
 }) => {
+  const [isHovering, setIsHovering] = React.useState<boolean>(false);
+
+  const determineColor = () => {
+    if (hoverColor && isHovering) {
+      return hoverColor;
+    }
+
+    return iconProps.color;
+  };
   return (
     <Button
       type="button"
@@ -40,8 +51,16 @@ const IconButton: React.FunctionComponent<IconButtonProps> = ({
       height={size}
       width={size}
       borderRadius={borderRadius}
+      {...hoverColor && {
+        onMouseOver: () => setIsHovering(true),
+        onMouseOut: () => setIsHovering(false),
+      }}
     >
-      <Icon {...iconProps} size={iconProps.size || size} />
+      <Icon
+        {...iconProps}
+        color={determineColor()}
+        size={iconProps.size || size}
+      />
     </Button>
   );
 };

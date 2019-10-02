@@ -9,6 +9,7 @@ import DrawerHeader from './Header';
 import { Colors, Sizes } from '../../../config';
 import { IncidentFilterState } from '../../../store/incidents';
 import { setIncidentFilter } from '../../../store/incidents/actions';
+import { toggleDrawer } from '../../../store/ui/actions';
 
 export interface DrawerList {
   incidents: Incident<any>[];
@@ -58,7 +59,11 @@ const DrawerList: React.FunctionComponent<DrawerList> = ({
 
   return (
     <Container>
-      <DrawerHeader setFilter={setFilter} filters={filter} />
+      <DrawerHeader
+        setFilter={setFilter}
+        filters={filter}
+        closeDrawer={() => dispatch(toggleDrawer(false))}
+      />
       <List ref={listRef} onScroll={onScroll}>
         {incidents.map(incident => (
           <DrawerListItem
