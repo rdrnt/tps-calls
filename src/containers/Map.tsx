@@ -7,12 +7,11 @@ import { darken } from 'polished';
 
 import { toggleDrawer, openLoader, closeLoader } from '../store/ui/actions';
 import { setSelectedIncident } from '../store/incidents/actions';
-import { MAPBOX_THEME_URL, Colors, Sizes } from '../config';
+import { MAPBOX_THEME_URL, Colors } from '../config';
 import { useScreenSize } from '../helpers/hooks';
 
 import MapInfo from '../components/MapInfo';
 import MapDrawerButton from '../components/MapDrawerButton';
-import { PoseGroup } from 'react-pose';
 
 interface MapState {
   position: Coordinates;
