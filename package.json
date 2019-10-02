@@ -3,8 +3,8 @@
   "version": "1.5.1",
   "private": true,
   "scripts": {
-    "start": "NODE_ENV=development && webpack-dev-server --hot",
-    "build": "NODE_ENV=production && webpack --mode production --progress",
+    "start": "NODE_ENV=development && webpack-dev-server --hot --config webpack.dev.js",
+    "build": "NODE_ENV=production && webpack --config webpack.prod.js --progress",
     "netlify-deploy": "yarn build && netlify deploy --dir dist",
     "netlify-deploy:prod": "netlify deploy --prod",
     "test": "node scripts/test.js --updateSnapshot"
@@ -14,6 +14,7 @@
     "d3-ease": "^1.0.5",
     "date-fns": "^1.30.1",
     "firebase": "^6.0.4",
+    "mapbox-gl": "^1.4.0",
     "polished": "^3.4.1",
     "prettier": "^1.14.2",
     "react": "^16.8.6",
@@ -69,6 +70,7 @@
     "webpack": "^4.32.2",
     "webpack-cli": "^3.3.2",
     "webpack-dev-server": "^3.7.2",
+    "webpack-merge": "^4.2.2",
     "webpack-pwa-manifest": "^4.0.0"
   },
   "jest": {

@@ -55,7 +55,5 @@ module.exports = {
 };
 
 function getCustomTransformers() {
-  return {
-    before: [rhTransformer()],
-  };
+  return isDevelopment ? [rhTransformer()] : [];
 }
