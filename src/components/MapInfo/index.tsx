@@ -51,11 +51,13 @@ const MapInfo: React.FunctionComponent<MapInfo> = ({
       {incident && !drawerOpen && (
         <Container key="info">
           <Content>
-            <Text as="h5">{incident.name}</Text>
-            <Text as="p" size={12} lineHeight={14}>
+            <Text as="h5" size={20}>
+              {incident.name}
+            </Text>
+            <Text as="p" size={14} lineHeight={16}>
               {incident.location}
             </Text>
-            <Text as="span">
+            <Text as="span" size={12}>
               {DateHelper.formatIncidentDate(incident.date)}
             </Text>
           </Content>
