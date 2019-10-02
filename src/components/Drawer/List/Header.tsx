@@ -68,7 +68,8 @@ const FilterContent = styled(
     },
   })
 )`
-  padding-top: ${Sizes.SPACING / 2}px;
+  padding-top: ${props =>
+    props.pose === 'open' ? `${Sizes.SPACING / 2}px` : 0};
   width: 100%;
   overflow: hidden;
   display: flex;
