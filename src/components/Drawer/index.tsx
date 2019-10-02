@@ -16,8 +16,6 @@ const DesktopDrawerStyles = css`
   height: 100%;
   width: ${Sizes.DRAWER_WIDTH}px;
   max-width: ${Sizes.DRAWER_WIDTH}px;
-  border-radius: 8px;
-  box-shadow: 1px 2px rgba(0, 0, 0, 0.2);
 `;
 
 const MobileDrawerStyles = css`

@@ -149,7 +149,7 @@ const Map: React.FunctionComponent<MapProps> = ({}) => {
           'circle-radius': ['get', 'size'],
           // Gets the color from the feature properties
           'circle-color': ['get', 'color'],
-          'circle-stroke-width': 1,
+          'circle-stroke-width': ['get', 'border'],
           'circle-stroke-color': '#FFFFFF',
         }}
       >
@@ -169,6 +169,7 @@ const Map: React.FunctionComponent<MapProps> = ({}) => {
                 // https://docs.mapbox.com/mapbox-gl-js/example/data-driven-lines/
                 color: selected ? darken(0.2, Colors.PRIMARY) : Colors.PRIMARY,
                 size: selected ? 8 : 6,
+                border: selected ? 2 : 1,
               }}
               onClick={() => {
                 dispatch(setSelectedIncident(incident));
