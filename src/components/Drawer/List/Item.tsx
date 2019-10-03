@@ -26,13 +26,17 @@ const AnimatedContainer = posed.li({
 
 const Container = styled(AnimatedContainer)`
   height: 75px;
+  width: 100%;
   background-color: ${Colors.BACKGROUND};
   padding: ${Sizes.SPACING / 2}px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: flex-start;
-  margin: ${Sizes.SPACING / 2}px;
   border-radius: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   :hover {
     background-color: ${Colors.PRIMARY};

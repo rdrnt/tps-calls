@@ -60,6 +60,7 @@ const getFont = (isSecondary: boolean | undefined) => css`
 `;
 
 const createTextStyles = (props: StyledTextProps) => css<typeof props>`
+  display: block;
   margin: 0;
   padding: 0;
   color: ${props.color ? props.color : Colors.TEXT_PRIMARY};

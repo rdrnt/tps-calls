@@ -23,19 +23,19 @@ const Container = styled.div`
   padding: 0;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
   background-color: ${Colors.BACKGROUND_SECONDARY};
-  position: relative;
 `;
 
 const List = styled.ul`
-  width: 100%;
-  height: 100%;
-  padding: 0;
+  padding: 11px;
   margin: 0;
   list-style: none;
   overflow-y: scroll;
+  flex-grow: 1;
+
+  > li {
+    margin: ${Sizes.SPACING / 2}px 0;
+  }
 `;
 
 const DrawerList: React.FunctionComponent<DrawerList> = ({
