@@ -38,7 +38,7 @@ const App: React.FunctionComponent = () => (
         <Loader />
         <Drawer />
         <Switch>
-          <Route path={['/', '/:incidentId']} component={Map} />
+          <Route path={['/:id', '/']} component={Map} />
         </Switch>
       </Provider>
     </Router>
