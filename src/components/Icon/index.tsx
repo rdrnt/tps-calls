@@ -1,8 +1,22 @@
 import * as React from 'react';
-import { FiSliders, FiSidebar, FiXCircle, FiX } from 'react-icons/fi';
+import {
+  FiSliders,
+  FiSidebar,
+  FiXCircle,
+  FiX,
+  FiMinus,
+  FiChevronUp,
+} from 'react-icons/fi';
 import { GoSearch } from 'react-icons/go';
 
-type IconNames = 'slider' | 'search' | 'menu' | 'x-circle' | 'x';
+type IconNames =
+  | 'slider'
+  | 'search'
+  | 'menu'
+  | 'x-circle'
+  | 'x'
+  | 'chevron-straight'
+  | 'chevron-up';
 
 const AllIcons: { [key in IconNames]?: React.ReactElement } = {
   slider: <FiSliders />,
@@ -10,6 +24,8 @@ const AllIcons: { [key in IconNames]?: React.ReactElement } = {
   menu: <FiSidebar />,
   'x-circle': <FiXCircle />,
   x: <FiX />,
+  'chevron-straight': <FiMinus />,
+  'chevron-up': <FiChevronUp />,
 };
 
 export interface IconProps {
