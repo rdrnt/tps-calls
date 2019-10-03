@@ -31,7 +31,7 @@
     "styled-components": "^4.2.1",
     "tps-calls-shared": "git+ssh://git@github.com:rdrnt/tps-calls-shared.git",
     "tslib": "^1.9.3",
-    "typeface-roboto": "^0.0.75",
+    "typeface-poppins": "^0.0.72",
     "use-debounce": "^3.0.1"
   },
   "devDependencies": {

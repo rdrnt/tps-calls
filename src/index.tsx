@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { hot } from 'react-hot-ts';
-import 'typeface-roboto';
+import 'typeface-poppins';
 
 import App from './App';
 

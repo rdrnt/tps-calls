@@ -6,7 +6,6 @@ import { Incident } from 'tps-calls-shared';
 import { DateHelper } from '../../helpers';
 import { Sizes, Colors } from '../../config';
 import Text from '../Text';
-import ExpandButton from './ExpandButton';
 
 const WIDTH = 325;
 
@@ -65,7 +64,7 @@ const ExtraContent = styled.div`
 
 const ExtraAction = styled.button`
   padding: ${Sizes.SPACING / 2}px;
-  background-color: ${Colors.PRIMARY};
+  background-color: ${Colors.SECONDARY};
   border: none;
   border-radius: 8px;
 `;

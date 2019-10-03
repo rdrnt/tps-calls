@@ -9,6 +9,7 @@ export interface StyledTextProps {
   size?: number;
   letterSpacing?: number;
   lineHeight?: number;
+  secondaryFont?: boolean;
 }
 
 let DEFAULT_TEXT_STYLES: { [key in ValidTextTypes]: StyledTextProps } = {
@@ -45,6 +46,7 @@ let DEFAULT_TEXT_STYLES: { [key in ValidTextTypes]: StyledTextProps } = {
     size: 10,
     weight: 'normal',
     color: Colors.TEXT_SECONDARY,
+    secondaryFont: true,
   },
   p: {
     size: 16,
@@ -52,6 +54,10 @@ let DEFAULT_TEXT_STYLES: { [key in ValidTextTypes]: StyledTextProps } = {
     lineHeight: 18,
   },
 };
+
+const getFont = (isSecondary: boolean | undefined) => css`
+  font-family: ${isSecondary ? 'Helvetica Neue' : 'Poppins'}, arial, sans-serif;
+`;
 
 const createTextStyles = (props: StyledTextProps) => css<typeof props>`
   margin: 0;
@@ -61,6 +67,7 @@ const createTextStyles = (props: StyledTextProps) => css<typeof props>`
   font-weight: ${props.weight};
   ${props.letterSpacing && `letter-spacing: ${props.letterSpacing}px`};
   ${props.lineHeight && `line-height: ${props.lineHeight}px`};
+  ${getFont(props.secondaryFont)};
 `;
 
 const H1 = styled.h1<StyledTextProps>`
@@ -124,7 +131,7 @@ const Span = styled.span<StyledTextProps>`
     createTextStyles({
       ...DEFAULT_TEXT_STYLES.span,
       ...props,
-    })};
+    })}
 `;
 
 export {
