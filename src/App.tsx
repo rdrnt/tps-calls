@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createGlobalStyle } from 'styled-components';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import { Firebase } from './helpers';
 
@@ -32,14 +32,16 @@ Firebase.initialize();
 const App: React.FunctionComponent = () => (
   <>
     <GlobalStyle />
-    <Provider store={store}>
-      <IncidentListener />
-      <Loader />
-      <Drawer />
-      <Router>
-        <Route path="/" component={Map} />
-      </Router>
-    </Provider>
+    <Router>
+      <Provider store={store}>
+        <IncidentListener />
+        <Loader />
+        <Drawer />
+        <Switch>
+          <Route path={['/', '/:incidentId']} component={Map} />
+        </Switch>
+      </Provider>
+    </Router>
   </>
 );
 
