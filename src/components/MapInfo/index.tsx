@@ -1,12 +1,13 @@
 import * as React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import posed, { PoseGroup } from 'react-pose';
 import { Incident } from 'tps-calls-shared';
 
 import { DateHelper } from '../../helpers';
 import { Sizes, Colors } from '../../config';
 import Text from '../Text';
-import { darken } from 'polished';
+
+import MapInfoExtraContent from './Extra';
 
 const WIDTH = 325;
 
@@ -56,21 +57,6 @@ const IncidentContent = styled.div`
   align-items: flex-start;
 `;
 
-const ExtraContent = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-top: 1px solid ${Colors.BACKGROUND_SECONDARY};
-`;
-
-const ExtraAction = styled.button`
-  padding: ${Sizes.SPACING / 3}px;
-  background-color: ${darken(0.2, Colors.PRIMARY)};
-  border: none;
-  border-radius: 4px;
-  min-width: 60px;
-`;
-
 interface MapInfo {
   incident?: Incident<any>;
   drawerOpen: boolean;
@@ -94,13 +80,7 @@ const MapInfo: React.FunctionComponent<MapInfo> = ({
                 {DateHelper.formatIncidentDate(incident.date)}
               </Text>
             </IncidentContent>
-            <ExtraContent>
-              <ExtraAction type="button">
-                <Text as="span" color="white">
-                  Share
-                </Text>
-              </ExtraAction>
-            </ExtraContent>
+            <MapInfoExtraContent incidentId={incident.id} />
           </Content>
         </Container>
       )}
