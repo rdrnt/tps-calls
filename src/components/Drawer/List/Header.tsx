@@ -21,12 +21,10 @@ const Container = styled.div<{ showBottomBorder?: boolean }>`
   top: 0;
   left: 0;
   width: 100%;
+  height: auto;
   background-color: ${Colors.BACKGROUND_SECONDARY};
   padding: ${Sizes.SPACING / 2}px;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
+  display: block;
   transition: height 1s ease-in-out;
   border-bottom: ${props =>
     props.showBottomBorder
@@ -36,7 +34,6 @@ const Container = styled.div<{ showBottomBorder?: boolean }>`
 
 const DefaultContent = styled.div`
   height: 40px;
-  min-height: 40px;
   width: 100%;
   display: flex;
   align-items: center;
