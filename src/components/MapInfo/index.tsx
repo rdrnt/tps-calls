@@ -6,6 +6,7 @@ import { Incident } from 'tps-calls-shared';
 import { DateHelper } from '../../helpers';
 import { Sizes, Colors } from '../../config';
 import Text from '../Text';
+import { darken } from 'polished';
 
 const WIDTH = 325;
 
@@ -57,16 +58,17 @@ const IncidentContent = styled.div`
 
 const ExtraContent = styled.div`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
   border-top: 1px solid ${Colors.BACKGROUND_SECONDARY};
 `;
 
 const ExtraAction = styled.button`
-  padding: ${Sizes.SPACING / 2}px;
-  background-color: ${Colors.SECONDARY};
+  padding: ${Sizes.SPACING / 3}px;
+  background-color: ${darken(0.2, Colors.PRIMARY)};
   border: none;
-  border-radius: 8px;
+  border-radius: 4px;
+  min-width: 60px;
 `;
 
 interface MapInfo {
