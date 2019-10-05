@@ -54,6 +54,8 @@ const IconButton: React.FunctionComponent<IconButtonProps> = ({
       {...hoverColor && {
         onMouseOver: () => setIsHovering(true),
         onMouseOut: () => setIsHovering(false),
+        onTouchEnd: () => setIsHovering(false),
+        onTouchStart: () => setIsHovering(true),
       }}
     >
       <Icon
