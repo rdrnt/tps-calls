@@ -8,7 +8,10 @@ import DrawerListItem from './Item';
 import DrawerHeader from './Header';
 import { Colors, Sizes } from '../../../config';
 import { IncidentFilterState } from '../../../store/incidents';
-import { setIncidentFilter } from '../../../store/incidents/actions';
+import {
+  setIncidentFilter,
+  setSelectedIncident,
+} from '../../../store/incidents/actions';
 import { toggleDrawer } from '../../../store/ui/actions';
 
 export interface DrawerList {
@@ -69,7 +72,7 @@ const DrawerList: React.FunctionComponent<DrawerList> = ({
           <DrawerListItem
             key={incident.id}
             incident={incident}
-            scrollPosition={scrollPosition}
+            onClick={() => dispatch(setSelectedIncident(incident))}
           />
         ))}
       </List>

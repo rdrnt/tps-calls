@@ -36,6 +36,7 @@ const Container = styled.div<{ showBottomBorder?: boolean }>`
 
 const DefaultContent = styled.div`
   height: 40px;
+  min-height: 40px;
   width: 100%;
   display: flex;
   align-items: center;

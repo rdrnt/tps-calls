@@ -6,13 +6,11 @@ import VisibilitySensor from 'react-visibility-sensor';
 import Text from '../../Text';
 import { Sizes, Colors } from '../../../config';
 import { DateHelper } from '../../../helpers';
-import { useDispatch } from 'react-redux';
-import { setSelectedIncident } from '../../../store/incidents/actions';
 import posed from 'react-pose';
 
 export interface DrawerListItem {
   incident: Incident<any>;
-  scrollPosition: number;
+  onClick: () => void;
 }
 
 const AnimatedContainer = posed.li({
@@ -49,9 +47,8 @@ const Container = styled(AnimatedContainer)`
 
 const DrawerListItem: React.FunctionComponent<DrawerListItem> = ({
   incident,
-  scrollPosition,
+  onClick,
 }) => {
-  const dispatch = useDispatch();
   const [animationState, setAnimationState] = React.useState<
     'hidden' | 'visible'
   >('hidden');
@@ -63,10 +60,7 @@ const DrawerListItem: React.FunctionComponent<DrawerListItem> = ({
       }}
       partialVisibility={true}
     >
-      <Container
-        pose={animationState}
-        onClick={() => dispatch(setSelectedIncident(incident))}
-      >
+      <Container pose={animationState} onClick={onClick}>
         <Text as="h5">{incident.name}</Text>
         <Text as="p" size={12} lineHeight={14}>
           {incident.location}
