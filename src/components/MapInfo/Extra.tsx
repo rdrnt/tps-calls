@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import posed, { PoseGroup } from 'react-pose';
 import { darken } from 'polished';
+// @ts-ignore
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { Sizes, Colors } from '../../config';
