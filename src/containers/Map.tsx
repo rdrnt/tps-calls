@@ -10,6 +10,7 @@ import { toggleDrawer, openLoader, closeLoader } from '../store/ui/actions';
 import { setSelectedIncident } from '../store/incidents/actions';
 import { MAPBOX_THEME_URL, Colors } from '../config';
 import { useScreenSize } from '../helpers/hooks';
+import { Environment } from '../helpers';
 
 import MapInfo from '../components/MapInfo';
 import MapDrawerButton from '../components/MapDrawerButton';
@@ -30,7 +31,7 @@ interface MapProps {
 }
 
 const MapMapbox = ReactMapboxGl({
-  accessToken: process.env.REACT_APP_MAPBOX_API_KEY as string,
+  accessToken: Environment.config.MAPBOX_API_KEY,
   minZoom: 9,
 });
 
