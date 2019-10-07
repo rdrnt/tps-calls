@@ -1,15 +1,12 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
-const rhTransformer = require('react-hot-ts/lib/transformer');
 const ForkTsCheckerPlugin = require('fork-ts-checker-webpack-plugin');
 
 const paths = {
   src: path.resolve('./src'),
   indexHtml: path.resolve('./public/index.html'),
 };
-
-const isDevelopment = process.env.NODE_ENV === 'development';
 
 var dotenv = require('dotenv').config({ path: __dirname + '/.env.local' });
 
@@ -31,7 +28,6 @@ module.exports = {
         exclude: /node_modules/,
         options: {
           transpileOnly: true, // -> ForkTsCheckerPlugin
-          getCustomTransformers,
         },
       },
       {
@@ -54,7 +50,3 @@ module.exports = {
     }),
   ],
 };
-
-function getCustomTransformers() {
-  return isDevelopment ? [rhTransformer()] : [];
-}
