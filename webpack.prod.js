@@ -8,8 +8,7 @@ const packageJson = require('./package.json');
 
 module.exports = env => {
   // if the env.NODE_ENV is local, don't upload source maps and stuff. It's a dry run for our build
-  const { NODE_ENV } = env;
-  const isDryRun = NODE_ENV && NODE_ENV === 'local';
+  const isDryRun = env && env.NODE_ENV === 'local';
 
   const getPlugins = () => {
     if (!isDryRun) {
@@ -27,9 +26,10 @@ module.exports = env => {
 
   return merge(common, {
     mode: 'production',
+    devtool: 'source-map',
     optimization: {
       minimize: true,
-      minimizer: [new TerserPlugin()],
+      minimizer: [new TerserPlugin({ sourceMap: true })],
     },
     plugins: getPlugins(),
   });
