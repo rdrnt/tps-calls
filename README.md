@@ -4,45 +4,41 @@ Real-time mapping of locations where the Toronto Police have responded to a call
 
 Built with React + Redux + react-map-gl + material-ui.
 
-# Contributions
+## Contributions
 
 I would love contributions! The **TODO** list below has more information on what I need help with.
 
 When commiting, please try your best to use [this](http://karma-runner.github.io/2.0/dev/git-commit-msg.html) format for your commit messages.
 
-# TODO
+## TODO
 
 ## UI
 
-- Ward Overlay (When the wards change)
-- Animation on first load
 - Color code incidents
 - Geofencing (if an incident happens within _x_ km the user will receive a push notifcation)
 - Add @TPSOperations related tweet to the selected incident. (Hint, there's an associated ID)
 
-## Core
+## Building
 
-- Ability to download/cache map of the GTA
-- Improve map performance
-- Store incidents since the start of project (Maybe)
+1. Create a `.sentryclirc, .env.development, .env.production` at the root of the project
 
-## Other
+2. (Building for production) In the `.sentryclirc, put:
 
-- Mapbox API key in props
+```plain
+[defaults]
+project=getprojectnamefromowner
+org=getorgfromowner
+```
 
-# Libraries
+3. In the `.env.development`, `.env.production`, make sure you have the following keys:
 
-[styled-components](https://www.styled-components.com/)
+```plain
+REACT_APP_MAPBOX_API_KEY
 
-[react-map-gl](https://uber.github.io/react-map-gl/#/Documentation/getting-started/get-started)
+REACT_APP_GANALYTICS_KEY
 
-[viewport-mercator-project](http://uber-common.github.io/viewport-mercator-project/#/documentation/overview)
-
-[react-icons](https://react-icons.netlify.com/#/icons/fi)
-
-# Notes
-
-[Base design](https://medium.muz.li/map-location-ui-inspiration-6eb9d6b5a99b)
+REACT_APP_SENTRY_DSN
+```
 
 # License
 

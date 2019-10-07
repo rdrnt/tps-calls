@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "NODE_ENV=development && webpack-dev-server --hot --config webpack.dev.js",
+    "start:build": "rm -rf dist && webpack --config webpack.prod.js --env.NODE_ENV=local --progress",
     "build": "rm -rf dist && webpack --config webpack.prod.js --progress",
     "netlify-deploy": "yarn build && netlify deploy --dir dist",
     "netlify-deploy:prod": "netlify deploy --prod",
@@ -11,6 +12,7 @@
   },
   "dependencies": {
     "@reach/router": "^1.2.1",
+    "@sentry/browser": "^5.6.3",
     "d3-ease": "^1.0.5",
     "date-fns": "^1.30.1",
     "firebase": "^6.0.4",
@@ -40,6 +42,7 @@
     "@babel/core": "^7.0.0-0",
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-typescript": "^7.3.3",
+    "@sentry/webpack-plugin": "^1.8.1",
     "@types/d3-ease": "^1.0.8",
     "@types/react": "^16.8.18",
     "@types/react-copy-to-clipboard": "^4.3.0",
