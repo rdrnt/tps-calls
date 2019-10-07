@@ -7,6 +7,8 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Sizes, Colors } from '../../config';
 import { createShareUrl } from '../../helpers';
 
+import { Button } from '../Button';
+
 import Text from '../Text';
 
 const ExtraContent = styled.div`
@@ -15,18 +17,6 @@ const ExtraContent = styled.div`
   align-items: center;
   border-top: 1px solid ${Colors.BACKGROUND_SECONDARY};
   height: 55px;
-`;
-
-const ExtraAction = styled.button`
-  padding: ${Sizes.SPACING / 3}px;
-  background-color: ${darken(0.2, Colors.PRIMARY)};
-  border: none;
-  border-radius: 4px;
-  min-width: 60px;
-
-  &:hover {
-    background-color: ${darken(0.3, Colors.PRIMARY)};
-  }
 `;
 
 const ShowHideContent = posed.div({
@@ -48,11 +38,7 @@ const ShareButton: React.FunctionComponent<{
 }> = ({ onCopy, id }) => {
   return (
     <CopyToClipboard text={createShareUrl(id)} onCopy={onCopy}>
-      <ExtraAction type="button">
-        <Text as="span" color="white">
-          Share
-        </Text>
-      </ExtraAction>
+      <Button label="share" color={darken(0.2, Colors.PRIMARY)} />
     </CopyToClipboard>
   );
 };
