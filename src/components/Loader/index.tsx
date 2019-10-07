@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import posed, { PoseGroup } from 'react-pose';
 import { AppState } from '../../store';
 import { connect } from 'react-redux';
+import BounceLoader from 'react-spinners/BounceLoader';
 
 import { Colors } from '../../config';
 
@@ -26,6 +27,7 @@ const Container = styled(AnimatedContainer)`
   z-index: 999;
   background-color: ${Colors.BACKGROUND};
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
@@ -46,6 +48,7 @@ const Loader: React.FunctionComponent<Loader> = ({ open, message }) => (
   <PoseGroup>
     {open && (
       <Container key="loader">
+        <BounceLoader color={Colors.PRIMARY} />
         {message && (
           <Text as="h1" weight="bold">
             {message}
