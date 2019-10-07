@@ -30,7 +30,7 @@ const Container = styled.div`
 `;
 
 const List = styled.ul`
-  padding: 11px;
+  padding: ${Sizes.SPACING / 2}px;
   margin: 0;
   list-style: none;
   overflow-y: scroll;

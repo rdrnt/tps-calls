@@ -10,7 +10,7 @@ export enum Colors {
 
 export enum Sizes {
   SPACING = 22,
-  DRAWER_WIDTH = 350,
+  DRAWER_WIDTH = 375,
 }
 
 export enum Defaults {
