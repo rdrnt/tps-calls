@@ -9,9 +9,15 @@ import productionConfig from '../../../config/firebase/production.json';
 import developmentConfig from '../../../config/firebase/development.json';
 
 export const initialize = () => {
-  const configToUse = Environment.isDevelopment
-    ? developmentConfig
-    : productionConfig;
+  let configToUse;
+
+  if (Environment.isDevelopment) {
+    console.warn('Using development Firebase project');
+    configToUse = developmentConfig;
+  } else {
+    configToUse = productionConfig;
+  }
+
   firebaseApp.initializeApp({ ...configToUse });
 };
 
