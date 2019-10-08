@@ -6,6 +6,8 @@ import {
   FiX,
   FiMinus,
   FiChevronUp,
+  FiCalendar,
+  FiArrowRight,
 } from 'react-icons/fi';
 import { GoSearch } from 'react-icons/go';
 
@@ -16,7 +18,9 @@ type IconNames =
   | 'x-circle'
   | 'x'
   | 'chevron-straight'
-  | 'chevron-up';
+  | 'chevron-up'
+  | 'calendar'
+  | 'right-arrow';
 
 const AllIcons: { [key in IconNames]?: React.ReactElement } = {
   slider: <FiSliders />,
@@ -26,6 +30,8 @@ const AllIcons: { [key in IconNames]?: React.ReactElement } = {
   x: <FiX />,
   'chevron-straight': <FiMinus />,
   'chevron-up': <FiChevronUp />,
+  calendar: <FiCalendar />,
+  'right-arrow': <FiArrowRight />,
 };
 
 export interface IconProps {

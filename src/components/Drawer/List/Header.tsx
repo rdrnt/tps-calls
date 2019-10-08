@@ -5,11 +5,12 @@ import posed, { PoseGroup } from 'react-pose';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import { Colors, Sizes } from '../../../config';
-import Text, { createTextStyles, DEFAULT_TEXT_STYLES } from '../../Text';
 import { IncidentFilterState } from '../../../store/incidents';
-import { IconButton } from '../../Button';
 
+import Text, { createTextStyles, DEFAULT_TEXT_STYLES } from '../../Text';
+import { IconButton } from '../../Button';
 import Icon from '../../Icon';
+import DrawerFilter from './Filter';
 
 interface DrawerHeader {
   setFilter: (value: IncidentFilterState) => void;
@@ -166,6 +167,7 @@ const DrawerHeader: React.FunctionComponent<DrawerHeader> = ({
               label="Filters"
               onClick={() => setFilterVisibility(false)}
             />
+            <DrawerFilter />
           </Content>
         )}
       </PoseGroup>
