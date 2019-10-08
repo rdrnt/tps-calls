@@ -22,7 +22,10 @@ const Container = styled.button<{
   border: ButtonBorder;
   hasLabel: boolean;
 }>`
-  display: block;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
   padding: ${Sizes.SPACING / 3}px;
   border: ${props =>
     props.border.color ? `1px solid ${props.border.color}` : 'none'};

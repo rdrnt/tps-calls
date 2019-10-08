@@ -31,6 +31,7 @@ const Container = styled.div`
 
 const List = styled.ul`
   padding: ${Sizes.SPACING / 2}px;
+  padding-top: 0;
   margin: 0;
   list-style: none;
   overflow-y: scroll;

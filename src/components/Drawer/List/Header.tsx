@@ -1,14 +1,15 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useDebouncedCallback } from 'use-debounce';
-import posed from 'react-pose';
-import { darken } from 'polished';
+import posed, { PoseGroup } from 'react-pose';
+import 'react-datepicker/dist/react-datepicker.css';
 
 import { Colors, Sizes } from '../../../config';
 import Text, { createTextStyles, DEFAULT_TEXT_STYLES } from '../../Text';
 import { IncidentFilterState } from '../../../store/incidents';
-import Icon from '../../Icon';
 import { IconButton } from '../../Button';
+
+import Icon from '../../Icon';
 
 interface DrawerHeader {
   setFilter: (value: IncidentFilterState) => void;
@@ -16,7 +17,7 @@ interface DrawerHeader {
   closeDrawer: () => void;
 }
 
-const Container = styled.div<{ showBottomBorder?: boolean }>`
+const Container = styled.div`
   position: sticky;
   top: 0;
   left: 0;
@@ -26,60 +27,86 @@ const Container = styled.div<{ showBottomBorder?: boolean }>`
   padding: ${Sizes.SPACING / 2}px;
   display: block;
   transition: height 1s ease-in-out;
-  border-bottom: ${props =>
-    props.showBottomBorder
-      ? `1px solid ${darken(0.2, Colors.BACKGROUND_SECONDARY)}`
-      : 'none'};
 `;
 
-const DefaultContent = styled.div`
-  height: 40px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  > div {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-`;
-
-const FilterContent = styled(
+const Content = styled(
   posed.div({
-    open: {
+    enter: {
+      opacity: 1,
       height: 'auto',
     },
-    closed: {
+    exit: {
+      opacity: 0,
       height: 0,
     },
   })
 )`
-  padding-top: ${props =>
-    props.pose === 'open' ? `${Sizes.SPACING / 2}px` : 0};
   width: 100%;
-  overflow: hidden;
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: hidden;
 `;
 
-const SearchBar = styled.div`
+const HeadingContent = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: ${Sizes.SPACING / 2}px;
+`;
+
+const SearchBarContainer = styled.div`
   background-color: ${Colors.BACKGROUND};
   height: 35px;
   width: 100%;
-  border-radius: 10px;
-  ${createTextStyles({ ...DEFAULT_TEXT_STYLES.p, size: 12, lineHeight: 14 })};
+  border-radius: 6px;
   padding: ${Sizes.SPACING / 2}px;
   display: flex;
+  flex-direction: row;
   align-items: center;
+`;
+
+const SearchBar = styled.div`
+  flex-grow: 1;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
 
   > input {
+    ${createTextStyles({
+      ...DEFAULT_TEXT_STYLES.p,
+      size: 12,
+      lineHeight: 14,
+      secondaryFont: true,
+    })};
+    margin-left: 6px;
     background-color: inherit;
     border: none;
     flex-grow: 1;
+
+    &::placeholder {
+      color: ${Colors.TEXT_SECONDARY};
+    }
   }
 `;
+
+const Heading: React.FunctionComponent<{
+  label: string;
+  onClick: () => void;
+}> = ({ onClick, label }) => (
+  <HeadingContent>
+    <Text as="h1" size={24} lineHeight={28} weight="bold">
+      {label}
+    </Text>
+    <IconButton
+      size={30}
+      iconProps={{ name: 'x', size: 20 }}
+      onClick={onClick}
+    />
+  </HeadingContent>
+);
 
 const DrawerHeader: React.FunctionComponent<DrawerHeader> = ({
   setFilter,
@@ -106,44 +133,42 @@ const DrawerHeader: React.FunctionComponent<DrawerHeader> = ({
   }, [searchValue]);
 
   return (
-    <Container showBottomBorder={showFilters}>
-      <DefaultContent>
-        <Text as="h1" size={24} lineHeight={28} weight="bold">
-          Incidents
-        </Text>
-        <div>
-          <IconButton
-            onClick={() => setFilterVisibility(!showFilters)}
-            size={40}
-            hoverColor={Colors.PRIMARY}
-            iconProps={{
-              size: 20,
-              name: 'slider',
-              color: showFilters ? Colors.PRIMARY : 'black',
-            }}
-          />
-          <IconButton
-            onClick={closeDrawer}
-            size={40}
-            hoverColor={Colors.PRIMARY}
-            iconProps={{
-              size: 20,
-              name: 'x',
-              color: 'black',
-            }}
-          />
-        </div>
-      </DefaultContent>
-      <FilterContent pose={showFilters ? 'open' : 'closed'}>
-        <SearchBar>
-          <input
-            type="text"
-            placeholder="Dundas St, Stabbing, etc..."
-            onChange={event => setSearchValue(event.target.value)}
-            value={searchValue}
-          />
-        </SearchBar>
-      </FilterContent>
+    <Container>
+      <PoseGroup>
+        {!showFilters ? (
+          <Content key="default">
+            <Heading label="Incidents" onClick={closeDrawer} />
+            <SearchBarContainer>
+              <SearchBar>
+                <Icon size={15} name="search" color={Colors.TEXT_SECONDARY} />
+                <input
+                  type="text"
+                  placeholder="Dundas St, Stabbing, etc..."
+                  onChange={event => setSearchValue(event.target.value)}
+                  value={searchValue}
+                />
+              </SearchBar>
+              <IconButton
+                size={30}
+                iconProps={{
+                  name: 'slider',
+                  color: showFilters ? Colors.PRIMARY : Colors.TEXT_SECONDARY,
+                  size: 15,
+                }}
+                hoverColor={Colors.PRIMARY}
+                onClick={() => setFilterVisibility(true)}
+              />
+            </SearchBarContainer>
+          </Content>
+        ) : (
+          <Content key="filters">
+            <Heading
+              label="Filters"
+              onClick={() => setFilterVisibility(false)}
+            />
+          </Content>
+        )}
+      </PoseGroup>
     </Container>
   );
 };
