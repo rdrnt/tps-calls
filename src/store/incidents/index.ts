@@ -7,6 +7,8 @@ import { Timestamp } from '@google-cloud/firestore';
 
 export interface IncidentFilterState {
   search?: string;
+  startDate?: Timestamp;
+  endDate?: Timestamp;
 }
 
 export interface IncidentsState {

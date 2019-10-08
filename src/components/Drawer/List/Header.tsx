@@ -167,7 +167,7 @@ const DrawerHeader: React.FunctionComponent<DrawerHeader> = ({
               label="Filters"
               onClick={() => setFilterVisibility(false)}
             />
-            <DrawerFilter />
+            <DrawerFilter filters={filters} setFilter={setFilter} />
           </Content>
         )}
       </PoseGroup>

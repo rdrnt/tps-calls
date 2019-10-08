@@ -1,10 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
+import { Timestamp } from '@google-cloud/firestore';
 
 import Text from '../../../Text';
 import { Sizes, Colors } from '../../../../config';
 import Icon from '../../../Icon';
+import { DateHelper } from '../../../../helpers';
 
 const ItemContainer = styled.button<{ color: string }>`
   margin: 0;
@@ -14,13 +16,13 @@ const ItemContainer = styled.button<{ color: string }>`
 `;
 
 interface DateFilterItem {
-  dateValue: string;
+  value?: Timestamp;
   onClick: () => void;
   active: boolean;
 }
 
 const DateFilterItem: React.FunctionComponent<DateFilterItem> = ({
-  dateValue,
+  value,
   onClick,
   active,
 }) => {
@@ -38,7 +40,7 @@ const DateFilterItem: React.FunctionComponent<DateFilterItem> = ({
     <ItemContainer type="button" color={color} onClick={onClick}>
       <Icon size={15} name="calendar" color={color} />
       <Text as="p" size={12} lineHeight={12} color={color}>
-        {dateValue}
+        {value ? '2019-04-8 @ 9:11am' : 'Current'}
       </Text>
     </ItemContainer>
   );
@@ -50,12 +52,15 @@ const DateFilterItem: React.FunctionComponent<DateFilterItem> = ({
 
 interface CalendarConfig {
   id: 'start' | 'end';
-  value: Date;
+  value?: Timestamp;
+  onChange: (newDate: Date) => void;
 }
 
 interface DateFilter {
-  startDate: Date;
-  endDate: Date;
+  startDate?: Timestamp;
+  endDate?: Timestamp;
+  setStartDate: (value: Timestamp) => void;
+  setEndDate: (value: Timestamp) => void;
 }
 
 const Container = styled.div`
@@ -95,6 +100,8 @@ const Content = styled.div`
 const DateFilter: React.FunctionComponent<DateFilter> = ({
   startDate,
   endDate,
+  setEndDate,
+  setStartDate,
 }) => {
   const [calendar, showCalendar] = React.useState<CalendarConfig | undefined>();
 
@@ -113,32 +120,46 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
       <Content>
         <DateFilterContent>
           <DateFilterItem
-            dateValue="2019-0-1 @ 9:30pm"
+            value={startDate}
             onClick={() =>
               showCalendarWithConfig({
                 id: 'start',
                 value: startDate,
+                onChange: (value: Date) =>
+                  setStartDate(DateHelper.convertDateToTimestamp(value)),
               })
             }
             active={Boolean(calendar && calendar.id === 'start')}
           />
-          <Icon name="right-arrow" size={20} />
-          <DateFilterItem
-            dateValue="2019-04-31 @ 10:20am"
-            onClick={() =>
-              showCalendarWithConfig({
-                id: 'end',
-                value: endDate,
-              })
-            }
-            active={Boolean(calendar && calendar.id === 'end')}
-          />
+          {endDate && (
+            <>
+              <Icon name="right-arrow" size={20} />
+              <DateFilterItem
+                value={endDate}
+                onClick={() =>
+                  showCalendarWithConfig({
+                    id: 'end',
+                    value: endDate,
+                    onChange: (value: Date) =>
+                      setEndDate(DateHelper.convertDateToTimestamp(value)),
+                  })
+                }
+                active={Boolean(calendar && calendar.id === 'end')}
+              />
+            </>
+          )}
         </DateFilterContent>
         {calendar && (
           <CalendarContent>
             <DatePicker
-              selected={calendar.value}
-              onChange={newDate => console.log('new date')}
+              selected={
+                calendar.value
+                  ? DateHelper.convertTimestampToDate(
+                      calendar.value as Timestamp
+                    )
+                  : new Date()
+              }
+              onChange={calendar.onChange}
               inline={true}
               showTimeSelect={true}
               calendarClassName="customCalendar"
