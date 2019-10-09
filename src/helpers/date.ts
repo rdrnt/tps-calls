@@ -1,20 +1,17 @@
 import { format } from 'date-fns';
 import firebase from 'firebase/app';
 
-export const convertTimestampToDate = (
-  timestamp: firebase.firestore.Timestamp
-): Date => timestamp.toDate();
+type Timestamp = firebase.firestore.Timestamp;
 
-export const convertDateToTimestamp = (
-  date: Date
-): firebase.firestore.Timestamp => firebase.firestore.Timestamp.fromDate(date);
+export const convertTimestampToDate = (timestamp: Timestamp): Date =>
+  timestamp.toDate();
 
-export const now = (): firebase.firestore.Timestamp =>
-  firebase.firestore.Timestamp.now();
+export const convertDateToTimestamp = (date: Date): Timestamp =>
+  firebase.firestore.Timestamp.fromDate(date);
 
-export const formatIncidentDate = (
-  incidentTimestamp: firebase.firestore.Timestamp
-) => {
+export const now = (): Timestamp => firebase.firestore.Timestamp.now();
+
+export const formatIncidentDate = (incidentTimestamp: Timestamp) => {
   const timestampToDate = convertTimestampToDate(incidentTimestamp);
   return format(timestampToDate, 'MMM Do YYYY @ h:mma');
 };

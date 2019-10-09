@@ -1,8 +1,12 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Firebase } from '../../helpers';
-import { setIncidentList } from '../../store/incidents/actions';
+import { Firebase, DateHelper } from '../../helpers';
+import {
+  setIncidentList,
+  setFilterNewestDate,
+  setFilterOldestDate,
+} from '../../store/incidents/actions';
 import { AppState } from 'store';
 import { Incident } from 'tps-calls-shared';
 import { useDebouncedCallback } from 'use-debounce/lib';
@@ -16,16 +20,38 @@ const IncidentListener: React.FunctionComponent = ({}) => {
     Incident<any>[]
   >([]);
 
+  // Sets the incidents in the store
   const [setIncidents] = useDebouncedCallback(incidents => {
     dispatch(setIncidentList(incidents));
   }, 300);
+
+  const loadOldestIncidentDate = async () => {
+    const oldestIncident: Incident<
+      any
+    > = await Firebase.incidents.getOldestIncident();
+    dispatch(setFilterOldestDate(oldestIncident.date));
+  };
 
   // Set the listener
   React.useEffect(() => {
     const incidentListener = Firebase.incidents.listener(newIncidents => {
       setIncidents(newIncidents);
       setDefaultIncidentList(newIncidents);
+
+      // Sets the newest incident for filtering
+      const newestIncident = newIncidents.reduce((pre, current) => {
+        const previousDate = DateHelper.convertTimestampToDate(pre.date);
+        const currentDateToCompare = DateHelper.convertTimestampToDate(
+          current.date
+        );
+
+        return previousDate > currentDateToCompare ? pre : current;
+      });
+
+      dispatch(setFilterNewestDate(newestIncident.date));
     });
+
+    loadOldestIncidentDate();
 
     return () => {
       // Remove the listener
