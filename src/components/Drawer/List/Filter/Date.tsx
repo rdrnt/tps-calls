@@ -206,6 +206,8 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
       currentValueDate.getDate() === newestValueDate.getDate() &&
       currentValueDate.getDate() !== oldestValueDate.getDate()
     ) {
+      // Set the minimum time to the start of the day
+      // Set the max time to the time of the newest incident
       return {
         minTime: setHours(setMinutes(new Date(), 0), 0),
         maxTime: setHours(
@@ -220,6 +222,8 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
       currentValueDate.getDate() !== newestValueDate.getDate()
     ) {
       return {
+        // Set the minimum time to when the oldest incident occured
+        // Set the minimum time to the end of that day
         minTime: setHours(
           setMinutes(new Date(), oldestValueDate.getMinutes()),
           oldestValueDate.getHours()
