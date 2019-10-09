@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import firebase from 'firebase/app';
 
-type Timestamp = firebase.firestore.Timestamp;
+export type Timestamp = firebase.firestore.Timestamp;
 
 export const convertTimestampToDate = (timestamp: Timestamp): Date =>
   timestamp.toDate();

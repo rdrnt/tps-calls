@@ -1145,10 +1145,10 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
-"@rdrnt/tps-calls-shared@^0.1.2":
-  version "0.1.2"
-  resolved "https://npm.pkg.github.com/download/@rdrnt/tps-calls-shared/0.1.2/d39bb5068373de8aab204bac60c290924c668d7901f10099dd4cf39c09fbced8#41c4a035ee1017c6e95414e112165d3de39536d3"
-  integrity sha1-QcSgNe4QF8bpVBThEhZdPeOVNtM=
+"@rdrnt/tps-calls-shared@^0.1.4":
+  version "0.1.4"
+  resolved "https://npm.pkg.github.com/download/@rdrnt/tps-calls-shared/0.1.4/5f4c3f273ddf9e7213a46c062a5f8be849d2d24b8e0c520c4ff29f90b29cbc13#56ea25b22f2ebd89b61f65a39f1cb34ba76de262"
+  integrity sha1-Vuolsi8uvYm2H2WjnxyzS6dt4mI=
   dependencies:
     "@google-cloud/firestore" "^2.1.1"
 
@@ -4570,11 +4570,6 @@ http-signature@~1.2.0:
     assert-plus "^1.0.0"
     jsprim "^1.2.2"
     sshpk "^1.7.0"
-
-http2@^3.3.7:
-  version "3.3.7"
-  resolved "https://registry.yarnpkg.com/http2/-/http2-3.3.7.tgz#78396eb1e0bcd1db1f4b138d997c682e23414fbc"
-  integrity sha512-puSi8M8WNlFJm9Pk4c/Mbz9Gwparuj3gO9/RRO5zv6piQ0FY+9Qywp0PdWshYgsMJSalixFY7eC6oPu0zRxLAQ==
 
 https-browserify@^1.0.0:
   version "1.0.0"

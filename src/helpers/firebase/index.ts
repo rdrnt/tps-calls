@@ -1,4 +1,4 @@
-import firebaseApp from 'firebase/app';
+import * as firebaseApp from 'firebase/app';
 import 'firebase/firestore';
 
 import { Environment } from '..';

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
-import { Timestamp } from '@google-cloud/firestore';
+import { Timestamp } from '@rdrnt/tps-calls-shared';
 
 import Text from '../../../Text';
 import { Sizes, Colors } from '../../../../config';

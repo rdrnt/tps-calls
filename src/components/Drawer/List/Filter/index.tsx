@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useDebouncedCallback } from 'use-debounce';
-import { Timestamp } from '@google-cloud/firestore';
+import { Timestamp } from '@rdrnt/tps-calls-shared';
 
 import DateFilter from './Date';
 import { IncidentFilterState } from '../../../../store/incidents';

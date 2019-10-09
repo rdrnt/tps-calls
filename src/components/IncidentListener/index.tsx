@@ -51,7 +51,7 @@ const IncidentListener: React.FunctionComponent = ({}) => {
       dispatch(setFilterNewestDate(newestIncident.date));
     });
 
-    loadOldestIncidentDate();
+    // loadOldestIncidentDate();
 
     return () => {
       // Remove the listener

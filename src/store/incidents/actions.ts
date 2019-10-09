@@ -1,6 +1,7 @@
 import { IncidentActions, IncidentActionType, IncidentFilterState } from '.';
 import { Incident } from '@rdrnt/tps-calls-shared';
-import { Timestamp } from '@google-cloud/firestore';
+
+import { DateHelper } from '../../helpers';
 
 export function setIncidentList(list: Incident<any>[]): IncidentActionType {
   return {
@@ -29,14 +30,14 @@ export function setIncidentFilter({ ...options }: IncidentFilterState) {
   };
 }
 
-export function setFilterOldestDate(value: Timestamp) {
+export function setFilterOldestDate(value: DateHelper.Timestamp) {
   return {
     type: IncidentActions.SET_INCIDENT_FILTER_OLDEST_DATE,
     payload: value,
   };
 }
 
-export function setFilterNewestDate(value: Timestamp) {
+export function setFilterNewestDate(value: DateHelper.Timestamp) {
   return {
     type: IncidentActions.SET_INCIDENT_FILTER_NEWEST_DATE,
     payload: value,

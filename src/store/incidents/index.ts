@@ -1,5 +1,6 @@
 import { Incident } from '@rdrnt/tps-calls-shared';
-import { Timestamp } from '@google-cloud/firestore';
+
+import { DateHelper } from '../../helpers';
 
 /*
  INCIDENTS
@@ -7,24 +8,24 @@ import { Timestamp } from '@google-cloud/firestore';
 
 export interface IncidentFilterState {
   search?: string;
-  startDate?: Timestamp;
-  endDate?: Timestamp;
+  startDate?: DateHelper.Timestamp;
+  endDate?: DateHelper.Timestamp;
 }
 
 export interface IncidentsState {
   list: Incident<any>[];
   selected?: Incident<any>;
   filter: IncidentFilterState;
-  oldestIncidentDate: Timestamp;
-  newestIncidentDate: Timestamp;
+  oldestIncidentDate: DateHelper.Timestamp;
+  newestIncidentDate: DateHelper.Timestamp;
 }
 
 export const INITIAL_STATE: IncidentsState = {
   list: [],
   selected: undefined,
   filter: {},
-  oldestIncidentDate: Timestamp.now(),
-  newestIncidentDate: Timestamp.now(),
+  oldestIncidentDate: DateHelper.now(),
+  newestIncidentDate: DateHelper.now(),
 };
 
 export enum IncidentActions {
@@ -53,22 +54,22 @@ export interface SetIncidentFilterAction {
   type: IncidentActions.SET_INCIDENT_FILTER;
   payload: {
     search?: string;
-    startDate?: Timestamp;
-    endDate?: Timestamp;
+    startDate?: DateHelper.Timestamp;
+    endDate?: DateHelper.Timestamp;
   };
 }
 
 export interface SetIncidentFilterOldestDateAction {
   type: IncidentActions.SET_INCIDENT_FILTER_OLDEST_DATE;
   payload: {
-    oldestIncidentDate: Timestamp;
+    oldestIncidentDate: DateHelper.Timestamp;
   };
 }
 
 export interface SetIncidentFilterNewestDateAction {
   type: IncidentActions.SET_INCIDENT_FILTER_NEWEST_DATE;
   payload: {
-    newestIncidentDate: Timestamp;
+    newestIncidentDate: DateHelper.Timestamp;
   };
 }
 
