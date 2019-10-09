@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IncidentType, IncidentSourceType } from 'tps-calls-shared';
+import { IncidentType, IncidentSourceType } from '@rdrnt/tps-calls-shared';
 import { GiKnifeThrust } from 'react-icons/gi';
 
 export const getIconForIncidentType = (incidentType: IncidentType) => {

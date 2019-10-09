@@ -1,4 +1,4 @@
-import { Incident } from 'tps-calls-shared';
+import { Incident } from '@rdrnt/tps-calls-shared';
 import { Timestamp } from '@google-cloud/firestore';
 
 /*

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import posed, { PoseGroup } from 'react-pose';
-import { Incident } from 'tps-calls-shared';
+import { Incident } from '@rdrnt/tps-calls-shared';
 
 import { DateHelper } from '../../helpers';
 import { Sizes, Colors } from '../../config';

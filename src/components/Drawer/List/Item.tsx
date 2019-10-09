@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Incident } from 'tps-calls-shared';
+import { Incident } from '@rdrnt/tps-calls-shared';
 import VisibilitySensor from 'react-visibility-sensor';
 
 import Text from '../../Text';

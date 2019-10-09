@@ -19,6 +19,7 @@ netlify.toml
 .DS_Store
 .env.*
 .sentryclirc
+.npmrc
 
 npm-debug.log*
 yarn-debug.log*

@@ -21,4 +21,6 @@ export const initialize = () => {
   firebaseApp.initializeApp({ ...configToUse });
 };
 
+export { firebaseApp as firebase };
+
 export { incidents };

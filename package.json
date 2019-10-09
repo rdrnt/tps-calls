@@ -11,11 +11,12 @@
     "test": "node scripts/test.js --updateSnapshot"
   },
   "dependencies": {
+    "@rdrnt/tps-calls-shared": "^0.1.2",
     "@reach/router": "^1.2.1",
     "@sentry/browser": "^5.6.3",
     "d3-ease": "^1.0.5",
     "date-fns": "^1.30.1",
-    "firebase": "^6.0.4",
+    "firebase": "^7.1.0",
     "mapbox-gl": "^1.4.0",
     "polished": "^3.4.1",
     "prettier": "^1.14.2",
@@ -34,7 +35,6 @@
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "styled-components": "^4.2.1",
-    "tps-calls-shared": "git+ssh://git@github.com:rdrnt/tps-calls-shared.git",
     "tslib": "^1.9.3",
     "typeface-poppins": "^0.0.72",
     "use-debounce": "^3.0.1"

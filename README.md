@@ -20,7 +20,7 @@ When commiting, please try your best to use [this](http://karma-runner.github.io
 
 ## Building
 
-1. Create a `.sentryclirc, .env.development, .env.production` at the root of the project
+1. Create a `.sentryclirc, .env, .npmrc` at the root of the project
 
 2. (Building for production) In the `.sentryclirc, put:
 
@@ -30,7 +30,7 @@ project=getprojectnamefromowner
 org=getorgfromowner
 ```
 
-3. In the `.env.development`, `.env.production`, make sure you have the following keys:
+3. In the `.env`, make sure you have the following keys:
 
 ```plain
 REACT_APP_MAPBOX_API_KEY
@@ -38,6 +38,13 @@ REACT_APP_MAPBOX_API_KEY
 REACT_APP_GANALYTICS_KEY
 
 REACT_APP_SENTRY_DSN
+```
+
+4. In the `.npmrc` (required for types), put the following:
+
+```plain
+//npm.pkg.github.com/:_authToken=YOUR_GIVEN_TOKEN
+@rdrnt:registry=https://npm.pkg.github.com
 ```
 
 # License

@@ -8,8 +8,8 @@ import {
   setFilterOldestDate,
 } from '../../store/incidents/actions';
 import { AppState } from 'store';
-import { Incident } from 'tps-calls-shared';
-import { useDebouncedCallback } from 'use-debounce/lib';
+import { Incident } from '@rdrnt/tps-calls-shared';
+import { useDebouncedCallback } from 'use-debounce';
 
 const IncidentListener: React.FunctionComponent = ({}) => {
   const dispatch = useDispatch();

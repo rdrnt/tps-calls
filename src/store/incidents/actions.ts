@@ -1,5 +1,5 @@
 import { IncidentActions, IncidentActionType, IncidentFilterState } from '.';
-import { Incident } from 'tps-calls-shared';
+import { Incident } from '@rdrnt/tps-calls-shared';
 import { Timestamp } from '@google-cloud/firestore';
 
 export function setIncidentList(list: Incident<any>[]): IncidentActionType {
