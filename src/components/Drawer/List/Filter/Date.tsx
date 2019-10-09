@@ -6,7 +6,9 @@ import { Timestamp } from '@google-cloud/firestore';
 import Text from '../../../Text';
 import { Sizes, Colors } from '../../../../config';
 import Icon from '../../../Icon';
+import { Button } from '../../../Button';
 import { DateHelper } from '../../../../helpers';
+import { onHover } from '../../../../helpers/hooks';
 
 const ItemContainer = styled.button<{ color: string }>`
   margin: 0;
@@ -27,20 +29,26 @@ const DateFilterItem: React.FunctionComponent<DateFilterItem> = ({
   active,
 }) => {
   const [color, setColor] = React.useState<string>('black');
+  const [hovering, hoverProps] = onHover();
 
   React.useEffect(() => {
-    if (active) {
+    if (active || hovering) {
       setColor(Colors.PRIMARY);
-    } else if (!active) {
+    } else if (!active || !hovering) {
       setColor('black');
     }
-  }, [active]);
+  }, [active, hovering]);
 
   return (
-    <ItemContainer type="button" color={color} onClick={onClick}>
+    <ItemContainer
+      type="button"
+      color={color}
+      onClick={onClick}
+      {...hoverProps}
+    >
       <Icon size={15} name="calendar" color={color} />
       <Text as="p" size={12} lineHeight={12} color={color}>
-        {value ? '2019-04-8 @ 9:11am' : 'Current'}
+        {value ? DateHelper.formatIncidentDate(value) : 'Current'}
       </Text>
     </ItemContainer>
   );
@@ -78,10 +86,17 @@ const DateFilterContent = styled.div`
 `;
 
 const CalendarContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   margin-top: ${Sizes.SPACING / 2}px;
   .customCalendar {
     font-family: 'Poppins', arial, sans-serif;
     .react-datepicker__day--selected {
+      background-color: ${Colors.PRIMARY};
+    }
+    li.react-datepicker__time-list-item--selected {
       background-color: ${Colors.PRIMARY};
     }
   }
@@ -105,14 +120,31 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
 }) => {
   const [calendar, showCalendar] = React.useState<CalendarConfig | undefined>();
 
+  const hideCalendar = () => {
+    showCalendar(undefined);
+  };
+
   const showCalendarWithConfig = (config: CalendarConfig) => {
     // if we have a calendar, hide it
-    if (calendar) {
-      showCalendar(undefined);
+    if (calendar && calendar.id !== config.id) {
+      hideCalendar();
     } else {
       showCalendar(config);
     }
   };
+
+  // if the start date or end date update
+  React.useEffect(() => {
+    if (calendar) {
+      if (calendar.id === 'start' && startDate) {
+        showCalendarWithConfig({ ...calendar, value: startDate });
+      }
+
+      if (calendar.id === 'end' && endDate) {
+        showCalendarWithConfig({ ...calendar, value: endDate });
+      }
+    }
+  }, [startDate, endDate]);
 
   return (
     <Container>
@@ -131,7 +163,7 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
             }
             active={Boolean(calendar && calendar.id === 'start')}
           />
-          {endDate && (
+          {startDate && (
             <>
               <Icon name="right-arrow" size={20} />
               <DateFilterItem
@@ -164,6 +196,7 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
               showTimeSelect={true}
               calendarClassName="customCalendar"
             />
+            <Button label="close" onClick={hideCalendar} />
           </CalendarContent>
         )}
       </Content>
