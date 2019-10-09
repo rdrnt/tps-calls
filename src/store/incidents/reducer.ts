@@ -34,6 +34,16 @@ export function incidentReducer(
         ...state,
         filter: clonedState,
       };
+    case IncidentActions.SET_INCIDENT_FILTER_OLDEST_DATE:
+      return {
+        ...state,
+        oldestIncidentDate: action.payload.oldestIncidentDate,
+      };
+    case IncidentActions.SET_INCIDENT_FILTER_NEWEST_DATE:
+      return {
+        ...state,
+        newestIncidentDate: action.payload.newestIncidentDate,
+      };
     default:
       return state;
   }

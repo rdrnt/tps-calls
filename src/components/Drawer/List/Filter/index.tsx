@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useDebouncedCallback } from 'use-debounce';
+import { Timestamp } from '@google-cloud/firestore';
 
 import DateFilter from './Date';
 import { IncidentFilterState } from '../../../../store/incidents';
-import { Timestamp } from '@google-cloud/firestore';
 
 interface DrawerFilter {
   filters: IncidentFilterState;
@@ -23,6 +23,8 @@ const DrawerFilter: React.FunctionComponent<DrawerFilter> = ({
   const [updateFilter] = useDebouncedCallback((value: IncidentFilterState) => {
     setFilter(value);
   }, 200);
+
+  React.useEffect(() => {}, []);
 
   const setStartDate = (value?: Timestamp) => {
     updateFilter({ startDate: value });

@@ -1,6 +1,6 @@
 import firebaseApp from 'firebase/app';
 import 'firebase/firestore';
-import { Incident } from 'tps-calls-shared';
+import { Incident, FirestoreCollections } from 'tps-calls-shared';
 
 export const listener = (onChange: (incidents: Incident<any>[]) => void) =>
   firebaseApp
@@ -16,3 +16,14 @@ export const listener = (onChange: (incidents: Incident<any>[]) => void) =>
       );
       onChange(incidents);
     });
+
+export const getOldestIncident = async (): Promise<Incident<any>> => {
+  const queryDoc = await firebaseApp
+    .firestore()
+    .collection(FirestoreCollections.INCIDENTS)
+    .orderBy('date', 'asc')
+    .limit(1)
+    .get();
+  const oldestIncident = queryDoc.docs[0].data() as Incident<any>;
+  return oldestIncident;
+};
