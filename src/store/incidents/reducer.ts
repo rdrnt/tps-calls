@@ -37,12 +37,12 @@ export function incidentReducer(
     case IncidentActions.SET_INCIDENT_FILTER_OLDEST_DATE:
       return {
         ...state,
-        oldestIncidentDate: action.payload.oldestIncidentDate,
+        oldestIncidentDate: action.payload.date,
       };
     case IncidentActions.SET_INCIDENT_FILTER_NEWEST_DATE:
       return {
         ...state,
-        newestIncidentDate: action.payload.newestIncidentDate,
+        newestIncidentDate: action.payload.date,
       };
     default:
       return state;

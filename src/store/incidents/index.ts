@@ -62,14 +62,14 @@ export interface SetIncidentFilterAction {
 export interface SetIncidentFilterOldestDateAction {
   type: IncidentActions.SET_INCIDENT_FILTER_OLDEST_DATE;
   payload: {
-    oldestIncidentDate: DateHelper.Timestamp;
+    date: DateHelper.Timestamp;
   };
 }
 
 export interface SetIncidentFilterNewestDateAction {
   type: IncidentActions.SET_INCIDENT_FILTER_NEWEST_DATE;
   payload: {
-    newestIncidentDate: DateHelper.Timestamp;
+    date: DateHelper.Timestamp;
   };
 }
 

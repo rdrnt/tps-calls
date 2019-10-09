@@ -30,16 +30,20 @@ export function setIncidentFilter({ ...options }: IncidentFilterState) {
   };
 }
 
-export function setFilterOldestDate(value: DateHelper.Timestamp) {
+export function setFilterOldestDate(date: DateHelper.Timestamp) {
   return {
     type: IncidentActions.SET_INCIDENT_FILTER_OLDEST_DATE,
-    payload: value,
+    payload: {
+      date,
+    },
   };
 }
 
-export function setFilterNewestDate(value: DateHelper.Timestamp) {
+export function setFilterNewestDate(date: DateHelper.Timestamp) {
   return {
     type: IncidentActions.SET_INCIDENT_FILTER_NEWEST_DATE,
-    payload: value,
+    payload: {
+      date,
+    },
   };
 }
