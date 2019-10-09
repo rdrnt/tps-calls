@@ -117,32 +117,6 @@ const Content = styled.div`
   align-items: center;
 `;
 
-const calculateMinTime = (currentValue: Date, oldestValue: Timestamp) => {
-  const oldestValueDate = DateHelper.convertTimestampToDate(oldestValue);
-
-  if (currentValue.getDate() === oldestValueDate.getDate()) {
-    console.log('Matching min time', oldestValueDate.toLocaleTimeString());
-    return oldestValueDate;
-  }
-
-  console.log('Not Matching min time', currentValue.toLocaleTimeString());
-  return setHours(setMinutes(new Date(), 0), 0);
-};
-
-const calculateMaxTime = (currentValue: Date, newestValue: Timestamp) => {
-  const newestValueDate = DateHelper.convertTimestampToDate(newestValue);
-
-  if (currentValue.getDate() === newestValueDate.getDate()) {
-    console.log('Matching Max time', newestValueDate.toLocaleTimeString());
-    return newestValueDate;
-  }
-  console.log('Not mathcing max time', currentValue.toLocaleTimeString());
-  return setHours(
-    setMinutes(new Date(), currentValue.getHours()),
-    currentValue.getMinutes()
-  );
-};
-
 // Requirements
 // The start date cannot be older than the oldest incident
 // The end date cannot be newer than the newest incident
@@ -190,6 +164,10 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
     } else {
       setStartDate(DateHelper.convertDateToTimestamp(newStartDate));
     }
+  };
+
+  const changeEndDate = (newEndDate: Date) => {
+    setEndDate(DateHelper.convertDateToTimestamp(newEndDate));
   };
 
   const calculateMinMaxTime = (
@@ -273,8 +251,7 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
                   showCalendarWithConfig({
                     id: 'end',
                     value: endDate || DateHelper.now(),
-                    onChange: (value: Date) =>
-                      setEndDate(DateHelper.convertDateToTimestamp(value)),
+                    onChange: changeEndDate,
                     min: startDate,
                     max: incidentDates.newest,
                   })
