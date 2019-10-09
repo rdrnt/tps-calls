@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Incident, FirestoreCollections } from '@rdrnt/tps-calls-shared';
+import { useDebouncedCallback } from 'use-debounce';
 
 import { Firebase, DateHelper } from '../../helpers';
 import {
@@ -7,9 +9,7 @@ import {
   setFilterNewestDate,
   setFilterOldestDate,
 } from '../../store/incidents/actions';
-import { AppState } from 'store';
-import { Incident } from '@rdrnt/tps-calls-shared';
-import { useDebouncedCallback } from 'use-debounce';
+import { AppState } from '../../store';
 
 const IncidentListener: React.FunctionComponent = ({}) => {
   const dispatch = useDispatch();
@@ -61,22 +61,40 @@ const IncidentListener: React.FunctionComponent = ({}) => {
     };
   }, []);
 
-  // Filtering
-  React.useEffect(() => {
-    // if we have any filter options
-    const doesHaveFilter = Object.keys(filter).length > 0;
-
-    // if we don't have any filter options, and the lists aren't equal, set the default list
-    if (!doesHaveFilter && list.length !== defaultIncidentList.length) {
-      setIncidents(defaultIncidentList);
-    } else {
+  const applyFilters = async () => {
+    try {
       let filteredIncidents: Incident<any>[] = [];
 
-      if (filter.search) {
-        const matchingIncidents = list.filter(incident =>
-          incident.name.toLowerCase().includes(filter.search!.toLowerCase())
+      const applySearch = (value: string): Incident<any>[] => {
+        // Whether we should search the filtered incidents, or the default list
+        const incidentsToSearch =
+          filteredIncidents.length > 0 ? filteredIncidents : list;
+        const matchingIncidents = incidentsToSearch.filter(incident =>
+          incident.name.toLowerCase().includes(value.toLowerCase())
         );
-        filteredIncidents.push(...matchingIncidents);
+
+        return matchingIncidents;
+      };
+
+      if (filter.startDate && filter.endDate) {
+        const incidentDateDocs = await Firebase.firebase
+          .firestore()
+          .collection(FirestoreCollections.INCIDENTS)
+          .orderBy('date', 'desc')
+          .where('date', '>=', filter.startDate)
+          .where('date', '<=', filter.endDate)
+          .get();
+
+        const dateIncidents = incidentDateDocs.docs.map(incidentDoc => ({
+          ...(incidentDoc.data() as Incident<any>),
+        }));
+
+        filteredIncidents.push(...dateIncidents);
+      }
+
+      if (filter.search) {
+        const searchedIncidents = applySearch(filter.search);
+        filteredIncidents.push(...searchedIncidents);
       }
 
       // if we have incidents to filter, remove the duplicates that may arise
@@ -92,7 +110,26 @@ const IncidentListener: React.FunctionComponent = ({}) => {
           },
           []
         );
+
         setIncidents(filteredDuplicateIncidents);
+      }
+    } catch (error) {
+      console.log('Error filtering', error);
+    }
+  };
+
+  // Filtering
+  React.useEffect(() => {
+    // if we have any filter options
+    const doesHaveFilter = Object.keys(filter).length > 0;
+
+    // if we don't have any filter options, and the lists aren't equal, set the default list
+    if (!doesHaveFilter && list.length !== defaultIncidentList.length) {
+      setIncidents(defaultIncidentList);
+    } else {
+      const filterByDates = filter.startDate && filter.startDate;
+      if (filter.search || filterByDates) {
+        applyFilters();
       }
     }
   }, [filter]);
