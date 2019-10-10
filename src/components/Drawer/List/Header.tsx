@@ -6,6 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 import { Colors, Sizes } from '../../../config';
 import { IncidentFilterState } from '../../../store/incidents';
+import { setIncidentFilter } from '../../../store/incidents/actions';
 
 import Text, { createTextStyles, DEFAULT_TEXT_STYLES } from '../../Text';
 import { IconButton } from '../../Button';
@@ -13,7 +14,7 @@ import Icon from '../../Icon';
 import DrawerFilter from './Filter';
 
 interface DrawerHeader {
-  setFilter: (value: IncidentFilterState) => void;
+  setFilter: () => void;
   filters: IncidentFilterState;
   closeDrawer: () => void;
 }
@@ -98,7 +99,7 @@ const Heading: React.FunctionComponent<{
   onClick: () => void;
 }> = ({ onClick, label }) => (
   <HeadingContent>
-    <Text as="h1" size={24} lineHeight={28} weight="bold">
+    <Text as="h1" size={28} lineHeight={30} weight="bold">
       {label}
     </Text>
     <IconButton
@@ -119,7 +120,7 @@ const DrawerHeader: React.FunctionComponent<DrawerHeader> = ({
 
   const [updateStoreSearchValue] = useDebouncedCallback(
     (value: string | undefined) => {
-      setFilter({ search: value });
+      setFilter({ values: { search: value } });
     },
     200
   );

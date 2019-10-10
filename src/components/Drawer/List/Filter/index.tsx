@@ -1,14 +1,14 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { useDebouncedCallback } from 'use-debounce';
 import { Timestamp } from '@rdrnt/tps-calls-shared';
 
 import DateFilter from './Date';
 import { IncidentFilterState } from '../../../../store/incidents';
+import { setIncidentFilter } from '../../../../store/incidents/actions';
 
 interface DrawerFilter {
   filters: IncidentFilterState;
-  setFilter: (value: IncidentFilterState) => void;
+  setFilter: typeof setIncidentFilter;
 }
 
 const Container = styled.div`
@@ -16,22 +16,44 @@ const Container = styled.div`
   height: auto;
 `;
 
+export type clearFilters = ({
+  ignoreFields,
+}: {
+  ignoreFields?: [keyof IncidentFilterState];
+}) => void;
+
 const DrawerFilter: React.FunctionComponent<DrawerFilter> = ({
   filters,
   setFilter,
 }) => {
-  const [updateFilter] = useDebouncedCallback((value: IncidentFilterState) => {
-    setFilter(value);
-  }, 200);
-
-  React.useEffect(() => {}, []);
-
   const setStartDate = (value?: Timestamp) => {
-    updateFilter({ startDate: value });
+    setFilter({ values: { startDate: value } });
   };
 
   const setEndDate = (value?: Timestamp) => {
-    updateFilter({ endDate: value });
+    setFilter({ values: { endDate: value } });
+  };
+
+  const clearFilters = ({
+    ignoreFields,
+  }: {
+    ignoreFields?: [keyof IncidentFilterState];
+  }) => {
+    const newFilters: { [key: string]: any } = {
+      ...filters,
+    };
+    Object.keys(newFilters).forEach(key => {
+      if (
+        ignoreFields &&
+        !ignoreFields.includes(key as keyof IncidentFilterState)
+      ) {
+        delete newFilters[key];
+      } else {
+        delete newFilters[key];
+      }
+    });
+    console.log('Setting', newFilters);
+    setFilter({ values: newFilters, merge: false });
   };
 
   return (
@@ -41,6 +63,7 @@ const DrawerFilter: React.FunctionComponent<DrawerFilter> = ({
         endDate={filters.endDate}
         setStartDate={setStartDate}
         setEndDate={setEndDate}
+        clearFilters={clearFilters}
       />
     </Container>
   );

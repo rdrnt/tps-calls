@@ -23,10 +23,19 @@ export function setSelectedIncident(
   };
 }
 
-export function setIncidentFilter({ ...options }: IncidentFilterState) {
+export function setIncidentFilter({
+  values,
+  merge = true,
+}: {
+  values: IncidentFilterState;
+  merge?: boolean;
+}) {
   return {
     type: IncidentActions.SET_INCIDENT_FILTER,
-    payload: options,
+    payload: {
+      values,
+      merge,
+    },
   };
 }
 

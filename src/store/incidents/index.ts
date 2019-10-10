@@ -53,9 +53,8 @@ export interface SetSelectedIncidentAction {
 export interface SetIncidentFilterAction {
   type: IncidentActions.SET_INCIDENT_FILTER;
   payload: {
-    search?: string;
-    startDate?: DateHelper.Timestamp;
-    endDate?: DateHelper.Timestamp;
+    values: IncidentFilterState;
+    merge?: boolean;
   };
 }
 

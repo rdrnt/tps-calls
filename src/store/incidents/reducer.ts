@@ -3,6 +3,7 @@ import {
   IncidentActionType,
   IncidentsState,
   INITIAL_STATE,
+  IncidentFilterState,
 } from '.';
 
 export function incidentReducer(
@@ -21,18 +22,20 @@ export function incidentReducer(
         selected: action.payload.selected,
       };
     case IncidentActions.SET_INCIDENT_FILTER:
-      const clonedState: { [key: string]: any } = {
-        ...state.filter,
-        ...action.payload,
+      const { merge, values } = action.payload;
+      // Remove keys without a value
+      const modifiedState: { [key: string]: any } = {
+        ...values,
+        ...(merge && state.filter),
       };
-      Object.keys(clonedState).forEach(key => {
-        if (!clonedState[key]) {
-          delete clonedState[key];
+      Object.keys(modifiedState).forEach(key => {
+        if (!modifiedState[key]) {
+          delete modifiedState[key];
         }
       });
       return {
         ...state,
-        filter: clonedState,
+        filter: modifiedState,
       };
     case IncidentActions.SET_INCIDENT_FILTER_OLDEST_DATE:
       return {

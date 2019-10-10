@@ -51,7 +51,7 @@ const Container = styled(
     ${DesktopDrawerStyles};
   }
   background-color: ${Colors.BACKGROUND};
-  z-index: 2;
+  z-index: 3;
   margin: 0;
   overflow: hidden;
   border: none;

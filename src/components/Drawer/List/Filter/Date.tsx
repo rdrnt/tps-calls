@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
 import { Timestamp } from '@rdrnt/tps-calls-shared';
 
+import { clearFilters } from '.';
+
 import Text from '../../../Text';
 import { Sizes, Colors } from '../../../../config';
 import Icon from '../../../Icon';
@@ -11,7 +13,6 @@ import { DateHelper } from '../../../../helpers';
 import { onHover } from '../../../../helpers/hooks';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../../../store';
-
 const ItemContainer = styled.button<{ color: string }>`
   margin: 0;
   display: block;
@@ -71,8 +72,9 @@ interface CalendarConfig {
 interface DateFilter {
   startDate?: Timestamp;
   endDate?: Timestamp;
-  setStartDate: (value: Timestamp) => void;
-  setEndDate: (value: Timestamp) => void;
+  setStartDate: (value?: Timestamp) => void;
+  setEndDate: (value?: Timestamp) => void;
+  clearFilters: clearFilters;
 }
 
 const Container = styled.div`
@@ -80,6 +82,17 @@ const Container = styled.div`
   height: auto;
   display: flex;
   flex-direction: column;
+`;
+
+const Content = styled.div`
+  border-radius: 6px;
+  padding: ${Sizes.SPACING / 2}px;
+  background-color: ${Colors.BACKGROUND};
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 `;
 
 const DateFilterContent = styled.div`
@@ -112,16 +125,6 @@ const CalendarContent = styled.div`
   }
 `;
 
-const Content = styled.div`
-  border-radius: 6px;
-  padding: ${Sizes.SPACING / 2}px;
-  background-color: ${Colors.BACKGROUND};
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
 // Requirements
 // The start date cannot be older than the oldest incident
 // The end date cannot be newer than the newest incident
@@ -130,6 +133,7 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
   endDate,
   setEndDate,
   setStartDate,
+  clearFilters,
 }) => {
   const [calendar, showCalendar] = React.useState<CalendarConfig | undefined>();
   const [errorMessage, setErrorMessage] = React.useState<string>('');
@@ -142,15 +146,22 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
     showCalendar(undefined);
   };
 
+  const clearDates = () => {
+    clearFilters({ ignoreFields: ['search'] });
+  };
+
   // if the start date or end date update
   React.useEffect(() => {
     if (calendar) {
+      // if the start date updates, update the calendar
       if (calendar.id === 'start' && startDate) {
         showCalendar({ ...calendar, value: startDate });
       }
 
+      // if the end date is set, close the calendar
       if (calendar.id === 'end' && endDate) {
-        showCalendar({ ...calendar, value: endDate });
+        // showCalendar({ ...calendar, value: endDate });
+        hideCalendar();
       }
     }
   }, [startDate, endDate]);
@@ -267,6 +278,9 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
             </>
           )}
         </DateFilterContent>
+        {!calendar && startDate && endDate && (
+          <Button label="clear" onClick={clearDates} />
+        )}
         {calendar && (
           <CalendarContent>
             {errorMessage && <Text as="span">{errorMessage}</Text>}

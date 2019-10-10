@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
-    "start": "webpack-dev-server --hot --config webpack.dev.js",
+    "start": "webpack-dev-server --config webpack.dev.js",
     "start:build": "rm -rf dist && webpack --config webpack.prod.js --env.NODE_ENV=local --progress",
     "build": "rm -rf dist && webpack --config webpack.prod.js --progress",
     "netlify-deploy": "yarn build && netlify deploy --dir dist",

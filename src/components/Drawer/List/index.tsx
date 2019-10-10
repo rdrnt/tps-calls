@@ -51,8 +51,8 @@ const DrawerList: React.FunctionComponent<DrawerList> = ({
 
   const [scrollPosition, setScrollPosition] = React.useState<number>(0);
 
-  const setFilter = (newFilterOptions: IncidentFilterState) => {
-    dispatch(setIncidentFilter({ ...filter, ...newFilterOptions }));
+  const setFilter = ([args]: Parameters<typeof setIncidentFilter>) => {
+    dispatch(setIncidentFilter({ ...args }));
   };
 
   const [onScroll] = useDebouncedCallback(() => {
