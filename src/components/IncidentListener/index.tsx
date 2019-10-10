@@ -10,6 +10,7 @@ import {
   setFilterOldestDate,
 } from '../../store/incidents/actions';
 import { AppState } from '../../store';
+import { openLoader, closeLoader } from '../../store/ui/actions';
 
 const IncidentListener: React.FunctionComponent = ({}) => {
   const dispatch = useDispatch();
@@ -77,6 +78,7 @@ const IncidentListener: React.FunctionComponent = ({}) => {
       };
 
       if (filter.startDate && filter.endDate) {
+        dispatch(openLoader('Filtering...'));
         const incidentDateDocs = await Firebase.firebase
           .firestore()
           .collection(FirestoreCollections.INCIDENTS)
@@ -90,6 +92,7 @@ const IncidentListener: React.FunctionComponent = ({}) => {
         }));
 
         filteredIncidents.push(...dateIncidents);
+        dispatch(closeLoader());
       }
 
       if (filter.search) {
