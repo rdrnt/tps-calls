@@ -11,7 +11,6 @@ import { DateHelper } from '../../../../helpers';
 import { onHover } from '../../../../helpers/hooks';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../../../store';
-import { setHours, setMinutes } from 'date-fns';
 
 const ItemContainer = styled.button<{ color: string }>`
   margin: 0;
@@ -138,23 +137,37 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
   };
 
   const showCalendarWithConfig = (config: CalendarConfig) => {
-    // if we have a calendar, hide it
-    if (calendar && calendar.id !== config.id) {
-      hideCalendar();
+    // if we have a calendar
+    if (calendar) {
+      // if the config isn't the same, show the config
+      if (calendar.id !== config.id) {
+        showCalendar(config);
+      } else {
+        // if the config is the same, hide the calendar
+        // This is because they're clicking the opened calendar button
+        hideCalendar();
+      }
     } else {
       showCalendar(config);
     }
   };
 
+  // if the start date or end date update
+  React.useEffect(() => {
+    if (calendar) {
+      if (calendar.id === 'start' && startDate) {
+        showCalendarWithConfig({ ...calendar, value: startDate });
+      }
+
+      if (calendar.id === 'end' && endDate) {
+        showCalendarWithConfig({ ...calendar, value: endDate });
+      }
+    }
+  }, [startDate, endDate]);
+
   const changeStartDate = (newStartDate: Date) => {
     const oldestIncidentDate = DateHelper.convertTimestampToDate(
       incidentDates.oldest
-    );
-    console.log(
-      'Setting new start date to',
-      DateHelper.formatIncidentDate(
-        DateHelper.convertDateToTimestamp(newStartDate)
-      )
     );
     if (newStartDate < oldestIncidentDate) {
       setErrorMessage(
@@ -167,7 +180,17 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
   };
 
   const changeEndDate = (newEndDate: Date) => {
-    setEndDate(DateHelper.convertDateToTimestamp(newEndDate));
+    // If the start date and end date are more than 10 hours apart, don't apply the new end date
+    if (
+      DateHelper.compareHourDifference(
+        startDate!,
+        DateHelper.convertDateToTimestamp(newEndDate)
+      ) > 10
+    ) {
+      setErrorMessage('Date cannot be more than hours apart');
+    } else {
+      setEndDate(DateHelper.convertDateToTimestamp(newEndDate));
+    }
   };
 
   const calculateMinMaxTime = (
@@ -187,11 +210,14 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
       // Set the minimum time to the start of the day
       // Set the max time to the time of the newest incident
       return {
-        minTime: setHours(setMinutes(new Date(), 0), 0),
-        maxTime: setHours(
-          setMinutes(new Date(), newestValueDate.getMinutes()),
-          newestValueDate.getHours()
-        ),
+        minTime: DateHelper.createDateWithHoursAndMinutes({
+          hours: 0,
+          minutes: 0,
+        }),
+        maxTime: DateHelper.createDateWithHoursAndMinutes({
+          hours: newestValueDate.getHours(),
+          minutes: newestValueDate.getMinutes(),
+        }),
       };
     }
 
@@ -202,27 +228,17 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
       return {
         // Set the minimum time to when the oldest incident occured
         // Set the minimum time to the end of that day
-        minTime: setHours(
-          setMinutes(new Date(), oldestValueDate.getMinutes()),
-          oldestValueDate.getHours()
-        ),
-        maxTime: setHours(setMinutes(new Date(), 59), 23),
+        minTime: DateHelper.createDateWithHoursAndMinutes({
+          hours: oldestValueDate.getHours(),
+          minutes: oldestValueDate.getMinutes(),
+        }),
+        maxTime: DateHelper.createDateWithHoursAndMinutes({
+          hours: 23,
+          minutes: 59,
+        }),
       };
     }
   };
-
-  // if the start date or end date update
-  React.useEffect(() => {
-    if (calendar) {
-      if (calendar.id === 'start' && startDate) {
-        showCalendarWithConfig({ ...calendar, value: startDate });
-      }
-
-      if (calendar.id === 'end' && endDate) {
-        showCalendarWithConfig({ ...calendar, value: endDate });
-      }
-    }
-  }, [startDate, endDate]);
 
   return (
     <Container>
