@@ -97,10 +97,16 @@ const CalendarContent = styled.div`
   margin-top: ${Sizes.SPACING / 2}px;
   .customCalendar {
     font-family: 'Poppins', arial, sans-serif;
+    background-color: ${Colors.BACKGROUND};
     .react-datepicker__day--selected {
       background-color: ${Colors.PRIMARY};
     }
-    li.react-datepicker__time-list-item--selected {
+    /* Hack to make the time have the correct background color */
+    .react-datepicker__time-container
+      .react-datepicker__time
+      .react-datepicker__time-box
+      ul.react-datepicker__time-list
+      li.react-datepicker__time-list-item--selected {
       background-color: ${Colors.PRIMARY};
     }
   }
@@ -136,31 +142,15 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
     showCalendar(undefined);
   };
 
-  const showCalendarWithConfig = (config: CalendarConfig) => {
-    // if we have a calendar
-    if (calendar) {
-      // if the config isn't the same, show the config
-      if (calendar.id !== config.id) {
-        showCalendar(config);
-      } else {
-        // if the config is the same, hide the calendar
-        // This is because they're clicking the opened calendar button
-        hideCalendar();
-      }
-    } else {
-      showCalendar(config);
-    }
-  };
-
   // if the start date or end date update
   React.useEffect(() => {
     if (calendar) {
       if (calendar.id === 'start' && startDate) {
-        showCalendarWithConfig({ ...calendar, value: startDate });
+        showCalendar({ ...calendar, value: startDate });
       }
 
       if (calendar.id === 'end' && endDate) {
-        showCalendarWithConfig({ ...calendar, value: endDate });
+        showCalendar({ ...calendar, value: endDate });
       }
     }
   }, [startDate, endDate]);
@@ -248,7 +238,7 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
           <DateFilterItem
             value={startDate}
             onClick={() =>
-              showCalendarWithConfig({
+              showCalendar({
                 id: 'start',
                 value: startDate || DateHelper.now(),
                 onChange: changeStartDate,
@@ -264,7 +254,7 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
               <DateFilterItem
                 value={endDate}
                 onClick={() =>
-                  showCalendarWithConfig({
+                  showCalendar({
                     id: 'end',
                     value: endDate || DateHelper.now(),
                     onChange: changeEndDate,
