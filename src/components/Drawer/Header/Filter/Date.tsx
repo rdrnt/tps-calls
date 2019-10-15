@@ -99,6 +99,12 @@ const CalendarContent = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: ${Sizes.SPACING / 2}px;
+
+  /* The error message */
+  span:first-child {
+    margin-bottom: ${Sizes.SPACING / 2}px;
+  }
+
   .customCalendar {
     font-family: 'Poppins', arial, sans-serif;
     background-color: ${Colors.BACKGROUND};
@@ -142,6 +148,10 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
       // if the start date updates, update the calendar
       if (calendar.id === 'start' && startDate) {
         showCalendar({ ...calendar, value: startDate });
+        // Delete the end date if we change the start date
+        if (endDate) {
+          setEndDate(undefined);
+        }
       }
 
       // if the end date is set, close the calendar
@@ -153,29 +163,23 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
   }, [startDate, endDate]);
 
   const changeStartDate = (newStartDate: Date) => {
-    const oldestIncidentDate = DateHelper.convertTimestampToDate(
-      incidentDates.oldest
-    );
-    if (newStartDate < oldestIncidentDate) {
-      setErrorMessage(
-        'Start date cannot be older than ' +
-          DateHelper.formatIncidentDate(incidentDates.oldest)
-      );
-    } else {
-      setStartDate(DateHelper.convertDateToTimestamp(newStartDate));
-    }
+    setErrorMessage('');
+    setStartDate(DateHelper.convertDateToTimestamp(newStartDate));
   };
 
   const changeEndDate = (newEndDate: Date) => {
     // If the start date and end date are more than 10 hours apart, don't apply the new end date
     if (
       DateHelper.compareHourDifference(
-        startDate!,
-        DateHelper.convertDateToTimestamp(newEndDate)
-      ) > 10
+        DateHelper.convertDateToTimestamp(newEndDate),
+        startDate!
+      ) >= 8
     ) {
-      setErrorMessage('Date cannot be more than hours apart');
+      setErrorMessage('Date cannot be more 8 than hours apart');
+    } else if (newEndDate < DateHelper.convertTimestampToDate(startDate!)) {
+      setErrorMessage('Date cannot be more 8 than hours apart');
     } else {
+      setErrorMessage('');
       setEndDate(DateHelper.convertDateToTimestamp(newEndDate));
     }
   };
@@ -189,7 +193,7 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
     const newestValueDate = DateHelper.convertTimestampToDate(newestValue);
     const oldestValueDate = DateHelper.convertTimestampToDate(oldestValue);
 
-    // if the current value is equal to the newest incident
+    // if the current value is equal to the newest incident date
     if (
       currentValueDate.getDate() === newestValueDate.getDate() &&
       currentValueDate.getDate() !== oldestValueDate.getDate()
@@ -251,7 +255,7 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
               onClick={() =>
                 showCalendar({
                   id: 'end',
-                  value: endDate || DateHelper.now(),
+                  value: endDate || startDate,
                   onChange: changeEndDate,
                   min: startDate,
                   max: incidentDates.newest,
@@ -264,7 +268,11 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
       </DateFilterContent>
       {calendar && (
         <CalendarContent>
-          {errorMessage && <Text as="span">{errorMessage}</Text>}
+          {errorMessage && (
+            <Text as="span" color={Colors.ERROR}>
+              {errorMessage}
+            </Text>
+          )}
           <DatePicker
             selected={DateHelper.convertTimestampToDate(calendar.value)}
             onChange={calendar.onChange}
