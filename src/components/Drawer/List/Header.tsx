@@ -119,8 +119,8 @@ const DrawerHeader: React.FunctionComponent<DrawerHeader> = ({
   closeDrawer,
 }) => {
   const [showFilters, setFilterVisibility] = React.useState<boolean>(false);
-  const [searchValue, setSearchValue] = React.useState<string>(
-    filters.search || ''
+  const [searchValue, setSearchValue] = React.useState<string | undefined>(
+    filters.search
   );
 
   const [updateStoreSearchValue] = useDebouncedCallback(
