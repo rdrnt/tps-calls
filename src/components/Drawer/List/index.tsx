@@ -11,6 +11,7 @@ import { IncidentFilterState } from '../../../store/incidents';
 import {
   setIncidentFilter,
   setSelectedIncident,
+  SetIncidentFilterParams,
 } from '../../../store/incidents/actions';
 import { toggleDrawer } from '../../../store/ui/actions';
 
@@ -49,17 +50,9 @@ const DrawerList: React.FunctionComponent<DrawerList> = ({
   const dispatch = useDispatch();
   const listRef = React.useRef<HTMLUListElement>(null);
 
-  const [scrollPosition, setScrollPosition] = React.useState<number>(0);
-
-  const setFilter = ([args]: Parameters<typeof setIncidentFilter>) => {
-    dispatch(setIncidentFilter({ ...args }));
+  const setFilter = ({ values, merge }: SetIncidentFilterParams) => {
+    dispatch(setIncidentFilter({ values, merge }));
   };
-
-  const [onScroll] = useDebouncedCallback(() => {
-    if (listRef.current) {
-      setScrollPosition(listRef.current.scrollTop);
-    }
-  }, 200);
 
   return (
     <Container>
@@ -68,7 +61,7 @@ const DrawerList: React.FunctionComponent<DrawerList> = ({
         filters={filter}
         closeDrawer={() => dispatch(toggleDrawer(false))}
       />
-      <List ref={listRef} onScroll={onScroll}>
+      <List ref={listRef}>
         {incidents.map(incident => (
           <DrawerListItem
             key={incident.id}

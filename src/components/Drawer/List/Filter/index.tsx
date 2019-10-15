@@ -4,11 +4,14 @@ import { Timestamp } from '@rdrnt/tps-calls-shared';
 
 import DateFilter from './Date';
 import { IncidentFilterState } from '../../../../store/incidents';
-import { setIncidentFilter } from '../../../../store/incidents/actions';
+import {
+  setIncidentFilter,
+  SetIncidentFilterParams,
+} from '../../../../store/incidents/actions';
 
 interface DrawerFilter {
   filters: IncidentFilterState;
-  setFilter: typeof setIncidentFilter;
+  setFilter: (params: SetIncidentFilterParams) => void;
 }
 
 const Container = styled.div`

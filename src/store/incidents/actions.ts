@@ -23,6 +23,11 @@ export function setSelectedIncident(
   };
 }
 
+export interface SetIncidentFilterParams {
+  values: IncidentFilterState;
+  merge?: boolean;
+}
+
 export function setIncidentFilter({
   values,
   merge = true,

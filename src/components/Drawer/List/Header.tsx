@@ -6,7 +6,10 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 import { Colors, Sizes } from '../../../config';
 import { IncidentFilterState } from '../../../store/incidents';
-import { setIncidentFilter } from '../../../store/incidents/actions';
+import {
+  setIncidentFilter,
+  SetIncidentFilterParams,
+} from '../../../store/incidents/actions';
 
 import Text, { createTextStyles, DEFAULT_TEXT_STYLES } from '../../Text';
 import { IconButton } from '../../Button';
@@ -14,7 +17,7 @@ import Icon from '../../Icon';
 import DrawerFilter from './Filter';
 
 interface DrawerHeader {
-  setFilter: () => void;
+  setFilter: (params: SetIncidentFilterParams) => void;
   filters: IncidentFilterState;
   closeDrawer: () => void;
 }
