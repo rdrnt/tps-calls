@@ -2,11 +2,11 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { Incident } from '@rdrnt/tps-calls-shared';
 import VisibilitySensor from 'react-visibility-sensor';
+import posed from 'react-pose';
 
 import Text from '../../Text';
 import { Sizes, Colors } from '../../../config';
 import { DateHelper } from '../../../helpers';
-import posed from 'react-pose';
 
 export interface DrawerListItem {
   incident: Incident<any>;

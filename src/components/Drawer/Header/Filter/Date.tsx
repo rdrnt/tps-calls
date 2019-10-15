@@ -4,8 +4,6 @@ import DatePicker from 'react-datepicker';
 import { Timestamp } from '@rdrnt/tps-calls-shared';
 import { useSelector } from 'react-redux';
 
-import { clearFilters } from '.';
-
 import Text from '../../../Text';
 import { Sizes, Colors } from '../../../../config';
 import Icon from '../../../Icon';
@@ -74,7 +72,6 @@ interface DateFilter {
   endDate?: Timestamp;
   setStartDate: (value?: Timestamp) => void;
   setEndDate: (value?: Timestamp) => void;
-  clearFilters: clearFilters;
 }
 
 const Container = styled.div`
@@ -127,7 +124,6 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
   endDate,
   setEndDate,
   setStartDate,
-  clearFilters,
 }) => {
   const [calendar, showCalendar] = React.useState<CalendarConfig | undefined>();
   const [errorMessage, setErrorMessage] = React.useState<string>('');
@@ -138,10 +134,6 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
 
   const hideCalendar = () => {
     showCalendar(undefined);
-  };
-
-  const clearDates = () => {
-    clearFilters({ ignoreFields: ['search'] });
   };
 
   // if the start date or end date update

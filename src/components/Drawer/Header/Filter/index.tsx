@@ -6,10 +6,7 @@ import DateFilter from './Date';
 import FilterRow from './Row';
 
 import { IncidentFilterState } from '../../../../store/incidents';
-import {
-  setIncidentFilter,
-  SetIncidentFilterParams,
-} from '../../../../store/incidents/actions';
+import { SetIncidentFilterParams } from '../../../../store/incidents/actions';
 
 interface DrawerFilter {
   filters: IncidentFilterState;
@@ -20,12 +17,6 @@ const Container = styled.div`
   width: 100%;
   height: auto;
 `;
-
-export type clearFilters = ({
-  ignoreFields,
-}: {
-  ignoreFields?: [keyof IncidentFilterState];
-}) => void;
 
 const DrawerFilter: React.FunctionComponent<DrawerFilter> = ({
   filters,
@@ -79,7 +70,6 @@ const DrawerFilter: React.FunctionComponent<DrawerFilter> = ({
             endDate={filters.endDate}
             setStartDate={setStartDate}
             setEndDate={setEndDate}
-            clearFilters={clearFilters}
           />
         }
         onChange={onDateRowChange}

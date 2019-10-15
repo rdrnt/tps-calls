@@ -6,7 +6,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Colors, Sizes } from '../../config';
 import { AppState } from '../../store';
 import { toggleDrawer } from '../../store/ui/actions';
-import { setSelectedIncident } from '../../store/incidents/actions';
+import {
+  setSelectedIncident,
+  SetIncidentFilterParams,
+  setIncidentFilter,
+} from '../../store/incidents/actions';
+
+import DrawerHeader from './Header';
 
 import DrawerList from './List';
 
@@ -57,6 +63,16 @@ const Container = styled(
   border: none;
 `;
 
+const Content = styled.div`
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: ${Colors.BACKGROUND_SECONDARY};
+`;
+
 const Drawer: React.FunctionComponent = ({}) => {
   const dispatch = useDispatch();
   const incidentsState = useSelector((state: AppState) => state.incidents);
@@ -70,14 +86,27 @@ const Drawer: React.FunctionComponent = ({}) => {
     }
   }, [incidentsState.selected]);
 
+  const setFilter = ({ values, merge }: SetIncidentFilterParams) => {
+    dispatch(setIncidentFilter({ values, merge }));
+  };
+
   return (
     <PoseGroup>
       {uiState.drawerOpen && (
         <Container key="drawer">
-          <DrawerList
-            incidents={incidentsState.list}
-            filter={incidentsState.filter}
-          />
+          <Content>
+            <DrawerHeader
+              setFilter={setFilter}
+              filters={incidentsState.filter}
+              closeDrawer={() => dispatch(toggleDrawer(false))}
+            />
+            <DrawerList
+              incidents={incidentsState.list}
+              setSelectedIncident={incident =>
+                dispatch(setSelectedIncident(incident))
+              }
+            />
+          </Content>
         </Container>
       )}
     </PoseGroup>

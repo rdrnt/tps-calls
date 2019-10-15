@@ -1,23 +1,13 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Incident } from '@rdrnt/tps-calls-shared';
-import { useDispatch } from 'react-redux';
-import { useDebouncedCallback } from 'use-debounce';
 
 import DrawerListItem from './Item';
-import DrawerHeader from './Header';
 import { Colors, Sizes } from '../../../config';
-import { IncidentFilterState } from '../../../store/incidents';
-import {
-  setIncidentFilter,
-  setSelectedIncident,
-  SetIncidentFilterParams,
-} from '../../../store/incidents/actions';
-import { toggleDrawer } from '../../../store/ui/actions';
 
 export interface DrawerList {
   incidents: Incident<any>[];
-  filter: IncidentFilterState;
+  setSelectedIncident: (incident: Incident<any>) => void;
 }
 
 const Container = styled.div`
@@ -45,33 +35,19 @@ const List = styled.ul`
 
 const DrawerList: React.FunctionComponent<DrawerList> = ({
   incidents,
-  filter,
-}) => {
-  const dispatch = useDispatch();
-  const listRef = React.useRef<HTMLUListElement>(null);
-
-  const setFilter = ({ values, merge }: SetIncidentFilterParams) => {
-    dispatch(setIncidentFilter({ values, merge }));
-  };
-
-  return (
-    <Container>
-      <DrawerHeader
-        setFilter={setFilter}
-        filters={filter}
-        closeDrawer={() => dispatch(toggleDrawer(false))}
-      />
-      <List ref={listRef}>
-        {incidents.map(incident => (
-          <DrawerListItem
-            key={incident.id}
-            incident={incident}
-            onClick={() => dispatch(setSelectedIncident(incident))}
-          />
-        ))}
-      </List>
-    </Container>
-  );
-};
+  setSelectedIncident,
+}) => (
+  <Container>
+    <List>
+      {incidents.map(incident => (
+        <DrawerListItem
+          key={incident.id}
+          incident={incident}
+          onClick={() => setSelectedIncident(incident)}
+        />
+      ))}
+    </List>
+  </Container>
+);
 
 export default DrawerList;
