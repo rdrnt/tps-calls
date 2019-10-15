@@ -21,3 +21,14 @@ export function setLocationCoordinates(
     },
   };
 }
+
+export function setRequestingLocationPermissions(
+  value: boolean
+): UserActionType {
+  return {
+    type: UserActions.SET_REQUESTING_LOCATION_PERMISSIONS,
+    payload: {
+      value,
+    },
+  };
+}

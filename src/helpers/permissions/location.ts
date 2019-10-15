@@ -1,10 +1,19 @@
+import { Coordinates } from '@rdrnt/tps-calls-shared';
+
 export const isSupported = (): boolean => Boolean(window.navigator);
 
-export const requestPermission = () => {
+interface RequestPermissionParams {
+  success: (coordinates: Coordinates) => void;
+  error: () => void;
+}
+export const requestPermission = ({
+  success,
+  error,
+}: RequestPermissionParams) => {
   if (isSupported()) {
     navigator.geolocation.getCurrentPosition(
-      () => {
-        console.log('Scuess');
+      event => {
+        console.log('Scuess', event);
       },
       () => {
         console.log('Error');

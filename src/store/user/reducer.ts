@@ -21,6 +21,14 @@ export function userReducer(
           coordinates: action.payload.coordinates,
         },
       };
+    case UserActions.SET_REQUESTING_LOCATION_PERMISSIONS:
+      return {
+        ...state,
+        location: {
+          ...state.location,
+          requesting: action.payload.value,
+        },
+      };
     default:
       return state;
   }

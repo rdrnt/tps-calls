@@ -8,6 +8,7 @@ import { Firebase } from './helpers';
 import Map from './containers/Map';
 
 import IncidentListener from './components/IncidentListener';
+import { LocationListener } from './components/Listeners';
 
 import store from './store';
 import Drawer from './components/Drawer';
@@ -35,6 +36,7 @@ const App: React.FunctionComponent = () => (
     <Router>
       <Provider store={store}>
         <IncidentListener />
+        <LocationListener />
         <Loader />
         <Drawer />
         <Switch>
