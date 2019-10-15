@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { Colors, Sizes } from '../../../../config';
 import Text from '../../../Text';
+import Switch from '../../../Switch';
 
 interface DrawerFilterRow {
   content: React.ReactElement;
@@ -17,7 +18,7 @@ const Container = styled.div<{ showBorder?: boolean }>`
   display: flex;
   flex-direction: column;
   border-bottom: ${props =>
-    props.showBorder ? `solid 1px ${Colors.TEXT_SECONDARY}` : 'none'};
+    props.showBorder ? `solid 1px ${Colors.BORDER}` : 'none'};
 `;
 
 const Heading = styled.div`
@@ -25,13 +26,6 @@ const Heading = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-`;
-
-const Checkbox = styled.input`
-  height: 17px;
-  width: 17px;
-  background-color: ${Colors.BACKGROUND};
-  border: 1px solid ${Colors.BORDER};
 `;
 
 const DrawerFilterRow: React.FunctionComponent<DrawerFilterRow> = ({
@@ -59,11 +53,7 @@ const DrawerFilterRow: React.FunctionComponent<DrawerFilterRow> = ({
     <Container showBorder={!open}>
       <Heading>
         <Text as="h4">{title}</Text>
-        <Checkbox
-          type="checkbox"
-          checked={open}
-          onChange={() => toggleVisibility()}
-        />
+        <Switch value={open} onChange={toggleVisibility} />
       </Heading>
       {open && content}
     </Container>
