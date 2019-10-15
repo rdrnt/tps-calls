@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
 import { Timestamp } from '@rdrnt/tps-calls-shared';
+import { useSelector } from 'react-redux';
 
 import { clearFilters } from '.';
 
@@ -11,7 +12,6 @@ import Icon from '../../../Icon';
 import { Button } from '../../../Button';
 import { DateHelper } from '../../../../helpers';
 import { onHover } from '../../../../helpers/hooks';
-import { useSelector } from 'react-redux';
 import { AppState } from '../../../../store';
 const ItemContainer = styled.button<{ color: string }>`
   margin: 0;
@@ -270,9 +270,6 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
           </>
         )}
       </DateFilterContent>
-      {!calendar && startDate && endDate && (
-        <Button label="clear" onClick={clearDates} />
-      )}
       {calendar && (
         <CalendarContent>
           {errorMessage && <Text as="span">{errorMessage}</Text>}

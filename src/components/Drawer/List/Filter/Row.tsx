@@ -7,6 +7,7 @@ import Text from '../../../Text';
 interface DrawerFilterRow {
   content: React.ReactElement;
   title: string;
+  overrideOpen?: boolean;
   onChange?: (value: boolean) => void;
 }
 
@@ -35,11 +36,12 @@ const DrawerFilterRow: React.FunctionComponent<DrawerFilterRow> = ({
   content,
   title,
   onChange,
+  overrideOpen,
 }) => {
   const [open, setOpen] = React.useState<boolean>(false);
 
-  const toggleVisibility = () => {
-    const newValue = !open;
+  const toggleVisibility = (value?: boolean) => {
+    const newValue = value !== undefined ? value : !open;
     if (onChange) {
       onChange(newValue);
     }
@@ -47,11 +49,19 @@ const DrawerFilterRow: React.FunctionComponent<DrawerFilterRow> = ({
     setOpen(newValue);
   };
 
+  React.useEffect(() => {
+    toggleVisibility(overrideOpen);
+  }, [overrideOpen]);
+
   return (
     <Container showBorder={!open}>
       <Heading>
         <Text as="h4">{title}</Text>
-        <Checkbox type="checkbox" onChange={toggleVisibility} />
+        <Checkbox
+          type="checkbox"
+          checked={open}
+          onChange={() => toggleVisibility()}
+        />
       </Heading>
       {open && content}
     </Container>

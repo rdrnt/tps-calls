@@ -71,6 +71,7 @@ const DrawerFilter: React.FunctionComponent<DrawerFilter> = ({
   return (
     <Container>
       <FilterRow
+        overrideOpen={Boolean(filters.startDate || filters.endDate)}
         title="Date"
         content={
           <DateFilter
