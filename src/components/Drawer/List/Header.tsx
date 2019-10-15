@@ -119,21 +119,20 @@ const DrawerHeader: React.FunctionComponent<DrawerHeader> = ({
   closeDrawer,
 }) => {
   const [showFilters, setFilterVisibility] = React.useState<boolean>(false);
-  const [searchValue, setSearchValue] = React.useState<string>('');
+  const [searchValue, setSearchValue] = React.useState<string>(
+    filters.search || ''
+  );
 
   const [updateStoreSearchValue] = useDebouncedCallback(
     (value: string | undefined) => {
       setFilter({ values: { search: value } });
     },
-    200
+    50
   );
 
   React.useEffect(() => {
-    const newSearchValue: string | undefined = Boolean(searchValue)
-      ? searchValue
-      : undefined;
-    if (newSearchValue !== filters.search) {
-      updateStoreSearchValue(newSearchValue);
+    if (searchValue !== filters.search) {
+      updateStoreSearchValue(searchValue);
     }
   }, [searchValue]);
 

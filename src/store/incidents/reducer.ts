@@ -25,8 +25,8 @@ export function incidentReducer(
       const { merge, values } = action.payload;
       // Remove keys without a value
       const modifiedState: { [key: string]: any } = {
-        ...values,
         ...(merge && state.filter),
+        ...values,
       };
       Object.keys(modifiedState).forEach(key => {
         if (!modifiedState[key]) {
