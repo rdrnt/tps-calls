@@ -83,6 +83,7 @@ const IncidentListener: React.FunctionComponent = ({}) => {
         return matchingIncidents;
       };
 
+      // If we have a start date & end date to filter, and its not the same as the previous filters
       if (
         (Boolean(filter.startDate && filter.endDate) &&
           previousFilters.startDate !== filter.startDate) ||
