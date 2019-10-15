@@ -127,7 +127,7 @@ const DrawerHeader: React.FunctionComponent<DrawerHeader> = ({
     (value: string | undefined) => {
       setFilter({ values: { search: value } });
     },
-    50
+    100
   );
 
   React.useEffect(() => {
@@ -149,7 +149,7 @@ const DrawerHeader: React.FunctionComponent<DrawerHeader> = ({
                   type="text"
                   placeholder="Dundas St, Stabbing, etc..."
                   onChange={event => setSearchValue(event.target.value)}
-                  value={searchValue}
+                  value={searchValue || ''}
                 />
               </SearchBar>
               <IconButton

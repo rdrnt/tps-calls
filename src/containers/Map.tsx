@@ -59,10 +59,12 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
 
     // if the map has been loaded, and we have a list of incidents
     if (isMapLoaded && incidentsState.list.length !== 0) {
-      // Close the loader
-      setTimeout(() => {
-        dispatch(closeLoader());
-      }, 500);
+      // Close the loader if it's open
+      if (uiState.loader.open) {
+        setTimeout(() => {
+          dispatch(closeLoader());
+        }, 500);
+      }
 
       // If we have an id in the params, see if there's a matching incident in the list
       const { id } = match.params;
