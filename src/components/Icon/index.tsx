@@ -7,7 +7,7 @@ import {
   FiArrowRight,
 } from 'react-icons/fi';
 import { GoSearch } from 'react-icons/go';
-import { IoIosAlert } from 'react-icons/io';
+import { IoIosAlert, IoMdLocate } from 'react-icons/io';
 
 export type IconNames =
   | 'slider'
@@ -16,7 +16,8 @@ export type IconNames =
   | 'x'
   | 'calendar'
   | 'right-arrow'
-  | 'info';
+  | 'info'
+  | 'position';
 
 const AllIcons: { [key in IconNames]?: React.ReactElement } = {
   slider: <FiSliders />,
@@ -26,6 +27,7 @@ const AllIcons: { [key in IconNames]?: React.ReactElement } = {
   calendar: <FiCalendar />,
   'right-arrow': <FiArrowRight />,
   info: <IoIosAlert />,
+  position: <IoMdLocate />,
 };
 
 export interface IconProps {

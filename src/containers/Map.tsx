@@ -10,7 +10,7 @@ import { toggleDrawer, openLoader, closeLoader } from '../store/ui/actions';
 import { setSelectedIncident } from '../store/incidents/actions';
 import { MAPBOX_THEME_URL, Colors, Sizes } from '../config';
 import { useScreenSize } from '../helpers/hooks';
-import { Environment } from '../helpers';
+import { Environment, Permissions } from '../helpers';
 
 import MapInfo from '../components/MapInfo';
 import MapOverlayButton from '../components/MapOverlayButton';
@@ -180,6 +180,17 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
             position={{ bottom: Sizes.SPACING, right: Sizes.SPACING }}
             size={30}
           />,
+          ...(Permissions.location.isSupported()
+            ? [
+                <MapOverlayButton
+                  key="locationButton"
+                  onClick={() => dispatch(toggleDrawer(true))}
+                  iconName="position"
+                  position={{ bottom: Sizes.SPACING, right: Sizes.SPACING * 4 }}
+                  size={30}
+                />,
+              ]
+            : []),
         ]}
       </PoseGroup>
 
