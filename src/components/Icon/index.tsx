@@ -11,7 +11,7 @@ import {
 } from 'react-icons/fi';
 import { GoSearch } from 'react-icons/go';
 
-type IconNames =
+export type IconNames =
   | 'slider'
   | 'search'
   | 'menu'

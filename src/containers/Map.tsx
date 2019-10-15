@@ -8,12 +8,13 @@ import { match } from 'react-router';
 
 import { toggleDrawer, openLoader, closeLoader } from '../store/ui/actions';
 import { setSelectedIncident } from '../store/incidents/actions';
-import { MAPBOX_THEME_URL, Colors } from '../config';
+import { MAPBOX_THEME_URL, Colors, Sizes } from '../config';
 import { useScreenSize } from '../helpers/hooks';
 import { Environment } from '../helpers';
 
 import MapInfo from '../components/MapInfo';
-import MapDrawerButton from '../components/MapDrawerButton';
+import MapOverlayButton from '../components/MapOverlayButton';
+import { PoseGroup } from 'react-pose';
 
 interface MapState {
   position: Coordinates;
@@ -164,10 +165,17 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
         }
       }}
     >
-      <MapDrawerButton
-        hidden={uiState.drawerOpen}
-        openDrawer={() => dispatch(toggleDrawer(true))}
-      />
+      <PoseGroup>
+        {!uiState.drawerOpen && (
+          <MapOverlayButton
+            key="drawerButton"
+            onClick={() => dispatch(toggleDrawer(true))}
+            iconName="menu"
+            position={{ top: Sizes.SPACING, left: Sizes.SPACING }}
+          />
+        )}
+      </PoseGroup>
+
       <MapInfo
         incident={incidentsState.selected}
         drawerOpen={uiState.drawerOpen}
