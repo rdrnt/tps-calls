@@ -11,6 +11,7 @@ import {
 } from '../../store/incidents/actions';
 import { AppState } from '../../store';
 import { openLoader, closeLoader } from '../../store/ui/actions';
+import { IncidentFilterState } from '../../store/incidents';
 
 const IncidentListener: React.FunctionComponent = ({}) => {
   const dispatch = useDispatch();
@@ -25,6 +26,11 @@ const IncidentListener: React.FunctionComponent = ({}) => {
   const [setIncidents] = useDebouncedCallback(incidents => {
     dispatch(setIncidentList(incidents));
   }, 300);
+
+  // Store the previous filter options
+  const [previousFilters, setPreviousFilters] = React.useState<
+    IncidentFilterState
+  >({});
 
   const loadOldestIncidentDate = async () => {
     const oldestIncident: Incident<
@@ -77,7 +83,11 @@ const IncidentListener: React.FunctionComponent = ({}) => {
         return matchingIncidents;
       };
 
-      if (filter.startDate && filter.endDate) {
+      if (
+        (Boolean(filter.startDate && filter.endDate) &&
+          previousFilters.startDate !== filter.startDate) ||
+        previousFilters.endDate !== filter.endDate
+      ) {
         dispatch(openLoader('Filtering...'));
         const incidentDateDocs = await Firebase.firebase
           .firestore()
@@ -116,6 +126,9 @@ const IncidentListener: React.FunctionComponent = ({}) => {
 
         setIncidents(filteredDuplicateIncidents);
       }
+
+      // Set the filters for comparison
+      setPreviousFilters(filter);
     } catch (error) {
       console.log('Error filtering', error);
     }
