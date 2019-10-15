@@ -3,4 +3,4 @@ export const config = {
   MAPBOX_API_KEY: process.env.REACT_APP_MAPBOX_API_KEY as string,
 };
 
-export const isDevelopment: boolean = Boolean(process.env.NODE_ENV);
+export const isDevelopment: boolean = process.env.NODE_ENV === 'development';
