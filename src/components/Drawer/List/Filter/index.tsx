@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { Timestamp } from '@rdrnt/tps-calls-shared';
 
 import DateFilter from './Date';
+import FilterRow from './Row';
+
 import { IncidentFilterState } from '../../../../store/incidents';
 import {
   setIncidentFilter,
@@ -59,14 +61,27 @@ const DrawerFilter: React.FunctionComponent<DrawerFilter> = ({
     setFilter({ values: newFilters, merge: false });
   };
 
+  const onDateRowChange = (open: boolean) => {
+    // If we close the date filter, and we have filter dates, clear them
+    if (!open && Boolean(filters.startDate || filters.endDate)) {
+      clearFilters({ ignoreFields: ['search'] });
+    }
+  };
+
   return (
     <Container>
-      <DateFilter
-        startDate={filters.startDate}
-        endDate={filters.endDate}
-        setStartDate={setStartDate}
-        setEndDate={setEndDate}
-        clearFilters={clearFilters}
+      <FilterRow
+        title="Date"
+        content={
+          <DateFilter
+            startDate={filters.startDate}
+            endDate={filters.endDate}
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+            clearFilters={clearFilters}
+          />
+        }
+        onChange={onDateRowChange}
       />
     </Container>
   );

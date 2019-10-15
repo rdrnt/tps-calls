@@ -102,7 +102,7 @@ const Heading: React.FunctionComponent<{
   onClick: () => void;
 }> = ({ onClick, label }) => (
   <HeadingContent>
-    <Text as="h1" size={28} lineHeight={30} weight="bold">
+    <Text as="h1" size={32} lineHeight={34} weight="bold">
       {label}
     </Text>
     <IconButton

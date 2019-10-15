@@ -78,21 +78,15 @@ interface DateFilter {
 }
 
 const Container = styled.div`
-  width: 100%;
   height: auto;
-  display: flex;
-  flex-direction: column;
-`;
-
-const Content = styled.div`
+  width: 100%;
   border-radius: 6px;
-  padding: ${Sizes.SPACING / 2}px;
   background-color: ${Colors.BACKGROUND};
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: relative;
+  padding: ${Sizes.SPACING / 2}px;
 `;
 
 const DateFilterContent = styled.div`
@@ -243,70 +237,67 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
 
   return (
     <Container>
-      <Text as="h5">Date</Text>
-      <Content>
-        <DateFilterContent>
-          <DateFilterItem
-            value={startDate}
-            onClick={() =>
-              showCalendar({
-                id: 'start',
-                value: startDate || DateHelper.now(),
-                onChange: changeStartDate,
-                min: incidentDates.oldest,
-                max: incidentDates.newest,
-              })
-            }
-            active={Boolean(calendar && calendar.id === 'start')}
-          />
-          {startDate && (
-            <>
-              <Icon name="right-arrow" size={20} />
-              <DateFilterItem
-                value={endDate}
-                onClick={() =>
-                  showCalendar({
-                    id: 'end',
-                    value: endDate || DateHelper.now(),
-                    onChange: changeEndDate,
-                    min: startDate,
-                    max: incidentDates.newest,
-                  })
-                }
-                active={Boolean(calendar && calendar.id === 'end')}
-              />
-            </>
-          )}
-        </DateFilterContent>
-        {!calendar && startDate && endDate && (
-          <Button label="clear" onClick={clearDates} />
-        )}
-        {calendar && (
-          <CalendarContent>
-            {errorMessage && <Text as="span">{errorMessage}</Text>}
-            <DatePicker
-              selected={DateHelper.convertTimestampToDate(calendar.value)}
-              onChange={calendar.onChange}
-              inline={true}
-              showTimeSelect={true}
-              minDate={
-                calendar.min && DateHelper.convertTimestampToDate(calendar.min)
+      <DateFilterContent>
+        <DateFilterItem
+          value={startDate}
+          onClick={() =>
+            showCalendar({
+              id: 'start',
+              value: startDate || DateHelper.now(),
+              onChange: changeStartDate,
+              min: incidentDates.oldest,
+              max: incidentDates.newest,
+            })
+          }
+          active={Boolean(calendar && calendar.id === 'start')}
+        />
+        {startDate && (
+          <>
+            <Icon name="right-arrow" size={20} />
+            <DateFilterItem
+              value={endDate}
+              onClick={() =>
+                showCalendar({
+                  id: 'end',
+                  value: endDate || DateHelper.now(),
+                  onChange: changeEndDate,
+                  min: startDate,
+                  max: incidentDates.newest,
+                })
               }
-              maxDate={
-                calendar.max && DateHelper.convertTimestampToDate(calendar.max)
-              }
-              {...calculateMinMaxTime(
-                calendar.value,
-                incidentDates.newest,
-                incidentDates.oldest
-              )}
-              timeIntervals={15}
-              calendarClassName="customCalendar"
+              active={Boolean(calendar && calendar.id === 'end')}
             />
-            <Button label="close" onClick={hideCalendar} />
-          </CalendarContent>
+          </>
         )}
-      </Content>
+      </DateFilterContent>
+      {!calendar && startDate && endDate && (
+        <Button label="clear" onClick={clearDates} />
+      )}
+      {calendar && (
+        <CalendarContent>
+          {errorMessage && <Text as="span">{errorMessage}</Text>}
+          <DatePicker
+            selected={DateHelper.convertTimestampToDate(calendar.value)}
+            onChange={calendar.onChange}
+            inline={true}
+            showTimeSelect={true}
+            minDate={
+              calendar.min && DateHelper.convertTimestampToDate(calendar.min)
+            }
+            maxDate={
+              calendar.max && DateHelper.convertTimestampToDate(calendar.max)
+            }
+            {...calculateMinMaxTime(
+              calendar.value,
+              incidentDates.newest,
+              incidentDates.oldest
+            )}
+            timeIntervals={15}
+            calendarClassName="customCalendar"
+          />
+          <Button label="close" onClick={hideCalendar} />
+        </CalendarContent>
+      )}
     </Container>
   );
 };
