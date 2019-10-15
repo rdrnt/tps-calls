@@ -106,8 +106,9 @@ const Heading: React.FunctionComponent<{
       {label}
     </Text>
     <IconButton
-      size={30}
+      size={20}
       iconProps={{ name: 'x', size: 20 }}
+      hoverColor={Colors.PRIMARY}
       onClick={onClick}
     />
   </HeadingContent>

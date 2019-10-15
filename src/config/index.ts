@@ -6,6 +6,7 @@ export enum Colors {
   TEXT_SECONDARY = '#919191',
   BACKGROUND = '#fefefe',
   BACKGROUND_SECONDARY = '#eeeded',
+  BORDER = '#e5e5e5',
 }
 
 export enum Sizes {

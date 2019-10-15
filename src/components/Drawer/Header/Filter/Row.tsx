@@ -30,6 +30,8 @@ const Heading = styled.div`
 const Checkbox = styled.input`
   height: 17px;
   width: 17px;
+  background-color: ${Colors.BACKGROUND};
+  border: 1px solid ${Colors.BORDER};
 `;
 
 const DrawerFilterRow: React.FunctionComponent<DrawerFilterRow> = ({
