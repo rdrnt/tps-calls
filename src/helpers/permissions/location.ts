@@ -9,20 +9,18 @@ interface RequestPermissionParams {
 export const requestPermission = ({
   success,
   error,
-}: RequestPermissionParams) => {
-  if (isSupported()) {
-    navigator.geolocation.getCurrentPosition(
-      event => {
-        console.log('Scuess', event);
-      },
-      () => {
-        console.log('Error');
-      }
-    ),
-      {
-        enableHighAccuracy: true,
-        timeout: 20000,
-        maximumAge: 60,
-      };
-  }
-};
+}: RequestPermissionParams): void =>
+  navigator.geolocation.getCurrentPosition(
+    event => {
+      success(event.coords);
+    },
+    () => {
+      console.log('Error');
+      error();
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 20000,
+      maximumAge: 60,
+    }
+  );

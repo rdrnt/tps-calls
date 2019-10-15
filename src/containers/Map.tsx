@@ -8,6 +8,7 @@ import { match } from 'react-router';
 
 import { toggleDrawer, openLoader, closeLoader } from '../store/ui/actions';
 import { setSelectedIncident } from '../store/incidents/actions';
+import { setRequestingLocationPermissions } from '../store/user/actions';
 import { MAPBOX_THEME_URL, Colors, Sizes } from '../config';
 import { useScreenSize } from '../helpers/hooks';
 import { Environment, Permissions } from '../helpers';
@@ -38,8 +39,7 @@ const MapMapbox = ReactMapboxGl({
 
 const Map: React.FunctionComponent<MapProps> = ({ match }) => {
   const dispatch = useDispatch();
-  const incidentsState = useSelector((state: AppState) => state.incidents);
-  const uiState = useSelector((state: AppState) => state.ui);
+  const { incidents, ui, user } = useSelector((state: AppState) => state);
   const screenDimensions = useScreenSize();
 
   // https://github.com/alex3165/react-mapbox-gl/issues/461
@@ -57,14 +57,14 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
 
   React.useEffect(() => {
     // if the map isn't loaded, show the loader
-    if (!isMapLoaded && !uiState.loader.open) {
+    if (!isMapLoaded && !ui.loader.open) {
       dispatch(openLoader('Loading map...'));
     }
 
     // if the map has been loaded, and we have a list of incidents
-    if (isMapLoaded && incidentsState.list.length !== 0) {
+    if (isMapLoaded && incidents.list.length !== 0) {
       // Close the loader if it's open
-      if (uiState.loader.open) {
+      if (ui.loader.open) {
         setTimeout(() => {
           dispatch(closeLoader());
         }, 500);
@@ -73,30 +73,30 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
       // If we have an id in the params, see if there's a matching incident in the list
       const { id } = match.params;
       const matchingIncident: Incident<any> | undefined = id
-        ? incidentsState.list.find(incident => incident.id === id)
+        ? incidents.list.find(incident => incident.id === id)
         : undefined;
       // If there is a matching incident, set it as the selected incident
       if (matchingIncident) {
         dispatch(setSelectedIncident(matchingIncident));
       }
     }
-  }, [isMapLoaded, incidentsState.list.length, match.params.id]);
+  }, [isMapLoaded, incidents.list.length, match.params.id]);
 
   // Close the drawer if we're interacting with the map & the drawer is open d
   React.useEffect(() => {
     if (interactingWithMap) {
-      if (uiState.drawerOpen) {
+      if (ui.drawerOpen) {
         dispatch(toggleDrawer(false));
       }
 
-      if (incidentsState.selected) {
+      if (incidents.selected) {
         dispatch(setSelectedIncident(undefined));
       }
     }
   }, [interactingWithMap]);
 
   React.useEffect(() => {
-    if (incidentsState.selected && mapRef.current) {
+    if (incidents.selected && mapRef.current) {
       // Save the previous position
       const currentPosition: {
         lat: number;
@@ -112,13 +112,13 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
 
       mapRef.current.flyTo({
         center: [
-          incidentsState.selected.coordinates.longitude,
-          incidentsState.selected.coordinates.latitude,
+          incidents.selected.coordinates.longitude,
+          incidents.selected.coordinates.latitude,
         ],
         speed: 1,
         zoom: 15,
       });
-    } else if (!incidentsState.selected && mapRef.current && mapState) {
+    } else if (!incidents.selected && mapRef.current && mapState) {
       // if the incident is unselected, and we have the map state
       // go back to their original position before they selected the incident
       mapRef.current.flyTo({
@@ -128,7 +128,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
       });
       setMapState(undefined);
     }
-  }, [incidentsState.selected]);
+  }, [incidents.selected]);
 
   // if the screen size changes, resize the map
   React.useEffect(() => {
@@ -156,17 +156,17 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
         setInteractingWithMap(false);
       }}
       onClick={() => {
-        if (uiState.drawerOpen) {
+        if (ui.drawerOpen) {
           dispatch(toggleDrawer(false));
         }
 
-        if (incidentsState.selected) {
+        if (incidents.selected) {
           dispatch(setSelectedIncident(undefined));
         }
       }}
     >
       <PoseGroup>
-        {!uiState.drawerOpen && [
+        {!ui.drawerOpen && [
           <MapOverlayButton
             key="drawerButton"
             onClick={() => dispatch(toggleDrawer(true))}
@@ -180,11 +180,13 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
             position={{ bottom: Sizes.SPACING, right: Sizes.SPACING }}
             size={30}
           />,
-          ...(Permissions.location.isSupported()
+          ...(!user.location.available
             ? [
                 <MapOverlayButton
                   key="locationButton"
-                  onClick={() => dispatch(toggleDrawer(true))}
+                  onClick={() =>
+                    dispatch(setRequestingLocationPermissions(true))
+                  }
                   iconName="position"
                   position={{ bottom: Sizes.SPACING, right: Sizes.SPACING * 4 }}
                   size={30}
@@ -194,10 +196,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
         ]}
       </PoseGroup>
 
-      <MapInfo
-        incident={incidentsState.selected}
-        drawerOpen={uiState.drawerOpen}
-      />
+      <MapInfo incident={incidents.selected} drawerOpen={ui.drawerOpen} />
 
       <Layer
         type="circle"
@@ -210,10 +209,9 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
           'circle-stroke-color': '#FFFFFF',
         }}
       >
-        {incidentsState.list.map(incident => {
+        {incidents.list.map(incident => {
           const selected = Boolean(
-            incidentsState.selected &&
-              incidentsState.selected.id === incident.id
+            incidents.selected && incidents.selected.id === incident.id
           );
           return (
             <Feature

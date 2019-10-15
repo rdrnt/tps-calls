@@ -33,7 +33,7 @@ const LocationListener: React.FunctionComponent<LocationListener> = ({}) => {
   };
 
   React.useEffect(() => {
-    if (userLocationState.available && userLocationState.requesting) {
+    if (Permissions.location.isSupported() && userLocationState.requesting) {
       Permissions.location.requestPermission({
         success: onUpdate,
         error: onNotAvailable,
