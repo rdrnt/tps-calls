@@ -2,36 +2,30 @@ import * as React from 'react';
 import {
   FiSliders,
   FiSidebar,
-  FiXCircle,
   FiX,
-  FiMinus,
-  FiChevronUp,
   FiCalendar,
   FiArrowRight,
 } from 'react-icons/fi';
 import { GoSearch } from 'react-icons/go';
+import { IoIosAlert } from 'react-icons/io';
 
 export type IconNames =
   | 'slider'
   | 'search'
   | 'menu'
-  | 'x-circle'
   | 'x'
-  | 'chevron-straight'
-  | 'chevron-up'
   | 'calendar'
-  | 'right-arrow';
+  | 'right-arrow'
+  | 'info';
 
 const AllIcons: { [key in IconNames]?: React.ReactElement } = {
   slider: <FiSliders />,
   search: <GoSearch />,
   menu: <FiSidebar />,
-  'x-circle': <FiXCircle />,
   x: <FiX />,
-  'chevron-straight': <FiMinus />,
-  'chevron-up': <FiChevronUp />,
   calendar: <FiCalendar />,
   'right-arrow': <FiArrowRight />,
+  info: <IoIosAlert />,
 };
 
 export interface IconProps {

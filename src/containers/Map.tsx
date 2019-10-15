@@ -166,14 +166,21 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
       }}
     >
       <PoseGroup>
-        {!uiState.drawerOpen && (
+        {!uiState.drawerOpen && [
           <MapOverlayButton
             key="drawerButton"
             onClick={() => dispatch(toggleDrawer(true))}
             iconName="menu"
             position={{ top: Sizes.SPACING, left: Sizes.SPACING }}
-          />
-        )}
+          />,
+          <MapOverlayButton
+            key="infoButton"
+            onClick={() => dispatch(toggleDrawer(true))}
+            iconName="info"
+            position={{ bottom: Sizes.SPACING, right: Sizes.SPACING }}
+            size={30}
+          />,
+        ]}
       </PoseGroup>
 
       <MapInfo
