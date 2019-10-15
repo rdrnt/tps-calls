@@ -77,13 +77,14 @@ const SearchBar = styled.div`
   flex-grow: 1;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   flex-direction: row;
 
   > input {
     ${createTextStyles({
       ...DEFAULT_TEXT_STYLES.p,
-      size: 12,
-      lineHeight: 14,
+      size: 16,
+      lineHeight: 18,
       secondaryFont: true,
     })};
     margin-left: 6px;
@@ -93,6 +94,10 @@ const SearchBar = styled.div`
 
     &::placeholder {
       color: ${Colors.TEXT_SECONDARY};
+    }
+
+    &:focus {
+      outline: none;
     }
   }
 `;
