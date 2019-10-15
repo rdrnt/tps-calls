@@ -9,10 +9,9 @@ export interface Switch {
 }
 
 const WIDTH = 50;
-const TOGGLEBALL_SIZE = 13;
+const TOGGLEBALL_SIZE = 15;
 
 const Container = styled.button<{ toggledOn: boolean }>`
-  height: 20px;
   width: ${WIDTH}px;
   border-radius: 20px;
   background-color: ${props =>
@@ -20,6 +19,8 @@ const Container = styled.button<{ toggledOn: boolean }>`
   position: relative;
   display: inline-block;
   border: 1px solid ${Colors.BORDER};
+  padding: 2px;
+  box-shadow: none;
 `;
 
 const ToggleBall = styled.div<{ toggledOn: boolean }>`
@@ -32,7 +33,7 @@ const ToggleBall = styled.div<{ toggledOn: boolean }>`
 
 const AnimatedToggleBall = posed(ToggleBall)({
   open: {
-    x: WIDTH - TOGGLEBALL_SIZE * 2,
+    x: WIDTH - TOGGLEBALL_SIZE - 5, //For some reason the 5 actually helps?
   },
   close: {
     x: 0,
