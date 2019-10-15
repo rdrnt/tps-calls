@@ -50,7 +50,6 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
   const [isMapLoaded, setIsMapLoaded] = React.useState<boolean>(false);
 
   const mapRef = React.useRef<any>();
-  const [isInteracting, setIsInteracting] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     // if the map isn't loaded, show the loader
@@ -78,7 +77,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
   }, [isMapLoaded, incidentsState.list.length, match.params.id]);
 
   // Close the drawer if we're interacting with the map & the drawer is open
-  React.useEffect(() => {
+  const onMapInteraction = (isInteracting: boolean) => {
     if (isInteracting && uiState.drawerOpen) {
       dispatch(toggleDrawer(false));
     }
@@ -86,7 +85,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
     if (isInteracting && incidentsState.selected) {
       dispatch(setSelectedIncident(undefined));
     }
-  }, [isInteracting]);
+  };
 
   React.useEffect(() => {
     if (incidentsState.selected && mapRef.current) {
@@ -143,10 +142,10 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
         setIsMapLoaded(true);
       }}
       onDragStart={() => {
-        setIsInteracting(true);
+        onMapInteraction(true);
       }}
       onDragEnd={() => {
-        setIsInteracting(false);
+        onMapInteraction(false);
       }}
       onClick={() => {
         if (uiState.drawerOpen) {
