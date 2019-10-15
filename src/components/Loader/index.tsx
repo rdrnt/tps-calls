@@ -34,7 +34,7 @@ const Container = styled(AnimatedContainer)`
   /* Make the loader message smaller on mobile devices */
   > h1 {
     @media only screen and (max-width: 600px) {
-      font-size: 50px;
+      font-size: 43px;
     }
   }
 `;

@@ -4,6 +4,7 @@ import posed, { PoseGroup } from 'react-pose';
 
 import { Colors } from '../../config';
 import Icon from '../Icon';
+import { onHover } from '../../helpers/hooks';
 
 interface MapDrawerButton {
   openDrawer: () => void;
@@ -22,19 +23,19 @@ const AnimatedContainer = posed.button({
 const Container = styled(AnimatedContainer)`
   position: absolute;
   top: 15px;
-  left: 15px;
+  right: 15px;
   height: 50px;
   width: 50px;
   border: none;
   border-radius: 25px;
-  background-color: ${Colors.BACKGROUND};
+  background-color: ${Colors.PRIMARY};
   display: flex;
   justify-content: center;
   align-items: center;
   box-shadow: 1px 2px rgba(0, 0, 0, 0.2);
 
   &:hover {
-    background-color: ${Colors.SECONDARY};
+    background-color: ${Colors.BACKGROUND_SECONDARY};
   }
 `;
 
@@ -42,19 +43,19 @@ const MapDrawerButton: React.FunctionComponent<MapDrawerButton> = ({
   openDrawer,
   hidden,
 }) => {
-  const [isHovering, setIsHovering] = React.useState<boolean>(false);
+  const [hovering, hoverProps] = onHover();
+
   return (
     <Container
       pose={hidden ? 'exit' : 'enter'}
       type="button"
       onClick={openDrawer}
-      onMouseOver={() => setIsHovering(true)}
-      onMouseOut={() => setIsHovering(false)}
+      {...hoverProps}
     >
       <Icon
         name="menu"
         size={25}
-        color={isHovering ? Colors.BACKGROUND : Colors.SECONDARY}
+        color={hovering ? Colors.PRIMARY : Colors.BACKGROUND}
       />
     </Container>
   );

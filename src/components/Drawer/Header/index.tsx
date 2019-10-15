@@ -59,7 +59,7 @@ const HeadingContent = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: ${Sizes.SPACING / 2}px;
+  margin: ${Sizes.SPACING / 2}px 0;
 `;
 
 const SearchBarContainer = styled.div`
