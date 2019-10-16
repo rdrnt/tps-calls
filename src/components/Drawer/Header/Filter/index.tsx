@@ -65,6 +65,17 @@ const DrawerFilter: React.FunctionComponent<DrawerFilter> = ({
     }
   };
 
+  const onNearbyRowOpenChange = (open: boolean) => {
+    // if it closed and we have no value
+    if (!open && filters.distance && filters.distance === 0) {
+      setFilter({
+        values: {
+          distance: undefined,
+        },
+      });
+    }
+  };
+
   return (
     <Container>
       <FilterRow
@@ -78,10 +89,11 @@ const DrawerFilter: React.FunctionComponent<DrawerFilter> = ({
             setEndDate={setEndDate}
           />
         }
-        onChange={onDateRowOpenChange}
+        onOpenChange={onDateRowOpenChange}
       />
       <FilterRow
         overrideOpen={Boolean(filters.distance)}
+        onOpenChange={onNearbyRowOpenChange}
         title="Nearby"
         content={
           <DistanceFilter

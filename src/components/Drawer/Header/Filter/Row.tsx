@@ -9,7 +9,7 @@ interface DrawerFilterRow {
   content: React.ReactElement;
   title: string;
   overrideOpen?: boolean;
-  onChange?: (value: boolean) => void;
+  onOpenChange?: (value: boolean) => void;
 }
 
 const Container = styled.div<{ showBorder?: boolean }>`
@@ -31,15 +31,15 @@ const Heading = styled.div`
 const DrawerFilterRow: React.FunctionComponent<DrawerFilterRow> = ({
   content,
   title,
-  onChange,
+  onOpenChange,
   overrideOpen,
 }) => {
   const [open, setOpen] = React.useState<boolean>(false);
 
   const toggleVisibility = (value?: boolean) => {
     const newValue = value !== undefined ? value : !open;
-    if (onChange) {
-      onChange(newValue);
+    if (onOpenChange) {
+      onOpenChange(newValue);
     }
 
     setOpen(newValue);

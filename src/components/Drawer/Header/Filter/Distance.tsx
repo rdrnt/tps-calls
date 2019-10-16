@@ -10,7 +10,7 @@ import {
 import '@reach/slider/styles.css';
 
 import { Colors, Sizes } from '../../../../config';
-import Text from '../../../Text';
+import Text, { DEFAULT_TEXT_STYLES } from '../../../Text';
 
 export interface DistanceFilter {
   distance?: number;
@@ -40,10 +40,18 @@ const DistanceFilter: React.FunctionComponent<DistanceFilter> = ({
   distance = 0,
   setDistance,
 }) => {
+  const [initialDistance, setInitialDistance] = React.useState<number>(
+    distance
+  );
+
+  React.useEffect(() => {
+    setDistance(initialDistance);
+  }, [initialDistance]);
+
   return (
     <Container>
       <div className="row">
-        <Text as="p" weight={300}>
+        <Text as="p" weight="bold">
           0
         </Text>
         <Slider
@@ -51,21 +59,21 @@ const DistanceFilter: React.FunctionComponent<DistanceFilter> = ({
           max={15}
           defaultValue={0}
           name="distanceSlider"
-          value={distance}
-          onChange={setDistance}
+          value={initialDistance}
+          onChange={setInitialDistance}
         >
           <SliderTrack>
             <SliderTrackHighlight />
             <SliderHandle />
           </SliderTrack>
         </Slider>
-        <Text as="p" weight={300}>
+        <Text as="p" weight="bold">
           15
         </Text>
       </div>
       <div className="distanceValue">
-        <Text as="p" weight="bold">
-          {`${distance}km`}
+        <Text as="p" {...DEFAULT_TEXT_STYLES.h5}>
+          {`${initialDistance}km`}
         </Text>
       </div>
     </Container>
