@@ -7,7 +7,9 @@ import { IconButton } from '../Button';
 import { Colors, Sizes } from '../../config';
 import Icon from '../Icon';
 
-interface ProjectInfoModal {}
+import { ModalProps } from '.';
+
+interface ProjectInfoModal extends ModalProps {}
 
 const InfoRowContainer = styled.div`
   width: 100%;
@@ -15,7 +17,7 @@ const InfoRowContainer = styled.div`
   background-color: ${Colors.BACKGROUND};
 `;
 
-const InfoRowContent = styled.button`
+const InfoRowHeading = styled.button`
   width: 100%;
   border: none;
   padding: 0;
@@ -52,10 +54,10 @@ const InfoRow: React.FunctionComponent<{
 
   return (
     <InfoRowContainer>
-      <InfoRowContent onClick={() => setOpen(!open)}>
+      <InfoRowHeading onClick={() => setOpen(!open)}>
         <Icon size={25} name={open ? 'chevron-down' : 'chevron-right'} />
         <Text as="h5">{title}</Text>
-      </InfoRowContent>
+      </InfoRowHeading>
       <InfoRowInnerContent pose={open ? 'open' : 'closed'}>
         {content}
       </InfoRowInnerContent>
@@ -71,14 +73,21 @@ const Heading = styled.div`
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid ${Colors.BORDER};
+  padding: ${Sizes.SPACING / 3}px 0;
 `;
 
-const ProjectInfoModal: React.FunctionComponent<ProjectInfoModal> = ({}) => {
+const ProjectInfoModal: React.FunctionComponent<ProjectInfoModal> = ({
+  close,
+}) => {
   return (
     <Container>
       <Heading>
         <Text as="h2">tpscalls</Text>
-        <IconButton size={40} iconProps={{ size: 25, name: 'x' }} />
+        <IconButton
+          size={40}
+          iconProps={{ size: 25, name: 'x' }}
+          onClick={close}
+        />
       </Heading>
       <InfoRow
         title="What is this?"
