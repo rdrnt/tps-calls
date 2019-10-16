@@ -19,6 +19,7 @@ const ExtraContent = styled.div`
   align-items: center;
   border-top: 1px solid ${Colors.BACKGROUND_SECONDARY};
   height: 55px;
+  width: 100%;
 `;
 
 const ShowHideContent = posed.div({
