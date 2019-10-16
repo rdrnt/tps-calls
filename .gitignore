@@ -18,6 +18,7 @@ netlify.toml
 # misc
 .DS_Store
 .env.*
+.env
 .sentryclirc
 .npmrc
 
