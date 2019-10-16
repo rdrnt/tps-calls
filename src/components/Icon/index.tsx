@@ -1,10 +1,10 @@
 import * as React from 'react';
 import {
   FiSliders,
-  FiSidebar,
   FiX,
   FiCalendar,
   FiArrowRight,
+  FiMenu,
 } from 'react-icons/fi';
 import { GoSearch } from 'react-icons/go';
 import { IoIosAlert, IoMdLocate } from 'react-icons/io';
@@ -22,7 +22,7 @@ export type IconNames =
 const AllIcons: { [key in IconNames]?: React.ReactElement } = {
   slider: <FiSliders />,
   search: <GoSearch />,
-  menu: <FiSidebar />,
+  menu: <FiMenu />,
   x: <FiX />,
   calendar: <FiCalendar />,
   'right-arrow': <FiArrowRight />,

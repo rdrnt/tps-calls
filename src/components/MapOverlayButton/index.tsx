@@ -39,10 +39,10 @@ const Container = styled(AnimatedContainer)<{
   ${props => props.position.bottom && `bottom: ${props.position.bottom}px`};
   ${props => props.position.left && `left: ${props.position.left}px`};
   ${props => props.position.right && `right: ${props.position.right}px`};
-  height: 50px;
-  width: 50px;
+  height: 45px;
+  width: 45px;
   border: none;
-  border-radius: 25px;
+  border-radius: 22.5px;
   background-color: ${Colors.BACKGROUND};
   display: flex;
   justify-content: center;
