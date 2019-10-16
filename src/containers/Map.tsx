@@ -242,7 +242,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
               ]}
               properties={{
                 // https://docs.mapbox.com/mapbox-gl-js/example/data-driven-lines/
-                color: selected ? darken(0.2, Colors.PRIMARY) : Colors.PRIMARY,
+                color: selected ? Colors.BLACK : Colors.PRIMARY,
                 size: selected ? 8 : 6,
                 border: selected ? 2 : 1,
               }}
