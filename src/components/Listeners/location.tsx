@@ -41,6 +41,13 @@ const LocationListener: React.FunctionComponent<LocationListener> = ({}) => {
     }
   }, [userLocationState.requesting]);
 
+  React.useEffect(() => {
+    const isLocationAvailable = Boolean(window.navigator);
+    if (isLocationAvailable !== userLocationState.available) {
+      dispatch(setLocationAvailable(isLocationAvailable));
+    }
+  }, []);
+
   return null;
 };
 

@@ -5,6 +5,7 @@ import { Coordinates, Incident } from '@rdrnt/tps-calls-shared';
 import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 import { darken } from 'polished';
 import { match } from 'react-router';
+import { PoseGroup } from 'react-pose';
 
 import { toggleDrawer, openLoader, closeLoader } from '../store/ui/actions';
 import { setSelectedIncident } from '../store/incidents/actions';
@@ -15,7 +16,7 @@ import { Environment, Permissions } from '../helpers';
 
 import MapInfo from '../components/MapInfo';
 import MapOverlayButton from '../components/MapOverlayButton';
-import { PoseGroup } from 'react-pose';
+import UserLocationMarker from '../components/MapMarker/UserLocation';
 
 interface MapState {
   position: Coordinates;
@@ -94,6 +95,15 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
       }
     }
   }, [interactingWithMap]);
+
+  React.useEffect(() => {
+    if (user.location.coordinates) {
+      setCenter([
+        user.location.coordinates.longitude,
+        user.location.coordinates.latitude,
+      ]);
+    }
+  }, [user.location.coordinates]);
 
   React.useEffect(() => {
     if (incidents.selected && mapRef.current) {
@@ -180,7 +190,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
             position={{ bottom: Sizes.SPACING, right: Sizes.SPACING }}
             size={30}
           />,
-          ...(!user.location.available
+          ...(user.location.available
             ? [
                 <MapOverlayButton
                   key="locationButton"
@@ -198,6 +208,10 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
 
       <MapInfo incident={incidents.selected} drawerOpen={ui.drawerOpen} />
 
+      {user.location.coordinates && (
+        <UserLocationMarker coordinates={user.location.coordinates} />
+      )}
+
       <Layer
         type="circle"
         id="marker"
@@ -209,6 +223,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
           'circle-stroke-color': '#FFFFFF',
         }}
       >
+        {/* The incident features */}
         {incidents.list.map(incident => {
           const selected = Boolean(
             incidents.selected && incidents.selected.id === incident.id

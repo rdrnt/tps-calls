@@ -1,43 +1,29 @@
 import * as React from 'react';
-import styled from 'styled-components';
 import { Feature } from 'react-mapbox-gl';
-import posed from 'react-pose';
+import { Coordinates } from '@rdrnt/tps-calls-shared';
 
 import { Colors } from '../../config';
 
-const AnimatedContainer = posed.div({
-  enter: {
-    opacity: 1,
-  },
-  exit: {
-    opacity: 0,
-  },
-  hover: {
-    scale: 1.2,
-  },
-  default: {
-    scale: 1.0,
-  },
-});
-
-const Container = styled(AnimatedContainer)`
-  height: 10px;
-  width: 10px;
-  background-color: ${Colors.PRIMARY};
-  border-radius: 5px;
-  z-index: 1;
-`;
-
 interface MapMarkerProps {
-  latitude: number;
-  longitude: number;
+  selected?: boolean;
+  coordinates: Coordinates;
+  onClick: () => void;
 }
-const MapMarker: React.FunctionComponent<MapMarkerProps> = ({
-  latitude,
-  longitude,
-}) => {
-  const [isHovering, setIsHovering] = React.useState<boolean>(false);
 
-  return <Feature coordinates={[longitude, latitude]} />;
-};
+const MapMarker: React.FunctionComponent<MapMarkerProps> = ({
+  selected,
+  coordinates,
+  onClick,
+}) => (
+  <Feature
+    coordinates={[coordinates.longitude, coordinates.latitude]}
+    properties={{
+      // https://docs.mapbox.com/mapbox-gl-js/example/data-driven-lines/
+      color: selected ? Colors.BLACK : Colors.PRIMARY,
+      size: selected ? 8 : 6,
+      border: selected ? 2 : 1,
+    }}
+    onClick={onClick}
+  />
+);
 export default MapMarker;

@@ -8,6 +8,7 @@ export enum Colors {
   BACKGROUND_SECONDARY = '#eeeded',
   BORDER = '#d8d8d8',
   ERROR = '#cc0000',
+  BLACK = '#000000',
 }
 
 export enum Sizes {
