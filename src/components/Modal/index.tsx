@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Dialog } from '@reach/dialog';
 import { useDebouncedCallback } from 'use-debounce';
+import styled from 'styled-components';
 import '@reach/dialog/styles.css';
 
 import { AppState } from '../../store';
@@ -20,6 +21,18 @@ const ModalTable: { [key in ModalTypes]?: any } = {
   'project-info': ProjectInfoModal,
 };
 
+const StyledDialog = styled(Dialog)`
+  padding: ${Sizes.SPACING}px;
+  border-radius: 8px;
+  z-index: 999;
+  min-width: 50vw;
+  /* If the screen is under 600px */
+  @media only screen and (max-width: 600px) {
+    min-width: 85vw;
+  }
+  width: auto;
+`;
+
 const Modal: React.FunctionComponent = ({}) => {
   const dispatch = useDispatch();
   const { open, type } = useSelector((appState: AppState) => appState.ui.modal);
@@ -32,19 +45,9 @@ const Modal: React.FunctionComponent = ({}) => {
     const ModalFromType = ModalTable[type];
 
     return (
-      <Dialog
-        onDismiss={dismissModal}
-        style={{
-          padding: Sizes.SPACING,
-          borderRadius: 8,
-          zIndex: 999,
-          minWidth: '50vw',
-          maxWidth: '80vw',
-          width: 'auto',
-        }}
-      >
+      <StyledDialog onDismiss={dismissModal}>
         <ModalFromType close={dismissModal} />
-      </Dialog>
+      </StyledDialog>
     );
   }
 
