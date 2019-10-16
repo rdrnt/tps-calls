@@ -13,8 +13,8 @@ export const onHover = (): [boolean, OnHoverReturnProps] => {
   const returnValues: OnHoverReturnProps = {
     onMouseOver: () => setHovering(true),
     onMouseOut: () => setHovering(false),
-    onTouchEnd: () => setHovering(true),
-    onTouchStart: () => setHovering(false),
+    onTouchEnd: () => setHovering(false),
+    onTouchStart: () => setHovering(true),
   };
 
   return [hovering, returnValues];

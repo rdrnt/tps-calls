@@ -1,6 +1,7 @@
 import { Coordinates } from '@rdrnt/tps-calls-shared';
 
-export const isSupported = (): boolean => Boolean(window.navigator);
+export const isSupported = (): boolean =>
+  Boolean('geolocation' in window.navigator);
 
 interface RequestPermissionParams {
   success: (coordinates: Coordinates) => void;
@@ -20,7 +21,7 @@ export const requestPermission = ({
     },
     {
       enableHighAccuracy: true,
-      timeout: 20000,
-      maximumAge: 60,
+      timeout: 5000,
+      maximumAge: 9000,
     }
   );
