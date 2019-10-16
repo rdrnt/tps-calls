@@ -34,6 +34,13 @@ export function uiReducer(
           type: action.payload.type,
         },
       };
+    case UIActions.CLOSE_MODAL:
+      return {
+        ...state,
+        modal: {
+          open: false,
+        },
+      };
     default:
       return state;
   }

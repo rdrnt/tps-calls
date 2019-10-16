@@ -29,6 +29,7 @@ export enum UIActions {
   OPEN_LOADER = 'OPEN_LOADER',
   CLOSE_LOADER = 'CLOSE_LOADER',
   OPEN_MODAL = 'OPEN_MODAL',
+  CLOSE_MODAL = 'CLOSE_MODAL',
 }
 
 export interface ToggleDrawerAction {
@@ -57,8 +58,14 @@ export interface OpenModalAction {
   };
 }
 
+export interface CloseModalAction {
+  type: UIActions.CLOSE_MODAL;
+  payload: {};
+}
+
 export type UIActionType =
   | ToggleDrawerAction
   | OpenLoaderAction
   | CloseLoaderAction
-  | OpenModalAction;
+  | OpenModalAction
+  | CloseModalAction;

@@ -35,3 +35,10 @@ export function openModal(modalType: ModalTypes): UIActionType {
     },
   };
 }
+
+export function closeModal(): UIActionType {
+  return {
+    type: UIActions.CLOSE_MODAL,
+    payload: {},
+  };
+}

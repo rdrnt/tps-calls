@@ -7,7 +7,12 @@ import { darken } from 'polished';
 import { match } from 'react-router';
 import { PoseGroup } from 'react-pose';
 
-import { toggleDrawer, openLoader, closeLoader } from '../store/ui/actions';
+import {
+  toggleDrawer,
+  openLoader,
+  closeLoader,
+  openModal,
+} from '../store/ui/actions';
 import { setSelectedIncident } from '../store/incidents/actions';
 import { setRequestingLocationPermissions } from '../store/user/actions';
 import { MAPBOX_THEME_URL, Colors, Sizes } from '../config';
@@ -185,7 +190,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
           />,
           <MapOverlayButton
             key="infoButton"
-            onClick={() => dispatch(toggleDrawer(true))}
+            onClick={() => dispatch(openModal('project-info'))}
             iconName="info"
             position={{ bottom: Sizes.SPACING, right: Sizes.SPACING }}
             size={30}
