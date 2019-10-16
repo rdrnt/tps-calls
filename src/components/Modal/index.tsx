@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Dialog } from '@reach/dialog';
 import { useDebouncedCallback } from 'use-debounce';
 import styled from 'styled-components';
-import '@reach/dialog/styles.css';
 
 import { AppState } from '../../store';
 import { closeModal } from '../../store/ui/actions';

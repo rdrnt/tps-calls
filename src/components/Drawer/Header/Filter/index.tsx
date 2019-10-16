@@ -1,12 +1,14 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Timestamp } from '@rdrnt/tps-calls-shared';
+import { useDebouncedCallback } from 'use-debounce';
 
 import DateFilter from './Date';
 import FilterRow from './Row';
 
 import { IncidentFilterState } from '../../../../store/incidents';
 import { SetIncidentFilterParams } from '../../../../store/incidents/actions';
+import DistanceFilter from './Distance';
 
 interface DrawerFilter {
   filters: IncidentFilterState;
@@ -30,6 +32,10 @@ const DrawerFilter: React.FunctionComponent<DrawerFilter> = ({
     setFilter({ values: { endDate: value } });
   };
 
+  const [setDistance] = useDebouncedCallback((distance?: number) => {
+    setFilter({ values: { distance } });
+  }, 200);
+
   const clearFilters = ({
     ignoreFields,
   }: {
@@ -52,7 +58,7 @@ const DrawerFilter: React.FunctionComponent<DrawerFilter> = ({
     setFilter({ values: newFilters, merge: false });
   };
 
-  const onDateRowChange = (open: boolean) => {
+  const onDateRowOpenChange = (open: boolean) => {
     // If we close the date filter, and we have filter dates, clear them
     if (!open && Boolean(filters.startDate || filters.endDate)) {
       clearFilters({ ignoreFields: ['search'] });
@@ -72,7 +78,17 @@ const DrawerFilter: React.FunctionComponent<DrawerFilter> = ({
             setEndDate={setEndDate}
           />
         }
-        onChange={onDateRowChange}
+        onChange={onDateRowOpenChange}
+      />
+      <FilterRow
+        overrideOpen={Boolean(filters.distance)}
+        title="Nearby"
+        content={
+          <DistanceFilter
+            distance={filters.distance}
+            setDistance={setDistance}
+          />
+        }
       />
     </Container>
   );

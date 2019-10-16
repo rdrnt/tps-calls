@@ -10,6 +10,7 @@ export interface IncidentFilterState {
   search?: string;
   startDate?: DateHelper.Timestamp;
   endDate?: DateHelper.Timestamp;
+  distance?: number; // The number of kilometers
 }
 
 export interface IncidentsState {
