@@ -22,7 +22,13 @@ const LocationListener: React.FunctionComponent<LocationListener> = ({}) => {
     if (userLocationState.requesting) {
       dispatch(setRequestingLocationPermissions(false));
     }
-    dispatch(setLocationCoordinates(coordinates));
+
+    dispatch(
+      setLocationCoordinates({
+        latitude: coordinates.latitude,
+        longitude: coordinates.longitude,
+      })
+    );
     dispatch(setLocationAvailable(true));
   };
 

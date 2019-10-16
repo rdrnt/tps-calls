@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Incident, FirestoreCollections } from '@rdrnt/tps-calls-shared';
 import { useDebouncedCallback } from 'use-debounce';
+import { isPointWithinRadius } from 'geolib';
 
 import { Firebase, DateHelper } from '../../helpers';
 import {
@@ -15,7 +16,8 @@ import { IncidentFilterState } from '../../store/incidents';
 
 const IncidentListener: React.FunctionComponent = ({}) => {
   const dispatch = useDispatch();
-  const { filter, list } = useSelector((state: AppState) => state.incidents);
+  const { incidents, user } = useSelector((state: AppState) => state);
+  const { filter, list } = incidents;
 
   // Store the default incidents
   const [defaultIncidentList, setDefaultIncidentList] = React.useState<
@@ -70,13 +72,12 @@ const IncidentListener: React.FunctionComponent = ({}) => {
 
   const applyFilters = async () => {
     try {
-      let filteredIncidents: Incident<any>[] = [];
+      let filteredIncidents: Incident<any>[] = list;
+      let incidentsToFilter = defaultIncidentList;
 
       const applySearch = (value: string): Incident<any>[] => {
         // Whether we should search the filtered incidents, or the default list
-        const incidentsToSearch =
-          filteredIncidents.length > 0 ? filteredIncidents : list;
-        const matchingIncidents = incidentsToSearch.filter(incident =>
+        const matchingIncidents = incidentsToFilter.filter(incident =>
           incident.name.toLowerCase().includes(value.toLowerCase())
         );
 
@@ -102,8 +103,24 @@ const IncidentListener: React.FunctionComponent = ({}) => {
           ...(incidentDoc.data() as Incident<any>),
         }));
 
-        filteredIncidents.push(...dateIncidents);
+        incidentsToFilter = [...dateIncidents];
         dispatch(closeLoader());
+      }
+
+      if (
+        filter.distance &&
+        filter.distance !== 0 &&
+        user.location.coordinates
+      ) {
+        const withinPoint: Incident<any>[] = incidentsToFilter.filter(
+          incident =>
+            isPointWithinRadius(
+              incident.coordinates,
+              user.location.coordinates!,
+              filter.distance! * 1000
+            )
+        );
+        filteredIncidents.push(...withinPoint);
       }
 
       if (filter.search) {
@@ -112,7 +129,7 @@ const IncidentListener: React.FunctionComponent = ({}) => {
       }
 
       // if we have incidents to filter, remove the duplicates that may arise
-      if (filteredIncidents.length > 0) {
+      if (filteredIncidents.length) {
         const filteredDuplicateIncidents = filteredIncidents.reduce(
           (acc: Incident<any>[], current) => {
             const x = acc.find(item => item.id === current.id);
@@ -145,7 +162,7 @@ const IncidentListener: React.FunctionComponent = ({}) => {
       setIncidents(defaultIncidentList);
     } else {
       const filterByDates = filter.startDate && filter.startDate;
-      if (filter.search || filterByDates) {
+      if (filter.search || filterByDates || filter.distance) {
         applyFilters();
       }
     }
