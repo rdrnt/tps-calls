@@ -53,7 +53,7 @@ const InfoRow: React.FunctionComponent<{
   return (
     <InfoRowContainer>
       <InfoRowContent onClick={() => setOpen(!open)}>
-        <Icon size={25} name="right-arrow" />
+        <Icon size={25} name={open ? 'chevron-down' : 'chevron-right'} />
         <Text as="h5">{title}</Text>
       </InfoRowContent>
       <InfoRowInnerContent pose={open ? 'open' : 'closed'}>
