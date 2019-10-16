@@ -9,18 +9,20 @@ interface IconButtonProps {
   size: number;
   borderRadius?: number;
   hoverColor?: string;
+  backgroundColor?: string;
 }
 
 const Button = styled.button<{
   height: number;
   width: number;
   borderRadius?: number;
+  backgroundColor: string;
 }>`
   border: none;
   padding: 0;
   height: ${props => props.height}px;
   width: ${props => props.width}px;
-  background-color: transparent;
+  background-color: ${props => props.backgroundColor};
   border-radius: ${props =>
     props.borderRadius ? `${props.borderRadius}px` : 0};
   display: flex;
@@ -34,6 +36,7 @@ const IconButton: React.FunctionComponent<IconButtonProps> = ({
   size,
   borderRadius,
   hoverColor,
+  backgroundColor = 'transparent',
 }) => {
   const [isHovering, setIsHovering] = React.useState<boolean>(false);
 
@@ -51,12 +54,13 @@ const IconButton: React.FunctionComponent<IconButtonProps> = ({
       height={size}
       width={size}
       borderRadius={borderRadius}
-      {...hoverColor && {
+      backgroundColor={backgroundColor}
+      {...(hoverColor && {
         onMouseOver: () => setIsHovering(true),
         onMouseOut: () => setIsHovering(false),
         onTouchEnd: () => setIsHovering(false),
         onTouchStart: () => setIsHovering(true),
-      }}
+      })}
     >
       <Icon
         {...iconProps}

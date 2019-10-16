@@ -7,6 +7,7 @@ import {
   FiMenu,
   FiChevronRight,
   FiChevronDown,
+  FiLink,
 } from 'react-icons/fi';
 import { GoSearch } from 'react-icons/go';
 import { IoIosAlert, IoMdLocate } from 'react-icons/io';
@@ -21,7 +22,8 @@ export type IconNames =
   | 'info'
   | 'position'
   | 'chevron-right'
-  | 'chevron-down';
+  | 'chevron-down'
+  | 'link';
 
 const AllIcons: { [key in IconNames]?: React.ReactElement } = {
   slider: <FiSliders />,
@@ -34,6 +36,7 @@ const AllIcons: { [key in IconNames]?: React.ReactElement } = {
   position: <IoMdLocate />,
   'chevron-down': <FiChevronDown />,
   'chevron-right': <FiChevronRight />,
+  link: <FiLink />,
 };
 
 export interface IconProps {

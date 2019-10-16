@@ -8,9 +8,10 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Sizes, Colors } from '../../config';
 import { createShareUrl } from '../../helpers';
 
-import { Button } from '../Button';
+import { Button, IconButton } from '../Button';
 
 import Text from '../Text';
+import { IconNames } from '../Icon';
 
 const ExtraContent = styled.div`
   display: flex;
@@ -33,16 +34,27 @@ interface MapInfoExtraContent {
   incidentId: string;
 }
 
+const ActionContent = styled.div`
+  flex-grow: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+`;
+
 const ShareButton: React.FunctionComponent<{
-  onCopy: () => void;
-  id: string;
-}> = ({ onCopy, id }) => {
-  return (
-    <CopyToClipboard text={createShareUrl(id)} onCopy={onCopy}>
-      <Button label="share" color={darken(0.2, Colors.PRIMARY)} />
-    </CopyToClipboard>
-  );
-};
+  iconName: IconNames;
+  onClick?: () => void;
+}> = ({ iconName, onClick }) => (
+  <IconButton
+    size={30}
+    backgroundColor={Colors.PRIMARY}
+    borderRadius={15}
+    iconProps={{ size: 15, name: iconName, color: 'white' }}
+    onClick={onClick}
+  />
+);
 
 const MapInfoExtraContent: React.FunctionComponent<MapInfoExtraContent> = ({
   incidentId,
@@ -66,7 +78,11 @@ const MapInfoExtraContent: React.FunctionComponent<MapInfoExtraContent> = ({
           </ShowHideContent>
         ) : (
           <ShowHideContent key="share-button">
-            <ShareButton onCopy={showCopyMessage} id={incidentId} />
+            <ActionContent>
+              <CopyToClipboard text={createShareUrl(incidentId)}>
+                <ShareButton iconName="link" onClick={showCopyMessage} />
+              </CopyToClipboard>
+            </ActionContent>
           </ShowHideContent>
         )}
       </PoseGroup>
