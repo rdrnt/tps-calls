@@ -1,4 +1,5 @@
 import { Loader } from '../../components/Loader';
+import { ModalTypes } from '../../components/Modal';
 
 /*
  UI
@@ -6,6 +7,10 @@ import { Loader } from '../../components/Loader';
 export interface UIState {
   drawerOpen: boolean;
   loader: Loader;
+  modal: {
+    open: boolean;
+    type?: ModalTypes;
+  };
 }
 
 export const INITIAL_STATE: UIState = {
@@ -14,12 +19,16 @@ export const INITIAL_STATE: UIState = {
     open: false,
     message: undefined,
   },
+  modal: {
+    open: false,
+  },
 };
 
 export enum UIActions {
   TOGGLE_DRAWER = 'TOGGLE_DRAWER',
   OPEN_LOADER = 'OPEN_LOADER',
   CLOSE_LOADER = 'CLOSE_LOADER',
+  OPEN_MODAL = 'OPEN_MODAL',
 }
 
 export interface ToggleDrawerAction {
@@ -41,7 +50,15 @@ export interface CloseLoaderAction {
   payload: {};
 }
 
+export interface OpenModalAction {
+  type: UIActions.OPEN_MODAL;
+  payload: {
+    type: ModalTypes;
+  };
+}
+
 export type UIActionType =
   | ToggleDrawerAction
   | OpenLoaderAction
-  | CloseLoaderAction;
+  | CloseLoaderAction
+  | OpenModalAction;

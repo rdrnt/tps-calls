@@ -1,4 +1,5 @@
 import { UIActions, UIActionType } from '.';
+import { ModalTypes } from '../../components/Modal';
 
 // TypeScript infers that this function is returning SendMessageAction
 export function toggleDrawer(value: boolean): UIActionType {
@@ -23,5 +24,14 @@ export function closeLoader(): UIActionType {
   return {
     type: UIActions.CLOSE_LOADER,
     payload: {},
+  };
+}
+
+export function openModal(modalType: ModalTypes): UIActionType {
+  return {
+    type: UIActions.OPEN_MODAL,
+    payload: {
+      type: modalType,
+    },
   };
 }

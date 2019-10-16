@@ -26,6 +26,14 @@ export function uiReducer(
           message: undefined,
         },
       };
+    case UIActions.OPEN_MODAL:
+      return {
+        ...state,
+        modal: {
+          open: true,
+          type: action.payload.type,
+        },
+      };
     default:
       return state;
   }

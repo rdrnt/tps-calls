@@ -13,6 +13,7 @@ import { LocationListener } from './components/Listeners';
 import store from './store';
 import Drawer from './components/Drawer';
 import Loader from './components/Loader';
+import Modal from './components/Modal';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -39,6 +40,7 @@ const App: React.FunctionComponent = () => (
         <LocationListener />
         <Loader />
         <Drawer />
+        <Modal />
         <Switch>
           <Route path={['/:id', '/']} component={Map} />
         </Switch>
