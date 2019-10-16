@@ -21,7 +21,7 @@ const GlobalStyle = createGlobalStyle`
     overflow: hidden;
     width: 100vw;
     height: 100vh;
-    font-family: 'Roboto', arial, sans-serif;
+    font-family: 'Poppins', arial, sans-serif;
   }
 
   * {

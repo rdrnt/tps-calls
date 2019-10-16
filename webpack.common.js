@@ -9,7 +9,7 @@ const paths = {
   indexHtml: path.resolve('./public/index.html'),
 };
 
-var dotenv = require('dotenv').config({ path: __dirname + '/.env.local' });
+var dotenv = require('dotenv').config({ path: __dirname + '/.env' });
 
 module.exports = {
   entry: './src/index.tsx',
