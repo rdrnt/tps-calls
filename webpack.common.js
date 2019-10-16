@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerPlugin = require('fork-ts-checker-webpack-plugin');
+const WebpackPwaManifest = require('webpack-pwa-manifest');
 
 const paths = {
   src: path.resolve('./src'),
@@ -49,6 +50,13 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       'process.env': JSON.stringify(dotenv.parsed),
+    }),
+    new WebpackPwaManifest({
+      name: 'tpscalls.live',
+      short_name: 'tpscalls',
+      description: 'Live toronto police calls',
+      background_color: '#ffffff',
+      orientation: 'portrait',
     }),
   ],
 };
