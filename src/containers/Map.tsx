@@ -41,6 +41,7 @@ interface MapProps {
 const MapMapbox = ReactMapboxGl({
   accessToken: Environment.config.MAPBOX_API_KEY,
   minZoom: 9,
+  attributionControl: false,
 });
 
 const Map: React.FunctionComponent<MapProps> = ({ match }) => {
