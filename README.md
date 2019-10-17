@@ -12,11 +12,15 @@ When commiting, please try your best to use [this](http://karma-runner.github.io
 
 ## TODO
 
-## UI
+### UI
 
 - Color code incidents
 - Geofencing (if an incident happens within _x_ km the user will receive a push notifcation)
 - Add @TPSOperations related tweet to the selected incident. (Hint, there's an associated ID)
+
+### General
+
+- Update README with release notes
 
 ## Building
 
