@@ -67,7 +67,7 @@ const DrawerFilter: React.FunctionComponent<DrawerFilter> = ({
 
   const onNearbyRowOpenChange = (open: boolean) => {
     // if it closed and we have no value
-    if (!open && filters.distance && filters.distance === 0) {
+    if (!open && filters.distance) {
       setFilter({
         values: {
           distance: undefined,

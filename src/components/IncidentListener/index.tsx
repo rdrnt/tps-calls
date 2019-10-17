@@ -72,17 +72,8 @@ const IncidentListener: React.FunctionComponent = ({}) => {
 
   const applyFilters = async () => {
     try {
-      let filteredIncidents: Incident<any>[] = list;
-      let incidentsToFilter = defaultIncidentList;
-
-      const applySearch = (value: string): Incident<any>[] => {
-        // Whether we should search the filtered incidents, or the default list
-        const matchingIncidents = incidentsToFilter.filter(incident =>
-          incident.name.toLowerCase().includes(value.toLowerCase())
-        );
-
-        return matchingIncidents;
-      };
+      let filteredIncidents: Incident<any>[] = [];
+      let incidentsToFilter = [...defaultIncidentList];
 
       // If we have a start date & end date to filter, and its not the same as the previous filters
       if (
@@ -90,6 +81,7 @@ const IncidentListener: React.FunctionComponent = ({}) => {
           previousFilters.startDate !== filter.startDate) ||
         previousFilters.endDate !== filter.endDate
       ) {
+        console.log('Filtering by date');
         dispatch(openLoader('Filtering...'));
         const incidentDateDocs = await Firebase.firebase
           .firestore()
@@ -112,6 +104,7 @@ const IncidentListener: React.FunctionComponent = ({}) => {
         filter.distance !== 0 &&
         user.location.coordinates
       ) {
+        console.log('Filtering by distance', filter.distance);
         const withinPoint: Incident<any>[] = incidentsToFilter.filter(
           incident =>
             isPointWithinRadius(
@@ -124,8 +117,11 @@ const IncidentListener: React.FunctionComponent = ({}) => {
       }
 
       if (filter.search) {
-        const searchedIncidents = applySearch(filter.search);
-        filteredIncidents.push(...searchedIncidents);
+        console.log('Filtering by search');
+        const matchingSearchIncidents = incidentsToFilter.filter(incident =>
+          incident.name.toLowerCase().includes(filter.search!.toLowerCase())
+        );
+        filteredIncidents.push(...matchingSearchIncidents);
       }
 
       // if we have incidents to filter, remove the duplicates that may arise
@@ -161,10 +157,7 @@ const IncidentListener: React.FunctionComponent = ({}) => {
     if (!doesHaveFilter && list.length !== defaultIncidentList.length) {
       setIncidents(defaultIncidentList);
     } else {
-      const filterByDates = filter.startDate && filter.startDate;
-      if (filter.search || filterByDates || filter.distance) {
-        applyFilters();
-      }
+      applyFilters();
     }
   }, [filter]);
 
