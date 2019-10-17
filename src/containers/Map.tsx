@@ -21,7 +21,7 @@ import { Environment, Permissions } from '../helpers';
 
 import MapInfo from '../components/MapInfo';
 import MapOverlayButton from '../components/MapOverlayButton';
-import UserLocationMarker from '../components/MapMarker/UserLocation';
+import AnimatedMapMarker from '../components/MapMarker/Animated';
 
 interface MapState {
   position: Coordinates;
@@ -215,44 +215,56 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
       <MapInfo incident={incidents.selected} drawerOpen={ui.drawerOpen} />
 
       {user.location.coordinates && (
-        <UserLocationMarker coordinates={user.location.coordinates} />
+        <AnimatedMapMarker
+          color={Colors.BLACK}
+          coordinates={user.location.coordinates}
+          size={10}
+        />
+      )}
+
+      {incidents.selected && (
+        <AnimatedMapMarker
+          color="#007bff"
+          coordinates={incidents.selected.coordinates}
+          size={20}
+        />
       )}
 
       <Layer
         type="circle"
         id="marker"
         paint={{
-          'circle-radius': ['get', 'size'],
+          'circle-radius': 6,
           // Gets the color from the feature properties
-          'circle-color': ['get', 'color'],
-          'circle-stroke-width': ['get', 'border'],
+          'circle-color': Colors.PRIMARY,
+          'circle-stroke-width': 1,
           'circle-stroke-color': '#FFFFFF',
         }}
       >
         {/* The incident features */}
-        {incidents.list.map(incident => {
-          const selected = Boolean(
-            incidents.selected && incidents.selected.id === incident.id
-          );
-          return (
-            <Feature
-              key={incident.id}
-              coordinates={[
-                incident.coordinates.longitude,
-                incident.coordinates.latitude,
-              ]}
-              properties={{
-                // https://docs.mapbox.com/mapbox-gl-js/example/data-driven-lines/
-                color: selected ? Colors.BLACK : Colors.PRIMARY,
-                size: selected ? 8 : 6,
-                border: selected ? 2 : 1,
-              }}
-              onClick={() => {
-                dispatch(setSelectedIncident(incident));
-              }}
-            />
-          );
-        })}
+        {incidents.list
+          .map(incident => {
+            const selected = Boolean(
+              incidents.selected && incidents.selected.id === incident.id
+            );
+            if (!selected) {
+              return (
+                <Feature
+                  key={incident.id}
+                  coordinates={[
+                    incident.coordinates.longitude,
+                    incident.coordinates.latitude,
+                  ]}
+                  onClick={() => {
+                    dispatch(setSelectedIncident(incident));
+                  }}
+                />
+              );
+            }
+
+            return null;
+          })
+          .filter(incidentFeature => Boolean(incidentFeature))}
       </Layer>
     </MapMapbox>
   );
