@@ -1,4 +1,10 @@
-import { format, setHours, setMinutes, differenceInHours } from 'date-fns';
+import {
+  format,
+  setHours,
+  setMinutes,
+  differenceInHours,
+  distanceInWordsToNow,
+} from 'date-fns';
 import firebase from 'firebase/app';
 
 export type Timestamp = firebase.firestore.Timestamp;
@@ -32,3 +38,6 @@ export const compareHourDifference = (
     convertTimestampToDate(firstDate),
     convertTimestampToDate(secondDate)
   );
+
+export const distanceInWords = (timestamp: Timestamp): string =>
+  distanceInWordsToNow(convertTimestampToDate(timestamp));

@@ -90,7 +90,9 @@ const MapInfoExtraContent: React.FunctionComponent<MapInfoExtraContent> = ({
             {/* Twitter button */}
             <a
               className="twitter-share-button"
-              href={URL.createTwitterShareUrl(incident.id)}
+              href={URL.createTwitterShareUrl(incident)}
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <ShareButton iconName="twitter" />
             </a>
