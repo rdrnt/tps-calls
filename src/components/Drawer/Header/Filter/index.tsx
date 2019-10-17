@@ -54,7 +54,6 @@ const DrawerFilter: React.FunctionComponent<DrawerFilter> = ({
         delete newFilters[key];
       }
     });
-    console.log('Setting', newFilters);
     setFilter({ values: newFilters, merge: false });
   };
 

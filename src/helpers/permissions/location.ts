@@ -16,7 +16,6 @@ export const requestPermission = ({
       success(event.coords);
     },
     () => {
-      console.log('Error');
       error();
     },
     {

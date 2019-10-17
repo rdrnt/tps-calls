@@ -81,7 +81,6 @@ const IncidentListener: React.FunctionComponent = ({}) => {
           previousFilters.startDate !== filter.startDate) ||
         previousFilters.endDate !== filter.endDate
       ) {
-        console.log('Filtering by date');
         dispatch(openLoader('Filtering...'));
         const incidentDateDocs = await Firebase.firebase
           .firestore()
@@ -104,7 +103,6 @@ const IncidentListener: React.FunctionComponent = ({}) => {
         filter.distance !== 0 &&
         user.location.coordinates
       ) {
-        console.log('Filtering by distance', filter.distance);
         const withinPoint: Incident<any>[] = incidentsToFilter.filter(
           incident =>
             isPointWithinRadius(
@@ -117,7 +115,6 @@ const IncidentListener: React.FunctionComponent = ({}) => {
       }
 
       if (filter.search) {
-        console.log('Filtering by search');
         const matchingSearchIncidents = incidentsToFilter.filter(incident =>
           incident.name.toLowerCase().includes(filter.search!.toLowerCase())
         );
