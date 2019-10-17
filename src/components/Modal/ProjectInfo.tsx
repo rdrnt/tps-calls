@@ -6,7 +6,6 @@ import Text, { createTextStyles, DEFAULT_TEXT_STYLES } from '../Text';
 import { IconButton } from '../Button';
 import { Colors, Sizes } from '../../config';
 import Icon from '../Icon';
-
 import { ModalProps } from '.';
 
 interface ProjectInfoModal extends ModalProps {}
@@ -92,7 +91,7 @@ const ProjectInfoModal: React.FunctionComponent<ProjectInfoModal> = ({
   return (
     <Container>
       <Heading>
-        <Text as="h2">tpscalls</Text>
+        <Text as="h2">tpscalls (beta 2.0)</Text>
         <IconButton
           size={40}
           iconProps={{ size: 25, name: 'x' }}
