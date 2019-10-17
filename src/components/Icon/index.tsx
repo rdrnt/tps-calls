@@ -10,7 +10,7 @@ import {
   FiLink,
 } from 'react-icons/fi';
 import { GoSearch } from 'react-icons/go';
-import { IoIosAlert, IoMdLocate } from 'react-icons/io';
+import { IoMdInformationCircle, IoMdLocate } from 'react-icons/io';
 
 export type IconNames =
   | 'slider'
@@ -32,7 +32,7 @@ const AllIcons: { [key in IconNames]?: React.ReactElement } = {
   x: <FiX />,
   calendar: <FiCalendar />,
   'right-arrow': <FiArrowRight />,
-  info: <IoIosAlert />,
+  info: <IoMdInformationCircle />,
   position: <IoMdLocate />,
   'chevron-down': <FiChevronDown />,
   'chevron-right': <FiChevronRight />,
