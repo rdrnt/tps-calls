@@ -12,13 +12,14 @@ interface DrawerFilterRow {
   onOpenChange?: (value: boolean) => void;
 }
 
-const Container = styled.div<{ showBorder?: boolean }>`
+const Container = styled.div<{ padBorder?: boolean }>`
   background-color: ${Colors.BACKGROUND_SECONDARY};
   width: 100%;
   display: flex;
   flex-direction: column;
-  border-bottom: ${props =>
-    props.showBorder ? `solid 1px ${Colors.BORDER}` : 'none'};
+
+  border-bottom: solid 1px ${Colors.BORDER};
+  ${props => props.padBorder && `padding-bottom: ${Sizes.SPACING / 2}px`};
 `;
 
 const Heading = styled.div`
@@ -50,7 +51,7 @@ const DrawerFilterRow: React.FunctionComponent<DrawerFilterRow> = ({
   }, [overrideOpen]);
 
   return (
-    <Container showBorder={!open}>
+    <Container padBorder={open}>
       <Heading>
         <Text as="h4">{title}</Text>
         <Switch value={open} onChange={toggleVisibility} />

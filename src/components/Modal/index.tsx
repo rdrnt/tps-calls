@@ -24,12 +24,11 @@ const StyledDialog = styled(Dialog)`
   padding: ${Sizes.SPACING}px;
   border-radius: 8px;
   z-index: 999;
-  min-width: 50vw;
+  min-width: 60vw;
   /* If the screen is under 600px */
   @media only screen and (max-width: 600px) {
     min-width: 85vw;
   }
-  width: auto;
 `;
 
 const Modal: React.FunctionComponent = ({}) => {
