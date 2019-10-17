@@ -41,7 +41,10 @@ const MapMarkerUserLocation: React.FunctionComponent<MapMarkerUserLocation> = ({
   coordinates,
 }) => {
   return (
-    <Marker coordinates={[coordinates.longitude, coordinates.latitude]}>
+    <Marker
+      coordinates={[coordinates.longitude, coordinates.latitude]}
+      style={{ zIndex: 0 }}
+    >
       <AnimatedDot initialPose="none" pose="animate" />
     </Marker>
   );
