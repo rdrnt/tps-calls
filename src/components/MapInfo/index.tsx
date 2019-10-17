@@ -80,7 +80,7 @@ const MapInfo: React.FunctionComponent<MapInfo> = ({
                 {DateHelper.formatIncidentDate(incident.date)}
               </Text>
             </IncidentContent>
-            <MapInfoExtraContent incidentId={incident.id} />
+            <MapInfoExtraContent incident={incident} />
           </Content>
         </Container>
       )}

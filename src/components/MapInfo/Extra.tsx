@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import posed, { PoseGroup } from 'react-pose';
-import { darken } from 'polished';
+import { Incident } from '@rdrnt/tps-calls-shared';
 // @ts-ignore
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { Sizes, Colors } from '../../config';
-import { createShareUrl } from '../../helpers';
+import { URL } from '../../helpers';
 
 import { Button, IconButton } from '../Button';
 
@@ -17,9 +17,8 @@ const ExtraContent = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-top: 1px solid ${Colors.BACKGROUND_SECONDARY};
+  border-top: 1px solid ${Colors.BORDER};
   height: 55px;
-  width: 100%;
 `;
 
 const ShowHideContent = posed.div({
@@ -32,16 +31,21 @@ const ShowHideContent = posed.div({
 });
 
 interface MapInfoExtraContent {
-  incidentId: string;
+  incident: Incident<any>;
 }
 
-const ActionContent = styled.div`
-  flex-grow: 1;
+const ActionContent = styled(ShowHideContent)`
   width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
+
+  > * {
+    :not(:last-child) {
+      margin-right: 5px;
+    }
+  }
 `;
 
 const ShareButton: React.FunctionComponent<{
@@ -58,7 +62,7 @@ const ShareButton: React.FunctionComponent<{
 );
 
 const MapInfoExtraContent: React.FunctionComponent<MapInfoExtraContent> = ({
-  incidentId,
+  incident,
 }) => {
   const [showingCopyMessage, toggleCopyMessage] = React.useState<boolean>(
     false
@@ -78,13 +82,19 @@ const MapInfoExtraContent: React.FunctionComponent<MapInfoExtraContent> = ({
             <Text as="span">Copied to clipboard</Text>
           </ShowHideContent>
         ) : (
-          <ShowHideContent key="share-button">
-            <ActionContent>
-              <CopyToClipboard text={createShareUrl(incidentId)}>
-                <ShareButton iconName="link" onClick={showCopyMessage} />
-              </CopyToClipboard>
-            </ActionContent>
-          </ShowHideContent>
+          <ActionContent key="actions">
+            {/* Copy link */}
+            <CopyToClipboard text={URL.createShareUrl(incident.id)}>
+              <ShareButton iconName="link" onClick={showCopyMessage} />
+            </CopyToClipboard>
+            {/* Twitter button */}
+            <a
+              className="twitter-share-button"
+              href={URL.createTwitterShareUrl(incident.id)}
+            >
+              <ShareButton iconName="twitter" />
+            </a>
+          </ActionContent>
         )}
       </PoseGroup>
     </ExtraContent>

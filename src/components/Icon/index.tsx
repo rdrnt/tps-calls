@@ -10,7 +10,11 @@ import {
   FiLink,
 } from 'react-icons/fi';
 import { GoSearch } from 'react-icons/go';
-import { IoMdInformationCircle, IoMdLocate } from 'react-icons/io';
+import {
+  IoMdInformationCircle,
+  IoMdLocate,
+  IoLogoTwitter,
+} from 'react-icons/io';
 
 export type IconNames =
   | 'slider'
@@ -23,7 +27,8 @@ export type IconNames =
   | 'position'
   | 'chevron-right'
   | 'chevron-down'
-  | 'link';
+  | 'link'
+  | 'twitter';
 
 const AllIcons: { [key in IconNames]?: React.ReactElement } = {
   slider: <FiSliders />,
@@ -37,6 +42,7 @@ const AllIcons: { [key in IconNames]?: React.ReactElement } = {
   'chevron-down': <FiChevronDown />,
   'chevron-right': <FiChevronRight />,
   link: <FiLink />,
+  twitter: <IoLogoTwitter />,
 };
 
 export interface IconProps {
