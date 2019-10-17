@@ -234,7 +234,14 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
         type="circle"
         id="marker"
         paint={{
-          'circle-radius': 6,
+          'circle-radius': {
+            stops: [
+              // [zoom, radius]
+              [9, 4],
+              [11, 6],
+              [14, 8],
+            ],
+          },
           // Gets the color from the feature properties
           'circle-color': Colors.PRIMARY,
           'circle-stroke-width': 1,
