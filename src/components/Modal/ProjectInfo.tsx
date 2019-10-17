@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import posed from 'react-pose';
 
-import Text from '../Text';
+import Text, { createTextStyles, DEFAULT_TEXT_STYLES } from '../Text';
 import { IconButton } from '../Button';
 import { Colors, Sizes } from '../../config';
 import Icon from '../Icon';
@@ -65,7 +65,13 @@ const InfoRow: React.FunctionComponent<{
   );
 };
 
-const Container = styled.div``;
+const Container = styled.div`
+  .extras {
+    a:not(:last-child) {
+      margin-bottom: ${Sizes.SPACING / 3}px;
+    }
+  }
+`;
 
 const Heading = styled.div`
   display: flex;
@@ -74,6 +80,10 @@ const Heading = styled.div`
   align-items: center;
   border-bottom: 1px solid ${Colors.BORDER};
   padding: ${Sizes.SPACING / 3}px 0;
+`;
+
+const ExternalLink = styled.a`
+  ${createTextStyles({ ...DEFAULT_TEXT_STYLES.p })};
 `;
 
 const ProjectInfoModal: React.FunctionComponent<ProjectInfoModal> = ({
@@ -95,6 +105,28 @@ const ProjectInfoModal: React.FunctionComponent<ProjectInfoModal> = ({
           <>
             <Text as="p">{`tpscalls.live is a real-time map of locations where the Toronto Police have responded to a call for service. These calls include incidents such as arrests, gun calls, collisions involving people or property, assaults, industrial accidents or disputes. Some calls for service will be, or are being, excluded for privacy reasons, including calls respecting domestic violence, sexual assault, or medical distress. Others calls may be excluded because they are part of an ongoing police operation.`}</Text>
           </>
+        }
+      />
+      <InfoRow
+        title="Bug report & feedback"
+        content={
+          <>
+            <Text as="p">{`I really appreciate feedback and help towards improving the site. If you would like to get in contact, you can find places to reach me below.`}</Text>
+          </>
+        }
+      />
+      <InfoRow
+        title="Extras"
+        content={
+          <div className="extras">
+            <ExternalLink href="mailto:contact@rileyyy.com">Email</ExternalLink>
+            <ExternalLink href="https://github.com/rdrnt/tps-calls">
+              Source code & Release notes
+            </ExternalLink>
+            <ExternalLink href="https://c4s.torontopolice.on.ca">
+              Inspiration
+            </ExternalLink>
+          </div>
         }
       />
     </Container>
