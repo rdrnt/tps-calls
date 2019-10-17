@@ -7,10 +7,12 @@ import {
   SliderHandle,
   // @ts-ignore missing types
 } from '@reach/slider';
-import '@reach/slider/styles.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { AppState } from '../../../../store';
 
 import { Colors, Sizes } from '../../../../config';
 import Text, { DEFAULT_TEXT_STYLES } from '../../../Text';
+import { setRequestingLocationPermissions } from '../../../../store/user/actions';
 
 export interface DistanceFilter {
   distance?: number;
@@ -36,10 +38,22 @@ const Container = styled.div`
   }
 `;
 
+const EnableButton = styled.button`
+  height: 20px;
+  width: 50px;
+  background-color: ${Colors.BACKGROUND};
+  border: none;
+`;
+
 const DistanceFilter: React.FunctionComponent<DistanceFilter> = ({
   distance = 0,
   setDistance,
 }) => {
+  const { available, coordinates } = useSelector(
+    (state: AppState) => state.user.location
+  );
+  const dispatch = useDispatch();
+
   const [initialDistance, setInitialDistance] = React.useState<number>(
     distance
   );
@@ -50,32 +64,55 @@ const DistanceFilter: React.FunctionComponent<DistanceFilter> = ({
 
   return (
     <Container>
-      <div className="row">
-        <Text as="p" weight="bold">
-          0
-        </Text>
-        <Slider
-          min={0}
-          max={15}
-          defaultValue={0}
-          name="distanceSlider"
-          value={initialDistance}
-          onChange={setInitialDistance}
-        >
-          <SliderTrack>
-            <SliderTrackHighlight />
-            <SliderHandle />
-          </SliderTrack>
-        </Slider>
-        <Text as="p" weight="bold">
-          15
-        </Text>
-      </div>
-      <div className="distanceValue">
-        <Text as="p" {...DEFAULT_TEXT_STYLES.h5}>
-          {`${initialDistance}km`}
-        </Text>
-      </div>
+      {available && coordinates ? (
+        <>
+          <div className="row">
+            <Text as="p" weight="bold">
+              0
+            </Text>
+            <Slider
+              min={0}
+              max={15}
+              defaultValue={0}
+              name="distanceSlider"
+              value={initialDistance}
+              onChange={setInitialDistance}
+            >
+              <SliderTrack>
+                <SliderTrackHighlight />
+                <SliderHandle />
+              </SliderTrack>
+            </Slider>
+            <Text as="p" weight="bold">
+              15
+            </Text>
+          </div>
+          <div className="distanceValue">
+            <Text as="p" {...DEFAULT_TEXT_STYLES.h5}>
+              {`${initialDistance}km`}
+            </Text>
+          </div>
+        </>
+      ) : (
+        <div className="distanceValue">
+          <Text as="span" size={11} secondaryFont={true}>
+            Location services must be enabled.
+          </Text>
+          <EnableButton
+            type="button"
+            onClick={() => dispatch(setRequestingLocationPermissions(true))}
+          >
+            <Text
+              as="span"
+              secondaryFont={true}
+              color={Colors.PRIMARY}
+              size={11}
+            >
+              enable
+            </Text>
+          </EnableButton>
+        </div>
+      )}
     </Container>
   );
 };
