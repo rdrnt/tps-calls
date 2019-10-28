@@ -11,7 +11,6 @@ import {
   setFilterOldestDate,
 } from '../../store/incidents/actions';
 import { AppState } from '../../store';
-import { openLoader, closeLoader } from '../../store/ui/actions';
 import { IncidentFilterState } from '../../store/incidents';
 
 const IncidentListener: React.FunctionComponent = ({}) => {
@@ -34,6 +33,11 @@ const IncidentListener: React.FunctionComponent = ({}) => {
     IncidentFilterState
   >({});
 
+  // Store the list of incidents for a specific date
+  const [incidentsAtDate, setIncidentsAtDate] = React.useState<Incident<any>[]>(
+    []
+  );
+
   const loadOldestIncidentDate = async () => {
     const oldestIncident: Incident<
       any
@@ -44,7 +48,9 @@ const IncidentListener: React.FunctionComponent = ({}) => {
   // Set the listener
   React.useEffect(() => {
     const incidentListener = Firebase.incidents.listener(newIncidents => {
+      // Set the incidents in the store
       setIncidents(newIncidents);
+      // Set the default incidents
       setDefaultIncidentList(newIncidents);
 
       // Sets the newest incident for filtering
@@ -60,6 +66,7 @@ const IncidentListener: React.FunctionComponent = ({}) => {
       dispatch(setFilterNewestDate(newestIncident.date));
     });
 
+    // set the oldest date for filtering
     loadOldestIncidentDate();
 
     return () => {
@@ -73,23 +80,45 @@ const IncidentListener: React.FunctionComponent = ({}) => {
   const applyFilters = async () => {
     try {
       let filteredIncidents: Incident<any>[] = [];
-      let incidentsToFilter = [...defaultIncidentList];
 
-      // If we have a start date & end date to filter, and its not the same as the previous filters
-      const hasDateFilters = Boolean(filter.startDate && filter.endDate);
-      const dateFiltersDifferent =
-        previousFilters.startDate !== filter.startDate ||
-        previousFilters.endDate !== filter.endDate;
-      if (hasDateFilters && dateFiltersDifferent) {
-        dispatch(openLoader('Filtering...'));
-        const incidentsAtDate = await Firebase.incidents.getIncidentsAtDate({
-          startDate: filter.startDate!,
-          endDate: filter.endDate!,
-        });
+      const getIncidentsToFilter = async () => {
+        const hasDateFilters = Boolean(filter.startDate && filter.endDate);
+        const dateFiltersDifferent =
+          previousFilters.startDate !== filter.startDate ||
+          previousFilters.endDate !== filter.endDate;
+        // Check if we have date filters
+        if (hasDateFilters) {
+          // If we have date filters, but they're different, get the incidents for that date
+          if (dateFiltersDifferent) {
+            const incidentsForDate = await Firebase.incidents.getIncidentsAtDate(
+              {
+                startDate: filter.startDate!,
+                endDate: filter.endDate!,
+              }
+            );
 
-        incidentsToFilter = [...incidentsAtDate];
-        filteredIncidents.push(...incidentsAtDate);
-        dispatch(closeLoader());
+            setIncidentsAtDate(incidentsForDate);
+
+            return incidentsForDate;
+          } else {
+            // If the date filters are the same, fallback on the previous incidents from that date
+            return incidentsAtDate;
+          }
+        }
+
+        // If we're not fitering by date, return the default incident list
+        return defaultIncidentList;
+      };
+
+      const incidentsToFilter = await getIncidentsToFilter();
+
+      // If we're only filtering by date, set the filtered incidents to the date
+      if (
+        filter.startDate &&
+        filter.endDate &&
+        Object.keys(filter).length == 2
+      ) {
+        filteredIncidents.push(...incidentsToFilter);
       }
 
       if (
