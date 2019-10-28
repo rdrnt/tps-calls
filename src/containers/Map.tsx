@@ -54,7 +54,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
     DEFAULTS.longitude,
     DEFAULTS.latitude,
   ]);
-  const [mapState, setMapState] = React.useState<MapState | undefined>();
+
   const [isMapLoaded, setIsMapLoaded] = React.useState<boolean>(false);
   const [interactingWithMap, setInteractingWithMap] = React.useState<boolean>(
     false
@@ -113,20 +113,8 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
   }, [user.location.coordinates]);
 
   React.useEffect(() => {
+    // If the selected incident changes, zoom into it
     if (incidents.selected && mapRef.current) {
-      // Save the previous position
-      const currentPosition: {
-        lat: number;
-        lng: number;
-      } = mapRef.current.getCenter();
-      setMapState({
-        zoom: mapRef.current.getZoom(),
-        position: {
-          latitude: currentPosition.lat,
-          longitude: currentPosition.lng,
-        },
-      });
-
       mapRef.current.flyTo({
         center: [
           incidents.selected.coordinates.longitude,
@@ -135,15 +123,6 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
         speed: 1,
         zoom: 15,
       });
-    } else if (!incidents.selected && mapRef.current && mapState) {
-      // if the incident is unselected, and we have the map state
-      // go back to their original position before they selected the incident
-      mapRef.current.flyTo({
-        center: [mapState.position.longitude, mapState.position.latitude],
-        speed: 1,
-        zoom: mapState.zoom,
-      });
-      setMapState(undefined);
     }
   }, [incidents.selected]);
 
