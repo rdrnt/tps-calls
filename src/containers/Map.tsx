@@ -17,7 +17,7 @@ import { setSelectedIncident } from '../store/incidents/actions';
 import { setRequestingLocationPermissions } from '../store/user/actions';
 import { MAPBOX_THEME_URL, Colors, Sizes } from '../config';
 import { useScreenSize } from '../helpers/hooks';
-import { Environment, Permissions } from '../helpers';
+import { Environment, Analytics } from '../helpers';
 
 import MapInfo from '../components/MapInfo';
 import MapOverlayButton from '../components/MapOverlayButton';
@@ -66,6 +66,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
     // if the map isn't loaded, show the loader
     if (!isMapLoaded && !ui.loader.open) {
       dispatch(openLoader('Loading map...'));
+      Analytics.pageview('/map');
     }
 
     // if the map has been loaded, and we have a list of incidents

@@ -3,7 +3,7 @@ import { createGlobalStyle } from 'styled-components';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import { Firebase } from './helpers';
+import { Firebase, Analytics } from './helpers';
 
 import Map from './containers/Map';
 
@@ -30,6 +30,7 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 Firebase.initialize();
+Analytics.initialize();
 
 const App: React.FunctionComponent = () => (
   <>

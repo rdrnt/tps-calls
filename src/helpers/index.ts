@@ -5,5 +5,14 @@ import * as Translate from './translate';
 export * from './hooks';
 import * as URL from './url';
 import * as Permissions from './permissions';
+import * as Analytics from './analytics';
 
-export { Environment, Firebase, DateHelper, Translate, URL, Permissions };
+export {
+  Environment,
+  Firebase,
+  DateHelper,
+  Translate,
+  URL,
+  Permissions,
+  Analytics,
+};
