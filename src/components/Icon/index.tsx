@@ -14,9 +14,11 @@ import {
   IoMdInformationCircle,
   IoMdLocate,
   IoLogoTwitter,
+  IoMdAlert,
 } from 'react-icons/io';
 
 export type IconNames =
+  | 'alert'
   | 'slider'
   | 'search'
   | 'menu'
@@ -31,6 +33,7 @@ export type IconNames =
   | 'twitter';
 
 const AllIcons: { [key in IconNames]?: React.ReactElement } = {
+  alert: <IoMdAlert />,
   slider: <FiSliders />,
   search: <GoSearch />,
   menu: <FiMenu />,
