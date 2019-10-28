@@ -94,7 +94,6 @@ const ProjectInfoModal: React.FunctionComponent<ProjectInfoModal> = ({
     Analytics.event({
       category: 'UI',
       action: Analytics.UI.SHOW_PROJECT_INFO,
-      nonInteraction: true,
     });
   }, []);
 
