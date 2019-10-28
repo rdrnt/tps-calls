@@ -76,25 +76,19 @@ const IncidentListener: React.FunctionComponent = ({}) => {
       let incidentsToFilter = [...defaultIncidentList];
 
       // If we have a start date & end date to filter, and its not the same as the previous filters
-      if (
-        (Boolean(filter.startDate && filter.endDate) &&
-          previousFilters.startDate !== filter.startDate) ||
-        previousFilters.endDate !== filter.endDate
-      ) {
+      const hasDateFilters = Boolean(filter.startDate && filter.endDate);
+      const dateFiltersDifferent =
+        previousFilters.startDate !== filter.startDate ||
+        previousFilters.endDate !== filter.endDate;
+      if (hasDateFilters && dateFiltersDifferent) {
         dispatch(openLoader('Filtering...'));
-        const incidentDateDocs = await Firebase.firebase
-          .firestore()
-          .collection(FirestoreCollections.INCIDENTS)
-          .orderBy('date', 'desc')
-          .where('date', '>=', filter.startDate)
-          .where('date', '<=', filter.endDate)
-          .get();
+        const incidentsAtDate = await Firebase.incidents.getIncidentsAtDate({
+          startDate: filter.startDate!,
+          endDate: filter.endDate!,
+        });
 
-        const dateIncidents = incidentDateDocs.docs.map(incidentDoc => ({
-          ...(incidentDoc.data() as Incident<any>),
-        }));
-
-        incidentsToFilter = [...dateIncidents];
+        incidentsToFilter = [...incidentsAtDate];
+        filteredIncidents.push(...incidentsAtDate);
         dispatch(closeLoader());
       }
 
