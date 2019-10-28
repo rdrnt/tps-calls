@@ -81,12 +81,16 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
 
       // If we have an id in the params, see if there's a matching incident in the list
       const { id } = match.params;
-      const matchingIncident: Incident<any> | undefined = id
-        ? incidents.list.find(incident => incident.id === id)
-        : undefined;
-      // If there is a matching incident, set it as the selected incident
-      if (matchingIncident) {
-        dispatch(setSelectedIncident(matchingIncident));
+      if (id) {
+        const matchingIncident: Incident<any> | undefined = incidents.list.find(
+          incident => incident.id === id
+        );
+        if (matchingIncident) {
+          // If there is a matching incident, set it as the selected incident
+          dispatch(setSelectedIncident(matchingIncident));
+        } else {
+          dispatch(showToast('Incident no longer exists.'));
+        }
       }
     }
   }, [isMapLoaded, incidents.list.length, match.params.id]);
@@ -116,7 +120,6 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
   React.useEffect(() => {
     // If the selected incident changes, zoom into it
     if (incidents.selected && mapRef.current) {
-      dispatch(showToast('No incident found for that id'));
       mapRef.current.flyTo({
         center: [
           incidents.selected.coordinates.longitude,

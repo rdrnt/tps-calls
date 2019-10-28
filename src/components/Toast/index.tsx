@@ -14,11 +14,11 @@ interface Toast {}
 const AnimatedContainer = posed.div({
   enter: {
     opacity: 1,
-    y: Sizes.SPACING + Sizes.SPACING / 2,
+    top: Sizes.SPACING + Sizes.SPACING / 2,
   },
   exit: {
     opacity: 0,
-    y: 0,
+    top: 0,
   },
 });
 
@@ -28,7 +28,6 @@ const Container = styled(AnimatedContainer)`
   align-items: center;
   justify-content: flex-start;
   position: absolute;
-  top: 0;
   left: ${props => `calc(50% - ${props.width / 2}px)`};
   z-index: ${ZIndex.TOAST};
   border-radius: 20px;
