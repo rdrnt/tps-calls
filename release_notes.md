@@ -1,3 +1,9 @@
+# v2.0.0
+
+- Complete rewrite
+
+- New design
+
 # v1.5.1 (Too small of a change)
 
 - Added page title
@@ -13,5 +19,5 @@
 - Added refresh button to Drawer
 
 - Added refresh Snackbar
-  
+
 - Added release notes script
