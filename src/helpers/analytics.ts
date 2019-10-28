@@ -2,17 +2,7 @@ import * as Sentry from '@sentry/browser';
 import ReactGA from 'react-ga';
 import { Environment } from '.';
 
-export enum EventCategory {
-  UI = 'UI',
-}
-
-export enum EventAction {
-  SHARE_TWITTER = 'Shared incident via twitter',
-  SHARE_URL = 'Shared incident via url',
-  SHOW_PROJECT_INFO = 'Show project info modal',
-  TRACK_LOCATION = 'Track',
-}
-
+// Initializes the analytics
 export const initialize = () => {
   const { SENTRY_DSN, GOOGLEANALYTICS_KEY } = Environment.config;
 
@@ -25,8 +15,31 @@ export const initialize = () => {
   }
 };
 
+export type EventCategory = 'UI';
+
+// The actions for the UI
+export enum UI {
+  SHARE_TWITTER = 'Shared incident via twitter',
+  SHARE_URL = 'Shared incident via url',
+  SHOW_PROJECT_INFO = 'Show project info modal',
+}
+
 export const pageview = (path: string) => {
   ReactGA.pageview(path);
 };
 
-export const event = {};
+interface EventParams {
+  category: EventCategory;
+  action: UI;
+  label?: string;
+  nonInteraction?: boolean;
+}
+
+export const event = ({
+  category,
+  action,
+  label,
+  nonInteraction,
+}: EventParams) => {
+  ReactGA.event({ category, action, label, nonInteraction });
+};

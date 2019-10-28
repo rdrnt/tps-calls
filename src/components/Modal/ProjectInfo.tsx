@@ -8,6 +8,8 @@ import { Colors, Sizes } from '../../config';
 import Icon from '../Icon';
 import { ModalProps } from '.';
 
+import { Analytics } from '../../helpers';
+
 interface ProjectInfoModal extends ModalProps {}
 
 const InfoRowContainer = styled.div`
@@ -88,6 +90,14 @@ const ExternalLink = styled.a`
 const ProjectInfoModal: React.FunctionComponent<ProjectInfoModal> = ({
   close,
 }) => {
+  React.useEffect(() => {
+    Analytics.event({
+      category: 'UI',
+      action: Analytics.UI.SHOW_PROJECT_INFO,
+      nonInteraction: true,
+    });
+  }, []);
+
   return (
     <Container>
       <Heading>
