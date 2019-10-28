@@ -1,3 +1,13 @@
+# v2.0.2
+
+- Toast component
+
+- Fixes filtering by date
+
+- Analytics
+
+- Show toast if invalid share URL/id on map load
+
 # v2.0.0
 
 - Complete rewrite
