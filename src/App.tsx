@@ -14,6 +14,7 @@ import store from './store';
 import Drawer from './components/Drawer';
 import Loader from './components/Loader';
 import Modal from './components/Modal';
+import Toast from './components/Toast';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -42,6 +43,7 @@ const App: React.FunctionComponent = () => (
         <Loader />
         <Drawer />
         <Modal />
+        <Toast />
         <Switch>
           <Route path={['/:id', '/']} component={Map} />
         </Switch>

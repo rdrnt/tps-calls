@@ -11,6 +11,10 @@ export interface UIState {
     open: boolean;
     type?: ModalTypes;
   };
+  toast: {
+    open: boolean;
+    message?: string;
+  };
 }
 
 export const INITIAL_STATE: UIState = {
@@ -22,6 +26,9 @@ export const INITIAL_STATE: UIState = {
   modal: {
     open: false,
   },
+  toast: {
+    open: false,
+  },
 };
 
 export enum UIActions {
@@ -30,6 +37,8 @@ export enum UIActions {
   CLOSE_LOADER = 'CLOSE_LOADER',
   OPEN_MODAL = 'OPEN_MODAL',
   CLOSE_MODAL = 'CLOSE_MODAL',
+  SHOW_TOAST = 'SHOW_TOAST',
+  CLOSE_TOAST = 'CLOSE_TOAST',
 }
 
 export interface ToggleDrawerAction {
@@ -63,9 +72,23 @@ export interface CloseModalAction {
   payload: {};
 }
 
+export interface ShowToastAction {
+  type: UIActions.SHOW_TOAST;
+  payload: {
+    message: string;
+  };
+}
+
+export interface CloseToastAction {
+  type: UIActions.CLOSE_TOAST;
+  payload: {};
+}
+
 export type UIActionType =
   | ToggleDrawerAction
   | OpenLoaderAction
   | CloseLoaderAction
   | OpenModalAction
-  | CloseModalAction;
+  | CloseModalAction
+  | ShowToastAction
+  | CloseToastAction;

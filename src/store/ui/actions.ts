@@ -42,3 +42,19 @@ export function closeModal(): UIActionType {
     payload: {},
   };
 }
+
+export function showToast(message: string): UIActionType {
+  return {
+    type: UIActions.SHOW_TOAST,
+    payload: {
+      message,
+    },
+  };
+}
+
+export function closeToast(): UIActionType {
+  return {
+    type: UIActions.CLOSE_TOAST,
+    payload: {},
+  };
+}

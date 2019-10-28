@@ -19,5 +19,12 @@ export enum Sizes {
 export enum Defaults {
   SECONDARY_FONT = 'Helvetica',
 }
+
+export enum ZIndex {
+  DRAWER = 1,
+  TOAST = 2,
+  MODAL = 3,
+}
+
 export const MAPBOX_THEME_URL =
   'mapbox://styles/drnt/cjmwb7zbo1f5b2ro8sqfdkaql';

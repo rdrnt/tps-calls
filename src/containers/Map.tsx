@@ -12,6 +12,7 @@ import {
   openLoader,
   closeLoader,
   openModal,
+  showToast,
 } from '../store/ui/actions';
 import { setSelectedIncident } from '../store/incidents/actions';
 import { setRequestingLocationPermissions } from '../store/user/actions';
@@ -115,6 +116,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
   React.useEffect(() => {
     // If the selected incident changes, zoom into it
     if (incidents.selected && mapRef.current) {
+      dispatch(showToast('No incident found for that id'));
       mapRef.current.flyTo({
         center: [
           incidents.selected.coordinates.longitude,

@@ -41,6 +41,21 @@ export function uiReducer(
           open: false,
         },
       };
+    case UIActions.SHOW_TOAST:
+      return {
+        ...state,
+        toast: {
+          open: true,
+          message: action.payload.message,
+        },
+      };
+    case UIActions.CLOSE_TOAST:
+      return {
+        ...state,
+        toast: {
+          open: false,
+        },
+      };
     default:
       return state;
   }
