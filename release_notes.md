@@ -1,3 +1,11 @@
+# v2.0.3
+
+- Hide map buttons depending on conditions
+
+- Analytics for sharing incidents
+
+- Small changes to the project structure
+
 # v2.0.2
 
 - Toast component
