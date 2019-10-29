@@ -19,8 +19,8 @@ export type EventCategory = 'UI';
 
 // The actions for the UI
 export enum UI {
-  SHARE_TWITTER = 'Shared incident via twitter',
-  SHARE_URL = 'Shared incident via url',
+  SHARE_INCIDENT_TWITTER = 'Shared incident via Twitter',
+  SHARE_INCIDENT_URL = 'Shared incident via URL',
   SHOW_PROJECT_INFO = 'Show project info modal',
 }
 

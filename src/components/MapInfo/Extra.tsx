@@ -6,7 +6,7 @@ import { Incident } from '@rdrnt/tps-calls-shared';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { Sizes, Colors } from '../../config';
-import { URL } from '../../helpers';
+import { URL, Analytics } from '../../helpers';
 
 import { Button, IconButton } from '../Button';
 
@@ -74,6 +74,7 @@ const MapInfoExtraContent: React.FunctionComponent<MapInfoExtraContent> = ({
       toggleCopyMessage(false);
     }, 1200);
   };
+
   return (
     <ExtraContent>
       <PoseGroup>
@@ -85,7 +86,16 @@ const MapInfoExtraContent: React.FunctionComponent<MapInfoExtraContent> = ({
           <ActionContent key="actions">
             {/* Copy link */}
             <CopyToClipboard text={URL.createShareUrl(incident.id)}>
-              <ShareButton iconName="link" onClick={showCopyMessage} />
+              <ShareButton
+                iconName="link"
+                onClick={() => {
+                  showCopyMessage();
+                  Analytics.event({
+                    category: 'UI',
+                    action: Analytics.UI.SHARE_INCIDENT_URL,
+                  });
+                }}
+              />
             </CopyToClipboard>
             {/* Twitter button */}
             <a
@@ -94,7 +104,15 @@ const MapInfoExtraContent: React.FunctionComponent<MapInfoExtraContent> = ({
               target="_blank"
               rel="noopener noreferrer"
             >
-              <ShareButton iconName="twitter" />
+              <ShareButton
+                iconName="twitter"
+                onClick={() => {
+                  Analytics.event({
+                    category: 'UI',
+                    action: Analytics.UI.SHARE_INCIDENT_TWITTER,
+                  });
+                }}
+              />
             </a>
           </ActionContent>
         )}
