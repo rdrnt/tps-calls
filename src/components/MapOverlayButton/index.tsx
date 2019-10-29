@@ -20,6 +20,7 @@ interface MapOverlayButton {
   color?: string;
   hoverColor?: string;
   size?: number;
+  hidden: boolean;
 }
 
 const AnimatedContainer = posed.button({
@@ -57,18 +58,28 @@ const MapOverlayButton: React.FunctionComponent<MapOverlayButton> = ({
   hoverColor = Colors.PRIMARY,
   iconName,
   size = 25,
+  hidden,
 }) => {
   const [hovering, hoverProps] = onHover();
 
   return (
-    <Container
-      type="button"
-      onClick={onClick}
-      position={position}
-      {...hoverProps}
-    >
-      <Icon name={iconName} size={size} color={hovering ? hoverColor : color} />
-    </Container>
+    <PoseGroup>
+      {!hidden && (
+        <Container
+          key={`overlay-${iconName}`}
+          type="button"
+          onClick={onClick}
+          position={position}
+          {...hoverProps}
+        >
+          <Icon
+            name={iconName}
+            size={size}
+            color={hovering ? hoverColor : color}
+          />
+        </Container>
+      )}
+    </PoseGroup>
   );
 };
 

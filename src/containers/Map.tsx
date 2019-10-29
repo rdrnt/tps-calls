@@ -166,36 +166,31 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
         }
       }}
     >
-      <PoseGroup>
-        {!ui.drawerOpen && [
-          <MapOverlayButton
-            key="drawerButton"
-            onClick={() => dispatch(toggleDrawer(true))}
-            iconName="menu"
-            position={{ top: Sizes.SPACING, left: Sizes.SPACING }}
-          />,
-          <MapOverlayButton
-            key="infoButton"
-            onClick={() => dispatch(openModal('project-info'))}
-            iconName="info"
-            position={{ bottom: Sizes.SPACING, right: Sizes.SPACING }}
-            size={30}
-          />,
-          ...(user.location.available
-            ? [
-                <MapOverlayButton
-                  key="locationButton"
-                  onClick={() =>
-                    dispatch(setRequestingLocationPermissions(true))
-                  }
-                  iconName="position"
-                  position={{ bottom: Sizes.SPACING, right: Sizes.SPACING * 4 }}
-                  size={30}
-                />,
-              ]
-            : []),
-        ]}
-      </PoseGroup>
+      {/* Overlay button for opening the drawer */}
+      <MapOverlayButton
+        hidden={ui.drawerOpen}
+        onClick={() => dispatch(toggleDrawer(true))}
+        iconName="menu"
+        position={{ top: Sizes.SPACING, left: Sizes.SPACING }}
+      />
+      {/* Overlay button for opening the project info */}
+      <MapOverlayButton
+        hidden={Boolean(ui.drawerOpen || incidents.selected)}
+        onClick={() => dispatch(openModal('project-info'))}
+        iconName="info"
+        position={{ bottom: Sizes.SPACING, right: Sizes.SPACING }}
+        size={30}
+      />
+      {/* Overlay button for users location */}
+      <MapOverlayButton
+        hidden={Boolean(
+          ui.drawerOpen || incidents.selected || !user.location.available
+        )}
+        onClick={() => dispatch(setRequestingLocationPermissions(true))}
+        iconName="position"
+        position={{ bottom: Sizes.SPACING, right: Sizes.SPACING * 4 }}
+        size={30}
+      />
 
       <MapInfo incident={incidents.selected} drawerOpen={ui.drawerOpen} />
 
