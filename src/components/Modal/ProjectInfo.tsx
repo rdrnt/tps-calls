@@ -100,7 +100,7 @@ const ProjectInfoModal: React.FunctionComponent<ProjectInfoModal> = ({
   return (
     <Container>
       <Heading>
-        <Text as="h2">tpscalls (beta 2.0)</Text>
+        <Text as="h2">tpscalls</Text>
         <IconButton
           size={40}
           iconProps={{ size: 25, name: 'x' }}
