@@ -22,11 +22,6 @@ import MapInfo from '../components/MapInfo';
 import MapOverlayButton from '../components/MapOverlayButton';
 import AnimatedMapMarker from '../components/MapMarker/Animated';
 
-interface MapState {
-  position: Coordinates;
-  zoom: number;
-}
-
 const DEFAULTS = {
   latitude: 43.653225,
   longitude: -79.383186,
