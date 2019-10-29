@@ -3,12 +3,9 @@ import { createGlobalStyle } from 'styled-components';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import { Firebase, Analytics } from './helpers';
-
 import Map from './containers/Map';
 
-import IncidentListener from './components/IncidentListener';
-import { LocationListener } from './components/Listeners';
+import { LocationListener, IncidentListener } from './components/Listeners';
 
 import store from './store';
 import Drawer from './components/Drawer';
@@ -29,9 +26,6 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 `;
-
-Firebase.initialize();
-Analytics.initialize();
 
 const App: React.FunctionComponent = () => (
   <>

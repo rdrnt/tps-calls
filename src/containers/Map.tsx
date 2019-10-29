@@ -3,9 +3,7 @@ import { AppState } from '../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { Coordinates, Incident } from '@rdrnt/tps-calls-shared';
 import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
-import { darken } from 'polished';
 import { match } from 'react-router';
-import { PoseGroup } from 'react-pose';
 
 import {
   toggleDrawer,

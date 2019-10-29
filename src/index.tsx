@@ -7,6 +7,11 @@ import '@reach/tooltip/styles.css';
 
 import App from './App';
 
+import { Firebase, Analytics } from './helpers';
+
+Firebase.initialize();
+Analytics.initialize();
+
 const root = document.createElement('div');
 document.body.appendChild(root);
 
