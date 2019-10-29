@@ -2,7 +2,7 @@
 
 Real-time mapping of locations where the Toronto Police have responded to a call for service. These calls include incidents such as arrests,gun calls, collisions involving people or property, assaults, industrial accidents or disputes. Some calls for service will be, or are being, excluded for privacy reasons, including calls respecting domestic violence, sexual assault, or medical distress. Others calls may be excluded because they are part of an ongoing police operation.
 
-Built with React + Redux + react-map-gl + material-ui.
+Built with React + Redux + react-mapbox-gl + styled-components.
 
 ## Contributions
 
@@ -19,11 +19,6 @@ When commiting, please try your best to use [this](http://karma-runner.github.io
 - Add @TPSOperations related tweet to the selected incident. (Hint, there's an associated ID)
 - Toast
   - Invalid location
-  - Cant find incident
-
-### General
-
-- Update README with release notes
 
 ## Building
 
@@ -54,6 +49,6 @@ REACT_APP_SENTRY_DSN
 @rdrnt:registry=https://npm.pkg.github.com
 ```
 
-# License
+## License
 
 [GPL-3.0 License](https://www.gnu.org/licenses/gpl-3.0.en.html).
