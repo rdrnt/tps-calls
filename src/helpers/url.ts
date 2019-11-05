@@ -22,7 +22,7 @@ export const createTwitterShareUrl = (incident: Incident<any>) => {
     incident.id
   )}`;
 
-  url += `?text=${tweetText}`;
+  url += `?text=${encodeURIComponent(tweetText)}`;
 
-  return encodeURI(url);
+  return url;
 };
