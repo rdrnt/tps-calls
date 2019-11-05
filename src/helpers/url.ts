@@ -22,7 +22,11 @@ export const createTwitterShareUrl = (incident: Incident<any>) => {
     incident.id
   )}`;
 
-  url += `?text=${encodeURIComponent(tweetText)}`;
+  const tweetHashtags = '?hashtags=tpscalls';
+
+  url += tweetHashtags;
+
+  url += `&text=${encodeURIComponent(tweetText)}`;
 
   return url;
 };
