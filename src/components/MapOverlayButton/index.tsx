@@ -48,7 +48,7 @@ const Container = styled(AnimatedContainer)<{
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 4px 9px 1px rgba(0, 0, 0, 0.7);
 `;
 
 const MapOverlayButton: React.FunctionComponent<MapOverlayButton> = ({
