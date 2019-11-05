@@ -1,17 +1,18 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import posed, { PoseGroup } from 'react-pose';
+import posed from 'react-pose';
 import { Incident } from '@rdrnt/tps-calls-shared';
 // @ts-ignore
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
-import { Sizes, Colors } from '../../config';
+import { Colors } from '../../config';
 import { URL, Analytics } from '../../helpers';
 
-import { Button, IconButton } from '../Button';
+import { IconButton } from '../Button';
 
-import Text from '../Text';
 import { IconNames } from '../Icon';
+import { useDispatch } from 'react-redux';
+import { showToast } from '../../store/ui/actions';
 
 const ExtraContent = styled.div`
   display: flex;
@@ -21,20 +22,11 @@ const ExtraContent = styled.div`
   height: 55px;
 `;
 
-const ShowHideContent = posed.div({
-  enter: {
-    opacity: 1,
-  },
-  exit: {
-    opacity: 0,
-  },
-});
-
 interface MapInfoExtraContent {
   incident: Incident<any>;
 }
 
-const ActionContent = styled(ShowHideContent)`
+const ActionContent = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -64,59 +56,41 @@ const ShareButton: React.FunctionComponent<{
 const MapInfoExtraContent: React.FunctionComponent<MapInfoExtraContent> = ({
   incident,
 }) => {
-  const [showingCopyMessage, toggleCopyMessage] = React.useState<boolean>(
-    false
-  );
-
-  const showCopyMessage = () => {
-    toggleCopyMessage(true);
-    setTimeout(() => {
-      toggleCopyMessage(false);
-    }, 1200);
-  };
-
+  const dispatch = useDispatch();
   return (
     <ExtraContent>
-      <PoseGroup>
-        {showingCopyMessage ? (
-          <ShowHideContent key="share-text">
-            <Text as="span">Copied to clipboard</Text>
-          </ShowHideContent>
-        ) : (
-          <ActionContent key="actions">
-            {/* Copy link */}
-            <CopyToClipboard text={URL.createShareUrl(incident.id)}>
-              <ShareButton
-                iconName="link"
-                onClick={() => {
-                  showCopyMessage();
-                  Analytics.event({
-                    category: 'UI',
-                    action: Analytics.UI.SHARE_INCIDENT_URL,
-                  });
-                }}
-              />
-            </CopyToClipboard>
-            {/* Twitter button */}
-            <a
-              className="twitter-share-button"
-              href={URL.createTwitterShareUrl(incident)}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <ShareButton
-                iconName="twitter"
-                onClick={() => {
-                  Analytics.event({
-                    category: 'UI',
-                    action: Analytics.UI.SHARE_INCIDENT_TWITTER,
-                  });
-                }}
-              />
-            </a>
-          </ActionContent>
-        )}
-      </PoseGroup>
+      <ActionContent>
+        {/* Copy link */}
+        <CopyToClipboard text={URL.createShareUrl(incident.id)}>
+          <ShareButton
+            iconName="link"
+            onClick={() => {
+              dispatch(showToast('Copied to clipboard'));
+              Analytics.event({
+                category: 'UI',
+                action: Analytics.UI.SHARE_INCIDENT_URL,
+              });
+            }}
+          />
+        </CopyToClipboard>
+        {/* Twitter button */}
+        <a
+          className="twitter-share-button"
+          href={URL.createTwitterShareUrl(incident)}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <ShareButton
+            iconName="twitter"
+            onClick={() => {
+              Analytics.event({
+                category: 'UI',
+                action: Analytics.UI.SHARE_INCIDENT_TWITTER,
+              });
+            }}
+          />
+        </a>
+      </ActionContent>
     </ExtraContent>
   );
 };
