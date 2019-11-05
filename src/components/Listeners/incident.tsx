@@ -138,9 +138,16 @@ const IncidentListener: React.FunctionComponent = ({}) => {
       }
 
       if (filter.search) {
-        const matchingSearchIncidents = incidentsToFilter.filter(incident =>
-          incident.name.toLowerCase().includes(filter.search!.toLowerCase())
-        );
+        const matchingSearchIncidents = incidentsToFilter.filter(incident => {
+          const nameMatch = incident.name
+            .toLowerCase()
+            .includes(filter.search!.toLowerCase());
+          const locationMatch = incident.location
+            .toLowerCase()
+            .includes(filter.search!.toLowerCase());
+
+          return nameMatch || locationMatch;
+        });
         filteredIncidents.push(...matchingSearchIncidents);
       }
 
