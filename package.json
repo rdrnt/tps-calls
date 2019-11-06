@@ -1,6 +1,6 @@
 {
   "name": "tps-calls",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "private": true,
   "scripts": {
     "start": "webpack-dev-server --config webpack.dev.js",
