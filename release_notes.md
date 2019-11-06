@@ -1,3 +1,13 @@
+# v2.0.4
+
+- Fixes Twitter sharing text not being encoded
+
+- Add close button to Selected Incident info (animates to previous map position)
+
+- Improved Toast styles & usage
+
+- Search for incidents by name or location
+
 # v2.0.3
 
 - Hide map buttons depending on conditions
