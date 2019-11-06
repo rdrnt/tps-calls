@@ -31,7 +31,7 @@ const ActionContent = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   flex-grow: 1;
 
   > * {
@@ -93,13 +93,6 @@ const MapInfoExtraContent: React.FunctionComponent<MapInfoExtraContent> = ({
           />
         </a>
       </ActionContent>
-      <IconButton
-        size={22}
-        backgroundColor={Colors.TEXT_SECONDARY}
-        borderRadius={15}
-        iconProps={{ size: 15, name: 'x', color: 'white' }}
-        onClick={close}
-      />
     </ExtraContent>
   );
 };

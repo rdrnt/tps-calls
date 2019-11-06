@@ -62,7 +62,9 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
 
   const mapRef = React.useRef<any>();
 
+  // Unselects the selected incident and animates to the users original position
   const unselectIncidentWithAnimation = (animated?: boolean) => {
+    // Clear the selected incident
     dispatch(setSelectedIncident(undefined));
 
     // If we have the map state, go back to their original position
@@ -75,6 +77,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
       });
     }
 
+    // Reset the map state
     setMapState(undefined);
   };
 
@@ -159,7 +162,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
     }
   }, [incidents.selected]);
 
-  // if the screen size changes, resize the map
+  // If the screen size changes, resize the map
   React.useEffect(() => {
     if (mapRef.current) {
       mapRef.current.resize();

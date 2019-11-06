@@ -6,6 +6,7 @@ import { Incident } from '@rdrnt/tps-calls-shared';
 import { DateHelper } from '../../helpers';
 import { Sizes, Colors } from '../../config';
 import Text from '../Text';
+import { IconButton } from '../Button';
 
 import MapInfoExtraContent from './Extra';
 
@@ -52,9 +53,22 @@ const Content = styled.div`
 
 const IncidentContent = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  /* Incident info */
+  > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  > button {
+    margin-left: 5px;
+    min-width: 17px;
+  }
 `;
 
 interface MapIncidentInfo {
@@ -74,13 +88,24 @@ const MapIncidentInfo: React.FunctionComponent<MapIncidentInfo> = ({
         <Container key="info">
           <Content>
             <IncidentContent>
-              <Text as="h5">{incident.name}</Text>
-              <Text as="p" size={14} lineHeight={16}>
-                {incident.location}
-              </Text>
-              <Text as="span" size={12}>
-                {DateHelper.formatIncidentDate(incident.date)}
-              </Text>
+              <div>
+                <Text as="h5" lineHeight={22}>
+                  {incident.name}
+                </Text>
+                <Text as="p" size={14} lineHeight={16}>
+                  {incident.location}
+                </Text>
+                <Text as="span" size={12}>
+                  {DateHelper.formatIncidentDate(incident.date)}
+                </Text>
+              </div>
+              <IconButton
+                size={17}
+                backgroundColor={Colors.TEXT_SECONDARY}
+                borderRadius={8.5}
+                iconProps={{ size: 13, name: 'x', color: 'white' }}
+                onClick={close}
+              />
             </IncidentContent>
             <MapInfoExtraContent incident={incident} close={close} />
           </Content>

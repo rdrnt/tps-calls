@@ -1,7 +1,9 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import { darken } from 'polished';
 
 import Icon, { IconProps } from '../Icon';
+import { onHover } from '../../helpers/hooks';
 
 interface IconButtonProps {
   iconProps: IconProps;
@@ -38,15 +40,24 @@ const IconButton: React.FunctionComponent<IconButtonProps> = ({
   hoverColor,
   backgroundColor = 'transparent',
 }) => {
-  const [isHovering, setIsHovering] = React.useState<boolean>(false);
+  const [hovering, hoverProps] = onHover();
 
-  const determineColor = () => {
-    if (hoverColor && isHovering) {
+  const determineIconColor = () => {
+    if (hoverColor && hovering) {
       return hoverColor;
     }
 
     return iconProps.color;
   };
+
+  const determineBackgroundColor = () => {
+    if (hovering && backgroundColor !== 'transparent') {
+      return darken(0.2, backgroundColor);
+    }
+
+    return backgroundColor;
+  };
+
   return (
     <Button
       type="button"
@@ -54,17 +65,12 @@ const IconButton: React.FunctionComponent<IconButtonProps> = ({
       height={size}
       width={size}
       borderRadius={borderRadius}
-      backgroundColor={backgroundColor}
-      {...(hoverColor && {
-        onMouseOver: () => setIsHovering(true),
-        onMouseOut: () => setIsHovering(false),
-        onTouchEnd: () => setIsHovering(false),
-        onTouchStart: () => setIsHovering(true),
-      })}
+      backgroundColor={determineBackgroundColor()}
+      {...hoverProps}
     >
       <Icon
         {...iconProps}
-        color={determineColor()}
+        color={determineIconColor()}
         size={iconProps.size || size}
       />
     </Button>
