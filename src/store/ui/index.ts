@@ -1,5 +1,6 @@
 import { Loader } from '../../components/Loader';
 import { ModalTypes } from '../../components/Modal';
+import { ToastOptions } from '../../components/Toast';
 
 /*
  UI
@@ -14,6 +15,7 @@ export interface UIState {
   toast: {
     open: boolean;
     message?: string;
+    options?: ToastOptions;
   };
 }
 
@@ -76,6 +78,7 @@ export interface ShowToastAction {
   type: UIActions.SHOW_TOAST;
   payload: {
     message: string;
+    options?: ToastOptions;
   };
 }
 

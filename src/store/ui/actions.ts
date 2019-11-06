@@ -1,5 +1,6 @@
 import { UIActions, UIActionType } from '.';
 import { ModalTypes } from '../../components/Modal';
+import { ToastOptions } from '../../components/Toast';
 
 // TypeScript infers that this function is returning SendMessageAction
 export function toggleDrawer(value: boolean): UIActionType {
@@ -43,11 +44,18 @@ export function closeModal(): UIActionType {
   };
 }
 
-export function showToast(message: string): UIActionType {
+export function showToast({
+  message,
+  options,
+}: {
+  message: string;
+  options?: ToastOptions;
+}): UIActionType {
   return {
     type: UIActions.SHOW_TOAST,
     payload: {
       message,
+      options,
     },
   };
 }

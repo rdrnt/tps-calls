@@ -8,15 +8,18 @@ export enum Colors {
   BACKGROUND_SECONDARY = '#eeeded',
   BORDER = '#d8d8d8',
   ERROR = '#cc0000',
+  SUCCESS = '#74d28c',
   BLACK = '#000000',
 }
 
 export enum Sizes {
   SPACING = 22,
   DRAWER_WIDTH = 375,
+  MAX_MOBILE_WIDTH = 375,
 }
 
 export enum Defaults {
+  PRIMARY_FONT = 'Poppins',
   SECONDARY_FONT = 'Helvetica',
 }
 

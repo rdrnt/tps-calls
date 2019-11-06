@@ -46,7 +46,7 @@ export function uiReducer(
         ...state,
         toast: {
           open: true,
-          message: action.payload.message,
+          ...action.payload,
         },
       };
     case UIActions.CLOSE_TOAST:

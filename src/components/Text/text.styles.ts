@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 import { ValidTextTypes } from './';
-import { Colors } from '../../config';
+import { Colors, Defaults } from '../../config';
 
 export interface StyledTextProps {
   color?: string;
@@ -56,7 +56,11 @@ let DEFAULT_TEXT_STYLES: { [key in ValidTextTypes]: StyledTextProps } = {
 };
 
 const getFont = (isSecondary: boolean | undefined) => css`
-  font-family: ${isSecondary ? 'Helvetica Neue' : 'Poppins'}, arial, sans-serif;
+  font-family: ${`${
+      isSecondary ? Defaults.SECONDARY_FONT : Defaults.PRIMARY_FONT
+    }`},
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 `;
 
 const createTextStyles = (props: StyledTextProps) => css<typeof props>`

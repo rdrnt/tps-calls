@@ -67,7 +67,15 @@ const MapInfoExtraContent: React.FunctionComponent<MapInfoExtraContent> = ({
           <ShareButton
             iconName="link"
             onClick={() => {
-              dispatch(showToast('Copied to clipboard'));
+              dispatch(
+                showToast({
+                  message: 'Copied to clipboard',
+                  options: {
+                    intent: 'success',
+                    icon: 'link',
+                  },
+                })
+              );
               Analytics.event({
                 category: 'UI',
                 action: Analytics.UI.SHARE_INCIDENT_URL,

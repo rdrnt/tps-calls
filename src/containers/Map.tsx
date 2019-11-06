@@ -107,7 +107,14 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
           // If there is a matching incident, set it as the selected incident
           dispatch(setSelectedIncident(matchingIncident));
         } else {
-          dispatch(showToast('Incident no longer exists.'));
+          dispatch(
+            showToast({
+              message: 'Incident no longer exists',
+              options: {
+                intent: 'error',
+              },
+            })
+          );
         }
       }
     }
