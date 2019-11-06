@@ -57,14 +57,16 @@ const IncidentContent = styled.div`
   align-items: flex-start;
 `;
 
-interface MapInfo {
+interface MapIncidentInfo {
   incident?: Incident<any>;
   drawerOpen: boolean;
+  close: () => void;
 }
 
-const MapInfo: React.FunctionComponent<MapInfo> = ({
+const MapIncidentInfo: React.FunctionComponent<MapIncidentInfo> = ({
   incident,
   drawerOpen,
+  close,
 }) => {
   return (
     <PoseGroup>
@@ -80,7 +82,7 @@ const MapInfo: React.FunctionComponent<MapInfo> = ({
                 {DateHelper.formatIncidentDate(incident.date)}
               </Text>
             </IncidentContent>
-            <MapInfoExtraContent incident={incident} />
+            <MapInfoExtraContent incident={incident} close={close} />
           </Content>
         </Container>
       )}
@@ -88,4 +90,4 @@ const MapInfo: React.FunctionComponent<MapInfo> = ({
   );
 };
 
-export default MapInfo;
+export default MapIncidentInfo;

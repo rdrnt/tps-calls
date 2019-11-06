@@ -24,14 +24,15 @@ const ExtraContent = styled.div`
 
 interface MapInfoExtraContent {
   incident: Incident<any>;
+  close: () => void;
 }
 
 const ActionContent = styled.div`
-  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
+  flex-grow: 1;
 
   > * {
     :not(:last-child) {
@@ -55,6 +56,7 @@ const ShareButton: React.FunctionComponent<{
 
 const MapInfoExtraContent: React.FunctionComponent<MapInfoExtraContent> = ({
   incident,
+  close,
 }) => {
   const dispatch = useDispatch();
   return (
@@ -91,6 +93,13 @@ const MapInfoExtraContent: React.FunctionComponent<MapInfoExtraContent> = ({
           />
         </a>
       </ActionContent>
+      <IconButton
+        size={22}
+        backgroundColor={Colors.TEXT_SECONDARY}
+        borderRadius={15}
+        iconProps={{ size: 15, name: 'x', color: 'white' }}
+        onClick={close}
+      />
     </ExtraContent>
   );
 };

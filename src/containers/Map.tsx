@@ -18,7 +18,7 @@ import { MAPBOX_THEME_URL, Colors, Sizes } from '../config';
 import { useScreenSize } from '../helpers/hooks';
 import { Environment, Analytics } from '../helpers';
 
-import MapInfo from '../components/MapInfo';
+import MapIncidentInfo from '../components/MapIncidentInfo';
 import MapOverlayButton from '../components/MapOverlayButton';
 import AnimatedMapMarker from '../components/MapMarker/Animated';
 
@@ -27,6 +27,11 @@ const DEFAULTS = {
   longitude: -79.383186,
   zoom: 11.0,
 };
+
+interface MapState {
+  position: Coordinates;
+  zoom: number;
+}
 
 interface MapProps {
   match: match<{ id?: string }>;
@@ -48,6 +53,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
     DEFAULTS.longitude,
     DEFAULTS.latitude,
   ]);
+  const [mapState, setMapState] = React.useState<MapState | undefined>();
 
   const [isMapLoaded, setIsMapLoaded] = React.useState<boolean>(false);
   const [interactingWithMap, setInteractingWithMap] = React.useState<boolean>(
@@ -55,6 +61,22 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
   );
 
   const mapRef = React.useRef<any>();
+
+  const unselectIncidentWithAnimation = (animated?: boolean) => {
+    dispatch(setSelectedIncident(undefined));
+
+    // If we have the map state, go back to their original position
+    // before they selected the incident
+    if (animated && mapRef.current && mapState) {
+      mapRef.current.flyTo({
+        center: [mapState.position.longitude, mapState.position.latitude],
+        speed: 1,
+        zoom: mapState.zoom,
+      });
+    }
+
+    setMapState(undefined);
+  };
 
   React.useEffect(() => {
     // if the map isn't loaded, show the loader
@@ -113,6 +135,19 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
   React.useEffect(() => {
     // If the selected incident changes, zoom into it
     if (incidents.selected && mapRef.current) {
+      const currentPosition: {
+        lat: number;
+        lng: number;
+      } = mapRef.current.getCenter();
+      // Save the map state
+      setMapState({
+        zoom: mapRef.current.getZoom(),
+        position: {
+          latitude: currentPosition.lat,
+          longitude: currentPosition.lng,
+        },
+      });
+
       mapRef.current.flyTo({
         center: [
           incidents.selected.coordinates.longitude,
@@ -185,7 +220,11 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
         size={30}
       />
 
-      <MapInfo incident={incidents.selected} drawerOpen={ui.drawerOpen} />
+      <MapIncidentInfo
+        incident={incidents.selected}
+        drawerOpen={ui.drawerOpen}
+        close={() => unselectIncidentWithAnimation(true)}
+      />
 
       {user.location.coordinates && (
         <AnimatedMapMarker
