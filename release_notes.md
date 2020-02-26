@@ -1,3 +1,11 @@
+# v2.0.5
+
+- Updated React, Mapbox, and other packages
+
+- If theres an id in the URL parameters, we now search firestore if it's not in the store
+
+- Modal opacity animation
+
 # v2.0.4
 
 - Fixes Twitter sharing text not being encoded
