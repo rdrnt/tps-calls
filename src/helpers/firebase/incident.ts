@@ -57,3 +57,21 @@ export const getIncidentsAtDate = async ({
     return [];
   }
 };
+
+export const getIncidentFromId = async (
+  id: string
+): Promise<Incident<any> | undefined> => {
+  try {
+    const incidentDoc = await firebase
+      .firestore()
+      .collection(FirestoreCollections.INCIDENTS)
+      .doc(id)
+      .get();
+
+    return Boolean(incidentDoc && incidentDoc.exists)
+      ? (incidentDoc.data() as Incident<any>)
+      : undefined;
+  } catch (error) {
+    return undefined;
+  }
+};

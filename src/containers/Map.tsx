@@ -16,7 +16,7 @@ import { setSelectedIncident } from '../store/incidents/actions';
 import { setRequestingLocationPermissions } from '../store/user/actions';
 import { MAPBOX_THEME_URL, Colors, Sizes } from '../config';
 import { useScreenSize } from '../helpers/hooks';
-import { Environment, Analytics } from '../helpers';
+import { Environment, Analytics, Firebase } from '../helpers';
 
 import MapIncidentInfo from '../components/MapIncidentInfo';
 import MapOverlayButton from '../components/MapOverlayButton';
@@ -81,6 +81,23 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
     setMapState(undefined);
   };
 
+  // Finds and returns an incident from the store or database
+  const getIncidentWithId = async (
+    id: string,
+    searchDB = false
+  ): Promise<Incident<any> | undefined> => {
+    const matchingIncident: Incident<any> | undefined = incidents.list.find(
+      incident => incident.id === id
+    );
+
+    if (!matchingIncident && searchDB) {
+      const incidentFromDB = await Firebase.incidents.getIncidentFromId(id);
+      return incidentFromDB;
+    }
+
+    return matchingIncident;
+  };
+
   React.useEffect(() => {
     // if the map isn't loaded, show the loader
     if (!isMapLoaded && !ui.loader.open) {
@@ -97,25 +114,23 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
         }, 500);
       }
 
-      // If we have an id in the params, see if there's a matching incident in the list
+      // If we have an id in the params, see if there's a matching incident in the db/store
       const { id } = match.params;
       if (id) {
-        const matchingIncident: Incident<any> | undefined = incidents.list.find(
-          incident => incident.id === id
-        );
-        if (matchingIncident) {
-          // If there is a matching incident, set it as the selected incident
-          dispatch(setSelectedIncident(matchingIncident));
-        } else {
-          dispatch(
-            showToast({
-              message: 'Incident no longer exists',
-              options: {
-                intent: 'error',
-              },
-            })
-          );
-        }
+        getIncidentWithId(id, true).then(incident => {
+          if (!incident) {
+            dispatch(
+              showToast({
+                message: 'Incident no longer exists',
+                options: {
+                  intent: 'error',
+                },
+              })
+            );
+          } else {
+            dispatch(setSelectedIncident(incident));
+          }
+        });
       }
     }
   }, [isMapLoaded, incidents.list.length, match.params.id]);
