@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Dialog } from '@reach/dialog';
 import { useDebouncedCallback } from 'use-debounce';
 import styled from 'styled-components';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import { AppState } from '../../store';
 import { closeModal } from '../../store/ui/actions';
@@ -39,17 +40,24 @@ const Modal: React.FunctionComponent = ({}) => {
     dispatch(closeModal());
   }, 200);
 
-  if (open && type) {
-    const ModalFromType = ModalTable[type];
+  const ModalFromType = open && type ? ModalTable[type] : null;
 
-    return (
-      <StyledDialog onDismiss={dismissModal}>
-        <ModalFromType close={dismissModal} />
-      </StyledDialog>
-    );
-  }
-
-  return null;
+  return (
+    <AnimatePresence>
+      {ModalFromType && (
+        <StyledDialog onDismiss={dismissModal}>
+          <motion.div
+            key="modal"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <ModalFromType close={dismissModal} />
+          </motion.div>
+        </StyledDialog>
+      )}
+    </AnimatePresence>
+  );
 };
 
 export default Modal;
