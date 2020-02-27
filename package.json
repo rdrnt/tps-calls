@@ -1,7 +1,14 @@
 {
   "name": "tpscalls-frontend",
-  "version": "0.1.0",
+  "version": "2.0.5",
   "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "netlify-deploy": "yarn build && netlify deploy --dir build",
+    "netlify-deploy:prod": "netlify deploy --prod"
+  },
   "dependencies": {
     "@rdrnt/tps-calls-shared": "^0.1.4",
     "@reach/dialog": "^0.3.0",
@@ -58,12 +65,6 @@
     "@types/styled-components": "^4.1.16",
     "react-scripts": "3.4.0",
     "redux-devtools-extension": "^2.13.8"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"

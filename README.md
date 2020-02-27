@@ -1,44 +1,54 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# tps-calls
 
-## Available Scripts
+Real-time mapping of locations where the Toronto Police have responded to a call for service. These calls include incidents such as arrests, gun calls, collisions involving people or property, assaults, industrial accidents or disputes. Some calls for service will be, or are being, excluded for privacy reasons, including calls respecting domestic violence, sexual assault, or medical distress. Others calls may be excluded because they are part of an ongoing police operation.
 
-In the project directory, you can run:
+Built with TypeScript, React, Redux, react-mapbox-gl & styled-components.
 
-### `yarn start`
+## Contributions
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+I would love contributions! The **TODO** list below has more information on what I need help with.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+When commiting, please try your best to use [this](http://karma-runner.github.io/2.0/dev/git-commit-msg.html) format for your commit messages.
 
-### `yarn test`
+## TODO
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### UI
 
-### `yarn build`
+- Color code incidents
+- Geofencing (if an incident happens within _x_ km the user will receive a push notifcation)
+- Add @TPSOperations related tweet to the selected incident. (Hint, there's an associated ID)
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Building
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+1. Create a `.sentryclirc, .env, .npmrc` at the root of the project
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+2. (Building for production) In the `.sentryclirc, put:
 
-### `yarn eject`
+```plain
+[defaults]
+project=getprojectnamefromowner
+org=getorgfromowner
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+3. In the `.env`, make sure you have the following keys:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```plain
+REACT_APP_MAPBOX_API_KEY
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+REACT_APP_GANALYTICS_KEY
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+REACT_APP_SENTRY_DSN
 
-## Learn More
+PORT=8080
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+4. In the `.npmrc` (required for types), put the following:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```plain
+//npm.pkg.github.com/:_authToken=YOUR_GIVEN_TOKEN
+@rdrnt:registry=https://npm.pkg.github.com
+```
+
+## License
+
+[GPL-3.0 License](https://www.gnu.org/licenses/gpl-3.0.en.html).
