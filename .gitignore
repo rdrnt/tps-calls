@@ -17,6 +17,12 @@
 .env.development.local
 .env.test.local
 .env.production.local
+.env
+src/config/firebase
+.netlify
+netlify.toml
+.npmrc
+.sentryclirc
 
 npm-debug.log*
 yarn-debug.log*

@@ -1,12 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import 'typeface-poppins';
+import '@reach/slider/styles.css';
+import '@reach/dialog/styles.css';
+import '@reach/tooltip/styles.css';
+
 import App from './App';
-import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import { Firebase, Analytics } from './helpers';
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+Firebase.initialize();
+Analytics.initialize();
+
+export default ReactDOM.render(<App />, document.querySelector('#root'));
