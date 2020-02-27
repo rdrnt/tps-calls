@@ -1,3 +1,9 @@
+# v2.1.0
+
+- Switched build system to react-scripts
+
+- ESLint linting
+
 # v2.0.5
 
 - Updated React, Mapbox, and other packages
