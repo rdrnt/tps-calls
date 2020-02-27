@@ -5,8 +5,8 @@ import { Environment } from '..';
 
 import * as incidents from './incident';
 
-import productionConfig from '../../../config/firebase/production.json';
-import developmentConfig from '../../../config/firebase/development.json';
+import productionConfig from '../../config/firebase/production.json';
+import developmentConfig from '../../config/firebase/development.json';
 
 export const initialize = () => {
   let configToUse;

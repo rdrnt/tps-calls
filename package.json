@@ -1,14 +1,13 @@
 {
-  "name": "tps-calls",
+  "name": "tpscalls-frontend",
   "version": "2.0.5",
   "private": true,
   "scripts": {
-    "start": "webpack-dev-server --config webpack.dev.js",
-    "start:build": "rm -rf dist && webpack --config webpack.prod.js --env.NODE_ENV=local --progress",
-    "build": "rm -rf dist && webpack --config webpack.prod.js --progress",
-    "netlify-deploy": "yarn build && netlify deploy --dir dist",
-    "netlify-deploy:prod": "netlify deploy --prod",
-    "test": "node scripts/test.js --updateSnapshot"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "netlify-deploy": "yarn build && netlify deploy --dir build",
+    "netlify-deploy:prod": "netlify deploy --prod"
   },
   "dependencies": {
     "@rdrnt/tps-calls-shared": "^0.1.4",
@@ -25,10 +24,13 @@
     "mapbox-gl": "^1.8.1",
     "polished": "^3.4.1",
     "prettier": "^1.14.2",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
     "react": "^16.12.0",
+    "react-dom": "^16.12.0",
     "react-copy-to-clipboard": "^5.0.1",
     "react-datepicker": "^2.9.6",
-    "react-dom": "^16.12.0",
     "react-ga": "^2.7.0",
     "react-icons": "^3.7.0",
     "react-mapbox-gl": "^4.8.2",
@@ -41,15 +43,13 @@
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "styled-components": "^4.2.1",
-    "tslib": "^1.10.0",
+    "typescript": "~3.7.2",
     "typeface-poppins": "^0.0.72",
     "use-debounce": "^3.0.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-0",
-    "@babel/preset-env": "^7.4.5",
-    "@babel/preset-typescript": "^7.3.3",
-    "@sentry/webpack-plugin": "^1.8.1",
+    "@types/jest": "^24.0.0",
+    "@types/node": "^12.0.0",
     "@types/d3-ease": "^1.0.8",
     "@types/geolib": "^2.0.23",
     "@types/reach__dialog": "^0.1.0",
@@ -63,65 +63,22 @@
     "@types/react-router-dom": "^5.1.0",
     "@types/redux": "^3.6.0",
     "@types/styled-components": "^4.1.16",
-    "babel-loader": "^8.0.6",
-    "babel-plugin-styled-components": "^1.10.4",
-    "babel-polyfill": "^6.26.0",
-    "css-loader": "^2.1.1",
-    "dotenv": "^8.0.0",
-    "favicons-webpack-plugin": "^1.0.2",
-    "file-loader": "^4.0.0",
-    "fork-ts-checker-webpack-plugin": "^1.5.0",
-    "html-webpack-plugin": "^3.0.7",
-    "json-loader": "^0.5.7",
-    "redux-devtools-extension": "^2.13.8",
-    "source-map-explorer": "^2.1.0",
-    "source-map-loader": "^0.2.4",
-    "style-loader": "^0.23.1",
-    "ts-loader": "^6.0.1",
-    "tslint": "^5.20.0",
-    "tslint-config-airbnb": "^5.11.1",
-    "tslint-config-prettier": "^1.18.0",
-    "tslint-plugin-prettier": "^2.0.1",
-    "tslint-react": "^4.0.0",
-    "typescript": "^3.6.3",
-    "webpack": "^4.32.2",
-    "webpack-cli": "^3.3.2",
-    "webpack-dev-server": "^3.7.2",
-    "webpack-merge": "^4.2.2",
-    "webpack-pwa-manifest": "^4.1.1"
+    "react-scripts": "3.4.0",
+    "redux-devtools-extension": "^2.13.8"
   },
-  "jest": {
-    "verbose": true,
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,mjs}"
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
     ],
-    "setupFiles": [
-      "<rootDir>/config/polyfills.js"
-    ],
-    "testMatch": [
-      "<rootDir>/src/js/tests/*.js"
-    ],
-    "testEnvironment": "node",
-    "testURL": "http://localhost",
-    "transform": {
-      "^.+\\.(js|jsx|mjs)$": "<rootDir>/node_modules/babel-jest",
-      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
-      "^(?!.*\\.(js|jsx|mjs|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
-    },
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$"
-    ],
-    "moduleNameMapper": {
-      "^react-native$": "react-native-web"
-    },
-    "moduleFileExtensions": [
-      "web.js",
-      "js",
-      "json",
-      "web.jsx",
-      "jsx",
-      "node",
-      "mjs"
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
     ]
   }
 }

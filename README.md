@@ -1,6 +1,6 @@
 # tps-calls
 
-Real-time mapping of locations where the Toronto Police have responded to a call for service. These calls include incidents such as arrests,gun calls, collisions involving people or property, assaults, industrial accidents or disputes. Some calls for service will be, or are being, excluded for privacy reasons, including calls respecting domestic violence, sexual assault, or medical distress. Others calls may be excluded because they are part of an ongoing police operation.
+Real-time mapping of locations where the Toronto Police have responded to a call for service. These calls include incidents such as arrests, gun calls, collisions involving people or property, assaults, industrial accidents or disputes. Some calls for service will be, or are being, excluded for privacy reasons, including calls respecting domestic violence, sexual assault, or medical distress. Others calls may be excluded because they are part of an ongoing police operation.
 
 Built with TypeScript, React, Redux, react-mapbox-gl & styled-components.
 
@@ -17,8 +17,6 @@ When commiting, please try your best to use [this](http://karma-runner.github.io
 - Color code incidents
 - Geofencing (if an incident happens within _x_ km the user will receive a push notifcation)
 - Add @TPSOperations related tweet to the selected incident. (Hint, there's an associated ID)
-- Toast
-  - Invalid location
 
 ## Building
 
@@ -40,6 +38,8 @@ REACT_APP_MAPBOX_API_KEY
 REACT_APP_GANALYTICS_KEY
 
 REACT_APP_SENTRY_DSN
+
+PORT=8080
 ```
 
 4. In the `.npmrc` (required for types), put the following:

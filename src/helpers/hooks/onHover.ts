@@ -8,7 +8,11 @@ interface OnHoverReturnProps {
 }
 
 export const onHover = (): [boolean, OnHoverReturnProps] => {
-  const [hovering, setHovering] = React.useState<boolean>(false);
+  // const [hovering, setHovering] = React.useState<boolean>(false);
+
+  const hovering = true;
+
+  const setHovering = (val: boolean) => {};
 
   const returnValues: OnHoverReturnProps = {
     onMouseOver: () => setHovering(true),

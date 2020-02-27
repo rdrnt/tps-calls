@@ -1,18 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta name="description" content="Real-time mapping of locations where police have responded to a call for service. These calls include incidents such as arrests, gun calls, collisions involving people or property, assaults, industrial accidents or disputes. Some calls for service will be, or are being, excluded for privacy reasons, including calls respecting domestic violence, sexual assault, or medical distress. Others calls may be excluded because they are part of an ongoing police operation.">
-  <meta name="keywords" content="Toronto Police, Calls, Map, Service Calls, GTA, Toronto, Police, Police calls">
-  <meta name="author" content="Riley Durant">
-  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.css' rel='stylesheet' />
-  <title>tpscalls.live</title>
-</head>
-<body>
-  <noscript>
-    You need to enable JavaScript to run this app.
-  </noscript>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+
+
+    <title>tpscalls.live</title>
+    <meta name="keywords" content="Toronto Police, Calls, Map, Service Calls, GTA, Toronto, Police, Police calls">
+    <meta name="author" content="Riley Durant">
+    <meta name="description" content="Real-time mapping of locations where police have responded to a call for service. These calls include incidents such as arrests, gun calls, collisions involving people or property, assaults, industrial accidents or disputes. Some calls for service will be, or are being, excluded for privacy reasons, including calls respecting domestic violence, sexual assault, or medical distress. Others calls may be excluded because they are part of an ongoing police operation.">
+
+    <meta property="og:title" content="tpscalls.live" />
+    <meta property="og:url" content="https://www.tpscalls.live" />
+    <meta property="og:image" content="%PUBLIC_URL%/images/map.jpg" />
+    <meta property="og:description" content="Real-time mapping of locations where the Toronto Police have responded to a call for service.">
+
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.css" rel="stylesheet" />
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
 </html>

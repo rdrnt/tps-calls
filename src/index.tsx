@@ -12,7 +12,4 @@ import { Firebase, Analytics } from './helpers';
 Firebase.initialize();
 Analytics.initialize();
 
-const root = document.createElement('div');
-document.body.appendChild(root);
-
-export default ReactDOM.render(<App />, root);
+export default ReactDOM.render(<App />, document.querySelector('#root'));

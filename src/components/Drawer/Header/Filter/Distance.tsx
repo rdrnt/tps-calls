@@ -71,12 +71,13 @@ const DistanceFilter: React.FunctionComponent<DistanceFilter> = ({
               0
             </Text>
             <Slider
+              handleAlignment="center"
               min={0}
               max={15}
               defaultValue={0}
               name="distanceSlider"
               value={initialDistance}
-              onChange={setInitialDistance}
+              // onChange={setInitialDistance}
             >
               <SliderTrack>
                 <SliderTrackHighlight />
