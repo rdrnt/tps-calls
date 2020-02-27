@@ -7,12 +7,8 @@ interface OnHoverReturnProps {
   onTouchStart: () => void;
 }
 
-export const onHover = (): [boolean, OnHoverReturnProps] => {
-  // const [hovering, setHovering] = React.useState<boolean>(false);
-
-  const hovering = true;
-
-  const setHovering = (val: boolean) => {};
+const OnHover = (): [boolean, OnHoverReturnProps] => {
+  const [hovering, setHovering] = React.useState<boolean>(false);
 
   const returnValues: OnHoverReturnProps = {
     onMouseOver: () => setHovering(true),
@@ -23,3 +19,5 @@ export const onHover = (): [boolean, OnHoverReturnProps] => {
 
   return [hovering, returnValues];
 };
+
+export { OnHover as onHover };
