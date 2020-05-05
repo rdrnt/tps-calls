@@ -11,6 +11,7 @@ import { Button } from '../../../Button';
 import { DateHelper } from '../../../../helpers';
 import { onHover } from '../../../../helpers/hooks';
 import { AppState } from '../../../../store';
+
 const ItemContainer = styled.button<{ color: string }>`
   margin: 0;
   display: block;
@@ -173,11 +174,11 @@ const DateFilter: React.FunctionComponent<DateFilter> = ({
       DateHelper.compareHourDifference(
         DateHelper.convertDateToTimestamp(newEndDate),
         startDate!
-      ) >= 8
+      ) >= 24
     ) {
-      setErrorMessage('Date cannot be more 8 than hours apart');
+      setErrorMessage('Date cannot be more then 24 hours apart');
     } else if (newEndDate < DateHelper.convertTimestampToDate(startDate!)) {
-      setErrorMessage('Date cannot be more 8 than hours apart');
+      setErrorMessage('Date cannot be more then 24 hours apart');
     } else {
       setErrorMessage('');
       setEndDate(DateHelper.convertDateToTimestamp(newEndDate));
