@@ -111,6 +111,14 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
       if (ui.loader.open) {
         setTimeout(() => {
           dispatch(closeLoader());
+          dispatch(
+            showToast({
+              message: `Under maintenance, follow @onlineriley on Twitter for updates.`,
+              options: {
+                intent: 'error',
+              },
+            })
+          );
         }, 500);
       }
 
