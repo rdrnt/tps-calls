@@ -153,7 +153,7 @@ const DrawerHeader: React.FunctionComponent<DrawerHeader> = ({
                 <Icon size={15} name="search" color={Colors.TEXT_SECONDARY} />
                 <input
                   type="text"
-                  placeholder="Dundas St, Stabbing, etc..."
+                  placeholder="Yonge St, Arrest, etc..."
                   onChange={event => setSearchValue(event.target.value)}
                   value={searchValue || ''}
                 />

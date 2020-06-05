@@ -10,7 +10,7 @@ import { ModalProps } from '.';
 
 import { Analytics } from '../../helpers';
 
-interface ProjectInfoModal extends ModalProps {}
+type ProjectInfoModal = ModalProps
 
 const InfoRowContainer = styled.div`
   width: 100%;
@@ -116,6 +116,14 @@ const ProjectInfoModal: React.FunctionComponent<ProjectInfoModal> = ({
         }
       />
       <InfoRow
+        title="Why am I not seeing anything new?"
+        content={
+          <>
+            <Text as="p">{`As of June 3rd 2020, the Toronto Police seem to be moving forward with closing off live data from the public. This means that occasionally I can't reach their servers to fetch new data. The future of this project remains unkown due to these circumstances.`}</Text>
+          </>
+        }
+      />
+      <InfoRow
         title="Bug report & feedback"
         content={
           <>
@@ -128,6 +136,9 @@ const ProjectInfoModal: React.FunctionComponent<ProjectInfoModal> = ({
         content={
           <div className="extras">
             <ExternalLink href="mailto:contact@rileyyy.com">Email</ExternalLink>
+            <ExternalLink href="https://twitter.com/onlineriley">
+              Follow me on Twitter
+            </ExternalLink>
             <ExternalLink href="https://github.com/rdrnt/tps-calls">
               Source code & Release notes
             </ExternalLink>
