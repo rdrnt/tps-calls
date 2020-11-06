@@ -116,10 +116,10 @@ const ProjectInfoModal: React.FunctionComponent<ProjectInfoModal> = ({
         }
       />
       <InfoRow
-        title="Why am I not seeing anything new?"
+        title="Why am I seeing nothing new?"
         content={
           <>
-            <Text as="p">{`As of June 3rd 2020, the Toronto Police seem to be moving forward with closing off live data from the public. This means that occasionally I can't reach their servers to fetch new data. The future of this project remains unkown due to these circumstances.`}</Text>
+          <Text as="p">{`Once in a while the Toronto Police's data feed goes offline. Unfortunately this is out of my control. If you have any questions, feel free to reach out.`}</Text>
           </>
         }
       />
