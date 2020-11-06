@@ -1,3 +1,9 @@
+# v2.1.4
+
+- Adds toast for shwoing unavailable tps data feed
+
+- Updated ProjectInfo modal copy
+
 # v2.1.0
 
 - Switched build system to react-scripts
