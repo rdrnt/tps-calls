@@ -111,9 +111,6 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
       if (ui.loader.open) {
         setTimeout(() => {
           dispatch(closeLoader());
-          dispatch(showToast({ message: 'TPS feed is temporarily offline', options: {
-            intent: 'error',
-          }}))
         }, 500);
       }
 

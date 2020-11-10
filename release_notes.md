@@ -1,3 +1,7 @@
+# v2.1.5
+
+- Removed toast for unavailable tps data feed
+
 # v2.1.4
 
 - Adds toast for shwoing unavailable tps data feed
