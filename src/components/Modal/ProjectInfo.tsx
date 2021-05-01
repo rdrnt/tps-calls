@@ -136,9 +136,6 @@ const ProjectInfoModal: React.FunctionComponent<ProjectInfoModal> = ({
         content={
           <div className="extras">
             <ExternalLink href="mailto:contact@rileyyy.com">Email</ExternalLink>
-            <ExternalLink href="https://twitter.com/onlineriley">
-              Follow me on Twitter
-            </ExternalLink>
             <ExternalLink href="https://github.com/rdrnt/tps-calls">
               Source code & Release notes
             </ExternalLink>
