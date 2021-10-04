@@ -10,8 +10,9 @@ import { closeModal } from '../../store/ui/actions';
 import { Sizes } from '../../config';
 
 import ProjectInfoModal from './ProjectInfo';
+import AddMissingPersonModal from './AddMissingPerson';
 
-export type ModalTypes = 'project-info';
+export type ModalTypes = 'project-info' | 'addMissingPerson';
 
 export interface ModalProps {
   close: () => void;
@@ -19,6 +20,7 @@ export interface ModalProps {
 
 const ModalTable: { [key in ModalTypes]?: any } = {
   'project-info': ProjectInfoModal,
+  addMissingPerson: AddMissingPersonModal,
 };
 
 const StyledDialog = styled(Dialog)`

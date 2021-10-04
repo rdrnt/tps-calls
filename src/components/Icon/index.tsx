@@ -16,6 +16,7 @@ import {
   IoLogoTwitter,
   IoMdAlert,
 } from 'react-icons/io';
+import { MdPersonSearch } from 'react-icons/md';
 
 export type IconNames =
   | 'alert'
@@ -26,6 +27,7 @@ export type IconNames =
   | 'calendar'
   | 'right-arrow'
   | 'info'
+  | 'personSearch'
   | 'position'
   | 'chevron-right'
   | 'chevron-down'
@@ -46,6 +48,7 @@ const AllIcons: { [key in IconNames]?: React.ReactElement } = {
   'chevron-right': <FiChevronRight />,
   link: <FiLink />,
   twitter: <IoLogoTwitter />,
+  personSearch: <MdPersonSearch />,
 };
 
 export interface IconProps {
