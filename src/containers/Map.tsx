@@ -256,14 +256,6 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
         position={{ bottom: Sizes.SPACING, right: Sizes.SPACING * 4 }}
         size={30}
       />
-      {/* Overlay button for addingmissing persons modal */}
-      <MapOverlayButton
-        hidden={Boolean(ui.drawerOpen || incidents.selected)}
-        onClick={() => dispatch(openModal('addMissingPerson'))}
-        iconName="personSearch"
-        position={{ bottom: Sizes.SPACING * 4, right: Sizes.SPACING }}
-        size={30}
-      />
 
       <MapIncidentInfo
         incident={incidents.selected}
