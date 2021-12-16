@@ -24,7 +24,7 @@ const IncidentListener: React.FunctionComponent = ({}) => {
   >([]);
 
   // Sets the incidents in the store
-  const [setIncidents] = useDebouncedCallback(incidents => {
+  const [setIncidents] = useDebouncedCallback((incidents: Incident<any>[]) => {
     dispatch(setIncidentList(incidents));
   }, 300);
 
@@ -39,9 +39,7 @@ const IncidentListener: React.FunctionComponent = ({}) => {
   );
 
   const loadOldestIncidentDate = async () => {
-    const oldestIncident: Incident<
-      any
-    > = await Firebase.incidents.getOldestIncident();
+    const oldestIncident: Incident<any> = await Firebase.incidents.getOldestIncident();
     dispatch(setFilterOldestDate(oldestIncident.date));
   };
 
@@ -79,7 +77,7 @@ const IncidentListener: React.FunctionComponent = ({}) => {
 
   const applyFilters = async () => {
     try {
-      let filteredIncidents: Incident<any>[] = [];
+      const filteredIncidents: Incident<any>[] = [];
 
       const getIncidentsToFilter = async () => {
         const hasDateFilters = Boolean(filter.startDate && filter.endDate);
@@ -126,13 +124,14 @@ const IncidentListener: React.FunctionComponent = ({}) => {
         filter.distance !== 0 &&
         user.location.coordinates
       ) {
-        const withinPoint: Incident<any>[] = incidentsToFilter.filter(
-          incident =>
-            isPointWithinRadius(
-              incident.coordinates,
-              user.location.coordinates!,
-              filter.distance! * 1000
-            )
+        const withinPoint: Incident<
+          any
+        >[] = incidentsToFilter.filter(incident =>
+          isPointWithinRadius(
+            incident.coordinates,
+            user.location.coordinates!,
+            filter.distance! * 1000
+          )
         );
         filteredIncidents.push(...withinPoint);
       }

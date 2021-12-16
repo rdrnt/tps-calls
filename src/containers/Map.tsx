@@ -109,6 +109,18 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
     if (isMapLoaded && incidents.list.length !== 0) {
       // Close the loader if it's open
       if (ui.loader.open) {
+        const apiStatus = Firebase.getRemoteConfigStringValue('tps_api_status');
+        if (apiStatus === 'offline') {
+          dispatch(
+            showToast({
+              message: 'TPS feed offline',
+              options: {
+                intent: 'error',
+              },
+            })
+          );
+        }
+
         setTimeout(() => {
           dispatch(closeLoader());
         }, 500);

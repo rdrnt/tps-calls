@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Timestamp } from '@rdrnt/tps-calls-shared';
 import { useDebouncedCallback } from 'use-debounce';
 
 import DateFilter from './Date';
@@ -8,6 +7,7 @@ import FilterRow from './Row';
 
 import { IncidentFilterState } from '../../../../store/incidents';
 import { SetIncidentFilterParams } from '../../../../store/incidents/actions';
+import { Timestamp } from '../../../../helpers/firebase';
 import DistanceFilter from './Distance';
 
 interface DrawerFilter {

@@ -27,7 +27,7 @@
   },
   "rules": {
     "@typescript-eslint/explicit-function-return-type": [
-      "error",
+      1,
       {
         "allowExpressions": true,
         "allowTypedFunctionExpressions": true

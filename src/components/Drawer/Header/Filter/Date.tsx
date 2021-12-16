@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
-import { Timestamp } from '@rdrnt/tps-calls-shared';
 import { useSelector } from 'react-redux';
 
 import Text from '../../../Text';
@@ -11,6 +10,7 @@ import { Button } from '../../../Button';
 import { DateHelper } from '../../../../helpers';
 import { onHover } from '../../../../helpers/hooks';
 import { AppState } from '../../../../store';
+import { Timestamp } from '../../../../helpers/firebase';
 
 const ItemContainer = styled.button<{ color: string }>`
   margin: 0;
@@ -50,6 +50,7 @@ const DateFilterItem: React.FunctionComponent<DateFilterItem> = ({
     >
       <Icon size={15} name="calendar" color={color} />
       <Text as="p" size={12} lineHeight={12} color={color}>
+        {/* @ts-ignore */}
         {value ? DateHelper.formatIncidentDate(value) : 'Current'}
       </Text>
     </ItemContainer>

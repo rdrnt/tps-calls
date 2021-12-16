@@ -1,9 +1,5 @@
-import { firebase } from '.';
-import {
-  Incident,
-  FirestoreCollections,
-  Timestamp,
-} from '@rdrnt/tps-calls-shared';
+import { firebase, Timestamp } from '.';
+import { Incident, FirestoreCollections } from '@rdrnt/tps-calls-shared';
 import { DateHelper } from '..';
 
 export const listener = (onChange: (incidents: Incident<any>[]) => void) =>
@@ -68,7 +64,7 @@ export const getIncidentFromId = async (
       .doc(id)
       .get();
 
-    return Boolean(incidentDoc && incidentDoc.exists)
+    return incidentDoc && incidentDoc.exists
       ? (incidentDoc.data() as Incident<any>)
       : undefined;
   } catch (error) {
