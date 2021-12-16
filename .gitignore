@@ -21,7 +21,6 @@
 src/config/firebase
 .netlify
 netlify.toml
-.npmrc
 .sentryclirc
 
 npm-debug.log*
