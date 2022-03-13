@@ -2,6 +2,7 @@ import * as React from 'react';
 import { createGlobalStyle } from 'styled-components';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { MapProvider } from 'react-map-gl';
 
 import Map from './containers/Map';
 
@@ -32,15 +33,19 @@ const App: React.FunctionComponent = () => (
     <GlobalStyle />
     <Router>
       <Provider store={store}>
-        <IncidentListener />
-        <LocationListener />
-        <Loader />
-        <Drawer />
-        <Modal />
-        <Toast />
-        <Switch>
-          <Route path={['/:id', '/']} component={Map} />
-        </Switch>
+        <>
+          <IncidentListener />
+          <LocationListener />
+          <Loader />
+          <Drawer />
+          <Modal />
+          <Toast />
+          <MapProvider>
+            <Switch>
+              <Route path={['/:id', '/']} component={Map} />
+            </Switch>
+          </MapProvider>
+        </>
       </Provider>
     </Router>
   </>

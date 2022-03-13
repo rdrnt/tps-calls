@@ -2,7 +2,7 @@ import * as React from 'react';
 import { AppState } from '../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { Coordinates, Incident } from '@rdrnt/tps-calls-shared';
-import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
+import ReactMapGl, { useMap } from 'react-map-gl';
 import { match } from 'react-router';
 
 import {
@@ -21,6 +21,7 @@ import { Environment, Analytics, Firebase } from '../helpers';
 import MapIncidentInfo from '../components/MapIncidentInfo';
 import MapOverlayButton from '../components/MapOverlayButton';
 import AnimatedMapMarker from '../components/MapMarker/Animated';
+import MapMarker from '../components/MapMarker';
 
 const DEFAULTS = {
   latitude: 43.653225,
@@ -36,12 +37,6 @@ interface MapState {
 interface MapProps {
   match: match<{ id?: string }>;
 }
-
-const MapMapbox = ReactMapboxGl({
-  accessToken: Environment.config.MAPBOX_API_KEY,
-  minZoom: 9,
-  attributionControl: false,
-});
 
 const Map: React.FunctionComponent<MapProps> = ({ match }) => {
   const dispatch = useDispatch();
@@ -60,7 +55,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
     false
   );
 
-  const mapRef = React.useRef<any>();
+  const { current: mapRef } = useMap();
 
   // Unselects the selected incident and animates to the users original position
   const unselectIncidentWithAnimation = (animated?: boolean) => {
@@ -69,8 +64,8 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
 
     // If we have the map state, go back to their original position
     // before they selected the incident
-    if (animated && mapRef.current && mapState) {
-      mapRef.current.flyTo({
+    if (animated && mapRef && mapState) {
+      mapRef.flyTo({
         center: [mapState.position.longitude, mapState.position.latitude],
         speed: 1,
         zoom: mapState.zoom,
@@ -155,7 +150,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
       }
 
       if (incidents.selected) {
-        dispatch(setSelectedIncident(undefined));
+        // dispatch(setSelectedIncident(undefined));
       }
     }
   }, [interactingWithMap]);
@@ -171,21 +166,21 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
 
   React.useEffect(() => {
     // If the selected incident changes, zoom into it
-    if (incidents.selected && mapRef.current) {
+    if (incidents.selected && mapRef) {
       const currentPosition: {
         lat: number;
         lng: number;
-      } = mapRef.current.getCenter();
+      } = mapRef.getCenter();
       // Save the map state
       setMapState({
-        zoom: mapRef.current.getZoom(),
+        zoom: mapRef.getZoom(),
         position: {
           latitude: currentPosition.lat,
           longitude: currentPosition.lng,
         },
       });
 
-      mapRef.current.flyTo({
+      mapRef.flyTo({
         center: [
           incidents.selected.coordinates.longitude,
           incidents.selected.coordinates.latitude,
@@ -198,21 +193,24 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
 
   // If the screen size changes, resize the map
   React.useEffect(() => {
-    if (mapRef.current) {
-      mapRef.current.resize();
+    if (mapRef) {
+      mapRef.resize();
     }
   }, [screenDimensions]);
 
   return (
-    <MapMapbox
-      style={MAPBOX_THEME_URL}
-      containerStyle={{
-        height: screenDimensions.height,
-        width: screenDimensions.width,
+    <ReactMapGl
+      mapboxAccessToken={Environment.config.MAPBOX_API_KEY}
+      mapStyle={MAPBOX_THEME_URL}
+      attributionControl={false}
+      initialViewState={{
+        latitude: 43.653225,
+        longitude: -79.383186,
+        zoom: 11.0,
       }}
-      center={center}
-      onStyleLoad={map => {
-        mapRef.current = map;
+      style={{ width: '100vw', height: '100vh' }}
+      minZoom={9}
+      onLoad={() => {
         setIsMapLoaded(true);
       }}
       onDragStart={() => {
@@ -227,7 +225,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
         }
 
         if (incidents.selected) {
-          dispatch(setSelectedIncident(undefined));
+          // dispatch(setSelectedIncident(undefined));
         }
       }}
     >
@@ -275,54 +273,32 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
         <AnimatedMapMarker
           color="#007bff"
           coordinates={incidents.selected.coordinates}
-          size={20}
+          size={22}
         />
       )}
 
-      <Layer
-        type="circle"
-        id="marker"
-        paint={{
-          'circle-radius': {
-            stops: [
-              // [zoom, radius]
-              [9, 4],
-              [11, 6],
-              [14, 8],
-            ],
-          },
-          // Gets the color from the feature properties
-          'circle-color': Colors.PRIMARY,
-          'circle-stroke-width': 1,
-          'circle-stroke-color': '#FFFFFF',
-        }}
-      >
-        {/* The incident features */}
-        {incidents.list
-          .map(incident => {
-            const selected = Boolean(
-              incidents.selected && incidents.selected.id === incident.id
+      {/* The incident features */}
+      {incidents.list
+        .map(incident => {
+          const selected = Boolean(
+            incidents.selected && incidents.selected.id === incident.id
+          );
+          if (!selected) {
+            return (
+              <MapMarker
+                key={incident.id}
+                coordinates={incident.coordinates}
+                onClick={() => {
+                  dispatch(setSelectedIncident(incident));
+                }}
+              />
             );
-            if (!selected) {
-              return (
-                <Feature
-                  key={incident.id}
-                  coordinates={[
-                    incident.coordinates.longitude,
-                    incident.coordinates.latitude,
-                  ]}
-                  onClick={() => {
-                    dispatch(setSelectedIncident(incident));
-                  }}
-                />
-              );
-            }
+          }
 
-            return null;
-          })
-          .filter(incidentFeature => Boolean(incidentFeature))}
-      </Layer>
-    </MapMapbox>
+          return null;
+        })
+        .filter(incidentFeature => Boolean(incidentFeature))}
+    </ReactMapGl>
   );
 };
 

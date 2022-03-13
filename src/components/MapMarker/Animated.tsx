@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Marker } from 'react-mapbox-gl';
+import { Marker } from 'react-map-gl';
 import { Coordinates } from '@rdrnt/tps-calls-shared';
 import { darken, rgba } from 'polished';
 import posed from 'react-pose';
@@ -45,11 +45,7 @@ const AnimatedMapMarker: React.FunctionComponent<AnimatedMapMarker> = ({
   color,
   size = 15,
 }) => (
-  <Marker
-    coordinates={[coordinates.longitude, coordinates.latitude]}
-    style={{ zIndex: 0 }}
-    anchor="center"
-  >
+  <Marker {...coordinates} style={{ zIndex: 0 }} anchor="center">
     <AnimatedDot initialPose="none" pose="animate" color={color} size={size} />
   </Marker>
 );

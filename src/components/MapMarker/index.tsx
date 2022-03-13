@@ -1,8 +1,17 @@
 import * as React from 'react';
-import { Feature } from 'react-mapbox-gl';
+import { Marker } from 'react-map-gl';
+import styled from 'styled-components';
 import { Coordinates } from '@rdrnt/tps-calls-shared';
 
 import { Colors } from '../../config';
+
+const StyledMarkerDot = styled.div`
+  height: 17px;
+  width: 17px;
+  border-radius: 8.5px;
+  background-color: ${Colors.PRIMARY};
+  border: 2px solid white;
+`;
 
 interface MapMarkerProps {
   selected?: boolean;
@@ -15,15 +24,16 @@ const MapMarker: React.FunctionComponent<MapMarkerProps> = ({
   coordinates,
   onClick,
 }) => (
-  <Feature
-    coordinates={[coordinates.longitude, coordinates.latitude]}
-    properties={{
-      // https://docs.mapbox.com/mapbox-gl-js/example/data-driven-lines/
-      color: selected ? Colors.BLACK : Colors.PRIMARY,
-      size: selected ? 8 : 6,
+  <Marker
+    {...coordinates}
+    color={selected ? Colors.BLACK : Colors.PRIMARY}
+    scale={selected ? 8 : 6}
+    style={{
       border: selected ? 2 : 1,
     }}
     onClick={onClick}
-  />
+  >
+    <StyledMarkerDot />
+  </Marker>
 );
 export default MapMarker;
