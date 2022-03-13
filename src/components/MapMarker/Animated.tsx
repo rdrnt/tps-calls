@@ -24,14 +24,14 @@ const Dot = styled.div<{ color: string; size: number }>`
 const AnimatedDot = posed(Dot)(props => ({
   animate: {
     'box-shadow': `0px 0px 0px 0px ${getRgbaForAnimation(
-      0.6,
+      0.8,
       props.color as string
     )}`,
     transition: () => ({
       type: 'keyframes',
       values: [
         `0px 0px 0px 0px ${getRgbaForAnimation(0.8, props.color as string)}`,
-        `0px 0px 0px 8px ${getRgbaForAnimation(0.0, props.color as string)}`,
+        `0px 0px 0px 20px ${getRgbaForAnimation(0.0, props.color as string)}`,
         `0px 0px 0px 0px ${getRgbaForAnimation(0, props.color as string)}`,
       ],
       duration: 1500,

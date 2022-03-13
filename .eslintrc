@@ -33,6 +33,7 @@
         "allowTypedFunctionExpressions": true
       }
     ],
-    "react/prop-types": [1, { "skipUndeclared": true}]
+    "react/prop-types": [1, { "skipUndeclared": true}],
+    "@typescript-eslint/ban-ts-ignore": "off"
   }
 }

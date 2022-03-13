@@ -2,7 +2,7 @@ import * as React from 'react';
 import { AppState } from '../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { Coordinates, Incident } from '@rdrnt/tps-calls-shared';
-import ReactMapGl, { useMap } from 'react-map-gl';
+import ReactMapGl, { MapRef, useMap } from 'react-map-gl';
 import { match } from 'react-router';
 
 import {
@@ -15,7 +15,6 @@ import {
 import { setSelectedIncident } from '../store/incidents/actions';
 import { setRequestingLocationPermissions } from '../store/user/actions';
 import { MAPBOX_THEME_URL, Colors, Sizes } from '../config';
-import { useScreenSize } from '../helpers/hooks';
 import { Environment, Analytics, Firebase } from '../helpers';
 
 import MapIncidentInfo from '../components/MapIncidentInfo';
@@ -41,7 +40,11 @@ interface MapProps {
 const Map: React.FunctionComponent<MapProps> = ({ match }) => {
   const dispatch = useDispatch();
   const { incidents, ui, user } = useSelector((state: AppState) => state);
-  const screenDimensions = useScreenSize();
+
+  // I want to reffer to mapRef instead of mapRef.current throughout the app
+  // thats why theres two vars lol
+  const refForMap = React.useRef<MapRef | undefined>();
+  const mapRef = refForMap.current;
 
   // https://github.com/alex3165/react-mapbox-gl/issues/461
   const [center, setCenter] = React.useState<[number, number]>([
@@ -55,7 +58,9 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
     false
   );
 
-  const { current: mapRef } = useMap();
+  React.useEffect(() => {
+    console.log('Mao ref', mapRef);
+  }, [mapRef]);
 
   // Unselects the selected incident and animates to the users original position
   const unselectIncidentWithAnimation = (animated?: boolean) => {
@@ -150,7 +155,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
       }
 
       if (incidents.selected) {
-        // dispatch(setSelectedIncident(undefined));
+        dispatch(setSelectedIncident(undefined));
       }
     }
   }, [interactingWithMap]);
@@ -167,10 +172,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
   React.useEffect(() => {
     // If the selected incident changes, zoom into it
     if (incidents.selected && mapRef) {
-      const currentPosition: {
-        lat: number;
-        lng: number;
-      } = mapRef.getCenter();
+      const currentPosition = mapRef.getCenter();
       // Save the map state
       setMapState({
         zoom: mapRef.getZoom(),
@@ -191,15 +193,10 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
     }
   }, [incidents.selected]);
 
-  // If the screen size changes, resize the map
-  React.useEffect(() => {
-    if (mapRef) {
-      mapRef.resize();
-    }
-  }, [screenDimensions]);
-
   return (
     <ReactMapGl
+      //@ts-ignore
+      ref={refForMap}
       mapboxAccessToken={Environment.config.MAPBOX_API_KEY}
       mapStyle={MAPBOX_THEME_URL}
       attributionControl={false}
@@ -210,6 +207,9 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
       }}
       style={{ width: '100vw', height: '100vh' }}
       minZoom={9}
+      //disables zooming while an incident is selected
+      interactive={!incidents.selected}
+      scrollZoom={!incidents.selected}
       onLoad={() => {
         setIsMapLoaded(true);
       }}
@@ -222,10 +222,6 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
       onClick={() => {
         if (ui.drawerOpen) {
           dispatch(toggleDrawer(false));
-        }
-
-        if (incidents.selected) {
-          // dispatch(setSelectedIncident(undefined));
         }
       }}
     >
@@ -289,7 +285,9 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
                 key={incident.id}
                 coordinates={incident.coordinates}
                 onClick={() => {
-                  dispatch(setSelectedIncident(incident));
+                  if (!incidents.selected) {
+                    dispatch(setSelectedIncident(incident));
+                  }
                 }}
               />
             );
