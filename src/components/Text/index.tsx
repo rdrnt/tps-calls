@@ -47,9 +47,9 @@ const getTextComponentForType = (type: ValidTextTypes) => {
   }
 };
 
-const Text: React.FunctionComponent<
-  { as: ValidTextTypes } & StyledTextProps
-> = ({ as, children, ...rest }) => {
+const Text: React.FunctionComponent<{
+  as: ValidTextTypes;
+} & StyledTextProps> = ({ as, children, ...rest }) => {
   const TextComponent = getTextComponentForType(as);
 
   return React.cloneElement(TextComponent, { ...rest }, children);

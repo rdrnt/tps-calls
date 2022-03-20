@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import posed from 'react-pose';
 import { Incident } from '@rdrnt/tps-calls-shared';
 // @ts-ignore
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -13,6 +12,7 @@ import { IconButton } from '../Button';
 import { IconNames } from '../Icon';
 import { useDispatch } from 'react-redux';
 import { showToast } from '../../store/ui/actions';
+import Text from '../Text';
 
 const ExtraContent = styled.div`
   display: flex;
@@ -20,6 +20,11 @@ const ExtraContent = styled.div`
   align-items: center;
   border-top: 1px solid ${Colors.BORDER};
   height: 55px;
+
+  > h6 {
+    text-transform: uppercase;
+    margin-right: 8px;
+  }
 `;
 
 interface MapInfoExtraContent {
@@ -32,7 +37,6 @@ const ActionContent = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  flex-grow: 1;
 
   > * {
     :not(:last-child) {
@@ -56,11 +60,13 @@ const ShareButton: React.FunctionComponent<{
 
 const MapInfoExtraContent: React.FunctionComponent<MapInfoExtraContent> = ({
   incident,
-  close,
 }) => {
   const dispatch = useDispatch();
   return (
     <ExtraContent>
+      <Text as="h6" weight="bold">
+        Share via:
+      </Text>
       <ActionContent>
         {/* Copy link */}
         <CopyToClipboard text={URL.createShareUrl(incident.id)}>
