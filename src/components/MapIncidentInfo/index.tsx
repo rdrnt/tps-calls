@@ -10,7 +10,7 @@ import { IconButton } from '../Button';
 
 import MapInfoExtraContent from './Extra';
 
-const WIDTH = 325;
+const WIDTH = 335;
 
 const AnimatedContainer = posed.div({
   enter: {
@@ -63,6 +63,11 @@ const IncidentContent = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
+
+    > h4,
+    p {
+      margin-bottom: ${Sizes.SPACING / 4}px;
+    }
   }
 
   > button {
@@ -89,10 +94,10 @@ const MapIncidentInfo: React.FunctionComponent<MapIncidentInfo> = ({
           <Content>
             <IncidentContent>
               <div>
-                <Text as="h5" lineHeight={22}>
+                <Text as="h4" size={22} weight="500" lineHeight={22}>
                   {incident.name}
                 </Text>
-                <Text as="p" size={14} lineHeight={16}>
+                <Text as="p" lineHeight={21}>
                   {incident.location}
                 </Text>
                 <Text as="span" size={12}>
