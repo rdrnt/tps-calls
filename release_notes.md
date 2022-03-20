@@ -1,3 +1,13 @@
+# 2.2.0
+
+- Updates text styling for select incident overlay
+
+- Updates map library, using react-map-gl now
+
+- Updates all map things obviously :p
+
+- Move & remove some dependencies
+
 # v2.1.5
 
 - Removed toast for unavailable tps data feed
