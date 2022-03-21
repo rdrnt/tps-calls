@@ -2,8 +2,20 @@ import * as React from 'react';
 import { AppState } from '../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { Coordinates, Incident } from '@rdrnt/tps-calls-shared';
-import ReactMapGl, { MapRef, useMap } from 'react-map-gl';
+import ReactMapGl, { MapRef } from 'react-map-gl';
 import { match } from 'react-router';
+import mapboxgl from 'mapbox-gl';
+
+/*
+// @ts-ignore
+import mapboxgl from 'mapbox-gl/dist/mapbox-gl';
+// @ts-ignore
+import MapboxWorker from 'mapbox-gl/dist/mapbox-gl-csp-worker';
+mapboxgl.workerClass = MapboxWorker;
+*/
+
+// @ts-ignore
+mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 
 import {
   toggleDrawer,
@@ -57,10 +69,6 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
   const [interactingWithMap, setInteractingWithMap] = React.useState<boolean>(
     false
   );
-
-  React.useEffect(() => {
-    console.log('Mao ref', mapRef);
-  }, [mapRef]);
 
   // Unselects the selected incident and animates to the users original position
   const unselectIncidentWithAnimation = (animated?: boolean) => {
