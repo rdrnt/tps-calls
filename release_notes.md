@@ -1,3 +1,7 @@
+# 2.2.1
+
+- Adds worker-loader package and other things
+
 # 2.2.0
 
 - Updates text styling for select incident overlay
