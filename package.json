@@ -47,7 +47,8 @@
     "redux-thunk": "^2.3.0",
     "styled-components": "^4.2.1",
     "typeface-poppins": "^0.0.72",
-    "use-debounce": "^3.0.1"
+    "use-debounce": "^3.0.1",
+    "worker-loader": "^3.0.8"
   },
   "devDependencies": {
     "@types/d3-ease": "^1.0.8",
