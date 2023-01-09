@@ -1,6 +1,6 @@
 {
   "name": "tpscalls-frontend",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "private": true,
   "scripts": {
     "start": "react-scripts start",
