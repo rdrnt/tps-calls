@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/browser';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import { Environment } from '.';
 
 // Initializes the analytics
@@ -24,8 +24,8 @@ export enum UI {
   SHOW_PROJECT_INFO = 'Show project info modal',
 }
 
-export const pageview = (path: string) => {
-  ReactGA.pageview(path);
+export const pageview = (path: string): void => {
+  ReactGA.send({ hitType: 'pageview', page: path, title: path });
 };
 
 interface EventParams {
@@ -40,6 +40,6 @@ export const event = ({
   action,
   label,
   nonInteraction,
-}: EventParams) => {
+}: EventParams): void => {
   ReactGA.event({ category, action, label, nonInteraction });
 };
