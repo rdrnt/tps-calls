@@ -1,3 +1,11 @@
+# 2.2.3
+
+- Shows Mapbox attribution.
+
+# 2.2.2
+
+- Various changes.
+
 # 2.2.1
 
 - Adds worker-loader package and other things
