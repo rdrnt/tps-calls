@@ -207,7 +207,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
       ref={refForMap}
       mapboxAccessToken={Environment.config.MAPBOX_API_KEY}
       mapStyle={MAPBOX_THEME_URL}
-      attributionControl={false}
+      attributionControl={true}
       initialViewState={{
         latitude: 43.653225,
         longitude: -79.383186,
@@ -245,7 +245,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
         hidden={Boolean(ui.drawerOpen || incidents.selected)}
         onClick={() => dispatch(openModal('project-info'))}
         iconName="info"
-        position={{ bottom: Sizes.SPACING, right: Sizes.SPACING }}
+        position={{ bottom: Sizes.SPACING + 10, right: Sizes.SPACING }}
         size={30}
       />
       {/* Overlay button for users location */}
@@ -255,7 +255,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
         )}
         onClick={() => dispatch(setRequestingLocationPermissions(true))}
         iconName="position"
-        position={{ bottom: Sizes.SPACING, right: Sizes.SPACING * 4 }}
+        position={{ bottom: Sizes.SPACING + 10, right: Sizes.SPACING * 4 }}
         size={30}
       />
 
