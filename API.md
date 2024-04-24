@@ -1,6 +1,6 @@
 # Request Access to tpscalls REST API
 
-Thank you for your interest in using the tpscalls REST API. To get started, we ask that you provide some basic information before access is granted.
+Thank you for your interest in using the tpscalls REST API. To get started, follow the steps below.
 
 ## How to Apply for Access
 
