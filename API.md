@@ -6,7 +6,7 @@ Thank you for your interest in using the tpscalls REST API. To get started, foll
 
 Please follow the steps below to apply for API access:
 
-1. **Send an Email:**. - Here's a link to [my email](mailto:riley@drnt.ca). Please include "tpscalls API Access Request" as the subject.
+1. **Send an Email:** Here's a link to [my email](mailto:riley@drnt.ca). Please include "tpscalls API Access Request" as the subject.
 
 2. **Provide a Brief Reason for Access:** Explain what you plan to do with the API. This helps me understand your needs and tailor the API to better suit all users.
 
