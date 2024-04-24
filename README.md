@@ -8,7 +8,7 @@ Built with TypeScript, React, Redux, react-mapbox-gl & styled-components.
 
 ## API
 
-tpscalls now offers a REST API anyone can use! For more information and details, check out [API.md](https://github.com/rdrnt/tps-calls/API.md).
+tpscalls now offers a REST API anyone can use! For more information and details, check out [API.md](https://github.com/rdrnt/tps-calls/blob/master/API.md).
 
 ## Building
 
