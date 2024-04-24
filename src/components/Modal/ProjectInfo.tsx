@@ -119,7 +119,7 @@ const ProjectInfoModal: React.FunctionComponent<ProjectInfoModal> = ({
         title="Why am I seeing nothing new?"
         content={
           <>
-            <Text as="p">{`Once in a while the Toronto Police's data feed goes offline. Unfortunately this is out of my control. If you have any questions, feel free to reach out.`}</Text>
+            <Text as="p">{`Once in a while the Toronto Police's data feed goes offline. Unfortunately this is out of my control. If you have any questions, feel free to contact me.`}</Text>
           </>
         }
       />
@@ -127,8 +127,25 @@ const ProjectInfoModal: React.FunctionComponent<ProjectInfoModal> = ({
         title="Bug report & feedback"
         content={
           <>
-            <Text as="p">{`I really appreciate feedback and help towards improving the site. If you would like to get in contact, you can find places to reach me below.`}</Text>
+            <Text as="p">{`I really appreciate feedback and any help towards improving the project. If you would like to get in touch, you can find places to contact me below.`}</Text>
           </>
+        }
+      />
+      <InfoRow
+        title="API & Open Source"
+        content={
+          <div className="extras">
+            <Text as="p">{`Tpscalls is proudly open source and now offers a REST API anyone can use! Explore the codebase and find more information on how to get started with the API at the links below.`}</Text>
+            <ExternalLink
+              href="https://github.com/rdrnt/tps-calls"
+              style={{ marginTop: 5 }}
+            >
+              Source Code
+            </ExternalLink>
+            <ExternalLink href="https://github.com/rdrnt/tps-calls/blob/master/API.md">
+              API docs
+            </ExternalLink>
+          </div>
         }
       />
       <InfoRow
@@ -149,10 +166,7 @@ const ProjectInfoModal: React.FunctionComponent<ProjectInfoModal> = ({
         title="Extras"
         content={
           <div className="extras">
-            <ExternalLink href="mailto:riley@drnt.ca">Email</ExternalLink>
-            <ExternalLink href="https://github.com/rdrnt/tps-calls">
-              Source code & Release notes
-            </ExternalLink>
+            <ExternalLink href="mailto:riley@drnt.ca">Email Me</ExternalLink>
             <ExternalLink href="https://experience.arcgis.com/experience/a22f5295933e48a5b0a4c90cd3c4cae1">
               Inspiration
             </ExternalLink>
