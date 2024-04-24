@@ -83,7 +83,7 @@ const Heading = styled.div`
   padding: ${Sizes.SPACING / 3}px 0;
 `;
 
-const ExternalLink = styled.a`
+const ExternalLink = styled.a.attrs({ target: '_blank', rel: 'noopener' })`
   ${createTextStyles({ ...DEFAULT_TEXT_STYLES.p })};
 `;
 
@@ -132,6 +132,20 @@ const ProjectInfoModal: React.FunctionComponent<ProjectInfoModal> = ({
         }
       />
       <InfoRow
+        title="Donate"
+        content={
+          <>
+            <Text as="p">{`Your donations are greatly appreciated! They help cover server costs and keep my coffee cup full.`}</Text>
+            <ExternalLink
+              href="https://ko-fi.com/drnt_"
+              style={{ marginTop: 5 }}
+            >
+              Donate on Ko-fi
+            </ExternalLink>
+          </>
+        }
+      />
+      <InfoRow
         title="Extras"
         content={
           <div className="extras">
@@ -139,7 +153,7 @@ const ProjectInfoModal: React.FunctionComponent<ProjectInfoModal> = ({
             <ExternalLink href="https://github.com/rdrnt/tps-calls">
               Source code & Release notes
             </ExternalLink>
-            <ExternalLink href="https://c4s.torontopolice.on.ca">
+            <ExternalLink href="https://experience.arcgis.com/experience/a22f5295933e48a5b0a4c90cd3c4cae1">
               Inspiration
             </ExternalLink>
           </div>
