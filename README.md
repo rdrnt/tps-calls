@@ -4,19 +4,11 @@ Real-time mapping of locations where the Toronto Police have responded to a call
 
 Built with TypeScript, React, Redux, react-mapbox-gl & styled-components.
 
-## Contributions
+<a href='https://ko-fi.com/X8X1X9WW7' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi2.png?v=3' border='0' alt='Support me on ko-fi.com' /></a>
 
-I would love contributions! The **TODO** list below has more information on what I need help with.
+## API
 
-When commiting, please try your best to use [this](http://karma-runner.github.io/2.0/dev/git-commit-msg.html) format for your commit messages.
-
-## TODO
-
-### UI
-
-- Color code incidents
-- Geofencing (if an incident happens within _x_ km the user will receive a push notifcation)
-- Add @TPSOperations related tweet to the selected incident. (Hint, there's an associated ID)
+tpscalls now offers a REST API anyone can use! For more information and details, check out [API.md](https://github.com/rdrnt/tps-calls/API.md).
 
 ## Building
 
@@ -48,6 +40,10 @@ PORT=8080
 //npm.pkg.github.com/:_authToken=YOUR_GIVEN_TOKEN
 @rdrnt:registry=https://npm.pkg.github.com
 ```
+
+## Contributions
+
+Contributions are always appreciated! If you would like to get started, please send me an email.
 
 ## License
 
