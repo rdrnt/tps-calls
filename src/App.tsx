@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Map from './containers/Map';
+import ContactPage from './containers/Contact';
 
 import { LocationListener, IncidentListener } from './components/Listeners';
 
@@ -41,6 +42,7 @@ const App: React.FunctionComponent = () => (
           <Toast />
 
           <Switch>
+            <Route exact path="/contact" component={ContactPage} />
             <Route path={['/:id', '/']} component={Map} />
           </Switch>
         </>
