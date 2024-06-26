@@ -124,10 +124,20 @@ const ProjectInfoModal: React.FunctionComponent<ProjectInfoModal> = ({
         }
       />
       <InfoRow
+        title="Contact"
+        content={
+          <>
+            <ExternalLink href="/contact">Contact Page</ExternalLink>
+            <ExternalLink href="mailto:riley@drnt.ca">Email Me</ExternalLink>
+          </>
+        }
+      />
+      <InfoRow
         title="Bug report & feedback"
         content={
           <>
             <Text as="p">{`I really appreciate feedback and any help towards improving the project. If you would like to get in touch, you can find places to contact me below.`}</Text>
+            <ExternalLink href="/contact">Contact Page</ExternalLink>
           </>
         }
       />
@@ -160,17 +170,6 @@ const ProjectInfoModal: React.FunctionComponent<ProjectInfoModal> = ({
               Donate on Ko-fi
             </ExternalLink>
           </>
-        }
-      />
-      <InfoRow
-        title="Extras"
-        content={
-          <div className="extras">
-            <ExternalLink href="mailto:riley@drnt.ca">Email Me</ExternalLink>
-            <ExternalLink href="https://experience.arcgis.com/experience/a22f5295933e48a5b0a4c90cd3c4cae1">
-              Inspiration
-            </ExternalLink>
-          </div>
         }
       />
     </Container>
