@@ -1,3 +1,7 @@
+# 2.2.5
+
+- Increases chances of getting Android Beta Signup Modal
+
 # 2.2.4
 
 - Adds Android Beta Signup Modal
