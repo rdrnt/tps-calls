@@ -1,3 +1,7 @@
+# 2.2.6
+
+- Removes Android beta signup modal. Thanks everyone for participating!
+
 # 2.2.5
 
 - Increases chances of getting Android Beta Signup Modal

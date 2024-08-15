@@ -201,17 +201,6 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
     }
   }, [incidents.selected]);
 
-  React.useEffect(() => {
-    if (isMapLoaded) {
-      if (/Android/i.test(navigator.userAgent)) {
-        const randomNumber = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
-        if (randomNumber === 3) {
-          dispatch(openModal('android-beta-signup'));
-        }
-      }
-    }
-  }, [isMapLoaded]);
-
   return (
     <ReactMapGl
       //@ts-ignore
