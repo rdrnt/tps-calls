@@ -23,6 +23,7 @@ export enum UI {
   SHARE_INCIDENT_URL = 'Shared incident via URL',
   SHOW_PROJECT_INFO = 'Show project info modal',
   SHOW_ANDROID_BETA_MODAL = 'Show Android Beta Modal',
+  SHOW_DOWNLOAD_APP_MODAL = 'Show Download App Modal',
 }
 
 export const pageview = (path: string): void => {

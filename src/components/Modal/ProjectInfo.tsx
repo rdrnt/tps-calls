@@ -87,6 +87,32 @@ const ExternalLink = styled.a.attrs({ target: '_blank', rel: 'noopener' })`
   ${createTextStyles({ ...DEFAULT_TEXT_STYLES.p })};
 `;
 
+const StyledDownloadAppBanner = styled.a`
+  width: 100%;
+  padding: 10px;
+  background-color: ${Colors.PRIMARY};
+  border-radius: 6px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-decoration: none;
+  color: ${Colors.BACKGROUND};
+
+  p {
+    color: ${Colors.BACKGROUND};
+    text-transform: uppercase;
+    font-size: 12px;
+    line-height: 14px;
+    margin-right: ${Sizes.SPACING / 3}px;
+  }
+
+  &:hover {
+    background-color: ${Colors.TEXT_PRIMARY};
+  }
+`;
+
 const ProjectInfoModal: React.FunctionComponent<ProjectInfoModal> = ({
   close,
 }) => {
@@ -99,6 +125,10 @@ const ProjectInfoModal: React.FunctionComponent<ProjectInfoModal> = ({
 
   return (
     <Container>
+      <StyledDownloadAppBanner href="/download">
+        <Text as="p">Stay connected — download the mobile app!</Text>
+        <Icon name="right-arrow" size={13} color={Colors.BACKGROUND} />
+      </StyledDownloadAppBanner>
       <Heading>
         <Text as="h2">tpscalls</Text>
         <IconButton
@@ -107,6 +137,7 @@ const ProjectInfoModal: React.FunctionComponent<ProjectInfoModal> = ({
           onClick={close}
         />
       </Heading>
+
       <InfoRow
         title="What is this?"
         content={

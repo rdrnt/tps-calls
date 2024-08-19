@@ -102,6 +102,32 @@ const SearchBar = styled.div`
   }
 `;
 
+const StyledDownloadAppBanner = styled.a`
+  width: 100%;
+  padding: 10px;
+  background-color: ${Colors.PRIMARY};
+  margin-bottom: ${Sizes.SPACING / 2}px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  text-decoration: none;
+  color: ${Colors.BACKGROUND};
+
+  p {
+    color: ${Colors.BACKGROUND};
+    text-transform: uppercase;
+    font-size: 12px;
+    line-height: 14px;
+    margin-right: ${Sizes.SPACING / 3}px;
+  }
+
+  &:hover {
+    background-color: ${Colors.TEXT_PRIMARY};
+  }
+`;
+
 const Heading: React.FunctionComponent<{
   label: string;
   onClick: () => void;
@@ -148,6 +174,10 @@ const DrawerHeader: React.FunctionComponent<DrawerHeader> = ({
         {!showFilters ? (
           <Content key="default">
             <Heading label="Incidents" onClick={closeDrawer} />
+            <StyledDownloadAppBanner href="/download">
+              <Text as="p">Download the new mobile app!</Text>
+              <Icon name="right-arrow" size={13} color={Colors.BACKGROUND} />
+            </StyledDownloadAppBanner>
             <SearchBarContainer>
               <SearchBar>
                 <Icon size={15} name="search" color={Colors.TEXT_SECONDARY} />
