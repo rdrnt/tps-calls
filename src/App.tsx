@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Map from './containers/Map';
 import ContactPage from './containers/Contact';
+import DownloadPage from './containers/Download';
 
 import { LocationListener, IncidentListener } from './components/Listeners';
 
@@ -43,6 +44,7 @@ const App: React.FunctionComponent = () => (
 
           <Switch>
             <Route exact path="/contact" component={ContactPage} />
+            <Route exact path="/download" component={DownloadPage} />
             <Route path={['/:id', '/']} component={Map} />
           </Switch>
         </>

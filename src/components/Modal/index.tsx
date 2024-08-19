@@ -12,11 +12,13 @@ import { Sizes } from '../../config';
 import ProjectInfoModal from './ProjectInfo';
 import AddMissingPersonModal from './AddMissingPerson';
 import AndroidBetaSignupModal from './AndroidBetaSignup';
+import DownloadMobileAppModal from './DownloadMobileApp';
 
 export type ModalTypes =
   | 'project-info'
   | 'addMissingPerson'
-  | 'android-beta-signup';
+  | 'android-beta-signup'
+  | 'mobile-app-download';
 
 export interface ModalProps {
   close: () => void;
@@ -26,6 +28,7 @@ const ModalTable: { [key in ModalTypes]?: any } = {
   'project-info': ProjectInfoModal,
   addMissingPerson: AddMissingPersonModal,
   'android-beta-signup': AndroidBetaSignupModal,
+  'mobile-app-download': DownloadMobileAppModal,
 };
 
 const StyledDialog = styled(Dialog)`
