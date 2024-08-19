@@ -16,7 +16,7 @@ import {
   IoLogoTwitter,
   IoMdAlert,
 } from 'react-icons/io';
-import { MdPersonSearch, MdInstallMobile } from 'react-icons/md';
+import { MdPersonSearch, MdInstallMobile, MdFiberNew } from 'react-icons/md';
 
 export type IconNames =
   | 'alert'
@@ -26,6 +26,7 @@ export type IconNames =
   | 'mobile-install'
   | 'x'
   | 'calendar'
+  | 'new'
   | 'right-arrow'
   | 'info'
   | 'personSearch'
@@ -43,6 +44,7 @@ const AllIcons: { [key in IconNames]?: React.ReactElement } = {
   'mobile-install': <MdInstallMobile />,
   x: <FiX />,
   calendar: <FiCalendar />,
+  new: <MdFiberNew />,
   'right-arrow': <FiArrowRight />,
   info: <IoMdInformationCircle />,
   position: <IoMdLocate />,

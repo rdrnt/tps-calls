@@ -262,7 +262,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
       <MapOverlayButton
         hidden={false}
         onClick={() => dispatch(openModal('mobile-app-download'))}
-        iconName="mobile-install"
+        iconName="new"
         position={{ bottom: Sizes.SPACING + 10, right: Sizes.SPACING * 7 }}
         size={25}
       />
