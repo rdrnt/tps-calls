@@ -127,6 +127,7 @@ const ProjectInfoModal: React.FunctionComponent<ProjectInfoModal> = ({
     <Container>
       <StyledDownloadAppBanner href="/download">
         <Text as="p">Stay connected — download the mobile app!</Text>
+        <Icon name="right-arrow" size={13} color={Colors.BACKGROUND} />
       </StyledDownloadAppBanner>
       <Heading>
         <Text as="h2">tpscalls</Text>
