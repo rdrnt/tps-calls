@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Text from '../components/Text';
 import { Button } from '../components/Button';
 import { Colors, Sizes } from '../config';
+import { Analytics } from '../helpers';
 
 import AppStoreDownloadImage from '../assets/images/appStoreDownload.svg';
 import PlayStoreDownloadImage from '../assets/images/googlePlayDownload.svg';
@@ -136,6 +137,10 @@ const StyledBottomDownloadContent = styled.div`
 `;
 
 const DownloadPage = () => {
+  React.useEffect(() => {
+    Analytics.pageview('/download');
+  }, []);
+
   return (
     <Container>
       <StyledHeadingContent>
