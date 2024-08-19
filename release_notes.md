@@ -1,3 +1,15 @@
+# 2.3.0
+
+- Mobile App Launch!
+
+- Adds download page
+
+- Adds content across app to advertise mobile app
+
+- Bumps react-icons to latest version
+
+- Adds meta tag for iOS App
+
 # 2.2.6
 
 - Removes Android beta signup modal. Thanks everyone for participating!
