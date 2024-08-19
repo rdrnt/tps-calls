@@ -33,6 +33,7 @@ const Content = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  text-align: left;
 
   padding: ${Sizes.SPACING / 3}px 0;
   margin-top: ${Sizes.SPACING / 2}px;
