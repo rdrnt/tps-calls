@@ -132,6 +132,10 @@ const StyledBottomDownloadContent = styled.div`
       padding: ${Sizes.SPACING}px;
       color: ${Colors.BACKGROUND};
       font-weight: 500;
+
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-decoration: none;
     }
   }
 `;

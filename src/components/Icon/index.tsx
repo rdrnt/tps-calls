@@ -16,13 +16,14 @@ import {
   IoLogoTwitter,
   IoMdAlert,
 } from 'react-icons/io';
-import { MdPersonSearch } from 'react-icons/md';
+import { MdPersonSearch, MdInstallMobile } from 'react-icons/md';
 
 export type IconNames =
   | 'alert'
   | 'slider'
   | 'search'
   | 'menu'
+  | 'mobile-install'
   | 'x'
   | 'calendar'
   | 'right-arrow'
@@ -39,6 +40,7 @@ const AllIcons: { [key in IconNames]?: React.ReactElement } = {
   slider: <FiSliders />,
   search: <GoSearch />,
   menu: <FiMenu />,
+  'mobile-install': <MdInstallMobile />,
   x: <FiX />,
   calendar: <FiCalendar />,
   'right-arrow': <FiArrowRight />,

@@ -258,6 +258,14 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
         position={{ bottom: Sizes.SPACING + 10, right: Sizes.SPACING * 4 }}
         size={30}
       />
+      {/* Overlay button for users location */}
+      <MapOverlayButton
+        hidden={false}
+        onClick={() => dispatch(openModal('mobile-app-download'))}
+        iconName="mobile-install"
+        position={{ bottom: Sizes.SPACING + 10, right: Sizes.SPACING * 7 }}
+        size={25}
+      />
 
       <MapIncidentInfo
         incident={incidents.selected}
