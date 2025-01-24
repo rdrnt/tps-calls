@@ -1,0 +1,19 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "5Q5PTY9868.com.drnt.tpscalls",
+        "paths": [
+          "*"
+        ]
+      },
+      {
+        "appID": "5Q5PTY9868.com.drnt.tpscalls.dev",
+        "paths": [
+          "*"
+        ]
+      }
+    ]
+  }
+}
