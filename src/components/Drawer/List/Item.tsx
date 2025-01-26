@@ -1,8 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Incident } from '@rdrnt/tps-calls-shared';
-import VisibilitySensor from 'react-visibility-sensor';
-import posed from 'react-pose';
 
 import Text from '../../Text';
 import { Sizes, Colors } from '../../../config';
@@ -13,16 +11,7 @@ export interface DrawerListItem {
   onClick: () => void;
 }
 
-const AnimatedContainer = posed.li({
-  visible: {
-    opacity: 1,
-  },
-  hidden: {
-    opacity: 0,
-  },
-});
-
-const Container = styled(AnimatedContainer)`
+const Container = styled.li`
   height: 75px;
   width: 100%;
   background-color: ${Colors.BACKGROUND};
@@ -49,25 +38,14 @@ const DrawerListItem: React.FunctionComponent<DrawerListItem> = ({
   incident,
   onClick,
 }) => {
-  const [animationState, setAnimationState] = React.useState<
-    'hidden' | 'visible'
-  >('hidden');
-
   return (
-    <VisibilitySensor
-      onChange={isVisible => {
-        setAnimationState(isVisible ? 'visible' : 'hidden');
-      }}
-      partialVisibility={true}
-    >
-      <Container pose={animationState} onClick={onClick}>
-        <Text as="h5">{incident.name}</Text>
-        <Text as="p" size={12} lineHeight={14}>
-          {incident.location}
-        </Text>
-        <Text as="span">{DateHelper.formatIncidentDate(incident.date)}</Text>
-      </Container>
-    </VisibilitySensor>
+    <Container onClick={onClick}>
+      <Text as="h5">{incident.name}</Text>
+      <Text as="p" size={12} lineHeight={14}>
+        {incident.location}
+      </Text>
+      <Text as="span">{DateHelper.formatIncidentDate(incident.date)}</Text>
+    </Container>
   );
 };
 
