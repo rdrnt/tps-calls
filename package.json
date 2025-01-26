@@ -16,7 +16,6 @@
     "@reach/dialog": "^0.3.0",
     "@reach/router": "^1.2.1",
     "@reach/slider": "^0.4.0-beta.0",
-    "@reach/tooltip": "^0.3.0",
     "@sentry/browser": "^5.6.3",
     "date-fns": "^1.30.1",
     "firebase": "^11.2.0",
