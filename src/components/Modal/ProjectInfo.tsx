@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import posed from 'react-pose';
+import { motion } from 'motion/react';
 
 import Text, { createTextStyles, DEFAULT_TEXT_STYLES } from '../Text';
 import { IconButton } from '../Button';
@@ -30,20 +30,11 @@ const InfoRowHeading = styled.button`
   padding: ${Sizes.SPACING / 3}px 0;
 `;
 
-const InfoRowInnerContent = styled(
-  posed.div({
-    open: {
-      height: 'auto',
-    },
-    closed: {
-      height: 0,
-    },
-  })
-)`
+const InfoRowInnerContent = styled(motion.div)<{ $open: boolean }>`
   width: 100%;
   background-color: inherit;
   overflow: hidden;
-  padding: ${props => (props.pose === 'open' ? Sizes.SPACING / 2 : 0)}px;
+  padding: ${(props) => (props.$open ? Sizes.SPACING / 2 : 0)}px;
   padding-top: 0;
 `;
 
@@ -59,7 +50,7 @@ const InfoRow: React.FunctionComponent<{
         <Icon size={25} name={open ? 'chevron-down' : 'chevron-right'} />
         <Text as="h5">{title}</Text>
       </InfoRowHeading>
-      <InfoRowInnerContent pose={open ? 'open' : 'closed'}>
+      <InfoRowInnerContent animate={{ height: open ? 'auto' : 0 }} $open={open}>
         {content}
       </InfoRowInnerContent>
     </InfoRowContainer>

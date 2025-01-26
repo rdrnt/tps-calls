@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import posed, { PoseGroup } from 'react-pose';
+import { motion, AnimatePresence } from 'motion/react';
 import { AppState } from '../../store';
 import { connect } from 'react-redux';
 import BounceLoader from 'react-spinners/BounceLoader';
@@ -9,16 +9,7 @@ import { Colors } from '../../config';
 
 import Text from '../Text';
 
-const AnimatedContainer = posed.div({
-  enter: {
-    opacity: 1,
-  },
-  exit: {
-    opacity: 0,
-  },
-});
-
-const Container = styled(AnimatedContainer)`
+const Container = styled(motion.div)`
   position: absolute;
   top: 0;
   left: 0;
@@ -45,9 +36,9 @@ export interface Loader {
 }
 
 const Loader: React.FunctionComponent<Loader> = ({ open, message }) => (
-  <PoseGroup>
+  <AnimatePresence>
     {open && (
-      <Container key="loader">
+      <Container key="loader" animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
         <BounceLoader color={Colors.PRIMARY} />
         {message && (
           <Text as="h1" weight="bold">
@@ -56,7 +47,7 @@ const Loader: React.FunctionComponent<Loader> = ({ open, message }) => (
         )}
       </Container>
     )}
-  </PoseGroup>
+  </AnimatePresence>
 );
 
 const mapStateToProps = (state: AppState) => ({

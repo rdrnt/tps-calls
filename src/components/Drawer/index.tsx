@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled, { css } from 'styled-components';
-import posed, { PoseGroup } from 'react-pose';
+import { AnimatePresence, motion } from 'motion/react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Colors, Sizes } from '../../config';
@@ -31,24 +31,7 @@ const MobileDrawerStyles = css`
   height: 100%;
 `;
 
-const Container = styled(
-  posed.div({
-    enter: {
-      x: 0,
-      opacity: 1,
-      transition: {
-        x: {
-          duration: 150,
-          ease: 'easeInOut',
-        },
-      },
-    },
-    exit: {
-      x: -Sizes.DRAWER_WIDTH,
-      opacity: 0,
-    },
-  })
-)`
+const Container = styled(motion.div)`
   position: absolute;
   @media only screen and (max-width: 600px) {
     ${MobileDrawerStyles};
@@ -91,9 +74,25 @@ const Drawer: React.FunctionComponent = ({}) => {
   };
 
   return (
-    <PoseGroup>
+    <AnimatePresence>
       {uiState.drawerOpen && (
-        <Container key="drawer">
+        <Container
+          key="drawer"
+          animate={{
+            x: 0,
+            opacity: 1,
+            transition: {
+              x: {
+                duration: 150,
+                ease: 'easeInOut',
+              },
+            },
+          }}
+          exit={{
+            x: -Sizes.DRAWER_WIDTH,
+            opacity: 0,
+          }}
+        >
           <Content>
             <DrawerHeader
               setFilter={setFilter}
@@ -102,14 +101,14 @@ const Drawer: React.FunctionComponent = ({}) => {
             />
             <DrawerList
               incidents={incidentsState.list}
-              setSelectedIncident={incident =>
+              setSelectedIncident={(incident) =>
                 dispatch(setSelectedIncident(incident))
               }
             />
           </Content>
         </Container>
       )}
-    </PoseGroup>
+    </AnimatePresence>
   );
 };
 
