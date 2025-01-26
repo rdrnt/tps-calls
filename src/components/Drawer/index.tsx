@@ -77,13 +77,13 @@ const Drawer: React.FunctionComponent = ({}) => {
     <AnimatePresence>
       {uiState.drawerOpen && (
         <Container
-          key="drawer"
+          initial={{ x: -Sizes.DRAWER_WIDTH, opacity: 0 }}
           animate={{
             x: 0,
             opacity: 1,
             transition: {
               x: {
-                duration: 150,
+                duration: 0.3,
                 ease: 'easeInOut',
               },
             },
