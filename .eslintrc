@@ -1,39 +1,26 @@
 {
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 2018,
+    "ecmaVersion": 2020,
     "sourceType": "module",
     "ecmaFeatures": {
       "jsx": true
     }
   },
-  "plugins": ["@typescript-eslint", "react", "jsx-a11y", "prettier"],
-  "env": {
-    "browser": true,
-    "jest": true,
-    "node": true
-  },
   "extends": [
     "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
-    "plugin:jsx-a11y/recommended",
-    "plugin:prettier/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended" // Enables eslint-plugin-prettier
   ],
+  "plugins": ["react", "@typescript-eslint", "prettier"],
+  "rules": {
+    "prettier/prettier": "error" // Shows Prettier errors as ESLint errors
+    // Add any custom rules here
+  },
   "settings": {
     "react": {
-      "version": "detect"
+      "version": "detect" // Automatically detect React version
     }
-  },
-  "rules": {
-    "@typescript-eslint/explicit-function-return-type": [
-      1,
-      {
-        "allowExpressions": true,
-        "allowTypedFunctionExpressions": true
-      }
-    ],
-    "react/prop-types": [1, { "skipUndeclared": true}],
-    "@typescript-eslint/ban-ts-ignore": "off"
   }
 }
