@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Dialog } from '@reach/dialog';
 import { useDebouncedCallback } from 'use-debounce';
 import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 
 import { AppState } from '../../store';
 import { closeModal } from '../../store/ui/actions';
@@ -31,7 +31,7 @@ const ModalTable: { [key in ModalTypes]?: any } = {
   'mobile-app-download': DownloadMobileAppModal,
 };
 
-const StyledDialog = styled(Dialog)`
+const StyledDialog = styled(Dialog as any)`
   padding: ${Sizes.SPACING}px;
   border-radius: 8px;
   z-index: 999;
