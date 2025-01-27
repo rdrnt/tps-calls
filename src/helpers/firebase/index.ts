@@ -1,6 +1,5 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
-import 'mapbox-gl/dist/mapbox-gl.css';
 import { Environment } from '..';
 
 import productionConfig from '../../config/firebase/production.json';
