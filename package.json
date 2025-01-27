@@ -37,7 +37,7 @@
     "react-spinners": "^0.6.1",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
-    "styled-components": "^4.2.1",
+    "styled-components": "^6.1.14",
     "typeface-poppins": "^0.0.72",
     "use-debounce": "^3.0.1"
   },
@@ -70,7 +70,7 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "prettier": "^3.0",
     "redux-devtools-extension": "^2.13.8",
-    "typescript": "~3.7.2",
+    "typescript": "^5.7.3",
     "vite": "^6.0.11"
   }
 }
