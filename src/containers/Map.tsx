@@ -234,7 +234,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
       />
       {/* Overlay button for users location */}
       <MapOverlayButton
-        hidden={ui.drawerOpen}
+        hidden={Boolean(ui.drawerOpen || incidents.selected)}
         onClick={() => dispatch(openModal('mobile-app-download'))}
         iconName="new"
         position={{ bottom: Sizes.SPACING + 10, right: Sizes.SPACING * 7 }}

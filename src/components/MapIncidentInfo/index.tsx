@@ -33,10 +33,10 @@ const Container = styled(motion.div)`
 const Content = styled.div`
   height: 100%;
   width: 100%;
+  padding: ${Sizes.SPACING / 2}px;
 
   > div {
-    margin: 0 ${Sizes.SPACING / 2}px;
-    padding: ${Sizes.SPACING / 2}px 0;
+    padding: ${Sizes.SPACING / 3}px;
 
     &:first-child {
       margin-top: 0;

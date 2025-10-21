@@ -38,10 +38,8 @@ const ActionContent = styled.div`
   align-items: center;
   justify-content: center;
 
-  > * {
-    :not(:last-child) {
-      margin-right: 5px;
-    }
+  > *:not(:last-child) {
+    margin-right: 10px;
   }
 `;
 
