@@ -3,14 +3,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Dialog } from '@reach/dialog';
 import { useDebouncedCallback } from 'use-debounce';
 import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 
 import { AppState } from '../../store';
 import { closeModal } from '../../store/ui/actions';
 import { Sizes } from '../../config';
 
 import ProjectInfoModal from './ProjectInfo';
-import AddMissingPersonModal from './AddMissingPerson';
+
 import AndroidBetaSignupModal from './AndroidBetaSignup';
 import DownloadMobileAppModal from './DownloadMobileApp';
 
@@ -26,12 +26,12 @@ export interface ModalProps {
 
 const ModalTable: { [key in ModalTypes]?: any } = {
   'project-info': ProjectInfoModal,
-  addMissingPerson: AddMissingPersonModal,
+
   'android-beta-signup': AndroidBetaSignupModal,
   'mobile-app-download': DownloadMobileAppModal,
 };
 
-const StyledDialog = styled(Dialog)`
+const StyledDialog = styled(Dialog as any)`
   padding: ${Sizes.SPACING}px;
   border-radius: 8px;
   z-index: 999;
@@ -42,7 +42,7 @@ const StyledDialog = styled(Dialog)`
   }
 `;
 
-const Modal: React.FunctionComponent = ({}) => {
+const Modal: React.FunctionComponent = () => {
   const dispatch = useDispatch();
   const { open, type } = useSelector((appState: AppState) => appState.ui.modal);
 

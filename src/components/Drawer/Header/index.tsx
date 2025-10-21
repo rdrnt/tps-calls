@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useDebouncedCallback } from 'use-debounce';
-import posed, { PoseGroup } from 'react-pose';
+import { AnimatePresence, motion } from 'motion/react';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import { Colors, Sizes } from '../../../config';
@@ -34,18 +34,7 @@ const Container = styled.div`
   transition: height 1s ease-in-out;
 `;
 
-const Content = styled(
-  posed.div({
-    enter: {
-      opacity: 1,
-      height: 'auto',
-    },
-    exit: {
-      opacity: 0,
-      height: 0,
-    },
-  })
-)`
+const Content = styled(motion.div)`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -170,9 +159,13 @@ const DrawerHeader: React.FunctionComponent<DrawerHeader> = ({
 
   return (
     <Container>
-      <PoseGroup>
+      <AnimatePresence>
         {!showFilters ? (
-          <Content key="default">
+          <Content
+            key="default"
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+          >
             <Heading label="Incidents" onClick={closeDrawer} />
             <StyledDownloadAppBanner href="/download">
               <Text as="p">Download the new mobile app!</Text>
@@ -184,7 +177,7 @@ const DrawerHeader: React.FunctionComponent<DrawerHeader> = ({
                 <input
                   type="text"
                   placeholder="Yonge St, Arrest, etc..."
-                  onChange={event => setSearchValue(event.target.value)}
+                  onChange={(event) => setSearchValue(event.target.value)}
                   value={searchValue || ''}
                 />
               </SearchBar>
@@ -209,7 +202,7 @@ const DrawerHeader: React.FunctionComponent<DrawerHeader> = ({
             <DrawerFilter filters={filters} setFilter={setFilter} />
           </Content>
         )}
-      </PoseGroup>
+      </AnimatePresence>
     </Container>
   );
 };

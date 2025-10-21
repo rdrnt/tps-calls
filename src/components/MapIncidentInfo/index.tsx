@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import posed, { PoseGroup } from 'react-pose';
+import { motion, AnimatePresence } from 'motion/react';
 import { Incident } from '@rdrnt/tps-calls-shared';
 
 import { DateHelper } from '../../helpers';
@@ -12,16 +12,7 @@ import MapInfoExtraContent from './Extra';
 
 const WIDTH = 335;
 
-const AnimatedContainer = posed.div({
-  enter: {
-    opacity: 1,
-  },
-  exit: {
-    opacity: 0,
-  },
-});
-
-const Container = styled(AnimatedContainer)`
+const Container = styled(motion.div)`
   position: absolute;
   bottom: ${Sizes.SPACING * 3}px;
   left: calc(50% - ${WIDTH / 2}px);
@@ -30,8 +21,10 @@ const Container = styled(AnimatedContainer)`
   min-height: 50px;
   background-color: ${Colors.BACKGROUND};
   border-radius: 8px;
-  box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
-    0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+  box-shadow:
+    0px 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0px 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0px 3px 14px 2px rgba(0, 0, 0, 0.12);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -40,11 +33,13 @@ const Container = styled(AnimatedContainer)`
 const Content = styled.div`
   height: 100%;
   width: 100%;
+  padding: ${Sizes.SPACING / 2}px;
+  padding-bottom: 0;
 
+  > div:first-child {
+    padding: ${Sizes.SPACING / 3}px 0;
+  }
   > div {
-    margin: 0 ${Sizes.SPACING / 2}px;
-    padding: ${Sizes.SPACING / 2}px 0;
-
     &:first-child {
       margin-top: 0;
     }
@@ -88,9 +83,9 @@ const MapIncidentInfo: React.FunctionComponent<MapIncidentInfo> = ({
   close,
 }) => {
   return (
-    <PoseGroup>
+    <AnimatePresence>
       {incident && !drawerOpen && (
-        <Container key="info">
+        <Container key="info" animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           <Content>
             <IncidentContent>
               <div>
@@ -116,7 +111,7 @@ const MapIncidentInfo: React.FunctionComponent<MapIncidentInfo> = ({
           </Content>
         </Container>
       )}
-    </PoseGroup>
+    </AnimatePresence>
   );
 };
 

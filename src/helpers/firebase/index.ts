@@ -1,48 +1,25 @@
-import * as firebaseApp from 'firebase/app';
-import 'firebase/firestore';
-import 'firebase/remote-config';
-
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
 import { Environment } from '..';
-
-import * as incidents from './incident';
 
 import productionConfig from '../../config/firebase/production.json';
 import developmentConfig from '../../config/firebase/development.json';
-import { isDevelopment } from '../environment';
 
-export const initialize = () => {
-  let configToUse;
+import * as firebase from 'firebase';
 
-  if (Environment.isDevelopment) {
-    console.warn('Using development Firebase project');
-    configToUse = developmentConfig;
-  } else {
-    configToUse = productionConfig;
+const getFirebaseConfigForEnvironment = () => {
+  if (!Environment.isDevelopment) {
+    return productionConfig;
   }
-
-  firebaseApp.initializeApp({ ...configToUse });
-
-  // loads remote config
-  const remoteConfig = firebaseApp.remoteConfig();
-  remoteConfig.settings.minimumFetchIntervalMillis = isDevelopment
-    ? 1000
-    : 360000;
-  remoteConfig.defaultConfig = {
-    tps_api_status: 'online',
-  };
-  remoteConfig
-    .fetchAndActivate()
-    .then(() => firebaseApp.remoteConfig().fetch());
+  console.warn('Using development Firebase project');
+  return developmentConfig;
 };
 
-export const getRemoteConfigStringValue = (key: string): string =>
-  firebaseApp
-    .remoteConfig()
-    .getValue(key)
-    .asString();
+const app = initializeApp(getFirebaseConfigForEnvironment());
 
-export type Timestamp = firebaseApp.firestore.Timestamp;
+// Firebase services
+export const firestore = getFirestore(app); // Firestore database
 
-export { firebaseApp as firebase };
+export type Timestamp = firebase.firestore.Timestamp;
 
-export { incidents };
+export default app;

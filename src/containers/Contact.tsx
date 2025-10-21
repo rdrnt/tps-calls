@@ -1,8 +1,9 @@
-import * as React from 'react';
 import styled from 'styled-components';
 import Text from '../components/Text';
 import { Button } from '../components/Button';
 import { Colors, Sizes } from '../config';
+import { useEffect } from 'react';
+import { Analytics } from '../helpers';
 
 const Container = styled.div`
   height: 100vh;
@@ -33,6 +34,10 @@ const Container = styled.div`
 `;
 
 const ContactPage = () => {
+  useEffect(() => {
+    Analytics.pageview('/contact');
+  }, []);
+
   return (
     <Container>
       <Text as="h4">tpscalls</Text>

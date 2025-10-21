@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import posed, { PoseGroup } from 'react-pose';
+import { motion, AnimatePresence } from 'motion/react';
 
 import { Colors } from '../../config';
 import Icon, { IconNames } from '../Icon';
@@ -23,23 +23,14 @@ interface MapOverlayButton {
   hidden: boolean;
 }
 
-const AnimatedContainer = posed.button({
-  enter: {
-    opacity: 1,
-  },
-  exit: {
-    opacity: 0,
-  },
-});
-
-const Container = styled(AnimatedContainer)<{
+const Container = styled(motion.button)<{
   position: CssPosition;
 }>`
   position: absolute;
-  ${props => props.position.top && `top: ${props.position.top}px`};
-  ${props => props.position.bottom && `bottom: ${props.position.bottom}px`};
-  ${props => props.position.left && `left: ${props.position.left}px`};
-  ${props => props.position.right && `right: ${props.position.right}px`};
+  ${(props) => props.position.top && `top: ${props.position.top}px`};
+  ${(props) => props.position.bottom && `bottom: ${props.position.bottom}px`};
+  ${(props) => props.position.left && `left: ${props.position.left}px`};
+  ${(props) => props.position.right && `right: ${props.position.right}px`};
   height: 45px;
   width: 45px;
   border: none;
@@ -63,13 +54,15 @@ const MapOverlayButton: React.FunctionComponent<MapOverlayButton> = ({
   const [hovering, hoverProps] = onHover();
 
   return (
-    <PoseGroup>
+    <AnimatePresence>
       {!hidden && (
         <Container
           key={`overlay-${iconName}`}
           type="button"
           onClick={onClick}
           position={position}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
           {...hoverProps}
         >
           <Icon
@@ -79,7 +72,7 @@ const MapOverlayButton: React.FunctionComponent<MapOverlayButton> = ({
           />
         </Container>
       )}
-    </PoseGroup>
+    </AnimatePresence>
   );
 };
 

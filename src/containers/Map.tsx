@@ -4,18 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Coordinates, Incident } from '@rdrnt/tps-calls-shared';
 import ReactMapGl, { MapRef } from 'react-map-gl';
 import { match } from 'react-router';
-import mapboxgl from 'mapbox-gl';
-
-/*
-// @ts-ignore
-import mapboxgl from 'mapbox-gl/dist/mapbox-gl';
-// @ts-ignore
-import MapboxWorker from 'mapbox-gl/dist/mapbox-gl-csp-worker';
-mapboxgl.workerClass = MapboxWorker;
-*/
-
-// @ts-ignore
-mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 
 import {
   toggleDrawer,
@@ -27,7 +15,8 @@ import {
 import { setSelectedIncident } from '../store/incidents/actions';
 import { setRequestingLocationPermissions } from '../store/user/actions';
 import { MAPBOX_THEME_URL, Colors, Sizes } from '../config';
-import { Environment, Analytics, Firebase } from '../helpers';
+import { Environment, Analytics } from '../helpers';
+import * as FirebaseIncidents from '../helpers/firebase/incident';
 
 import MapIncidentInfo from '../components/MapIncidentInfo';
 import MapOverlayButton from '../components/MapOverlayButton';
@@ -55,20 +44,19 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
 
   // I want to reffer to mapRef instead of mapRef.current throughout the app
   // thats why theres two vars lol
-  const refForMap = React.useRef<MapRef | undefined>();
+  const refForMap = React.useRef<MapRef | null>(null);
   const mapRef = refForMap.current;
 
   // https://github.com/alex3165/react-mapbox-gl/issues/461
-  const [center, setCenter] = React.useState<[number, number]>([
+  const [, setCenter] = React.useState<[number, number]>([
     DEFAULTS.longitude,
     DEFAULTS.latitude,
   ]);
   const [mapState, setMapState] = React.useState<MapState | undefined>();
 
   const [isMapLoaded, setIsMapLoaded] = React.useState<boolean>(false);
-  const [interactingWithMap, setInteractingWithMap] = React.useState<boolean>(
-    false
-  );
+  const [interactingWithMap, setInteractingWithMap] =
+    React.useState<boolean>(false);
 
   // Unselects the selected incident and animates to the users original position
   const unselectIncidentWithAnimation = (animated?: boolean) => {
@@ -99,7 +87,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
     );
 
     if (!matchingIncident && searchDB) {
-      const incidentFromDB = await Firebase.incidents.getIncidentFromId(id);
+      const incidentFromDB = await FirebaseIncidents.getIncidentFromId(id);
       return incidentFromDB;
     }
 
@@ -116,23 +104,10 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
     // if the map has been loaded, and we have a list of incidents
     if (isMapLoaded && incidents.list.length !== 0) {
       // Close the loader if it's open
-      if (ui.loader.open) {
-        const apiStatus = Firebase.getRemoteConfigStringValue('tps_api_status');
-        if (apiStatus === 'offline') {
-          dispatch(
-            showToast({
-              message: 'TPS feed offline',
-              options: {
-                intent: 'error',
-              },
-            })
-          );
-        }
 
-        setTimeout(() => {
-          dispatch(closeLoader());
-        }, 500);
-      }
+      setTimeout(() => {
+        dispatch(closeLoader());
+      }, 500);
 
       // If we have an id in the params, see if there's a matching incident in the db/store
       const { id } = match.params;
@@ -203,7 +178,6 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
 
   return (
     <ReactMapGl
-      //@ts-ignore
       ref={refForMap}
       mapboxAccessToken={Environment.config.MAPBOX_API_KEY}
       mapStyle={MAPBOX_THEME_URL}
@@ -260,7 +234,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
       />
       {/* Overlay button for users location */}
       <MapOverlayButton
-        hidden={false}
+        hidden={Boolean(ui.drawerOpen || incidents.selected)}
         onClick={() => dispatch(openModal('mobile-app-download'))}
         iconName="new"
         position={{ bottom: Sizes.SPACING + 10, right: Sizes.SPACING * 7 }}

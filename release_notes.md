@@ -1,3 +1,8 @@
+# 3.0.0
+
+- Moved project to use Vite
+- Other small changes to styling
+
 # 2.3.0
 
 - Mobile App Launch!
