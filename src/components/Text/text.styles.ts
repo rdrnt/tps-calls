@@ -56,11 +56,17 @@ let DEFAULT_TEXT_STYLES: { [key in ValidTextTypes]: StyledTextProps } = {
 };
 
 const getFont = (isSecondary: boolean | undefined) => css`
-  font-family: ${`${
-      isSecondary ? Defaults.SECONDARY_FONT : Defaults.PRIMARY_FONT
-    }`},
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif,
-    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family:
+    ${`${isSecondary ? Defaults.SECONDARY_FONT : Defaults.PRIMARY_FONT}`},
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Helvetica,
+    Arial,
+    sans-serif,
+    'Apple Color Emoji',
+    'Segoe UI Emoji',
+    'Segoe UI Symbol';
 `;
 
 const createTextStyles = (props: StyledTextProps) => css<typeof props>`
@@ -76,7 +82,7 @@ const createTextStyles = (props: StyledTextProps) => css<typeof props>`
 `;
 
 const H1 = styled.h1<StyledTextProps>`
-  ${props =>
+  ${(props) =>
     createTextStyles({
       ...DEFAULT_TEXT_STYLES.h1,
       ...props,
@@ -84,7 +90,7 @@ const H1 = styled.h1<StyledTextProps>`
 `;
 
 const H2 = styled.h2<StyledTextProps>`
-  ${props =>
+  ${(props) =>
     createTextStyles({
       ...DEFAULT_TEXT_STYLES.h2,
       ...props,
@@ -92,7 +98,7 @@ const H2 = styled.h2<StyledTextProps>`
 `;
 
 const H3 = styled.h3<StyledTextProps>`
-  ${props =>
+  ${(props) =>
     createTextStyles({
       ...DEFAULT_TEXT_STYLES.h3,
       ...props,
@@ -100,7 +106,7 @@ const H3 = styled.h3<StyledTextProps>`
 `;
 
 const H4 = styled.h4<StyledTextProps>`
-  ${props =>
+  ${(props) =>
     createTextStyles({
       ...DEFAULT_TEXT_STYLES.h4,
       ...props,
@@ -108,7 +114,7 @@ const H4 = styled.h4<StyledTextProps>`
 `;
 
 const H5 = styled.h5<StyledTextProps>`
-  ${props =>
+  ${(props) =>
     createTextStyles({
       ...DEFAULT_TEXT_STYLES.h5,
       ...props,
@@ -116,7 +122,7 @@ const H5 = styled.h5<StyledTextProps>`
 `;
 
 const H6 = styled.h6<StyledTextProps>`
-  ${props =>
+  ${(props) =>
     createTextStyles({
       ...DEFAULT_TEXT_STYLES.h6,
       ...props,
@@ -124,7 +130,7 @@ const H6 = styled.h6<StyledTextProps>`
 `;
 
 const P = styled.p<StyledTextProps>`
-  ${props =>
+  ${(props) =>
     createTextStyles({
       ...DEFAULT_TEXT_STYLES.p,
       ...props,
@@ -132,7 +138,7 @@ const P = styled.p<StyledTextProps>`
 `;
 
 const Span = styled.span<StyledTextProps>`
-  ${props =>
+  ${(props) =>
     createTextStyles({
       ...DEFAULT_TEXT_STYLES.span,
       ...props,

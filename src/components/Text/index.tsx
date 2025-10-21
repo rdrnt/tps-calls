@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { FunctionComponent, ReactNode, cloneElement } from 'react';
 
 import {
   H1,
@@ -47,12 +47,15 @@ const getTextComponentForType = (type: ValidTextTypes) => {
   }
 };
 
-const Text: React.FunctionComponent<{
-  as: ValidTextTypes;
-} & StyledTextProps> = ({ as, children, ...rest }) => {
+const Text: FunctionComponent<
+  {
+    as: ValidTextTypes;
+    children: ReactNode;
+  } & StyledTextProps
+> = ({ as, children, ...rest }) => {
   const TextComponent = getTextComponentForType(as);
 
-  return React.cloneElement(TextComponent, { ...rest }, children);
+  return cloneElement(TextComponent, { ...rest }, children);
 };
 
 export { createTextStyles, DEFAULT_TEXT_STYLES };

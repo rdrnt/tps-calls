@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import posed, { PoseGroup } from 'react-pose';
+import { motion, AnimatePresence } from 'motion/react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { AppState } from '../../store';
@@ -20,24 +20,13 @@ export interface ToastOptions {
 
 type FinalToastOptions = Required<ToastOptions>;
 
-const AnimatedContainer = posed.div({
-  enter: {
-    opacity: 1,
-    top: Sizes.SPACING + Sizes.SPACING / 2,
-  },
-  exit: {
-    opacity: 0,
-    top: 0,
-  },
-});
-
-const Container = styled(AnimatedContainer)`
+const Container = styled(motion.div)<{ $width: number }>`
   min-width: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: absolute;
-  left: ${props => `calc(50% - ${props.width / 2}px)`};
+  left: ${(props) => `calc(50% - ${props.$width / 2}px)`};
   z-index: ${ZIndex.TOAST};
   border-radius: 20px;
   text-align: center;
@@ -110,9 +99,15 @@ const Toast: React.FunctionComponent<Toast> = ({}) => {
   }, [open]);
 
   return (
-    <PoseGroup>
+    <AnimatePresence>
       {open && (
-        <Container key="toast" ref={measureRef} width={width}>
+        <Container
+          key="toast"
+          ref={measureRef}
+          $width={width}
+          animate={{ opacity: 1, top: Sizes.SPACING + Sizes.SPACING / 2 }}
+          exit={{ opacity: 0, top: 0 }}
+        >
           {!defaultOptions.hideIcon && (
             <IconContainer backgroundColor={defaultOptions.color}>
               <Icon name={defaultOptions.icon} size={14} color="white" />
@@ -123,7 +118,7 @@ const Toast: React.FunctionComponent<Toast> = ({}) => {
           </Text>
         </Container>
       )}
-    </PoseGroup>
+    </AnimatePresence>
   );
 };
 

@@ -12,7 +12,6 @@ import { IconButton } from '../Button';
 import { IconNames } from '../Icon';
 import { useDispatch } from 'react-redux';
 import { showToast } from '../../store/ui/actions';
-import Text from '../Text';
 
 const ExtraContent = styled.div`
   display: flex;
@@ -38,10 +37,8 @@ const ActionContent = styled.div`
   align-items: center;
   justify-content: center;
 
-  > * {
-    :not(:last-child) {
-      margin-right: 5px;
-    }
+  > *:not(:last-child) {
+    margin-right: 10px;
   }
 `;
 
@@ -50,9 +47,9 @@ const ShareButton: React.FunctionComponent<{
   onClick?: () => void;
 }> = ({ iconName, onClick }) => (
   <IconButton
-    size={30}
+    size={32}
     backgroundColor={Colors.PRIMARY}
-    borderRadius={15}
+    borderRadius={16}
     iconProps={{ size: 15, name: iconName, color: 'white' }}
     onClick={onClick}
   />
@@ -64,9 +61,6 @@ const MapInfoExtraContent: React.FunctionComponent<MapInfoExtraContent> = ({
   const dispatch = useDispatch();
   return (
     <ExtraContent>
-      <Text as="h6" weight="bold">
-        Share via:
-      </Text>
       <ActionContent>
         {/* Copy link */}
         <CopyToClipboard text={URL.createShareUrl(incident.id)}>

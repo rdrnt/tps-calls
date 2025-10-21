@@ -13,7 +13,9 @@ import {
 import { AppState } from '../../store';
 import { IncidentFilterState } from '../../store/incidents';
 
-const IncidentListener: React.FunctionComponent = ({}) => {
+import * as FirebaseIncidents from '../../helpers/firebase/incident';
+
+const IncidentListener: React.FunctionComponent = () => {
   const dispatch = useDispatch();
   const { incidents, user } = useSelector((state: AppState) => state);
   const { filter, list } = incidents;
@@ -39,13 +41,13 @@ const IncidentListener: React.FunctionComponent = ({}) => {
   );
 
   const loadOldestIncidentDate = async () => {
-    const oldestIncident: Incident<any> = await Firebase.incidents.getOldestIncident();
+    const oldestIncident: Incident<any> = await FirebaseIncidents.getOldestIncident();
     dispatch(setFilterOldestDate(oldestIncident.date));
   };
 
   // Set the listener
   React.useEffect(() => {
-    const incidentListener = Firebase.incidents.listener(newIncidents => {
+    const incidentListener = FirebaseIncidents.listener(newIncidents => {
       // Set the incidents in the store
       setIncidents(newIncidents);
       // Set the default incidents
@@ -88,7 +90,7 @@ const IncidentListener: React.FunctionComponent = ({}) => {
         if (hasDateFilters) {
           // If we have date filters, but they're different, get the incidents for that date
           if (dateFiltersDifferent) {
-            const incidentsForDate = await Firebase.incidents.getIncidentsAtDate(
+            const incidentsForDate = await FirebaseIncidents.getIncidentsAtDate(
               {
                 startDate: filter.startDate!,
                 endDate: filter.endDate!,
