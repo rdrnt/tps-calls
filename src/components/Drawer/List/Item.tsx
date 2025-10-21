@@ -25,7 +25,7 @@ const Container = styled.li`
   overflow: hidden;
   text-overflow: ellipsis;
 
-  :hover {
+  &:hover {
     background-color: ${Colors.PRIMARY};
 
     * {
