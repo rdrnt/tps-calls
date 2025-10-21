@@ -8,7 +8,7 @@
     "build:dev": "NODE_ENV=development vite build",
     "test": "vitest",
     "netlify-deploy": "yarn build && netlify deploy --dir dist",
-    "netlify-deploy:prod": "netlify deploy --prod",
+    "netlify-deploy:prod": "netlify deploy --prod --dir dist",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
