@@ -55,9 +55,8 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
   const [mapState, setMapState] = React.useState<MapState | undefined>();
 
   const [isMapLoaded, setIsMapLoaded] = React.useState<boolean>(false);
-  const [interactingWithMap, setInteractingWithMap] = React.useState<boolean>(
-    false
-  );
+  const [interactingWithMap, setInteractingWithMap] =
+    React.useState<boolean>(false);
 
   // Unselects the selected incident and animates to the users original position
   const unselectIncidentWithAnimation = (animated?: boolean) => {
@@ -84,7 +83,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
     searchDB = false
   ): Promise<Incident<any> | undefined> => {
     const matchingIncident: Incident<any> | undefined = incidents.list.find(
-      incident => incident.id === id
+      (incident) => incident.id === id
     );
 
     if (!matchingIncident && searchDB) {
@@ -113,7 +112,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
       // If we have an id in the params, see if there's a matching incident in the db/store
       const { id } = match.params;
       if (id) {
-        getIncidentWithId(id, true).then(incident => {
+        getIncidentWithId(id, true).then((incident) => {
           if (!incident) {
             dispatch(
               showToast({
@@ -235,7 +234,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
       />
       {/* Overlay button for users location */}
       <MapOverlayButton
-        hidden={false}
+        hidden={ui.drawerOpen}
         onClick={() => dispatch(openModal('mobile-app-download'))}
         iconName="new"
         position={{ bottom: Sizes.SPACING + 10, right: Sizes.SPACING * 7 }}
@@ -266,7 +265,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
 
       {/* The incident features */}
       {incidents.list
-        .map(incident => {
+        .map((incident) => {
           const selected = Boolean(
             incidents.selected && incidents.selected.id === incident.id
           );
@@ -286,7 +285,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
 
           return null;
         })
-        .filter(incidentFeature => Boolean(incidentFeature))}
+        .filter((incidentFeature) => Boolean(incidentFeature))}
     </ReactMapGl>
   );
 };
