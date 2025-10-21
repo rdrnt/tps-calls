@@ -34,10 +34,12 @@ const Content = styled.div`
   height: 100%;
   width: 100%;
   padding: ${Sizes.SPACING / 2}px;
+  padding-bottom: 0;
 
+  > div:first-child {
+    padding: ${Sizes.SPACING / 3}px 0;
+  }
   > div {
-    padding: ${Sizes.SPACING / 3}px;
-
     &:first-child {
       margin-top: 0;
     }
