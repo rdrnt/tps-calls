@@ -12,7 +12,6 @@ import { IconButton } from '../Button';
 import { IconNames } from '../Icon';
 import { useDispatch } from 'react-redux';
 import { showToast } from '../../store/ui/actions';
-import Text from '../Text';
 
 const ExtraContent = styled.div`
   display: flex;

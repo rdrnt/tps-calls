@@ -44,11 +44,11 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
 
   // I want to reffer to mapRef instead of mapRef.current throughout the app
   // thats why theres two vars lol
-  const refForMap = React.useRef<MapRef | undefined>();
+  const refForMap = React.useRef<MapRef | null>(null);
   const mapRef = refForMap.current;
 
   // https://github.com/alex3165/react-mapbox-gl/issues/461
-  const [center, setCenter] = React.useState<[number, number]>([
+  const [, setCenter] = React.useState<[number, number]>([
     DEFAULTS.longitude,
     DEFAULTS.latitude,
   ]);
@@ -83,7 +83,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
     searchDB = false
   ): Promise<Incident<any> | undefined> => {
     const matchingIncident: Incident<any> | undefined = incidents.list.find(
-      (incident) => incident.id === id
+      incident => incident.id === id
     );
 
     if (!matchingIncident && searchDB) {
@@ -112,7 +112,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
       // If we have an id in the params, see if there's a matching incident in the db/store
       const { id } = match.params;
       if (id) {
-        getIncidentWithId(id, true).then((incident) => {
+        getIncidentWithId(id, true).then(incident => {
           if (!incident) {
             dispatch(
               showToast({
@@ -265,7 +265,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
 
       {/* The incident features */}
       {incidents.list
-        .map((incident) => {
+        .map(incident => {
           const selected = Boolean(
             incidents.selected && incidents.selected.id === incident.id
           );
@@ -285,7 +285,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
 
           return null;
         })
-        .filter((incidentFeature) => Boolean(incidentFeature))}
+        .filter(incidentFeature => Boolean(incidentFeature))}
     </ReactMapGl>
   );
 };
