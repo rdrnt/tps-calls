@@ -34,6 +34,13 @@ const textVariants = cva('', {
   },
 });
 
+export const getTextVariantClassName = (
+  variant: VariantProps<typeof textVariants>['variant'],
+  align?: VariantProps<typeof textVariants>['align']
+) => {
+  return cn(textVariants({ variant, align }));
+};
+
 type BaseProps = React.HTMLAttributes<Element> &
   VariantProps<typeof textVariants> & {
     asChild?: boolean;

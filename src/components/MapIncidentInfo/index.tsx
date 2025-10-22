@@ -3,6 +3,17 @@ import styled from 'styled-components';
 import { motion, AnimatePresence } from 'motion/react';
 import { Incident } from '@rdrnt/tps-calls-shared';
 
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '../ui/card';
+import { Separator } from '../ui/separator';
+
 import { DateHelper } from '../../helpers';
 import { Sizes, Colors } from '../../config';
 import Text from '../Text';
@@ -85,31 +96,23 @@ const MapIncidentInfo: React.FunctionComponent<MapIncidentInfo> = ({
   return (
     <AnimatePresence>
       {incident && !drawerOpen && (
-        <Container key="info" animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-          <Content>
-            <IncidentContent>
-              <div>
-                <Text as="h4" size={22} weight="500" lineHeight={22}>
-                  {incident.name}
-                </Text>
-                <Text as="p" lineHeight={21}>
-                  {incident.location}
-                </Text>
-                <Text as="span" size={12}>
-                  {DateHelper.formatIncidentDate(incident.date)}
-                </Text>
-              </div>
-              <IconButton
-                size={17}
-                backgroundColor={Colors.TEXT_SECONDARY}
-                borderRadius={8.5}
-                iconProps={{ size: 13, name: 'x', color: 'white' }}
-                onClick={close}
-              />
-            </IncidentContent>
-            <MapInfoExtraContent incident={incident} close={close} />
-          </Content>
-        </Container>
+        <Card className="absolute bottom-[25px] left-1/2 -translate-x-1/2 w-[335px]">
+          <CardHeader className="gap-1">
+            <CardTitle className="text-2xl font-bold">
+              {incident.name}
+            </CardTitle>
+            <CardDescription className="text-base text-primary">
+              {incident.location}
+            </CardDescription>
+            <CardDescription className="uppercase text-xs">
+              {DateHelper.formatIncidentDate(incident.date)}
+            </CardDescription>
+          </CardHeader>
+
+          <CardFooter>
+            <Separator />
+          </CardFooter>
+        </Card>
       )}
     </AnimatePresence>
   );

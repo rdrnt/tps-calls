@@ -2,7 +2,7 @@ import * as React from 'react';
 import { AppState } from '../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { Coordinates, Incident } from '@rdrnt/tps-calls-shared';
-import ReactMapGl, { MapRef } from 'react-map-gl';
+import ReactMapGl, { AttributionControl, MapRef } from 'react-map-gl';
 import { match } from 'react-router';
 
 import {
@@ -191,7 +191,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
       ref={refForMap}
       mapboxAccessToken={Environment.config.MAPBOX_API_KEY}
       mapStyle={MAPBOX_THEME_URL}
-      attributionControl={true}
+      attributionControl={false}
       initialViewState={{
         latitude: 43.653225,
         longitude: -79.383186,
@@ -217,6 +217,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
         }
       }}
     >
+      <AttributionControl compact={true} position="bottom-left" />
       {/* Overlay button for opening the drawer */}
       {!ui.drawerOpen && (
         <Button
@@ -234,35 +235,36 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
         close={() => unselectIncidentWithAnimation(true)}
       />
 
-      {Boolean(!ui.drawerOpen || !incidents.selected) && (
-        <ButtonGroup className="absolute bottom-[25px] right-[25px]">
-          <Button
-            size="icon-lg"
-            onClick={() => dispatch(openModal('mobile-app-download'))}
-          >
-            <TabletSmartphoneIcon />
-          </Button>
-          <ButtonGroupSeparator />
-          {user.location.available && (
-            <>
-              <Button
-                size="icon-lg"
-                onClick={() => dispatch(setRequestingLocationPermissions(true))}
-              >
-                <NavigationIcon />
-              </Button>
-              <ButtonGroupSeparator />
-            </>
-          )}
+      <ButtonGroup
+        className="absolute bottom-[25px] right-[25px]"
+        hidden={Boolean(ui.drawerOpen || incidents.selected)}
+      >
+        <Button
+          size="icon-lg"
+          onClick={() => dispatch(openModal('mobile-app-download'))}
+        >
+          <TabletSmartphoneIcon />
+        </Button>
+        <ButtonGroupSeparator />
+        {user.location.available && (
+          <>
+            <Button
+              size="icon-lg"
+              onClick={() => dispatch(setRequestingLocationPermissions(true))}
+            >
+              <NavigationIcon />
+            </Button>
+            <ButtonGroupSeparator />
+          </>
+        )}
 
-          <Button
-            size="icon-lg"
-            onClick={() => dispatch(openModal('project-info'))}
-          >
-            <InfoIcon />
-          </Button>
-        </ButtonGroup>
-      )}
+        <Button
+          size="icon-lg"
+          onClick={() => dispatch(openModal('project-info'))}
+        >
+          <InfoIcon />
+        </Button>
+      </ButtonGroup>
 
       {user.location.coordinates && (
         <AnimatedMapMarker
