@@ -4,6 +4,7 @@ import { Button } from '../components/Button';
 import { Colors, Sizes } from '../config';
 import { useEffect } from 'react';
 import { Analytics } from '../helpers';
+import { Typography } from '../components/Typography';
 
 const Container = styled.div`
   height: 100vh;
@@ -40,6 +41,7 @@ const ContactPage = () => {
 
   return (
     <Container>
+      <Typography variant="h1">Contact</Typography>
       <Text as="h4">tpscalls</Text>
       <Text as="h1">Contact</Text>
       <Text as="p">

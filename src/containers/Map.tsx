@@ -19,7 +19,6 @@ import { Environment, Analytics } from '../helpers';
 import * as FirebaseIncidents from '../helpers/firebase/incident';
 
 import MapIncidentInfo from '../components/MapIncidentInfo';
-import MapOverlayButton from '../components/MapOverlayButton';
 import AnimatedMapMarker from '../components/MapMarker/Animated';
 import MapMarker from '../components/MapMarker';
 import { Button } from '../components/ui/button';
@@ -27,7 +26,12 @@ import {
   ButtonGroup,
   ButtonGroupSeparator,
 } from '../components/ui/button-group';
-import { PlusIcon } from 'lucide-react';
+import {
+  MenuIcon,
+  NavigationIcon,
+  InfoIcon,
+  TabletSmartphoneIcon,
+} from 'lucide-react';
 
 const DEFAULTS = {
   latitude: 43.653225,
@@ -214,38 +218,15 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
       }}
     >
       {/* Overlay button for opening the drawer */}
-      <MapOverlayButton
-        hidden={ui.drawerOpen}
-        onClick={() => dispatch(toggleDrawer(true))}
-        iconName="menu"
-        position={{ top: Sizes.SPACING, left: Sizes.SPACING }}
-      />
-      {/* Overlay button for opening the project info */}
-      <MapOverlayButton
-        hidden={Boolean(ui.drawerOpen || incidents.selected)}
-        onClick={() => dispatch(openModal('project-info'))}
-        iconName="info"
-        position={{ bottom: Sizes.SPACING + 10, right: Sizes.SPACING }}
-        size={30}
-      />
-      {/* Overlay button for users location */}
-      <MapOverlayButton
-        hidden={Boolean(
-          ui.drawerOpen || incidents.selected || !user.location.available
-        )}
-        onClick={() => dispatch(setRequestingLocationPermissions(true))}
-        iconName="position"
-        position={{ bottom: Sizes.SPACING + 10, right: Sizes.SPACING * 4 }}
-        size={30}
-      />
-      {/* Overlay button for users location */}
-      <MapOverlayButton
-        hidden={Boolean(ui.drawerOpen || incidents.selected)}
-        onClick={() => dispatch(openModal('mobile-app-download'))}
-        iconName="new"
-        position={{ bottom: Sizes.SPACING + 10, right: Sizes.SPACING * 7 }}
-        size={25}
-      />
+      {!ui.drawerOpen && (
+        <Button
+          size="icon-lg"
+          className={`absolute top-[20px] left-[20px]`}
+          onClick={() => dispatch(toggleDrawer(true))}
+        >
+          <MenuIcon />
+        </Button>
+      )}
 
       <MapIncidentInfo
         incident={incidents.selected}
@@ -253,15 +234,35 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
         close={() => unselectIncidentWithAnimation(true)}
       />
 
-      <ButtonGroup className="absolute bottom-0 right-0">
-        <Button size="icon-lg">
-          <PlusIcon />
-        </Button>
-        <ButtonGroupSeparator />
-        <Button size="lg">Click me</Button>
-        <ButtonGroupSeparator />
-        <Button size="lg">no me</Button>
-      </ButtonGroup>
+      {Boolean(!ui.drawerOpen || !incidents.selected) && (
+        <ButtonGroup className="absolute bottom-[25px] right-[25px]">
+          <Button
+            size="icon-lg"
+            onClick={() => dispatch(openModal('mobile-app-download'))}
+          >
+            <TabletSmartphoneIcon />
+          </Button>
+          <ButtonGroupSeparator />
+          {user.location.available && (
+            <>
+              <Button
+                size="icon-lg"
+                onClick={() => dispatch(setRequestingLocationPermissions(true))}
+              >
+                <NavigationIcon />
+              </Button>
+              <ButtonGroupSeparator />
+            </>
+          )}
+
+          <Button
+            size="icon-lg"
+            onClick={() => dispatch(openModal('project-info'))}
+          >
+            <InfoIcon />
+          </Button>
+        </ButtonGroup>
+      )}
 
       {user.location.coordinates && (
         <AnimatedMapMarker
