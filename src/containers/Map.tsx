@@ -22,6 +22,12 @@ import MapIncidentInfo from '../components/MapIncidentInfo';
 import MapOverlayButton from '../components/MapOverlayButton';
 import AnimatedMapMarker from '../components/MapMarker/Animated';
 import MapMarker from '../components/MapMarker';
+import { Button } from '../components/ui/button';
+import {
+  ButtonGroup,
+  ButtonGroupSeparator,
+} from '../components/ui/button-group';
+import { PlusIcon } from 'lucide-react';
 
 const DEFAULTS = {
   latitude: 43.653225,
@@ -246,6 +252,16 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
         drawerOpen={ui.drawerOpen}
         close={() => unselectIncidentWithAnimation(true)}
       />
+
+      <ButtonGroup className="absolute bottom-0 right-0">
+        <Button size="icon-lg">
+          <PlusIcon />
+        </Button>
+        <ButtonGroupSeparator />
+        <Button size="lg">Click me</Button>
+        <ButtonGroupSeparator />
+        <Button size="lg">no me</Button>
+      </ButtonGroup>
 
       {user.location.coordinates && (
         <AnimatedMapMarker

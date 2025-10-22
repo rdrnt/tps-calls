@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 import { resolve } from 'path';
 
 export default defineConfig({
@@ -10,6 +11,7 @@ export default defineConfig({
       // Include .tsx files
       include: '**/*.{jsx,tsx}',
     }),
+    tailwindcss(),
   ],
   resolve: {
     alias: {
