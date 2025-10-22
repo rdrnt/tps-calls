@@ -14,6 +14,7 @@ import Drawer from './components/Drawer';
 import Loader from './components/Loader';
 import Modal from './components/Modal';
 import Toast from './components/Toast';
+import BetaFeature from './containers/BetaFeature';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -45,6 +46,7 @@ const App: React.FunctionComponent = () => (
           <Switch>
             <Route exact path="/contact" component={ContactPage} />
             <Route exact path="/download" component={DownloadPage} />
+            <Route exact path="/beta-feature" component={BetaFeature} />
             <Route path={['/:id', '/']} component={Map} />
           </Switch>
         </>
