@@ -1,20 +1,25 @@
-import { combineReducers, createStore } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
+import { configureStore } from '@reduxjs/toolkit';
+import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 
 // Reducer stuff
-import { incidentReducer } from './incidents/reducer';
-import { uiReducer } from './ui/reducer';
-import { userReducer } from './user/reducer';
+import incidentsReducer from './slices/incidents';
+import uiReducer from './slices/ui';
+import userReducer from './slices/user';
 
-const rootReducer = combineReducers({
-  incidents: incidentReducer,
-  ui: uiReducer,
-  user: userReducer,
+export const store = configureStore({
+  reducer: {
+    incidents: incidentsReducer,
+    ui: uiReducer,
+    user: userReducer,
+  },
+  devTools: true,
 });
 
-// Store
-export type AppState = ReturnType<typeof rootReducer>;
+export type AppState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
-const store = createStore(rootReducer, composeWithDevTools());
+// Typed hooks
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+export const useAppSelector: TypedUseSelectorHook<AppState> = useSelector;
 
 export default store;

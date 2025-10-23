@@ -1,22 +1,19 @@
 import * as React from 'react';
-import { AppState } from '../store';
-import { useDispatch, useSelector } from 'react-redux';
 import { Coordinates, Incident } from '@rdrnt/tps-calls-shared';
 import ReactMapGl, { AttributionControl, MapRef } from 'react-map-gl';
 import { match } from 'react-router';
-
 import {
-  toggleDrawer,
-  openLoader,
-  closeLoader,
-  openModal,
-  showToast,
-} from '../store/ui/actions';
-import { setSelectedIncident } from '../store/incidents/actions';
-import { setRequestingLocationPermissions } from '../store/user/actions';
-import { MAPBOX_THEME_URL, Colors, Sizes } from '../config';
+  MenuIcon,
+  NavigationIcon,
+  InfoIcon,
+  TabletSmartphoneIcon,
+} from 'lucide-react';
+
+import { MAPBOX_THEME_URL, Colors } from '../config';
 import { Environment, Analytics } from '../helpers';
 import * as FirebaseIncidents from '../helpers/firebase/incident';
+
+import { useAppDispatch, useAppSelector } from '../store';
 
 import MapIncidentInfo from '../components/MapIncidentInfo';
 import AnimatedMapMarker from '../components/MapMarker/Animated';
@@ -27,11 +24,14 @@ import {
   ButtonGroupSeparator,
 } from '../components/ui/button-group';
 import {
-  MenuIcon,
-  NavigationIcon,
-  InfoIcon,
-  TabletSmartphoneIcon,
-} from 'lucide-react';
+  closeLoader,
+  openLoader,
+  openModal,
+  setRequestingLocationPermissions,
+  setSelectedIncident,
+  showToast,
+  toggleDrawer,
+} from '../store/actions';
 
 const DEFAULTS = {
   latitude: 43.653225,
@@ -49,8 +49,11 @@ interface MapProps {
 }
 
 const Map: React.FunctionComponent<MapProps> = ({ match }) => {
-  const dispatch = useDispatch();
-  const { incidents, ui, user } = useSelector((state: AppState) => state);
+  const dispatch = useAppDispatch();
+
+  const incidents = useAppSelector(state => state.incidents);
+  const ui = useAppSelector(state => state.ui);
+  const user = useAppSelector(state => state.user);
 
   // I want to reffer to mapRef instead of mapRef.current throughout the app
   // thats why theres two vars lol

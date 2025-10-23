@@ -7,12 +7,11 @@ import {
   SliderHandle,
   // @ts-ignore missing types
 } from '@reach/slider';
-import { useSelector, useDispatch } from 'react-redux';
-import { AppState } from '../../../../store';
+import { AppState, useAppDispatch, useAppSelector } from '../../../../store';
 
 import { Colors, Sizes } from '../../../../config';
 import Text, { DEFAULT_TEXT_STYLES } from '../../../Text';
-import { setRequestingLocationPermissions } from '../../../../store/user/actions';
+import { setRequestingLocationPermissions } from '../../../../store/actions';
 
 export interface DistanceFilter {
   distance?: number;
@@ -49,14 +48,13 @@ const DistanceFilter: React.FunctionComponent<DistanceFilter> = ({
   distance = 0,
   setDistance,
 }) => {
-  const { available, coordinates } = useSelector(
+  const { available, coordinates } = useAppSelector(
     (state: AppState) => state.user.location
   );
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const [initialDistance, setInitialDistance] = React.useState<number>(
-    distance
-  );
+  const [initialDistance, setInitialDistance] =
+    React.useState<number>(distance);
 
   React.useEffect(() => {
     setDistance(initialDistance);

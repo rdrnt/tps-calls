@@ -19,13 +19,13 @@ const ItemContainer = styled.button<{ color: string }>`
   background-color: ${Colors.BACKGROUND};
 `;
 
-interface DateFilterItem {
+interface DateFilterItemProps {
   value?: Timestamp;
   onClick: () => void;
   active: boolean;
 }
 
-const DateFilterItem: React.FunctionComponent<DateFilterItem> = ({
+const DateFilterItem: React.FunctionComponent<DateFilterItemProps> = ({
   value,
   onClick,
   active,

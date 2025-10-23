@@ -4,12 +4,10 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { AppState } from '../../store';
-import { closeToast } from '../../store/ui/actions';
+import { closeToast } from '../../store/actions';
 import { Sizes, ZIndex, Colors } from '../../config';
 import Text from '../Text';
 import Icon, { IconNames } from '../Icon';
-
-interface Toast {}
 
 export interface ToastOptions {
   icon?: IconNames;
@@ -26,7 +24,7 @@ const Container = styled(motion.div)<{ $width: number }>`
   align-items: center;
   justify-content: center;
   position: absolute;
-  left: ${(props) => `calc(50% - ${props.$width / 2}px)`};
+  left: ${props => `calc(50% - ${props.$width / 2}px)`};
   z-index: ${ZIndex.TOAST};
   border-radius: 20px;
   text-align: center;
@@ -71,7 +69,7 @@ const determineColor = ({
   return Colors.PRIMARY;
 };
 
-const Toast: React.FunctionComponent<Toast> = ({}) => {
+const Toast: React.FunctionComponent = ({}) => {
   const dispatch = useDispatch();
   const { open, message, options } = useSelector(
     (appState: AppState) => appState.ui.toast

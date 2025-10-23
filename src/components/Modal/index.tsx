@@ -3,19 +3,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { AppState } from '../../store';
-import { closeModal } from '../../store/ui/actions';
+import { closeModal } from '../../store/actions';
 
 import ProjectInfoModal from './ProjectInfo';
 
 import DownloadMobileAppModal from './DownloadMobileApp';
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from '../ui/dialog';
+import { Dialog, DialogContent } from '../ui/dialog';
 
 export type ModalTypes = 'project-info' | 'mobile-app-download';
 

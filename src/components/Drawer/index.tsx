@@ -4,13 +4,12 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Colors, Sizes } from '../../config';
-import { AppState } from '../../store';
-import { toggleDrawer } from '../../store/ui/actions';
+import { AppState, useAppDispatch, useAppSelector } from '../../store';
 import {
+  toggleDrawer,
   setSelectedIncident,
-  SetIncidentFilterParams,
   setIncidentFilter,
-} from '../../store/incidents/actions';
+} from '../../store/actions';
 
 import DrawerHeader from './Header';
 
@@ -56,10 +55,10 @@ const Content = styled.div`
   background-color: ${Colors.BACKGROUND_SECONDARY};
 `;
 
-const Drawer: React.FunctionComponent = ({}) => {
-  const dispatch = useDispatch();
-  const incidentsState = useSelector((state: AppState) => state.incidents);
-  const uiState = useSelector((state: AppState) => state.ui);
+const Drawer: React.FunctionComponent = () => {
+  const dispatch = useAppDispatch();
+  const incidentsState = useAppSelector(state => state.incidents);
+  const uiState = useAppSelector(state => state.ui);
 
   React.useEffect(() => {
     if (incidentsState.selected) {
@@ -69,8 +68,8 @@ const Drawer: React.FunctionComponent = ({}) => {
     }
   }, [incidentsState.selected]);
 
-  const setFilter = ({ values, merge }: SetIncidentFilterParams) => {
-    dispatch(setIncidentFilter({ values, merge }));
+  const setFilter = (params: Parameters<typeof setIncidentFilter>[0]) => {
+    dispatch(setIncidentFilter(params));
   };
 
   return (
@@ -101,7 +100,7 @@ const Drawer: React.FunctionComponent = ({}) => {
             />
             <DrawerList
               incidents={incidentsState.list}
-              setSelectedIncident={(incident) =>
+              setSelectedIncident={incident =>
                 dispatch(setSelectedIncident(incident))
               }
             />

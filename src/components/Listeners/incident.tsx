@@ -4,20 +4,21 @@ import { Incident, FirestoreCollections } from '@rdrnt/tps-calls-shared';
 import { useDebouncedCallback } from 'use-debounce';
 import { isPointWithinRadius } from 'geolib';
 
-import { Firebase, DateHelper } from '../../helpers';
+import { DateHelper } from '../../helpers';
 import {
   setIncidentList,
   setFilterNewestDate,
   setFilterOldestDate,
-} from '../../store/incidents/actions';
-import { AppState } from '../../store';
-import { IncidentFilterState } from '../../store/incidents';
+} from '../../store/actions';
+import { AppState, useAppDispatch, useAppSelector } from '../../store';
+import { IncidentFilterState } from '../../store/slices/incidents';
 
 import * as FirebaseIncidents from '../../helpers/firebase/incident';
+import { Timestamp } from 'firebase/firestore';
 
 const IncidentListener: React.FunctionComponent = () => {
-  const dispatch = useDispatch();
-  const { incidents, user } = useSelector((state: AppState) => state);
+  const dispatch = useAppDispatch();
+  const { incidents, user } = useAppSelector((state: AppState) => state);
   const { filter, list } = incidents;
 
   // Store the default incidents
@@ -31,9 +32,8 @@ const IncidentListener: React.FunctionComponent = () => {
   }, 300);
 
   // Store the previous filter options
-  const [previousFilters, setPreviousFilters] = React.useState<
-    IncidentFilterState
-  >({});
+  const [previousFilters, setPreviousFilters] =
+    React.useState<IncidentFilterState>({});
 
   // Store the list of incidents for a specific date
   const [incidentsAtDate, setIncidentsAtDate] = React.useState<Incident<any>[]>(
@@ -41,8 +41,10 @@ const IncidentListener: React.FunctionComponent = () => {
   );
 
   const loadOldestIncidentDate = async () => {
-    const oldestIncident: Incident<any> = await FirebaseIncidents.getOldestIncident();
-    dispatch(setFilterOldestDate(oldestIncident.date));
+    const oldestIncident: Incident<any> =
+      await FirebaseIncidents.getOldestIncident();
+    // FIX THE TYPE HERE
+    dispatch(setFilterOldestDate(oldestIncident.date as Timestamp));
   };
 
   // Set the listener
@@ -63,7 +65,8 @@ const IncidentListener: React.FunctionComponent = () => {
         return previousDate > currentDateToCompare ? pre : current;
       });
 
-      dispatch(setFilterNewestDate(newestIncident.date));
+      // FIX THE TYPE HERE
+      dispatch(setFilterNewestDate(newestIncident.date as Timestamp));
     });
 
     // set the oldest date for filtering
@@ -126,14 +129,13 @@ const IncidentListener: React.FunctionComponent = () => {
         filter.distance !== 0 &&
         user.location.coordinates
       ) {
-        const withinPoint: Incident<
-          any
-        >[] = incidentsToFilter.filter(incident =>
-          isPointWithinRadius(
-            incident.coordinates,
-            user.location.coordinates!,
-            filter.distance! * 1000
-          )
+        const withinPoint: Incident<any>[] = incidentsToFilter.filter(
+          incident =>
+            isPointWithinRadius(
+              incident.coordinates,
+              user.location.coordinates!,
+              filter.distance! * 1000
+            )
         );
         filteredIncidents.push(...withinPoint);
       }
