@@ -1,57 +1,45 @@
 import * as React from 'react';
-import styled from 'styled-components';
 import { motion, AnimatePresence } from 'motion/react';
-import { AppState } from '../../store';
-import { connect } from 'react-redux';
+
 import BounceLoader from 'react-spinners/BounceLoader';
+
+import { useAppDispatch, useAppSelector } from '../../store';
 
 import { Colors } from '../../config';
 
-import Text from '../Text';
+import { closeLoader } from '../../store/slices/ui';
+import { Typography } from '../Typography';
 
-const Container = styled(motion.div)`
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  z-index: 999;
-  background-color: ${Colors.BACKGROUND};
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+const Loader: React.FunctionComponent = () => {
+  const { open, message } = useAppSelector(state => state.ui.loader);
+  const dispatch = useAppDispatch();
 
-  /* Make the loader message smaller on mobile devices */
-  > h1 {
-    @media only screen and (max-width: 600px) {
-      font-size: 43px;
-    }
-  }
-`;
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          key="loader"
+          className="absolute top-0 left-0 h-full w-full z-[999] bg-[#fefefe] flex flex-col justify-center items-center"
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onAnimationEnd={() => {
+            dispatch(closeLoader());
+          }}
+        >
+          <BounceLoader color={Colors.PRIMARY} />
+          {message && (
+            <Typography
+              variant="h1"
+              align="center"
+              className="max-sm:text-[43px] mt-4"
+            >
+              {message}
+            </Typography>
+          )}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
 
-export interface Loader {
-  open: boolean;
-  message?: string;
-}
-
-const Loader: React.FunctionComponent<Loader> = ({ open, message }) => (
-  <AnimatePresence>
-    {open && (
-      <Container key="loader" animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-        <BounceLoader color={Colors.PRIMARY} />
-        {message && (
-          <Text as="h1" weight="bold">
-            {message}
-          </Text>
-        )}
-      </Container>
-    )}
-  </AnimatePresence>
-);
-
-const mapStateToProps = (state: AppState) => ({
-  ...state.ui.loader,
-});
-
-export default connect(mapStateToProps)(Loader);
+export default Loader;
