@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Analytics } from '../helpers';
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -15,6 +16,7 @@ import {
   Timestamp,
 } from 'firebase/firestore';
 import { firestore } from '../helpers/firebase';
+import { Button } from '../components/ui/button';
 
 export interface TorontoTrafficCameraView {
   direction: string;
@@ -77,6 +79,17 @@ const BetaFeature = () => {
                     {camera.location.latitude.toFixed(4)},{' '}
                     {camera.location.longitude.toFixed(4)}
                   </CardDescription>
+                  <CardAction>
+                    <Button asChild>
+                      <a
+                        href={`https://www.google.com/maps/search/${camera.location.latitude},${camera.location.longitude}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        View On Map
+                      </a>
+                    </Button>
+                  </CardAction>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 gap-4">

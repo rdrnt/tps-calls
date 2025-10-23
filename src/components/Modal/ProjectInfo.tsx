@@ -1,112 +1,21 @@
 import * as React from 'react';
-import styled from 'styled-components';
-import { motion } from 'motion/react';
 
-import Text, { createTextStyles, DEFAULT_TEXT_STYLES } from '../Text';
-import { IconButton } from '../Button';
-import { Colors, Sizes } from '../../config';
-import Icon from '../Icon';
 import { ModalProps } from '.';
 
 import { Analytics } from '../../helpers';
+import { DialogHeader, DialogTitle } from '../ui/dialog';
+import { Button } from '../ui/button';
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from '../ui/accordion';
+import { Heart, Mail } from 'lucide-react';
 
-type ProjectInfoModal = ModalProps;
+type ProjectInfoModalProps = ModalProps;
 
-const InfoRowContainer = styled.div`
-  width: 100%;
-  border-bottom: 1px solid ${Colors.BORDER};
-  background-color: ${Colors.BACKGROUND};
-`;
-
-const InfoRowHeading = styled.button`
-  width: 100%;
-  border: none;
-  padding: 0;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  background-color: inherit;
-  padding: ${Sizes.SPACING / 3}px 0;
-`;
-
-const InfoRowInnerContent = styled(motion.div)<{ $open: boolean }>`
-  width: 100%;
-  background-color: inherit;
-  overflow: hidden;
-  padding: ${(props) => (props.$open ? Sizes.SPACING / 2 : 0)}px;
-  padding-top: 0;
-`;
-
-const InfoRow: React.FunctionComponent<{
-  title: string;
-  content: React.ReactElement;
-}> = ({ title, content }) => {
-  const [open, setOpen] = React.useState<boolean>(false);
-
-  return (
-    <InfoRowContainer>
-      <InfoRowHeading onClick={() => setOpen(!open)}>
-        <Icon size={25} name={open ? 'chevron-down' : 'chevron-right'} />
-        <Text as="h5">{title}</Text>
-      </InfoRowHeading>
-      <InfoRowInnerContent animate={{ height: open ? 'auto' : 0 }} $open={open}>
-        {content}
-      </InfoRowInnerContent>
-    </InfoRowContainer>
-  );
-};
-
-const Container = styled.div`
-  .extras {
-    a:not(:last-child) {
-      margin-bottom: ${Sizes.SPACING / 3}px;
-    }
-  }
-`;
-
-const Heading = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid ${Colors.BORDER};
-  padding: ${Sizes.SPACING / 3}px 0;
-`;
-
-const ExternalLink = styled.a.attrs({ target: '_blank', rel: 'noopener' })`
-  ${createTextStyles({ ...DEFAULT_TEXT_STYLES.p })};
-`;
-
-const StyledDownloadAppBanner = styled.a`
-  width: 100%;
-  padding: 10px;
-  background-color: ${Colors.PRIMARY};
-  border-radius: 6px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  text-decoration: none;
-  color: ${Colors.BACKGROUND};
-
-  p {
-    color: ${Colors.BACKGROUND};
-    text-transform: uppercase;
-    font-size: 12px;
-    line-height: 14px;
-    margin-right: ${Sizes.SPACING / 3}px;
-  }
-
-  &:hover {
-    background-color: ${Colors.TEXT_PRIMARY};
-  }
-`;
-
-const ProjectInfoModal: React.FunctionComponent<ProjectInfoModal> = ({
-  close,
-}) => {
+const ProjectInfoModal: React.FunctionComponent<ProjectInfoModalProps> = () => {
   React.useEffect(() => {
     Analytics.event({
       category: 'UI',
@@ -114,6 +23,100 @@ const ProjectInfoModal: React.FunctionComponent<ProjectInfoModal> = ({
     });
   }, []);
 
+  return (
+    <>
+      <DialogHeader>
+        <DialogTitle>tpscalls</DialogTitle>
+      </DialogHeader>
+      <Accordion type="single" collapsible className="w-full">
+        <AccordionItem value="item-1">
+          <AccordionTrigger>About</AccordionTrigger>
+          <AccordionContent>
+            {`tpscalls.live is a real-time map of locations where the Toronto Police have responded to a call for service. These calls include incidents such as arrests, gun calls, collisions involving people or property, assaults, industrial accidents or disputes. Some calls for service will be, or are being, excluded for privacy reasons, including calls respecting domestic violence, sexual assault, or medical distress. Others calls may be excluded because they are part of an ongoing police operation.`}
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="item-2">
+          <AccordionTrigger>Why am I seeing nothing new?</AccordionTrigger>
+          <AccordionContent>
+            {`Once in a while the Toronto Police's data feed goes offline. Unfortunately this is out of my control. If you have any questions, feel free to contact me.`}
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="item-3">
+          <AccordionTrigger>Contact</AccordionTrigger>
+          <AccordionContent>
+            <div className="flex flex-col gap-2">
+              Have a question? Feedback? Bug report? Feel free to connect with
+              me via the button below.
+              <Button type="button" variant="outline" className="w-fit" asChild>
+                <a href="mailto:riley@drnt.ca">
+                  <Mail />
+                  Contact
+                </a>
+              </Button>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="item-4">
+          <AccordionTrigger>Download the mobile app</AccordionTrigger>
+          <AccordionContent>
+            <Button type="button" variant="outline" className="w-fit" asChild>
+              <a href="/download" target="_blank" rel="noopener noreferrer">
+                Visit Download Page
+              </a>
+            </Button>
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="item-5">
+          <AccordionTrigger>API & Open Source</AccordionTrigger>
+          <AccordionContent>
+            <div className="flex flex-col gap-2">
+              {`Tpscalls is proudly open source and now offers a REST API anyone can use! Explore the codebase and find more information on how to get started with the API at the links below.`}
+              <Button type="button" variant="outline" className="w-fit" asChild>
+                <a
+                  href="https://github.com/rdrnt/tps-calls/blob/master/API.md"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  API Docs
+                </a>
+              </Button>
+
+              <Button type="button" variant="outline" className="w-fit" asChild>
+                <a
+                  href="https://github.com/rdrnt/tps-calls"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  GitHub
+                </a>
+              </Button>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="item-6">
+          <AccordionTrigger>Donate</AccordionTrigger>
+          <AccordionContent>
+            <div className="flex flex-col gap-2">
+              {`Your donations are greatly appreciated! They help cover project costs and keep the project alive.`}
+              <Button type="button" variant="outline" className="w-fit" asChild>
+                <a
+                  href="https://ko-fi.com/drnt_"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Heart />
+                  Donate on Ko-fi
+                </a>
+              </Button>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </>
+  );
+
+  /*
   return (
     <Container>
       <StyledDownloadAppBanner href="/download">
@@ -196,6 +199,7 @@ const ProjectInfoModal: React.FunctionComponent<ProjectInfoModal> = ({
       />
     </Container>
   );
+  */
 };
 
 export default ProjectInfoModal;

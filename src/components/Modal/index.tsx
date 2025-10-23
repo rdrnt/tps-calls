@@ -1,24 +1,23 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Dialog } from '@reach/dialog';
 import { useDebouncedCallback } from 'use-debounce';
-import styled from 'styled-components';
-import { motion, AnimatePresence } from 'motion/react';
 
 import { AppState } from '../../store';
 import { closeModal } from '../../store/ui/actions';
-import { Sizes } from '../../config';
 
 import ProjectInfoModal from './ProjectInfo';
 
-import AndroidBetaSignupModal from './AndroidBetaSignup';
 import DownloadMobileAppModal from './DownloadMobileApp';
 
-export type ModalTypes =
-  | 'project-info'
-  | 'addMissingPerson'
-  | 'android-beta-signup'
-  | 'mobile-app-download';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '../ui/dialog';
+
+export type ModalTypes = 'project-info' | 'mobile-app-download';
 
 export interface ModalProps {
   close: () => void;
@@ -27,20 +26,8 @@ export interface ModalProps {
 const ModalTable: { [key in ModalTypes]?: any } = {
   'project-info': ProjectInfoModal,
 
-  'android-beta-signup': AndroidBetaSignupModal,
   'mobile-app-download': DownloadMobileAppModal,
 };
-
-const StyledDialog = styled(Dialog as any)`
-  padding: ${Sizes.SPACING}px;
-  border-radius: 8px;
-  z-index: 999;
-  min-width: 60vw;
-  /* If the screen is under 600px */
-  @media only screen and (max-width: 600px) {
-    min-width: 85vw;
-  }
-`;
 
 const Modal: React.FunctionComponent = () => {
   const dispatch = useDispatch();
@@ -53,20 +40,12 @@ const Modal: React.FunctionComponent = () => {
   const ModalFromType = open && type ? ModalTable[type] : null;
 
   return (
-    <AnimatePresence>
-      {ModalFromType && (
-        <StyledDialog onDismiss={dismissModal}>
-          <motion.div
-            key="modal"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <ModalFromType close={dismissModal} />
-          </motion.div>
-        </StyledDialog>
-      )}
-    </AnimatePresence>
+    <Dialog open={open} onOpenChange={open => !open && dismissModal()}>
+      <DialogContent showCloseButton={true}>
+        {/* The modal content aka DialogContent children */}
+        {ModalFromType && <ModalFromType close={dismissModal} />}
+      </DialogContent>
+    </Dialog>
   );
 };
 

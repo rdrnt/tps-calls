@@ -4,6 +4,7 @@ import {
   setMinutes,
   differenceInHours,
   distanceInWordsToNow,
+  isToday,
 } from 'date-fns';
 import { Timestamp } from './firebase';
 import { Timestamp as TimestampClass } from 'firebase/firestore';
@@ -18,6 +19,11 @@ export const now = (): Timestamp => TimestampClass.now();
 
 export const formatIncidentDate = (incidentTimestamp: Timestamp) => {
   const timestampToDate = convertTimestampToDate(incidentTimestamp);
+
+  if (isToday(timestampToDate)) {
+    return `today @ ${format(timestampToDate, 'h:mma')}`;
+  }
+
   return format(timestampToDate, 'MMM Do YYYY @ h:mma');
 };
 
