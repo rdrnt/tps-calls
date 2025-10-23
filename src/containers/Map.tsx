@@ -29,9 +29,9 @@ import {
   openModal,
   setRequestingLocationPermissions,
   setSelectedIncident,
-  showToast,
   toggleDrawer,
 } from '../store/actions';
+import { toast } from 'sonner';
 
 const DEFAULTS = {
   latitude: 43.653225,
@@ -127,14 +127,10 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
       if (id) {
         getIncidentWithId(id, true).then(incident => {
           if (!incident) {
-            dispatch(
-              showToast({
-                message: 'Incident no longer exists',
-                options: {
-                  intent: 'error',
-                },
-              })
-            );
+            toast.error('Incident no longer exists', {
+              description: 'The incident you are looking for no longer exists.',
+              position: 'top-center',
+            });
           } else {
             dispatch(setSelectedIncident(incident));
           }

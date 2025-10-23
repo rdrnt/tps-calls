@@ -7,13 +7,14 @@ import Map from './containers/Map';
 import ContactPage from './containers/Contact';
 import DownloadPage from './containers/Download';
 
+import { Toaster } from './components/ui/sonner';
+
 import { LocationListener, IncidentListener } from './components/Listeners';
 
 import store from './store';
 import Drawer from './components/Drawer';
 import Loader from './components/Loader';
 import Modal from './components/Modal';
-import Toast from './components/Toast';
 import BetaFeature from './containers/BetaFeature';
 
 const GlobalStyle = createGlobalStyle`
@@ -41,7 +42,8 @@ const App: React.FunctionComponent = () => (
           <Loader />
           <Drawer />
           <Modal />
-          <Toast />
+
+          <Toaster />
 
           <Switch>
             <Route exact path="/contact" component={ContactPage} />

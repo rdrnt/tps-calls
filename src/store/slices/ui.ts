@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Loader } from '../../components/Loader';
 import { ModalTypes } from '../../components/Modal';
-import { ToastOptions } from '../../components/Toast';
 
 export interface UIState {
   drawerOpen: boolean;
@@ -9,11 +8,6 @@ export interface UIState {
   modal: {
     open: boolean;
     type?: ModalTypes;
-  };
-  toast: {
-    open: boolean;
-    message?: string;
-    options?: ToastOptions;
   };
 }
 
@@ -24,9 +18,6 @@ const initialState: UIState = {
     message: undefined,
   },
   modal: {
-    open: false,
-  },
-  toast: {
     open: false,
   },
 };
@@ -61,35 +52,10 @@ const uiSlice = createSlice({
         open: false,
       };
     },
-    showToast: (
-      state,
-      action: PayloadAction<{
-        message: string;
-        options?: ToastOptions;
-      }>
-    ) => {
-      state.toast = {
-        open: true,
-        message: action.payload.message,
-        options: action.payload.options,
-      };
-    },
-    closeToast: state => {
-      state.toast = {
-        open: false,
-      };
-    },
   },
 });
 
-export const {
-  toggleDrawer,
-  openLoader,
-  closeLoader,
-  openModal,
-  closeModal,
-  showToast,
-  closeToast,
-} = uiSlice.actions;
+export const { toggleDrawer, openLoader, closeLoader, openModal, closeModal } =
+  uiSlice.actions;
 
 export default uiSlice.reducer;

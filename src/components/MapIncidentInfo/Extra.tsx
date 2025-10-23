@@ -11,7 +11,7 @@ import { IconButton } from '../Button';
 
 import { IconNames } from '../Icon';
 import { useDispatch } from 'react-redux';
-import { showToast } from '../../store/ui/actions';
+import { toast } from 'sonner';
 
 const ExtraContent = styled.div`
   display: flex;
@@ -26,7 +26,7 @@ const ExtraContent = styled.div`
   }
 `;
 
-interface MapInfoExtraContent {
+interface MapInfoExtraContentProps {
   incident: Incident<any>;
   close: () => void;
 }
@@ -55,10 +55,9 @@ const ShareButton: React.FunctionComponent<{
   />
 );
 
-const MapInfoExtraContent: React.FunctionComponent<MapInfoExtraContent> = ({
-  incident,
-}) => {
-  const dispatch = useDispatch();
+const MapInfoExtraContent: React.FunctionComponent<
+  MapInfoExtraContentProps
+> = ({ incident }) => {
   return (
     <ExtraContent>
       <ActionContent>
@@ -67,15 +66,9 @@ const MapInfoExtraContent: React.FunctionComponent<MapInfoExtraContent> = ({
           <ShareButton
             iconName="link"
             onClick={() => {
-              dispatch(
-                showToast({
-                  message: 'Copied to clipboard',
-                  options: {
-                    intent: 'success',
-                    icon: 'link',
-                  },
-                })
-              );
+              toast.success('Copied to clipboard', {
+                position: 'top-center',
+              });
               Analytics.event({
                 category: 'UI',
                 action: Analytics.UI.SHARE_INCIDENT_URL,
