@@ -32,6 +32,7 @@ import {
   toggleDrawer,
 } from '../store/actions';
 import { toast } from 'sonner';
+import MapSidebar from '../components/MapSidebar';
 
 const DEFAULTS = {
   latitude: 43.653225,
@@ -186,125 +187,131 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
   }, [incidents.selected]);
 
   return (
-    <ReactMapGl
-      ref={refForMap}
-      mapboxAccessToken={Environment.config.MAPBOX_API_KEY}
-      mapStyle={MAPBOX_THEME_URL}
-      attributionControl={false}
-      initialViewState={{
-        latitude: 43.653225,
-        longitude: -79.383186,
-        zoom: 11.0,
-      }}
-      style={{ width: '100vw', height: '100vh' }}
-      minZoom={9}
-      //disables zooming while an incident is selected
-      interactive={!incidents.selected}
-      scrollZoom={!incidents.selected}
-      onLoad={() => {
-        setIsMapLoaded(true);
-      }}
-      onDragStart={() => {
-        setInteractingWithMap(true);
-      }}
-      onDragEnd={() => {
-        setInteractingWithMap(false);
-      }}
-      onClick={() => {
-        if (ui.drawerOpen) {
-          dispatch(toggleDrawer(false));
-        }
-      }}
-    >
-      <AttributionControl compact={true} position="bottom-left" />
-      {/* Overlay button for opening the drawer */}
-      {!ui.drawerOpen && (
-        <Button
-          size="icon-lg"
-          className={`absolute top-[20px] left-[20px]`}
-          onClick={() => dispatch(toggleDrawer(true))}
-        >
-          <MenuIcon />
-        </Button>
-      )}
-
-      <MapIncidentInfo
-        incident={incidents.selected}
-        drawerOpen={ui.drawerOpen}
-        close={() => unselectIncidentWithAnimation(true)}
-      />
-
-      <ButtonGroup
-        className="absolute bottom-[25px] right-[25px]"
-        hidden={Boolean(ui.drawerOpen || incidents.selected)}
+    <>
+      <ReactMapGl
+        ref={refForMap}
+        mapboxAccessToken={Environment.config.MAPBOX_API_KEY}
+        mapStyle={'mapbox://styles/drnt/cmh4091dh002w01sg6i7nb4sl'}
+        attributionControl={false}
+        initialViewState={{
+          latitude: 43.653225,
+          longitude: -79.383186,
+          zoom: 11.0,
+        }}
+        style={{ width: '100vw', height: '100vh' }}
+        minZoom={9}
+        //disables zooming while an incident is selected
+        interactive={!incidents.selected}
+        scrollZoom={!incidents.selected}
+        onLoad={() => {
+          setIsMapLoaded(true);
+        }}
+        onDragStart={() => {
+          setInteractingWithMap(true);
+        }}
+        onDragEnd={() => {
+          setInteractingWithMap(false);
+        }}
+        onClick={() => {
+          if (ui.drawerOpen) {
+            dispatch(toggleDrawer(false));
+          }
+        }}
       >
-        <Button
-          size="icon-lg"
-          onClick={() => dispatch(openModal('mobile-app-download'))}
-        >
-          <TabletSmartphoneIcon />
-        </Button>
-        <ButtonGroupSeparator />
-        {user.location.available && (
-          <>
-            <Button
-              size="icon-lg"
-              onClick={() => dispatch(setRequestingLocationPermissions(true))}
-            >
-              <NavigationIcon />
-            </Button>
-            <ButtonGroupSeparator />
-          </>
+        <AttributionControl compact={true} position="bottom-left" />
+        {/* Overlay button for opening the drawer */}
+        {!ui.drawerOpen && (
+          <Button
+            size="icon-lg"
+            className={`absolute top-[20px] left-[20px]`}
+            onClick={() => dispatch(toggleDrawer(true))}
+          >
+            <MenuIcon />
+          </Button>
         )}
 
-        <Button
-          size="icon-lg"
-          onClick={() => dispatch(openModal('project-info'))}
+        <MapIncidentInfo
+          incident={incidents.selected}
+          drawerOpen={ui.drawerOpen}
+          close={() => unselectIncidentWithAnimation(true)}
+        />
+
+        <ButtonGroup
+          className="absolute bottom-[25px] right-[25px]"
+          hidden={Boolean(ui.drawerOpen || incidents.selected)}
         >
-          <InfoIcon />
-        </Button>
-      </ButtonGroup>
+          <Button
+            size="icon-lg"
+            onClick={() => dispatch(openModal('mobile-app-download'))}
+          >
+            <TabletSmartphoneIcon />
+          </Button>
+          <ButtonGroupSeparator />
+          {user.location.available && (
+            <>
+              <Button
+                size="icon-lg"
+                onClick={() => dispatch(setRequestingLocationPermissions(true))}
+              >
+                <NavigationIcon />
+              </Button>
+              <ButtonGroupSeparator />
+            </>
+          )}
 
-      {user.location.coordinates && (
-        <AnimatedMapMarker
-          color={Colors.BLACK}
-          coordinates={user.location.coordinates}
-          size={10}
-        />
-      )}
+          <Button
+            size="icon-lg"
+            onClick={() => dispatch(openModal('project-info'))}
+          >
+            <InfoIcon />
+          </Button>
+        </ButtonGroup>
 
-      {incidents.selected && (
-        <AnimatedMapMarker
-          color="#007bff"
-          coordinates={incidents.selected.coordinates}
-          size={22}
-        />
-      )}
+        {user.location.coordinates && (
+          <AnimatedMapMarker
+            color={Colors.BLACK}
+            coordinates={user.location.coordinates}
+            size={10}
+          />
+        )}
 
-      {/* The incident features */}
-      {incidents.list
-        .map(incident => {
-          const selected = Boolean(
-            incidents.selected && incidents.selected.id === incident.id
-          );
-          if (!selected) {
-            return (
-              <MapMarker
-                key={incident.id}
-                coordinates={incident.coordinates}
-                onClick={() => {
-                  if (!incidents.selected) {
-                    dispatch(setSelectedIncident(incident));
-                  }
-                }}
-              />
+        {incidents.selected && (
+          <AnimatedMapMarker
+            color="#007bff"
+            coordinates={incidents.selected.coordinates}
+            size={22}
+          />
+        )}
+
+        {/* The incident features */}
+        {incidents.list
+          .map(incident => {
+            const selected = Boolean(
+              incidents.selected && incidents.selected.id === incident.id
             );
-          }
+            if (!selected) {
+              return (
+                <MapMarker
+                  key={incident.id}
+                  coordinates={incident.coordinates}
+                  onClick={() => {
+                    if (!incidents.selected) {
+                      dispatch(setSelectedIncident(incident));
+                    }
+                  }}
+                />
+              );
+            }
 
-          return null;
-        })
-        .filter(incidentFeature => Boolean(incidentFeature))}
-    </ReactMapGl>
+            return null;
+          })
+          .filter(incidentFeature => Boolean(incidentFeature))}
+      </ReactMapGl>
+      <MapSidebar
+        isOpen={ui.drawerOpen}
+        onClose={() => dispatch(toggleDrawer(false))}
+      />
+    </>
   );
 };
 

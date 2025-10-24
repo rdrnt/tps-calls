@@ -40,7 +40,7 @@ const App: React.FunctionComponent = () => (
           <IncidentListener />
           <LocationListener />
           <Loader />
-          <Drawer />
+
           <Modal />
 
           <Toaster />
