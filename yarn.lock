@@ -1872,13 +1872,6 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.15.tgz#e6e5a86d602beaca71ce5163fadf5f95d70931c7"
   integrity sha512-F6bEyamV9jKGAFBEmlQnesRPGOQqS2+Uwi0Em15xenOxHaf2hv6L8YCVn3rPdPJOiJfPiCnLIRyvwVaqMY3MIw==
 
-"@types/reach__dialog@^0.1.0":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@types/reach__dialog/-/reach__dialog-0.1.1.tgz#5f262d68cf5aa9580f576c7409ea30ac8f6d7017"
-  integrity sha512-hTHF+EvkpV1cyycWzhYMJ/FUnaK7Vroa+BrNLJrrOGHnmzh6EKTYyVDsjOPWZIv3FN9tO9v8u9I6AvjY0XoXGw==
-  dependencies:
-    "@types/react" "*"
-
 "@types/react-copy-to-clipboard@^5.0.0":
   version "5.0.7"
   resolved "https://registry.yarnpkg.com/@types/react-copy-to-clipboard/-/react-copy-to-clipboard-5.0.7.tgz#0cb724d4228f1c2f8f5675671b3971c8801d5f45"

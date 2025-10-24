@@ -1,0 +1,16 @@
+
+@layer utilities {
+  .pt-safe-top { padding-top: var(--safe-top); }
+  .pr-safe-right { padding-right: var(--safe-right); }
+  .pb-safe-bottom { padding-bottom: var(--safe-bottom); }
+  .pl-safe-left { padding-left: var(--safe-left); }
+
+  /* this one is important:
+     content shouldn't sit flush against the very bottom
+     on mobile safari, because Safari has that grabber/search bar.
+     So we add some extra breathing room on top of the safe inset.
+  */
+  .pb-safe-bottom-zone {
+    padding-bottom: calc(var(--safe-bottom) + 3.5rem); /* ~56px zone */
+  }
+}

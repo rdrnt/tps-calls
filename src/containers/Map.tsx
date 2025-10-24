@@ -33,6 +33,7 @@ import {
 } from '../store/actions';
 import { toast } from 'sonner';
 import MapSidebar from '../components/MapSidebar';
+import { SafeArea } from '../components/SafeArea';
 
 const DEFAULTS = {
   latitude: 43.653225,
@@ -218,54 +219,59 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
           }
         }}
       >
-        <AttributionControl compact={true} position="bottom-left" />
-        {/* Overlay button for opening the drawer */}
-        {!ui.drawerOpen && (
-          <Button
-            size="icon-lg"
-            className={`absolute top-[20px] left-[20px]`}
-            onClick={() => dispatch(toggleDrawer(true))}
-          >
-            <MenuIcon />
-          </Button>
-        )}
+        <SafeArea>
+          <AttributionControl compact={true} position="bottom-left" />
 
-        <MapIncidentInfo
-          incident={incidents.selected}
-          drawerOpen={ui.drawerOpen}
-          close={() => unselectIncidentWithAnimation(true)}
-        />
-
-        <ButtonGroup
-          className="absolute bottom-[25px] right-[25px]"
-          hidden={Boolean(ui.drawerOpen || incidents.selected)}
-        >
-          <Button
-            size="icon-lg"
-            onClick={() => dispatch(openModal('mobile-app-download'))}
-          >
-            <TabletSmartphoneIcon />
-          </Button>
-          <ButtonGroupSeparator />
-          {user.location.available && (
-            <>
-              <Button
-                size="icon-lg"
-                onClick={() => dispatch(setRequestingLocationPermissions(true))}
-              >
-                <NavigationIcon />
-              </Button>
-              <ButtonGroupSeparator />
-            </>
+          {/* Overlay button for opening the drawer */}
+          {!ui.drawerOpen && (
+            <Button
+              size="icon-lg"
+              className={`absolute top-[20px] left-[20px]`}
+              onClick={() => dispatch(toggleDrawer(true))}
+            >
+              <MenuIcon />
+            </Button>
           )}
 
-          <Button
-            size="icon-lg"
-            onClick={() => dispatch(openModal('project-info'))}
+          <MapIncidentInfo
+            incident={incidents.selected}
+            drawerOpen={ui.drawerOpen}
+            close={() => unselectIncidentWithAnimation(true)}
+          />
+
+          <ButtonGroup
+            className="absolute bottom-[25px] right-[25px]"
+            hidden={Boolean(ui.drawerOpen || incidents.selected)}
           >
-            <InfoIcon />
-          </Button>
-        </ButtonGroup>
+            <Button
+              size="icon-lg"
+              onClick={() => dispatch(openModal('mobile-app-download'))}
+            >
+              <TabletSmartphoneIcon />
+            </Button>
+            <ButtonGroupSeparator />
+            {user.location.available && (
+              <>
+                <Button
+                  size="icon-lg"
+                  onClick={() =>
+                    dispatch(setRequestingLocationPermissions(true))
+                  }
+                >
+                  <NavigationIcon />
+                </Button>
+                <ButtonGroupSeparator />
+              </>
+            )}
+
+            <Button
+              size="icon-lg"
+              onClick={() => dispatch(openModal('project-info'))}
+            >
+              <InfoIcon />
+            </Button>
+          </ButtonGroup>
+        </SafeArea>
 
         {user.location.coordinates && (
           <AnimatedMapMarker
