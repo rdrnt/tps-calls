@@ -27,14 +27,13 @@ const MapSidebarItem: React.FunctionComponent<MapSidebarItemProps> = ({
 }) => {
   return (
     <Item
-      variant="outline"
       onClick={onClick}
-      className="bg-gray-500 hover:bg-gray-600 mb-2 text-white mt-0"
+      className="bg-neutral-100 hover:bg-neutral-300 mb-2 text-neutral-950 mt-0"
     >
       <ItemContent>
         <ItemTitle className="font-bold">{incident.name}</ItemTitle>
         <ItemTitle>{incident.location}</ItemTitle>
-        <ItemDescription className="text-left text-white">
+        <ItemDescription className="text-left text-neutral-500">
           {DateHelper.formatIncidentDate(incident.date)}
         </ItemDescription>
       </ItemContent>
