@@ -13,11 +13,10 @@ import {
 import { Separator } from '../ui/separator';
 
 import { DateHelper } from '../../helpers';
-import { Sizes, Colors } from '../../config';
 
 import { Button } from '../ui/button';
 
-import { ExternalLinkIcon, Link, Megaphone } from 'lucide-react';
+import { Link, Megaphone } from 'lucide-react';
 
 interface MapIncidentInfoProps {
   incident?: Incident<any>;
@@ -28,13 +27,12 @@ interface MapIncidentInfoProps {
 const MapIncidentInfo: React.FunctionComponent<MapIncidentInfoProps> = ({
   incident,
   drawerOpen,
-  close,
 }) => {
   return (
     <AnimatePresence>
       {incident && !drawerOpen && (
-        <Card className="absolute bottom-[25px] left-1/2 -translate-x-1/2 w-auto min-w-[335px]">
-          <CardHeader className="gap-1">
+        <Card className="absolute bottom-[25px] left-1/2 -translate-x-1/2 w-auto sm:w-full md:w-auto min-w-[375px] p-6">
+          <CardHeader className="gap-1 px-0">
             <CardTitle className="text-2xl font-bold">
               {incident.name}
             </CardTitle>
@@ -46,7 +44,7 @@ const MapIncidentInfo: React.FunctionComponent<MapIncidentInfoProps> = ({
             </CardDescription>
           </CardHeader>
 
-          <Separator className="mx-6" />
+          <Separator />
           <CardFooter className="gap-2 justify-center items-center">
             <Button variant="outline" size="icon" className="rounded-full">
               <Link />

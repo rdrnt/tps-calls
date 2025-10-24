@@ -78,7 +78,7 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
           <motion.div
             initial={{ opacity: 0, y: -20 }} // Start slightly transparent and moved up
             animate={{ opacity: 1, y: 0 }} // Fade in and slide to position
-            transition={{ delay: 0.1, duration: 0.3 }} // Slight delay for staggered effect
+            transition={{ delay: 0.1, duration: 0.1 }} // Slight delay for staggered effect
             className="sticky top-0 z-10 bg-white"
           >
             <div className="flex flex-row items-center justify-between p-4 pb-0">
@@ -91,7 +91,7 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
               <motion.h2
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2, duration: 0.3 }}
+                transition={{ delay: 0.2, duration: 0.1 }}
                 className="text-lg font-semibold text-gray-900"
               >
                 Incidents
@@ -139,14 +139,14 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.4 }}
+            transition={{ delay: 0.1, duration: 0.2 }}
             className="p-4 overflow-y-auto h-[calc(100vh-73px)]"
           >
             {children || (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.6, duration: 0.3 }}
+                transition={{ delay: 0.1, duration: 0.1 }}
                 className="text-gray-500 text-center pb-10"
               >
                 {incidents.map(incident => (

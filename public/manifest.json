@@ -1,6 +1,7 @@
 {
   "short_name": "tpscalls.live",
   "name": "tpscalls.live - Real-time mapping of locations where the Toronto Police have responded to a call for service",
+  "description": "Real-time mapping of locations where the Toronto Police have responded to a call for service",
   "icons": [
     {
       "src": "favicon.ico",
@@ -10,16 +11,27 @@
     {
       "src": "images/logo192.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "any maskable"
     },
     {
       "src": "images/logo512.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "orientation": "portrait-primary",
+  "theme_color": "transparent",
+  "background_color": "transparent",
+  "scope": "/",
+  "lang": "en",
+  "categories": [
+    "maps",
+    "utilities",
+    "public-safety"
+  ],
+  "prefer_related_applications": false
 }
