@@ -22,8 +22,6 @@
     "@radix-ui/react-separator": "^1.1.7",
     "@radix-ui/react-slot": "^1.2.3",
     "@rdrnt/tps-calls-shared": "^0.2.1",
-    "@reach/dialog": "^0.3.0",
-    "@reach/slider": "^0.4.0-beta.0",
     "@reduxjs/toolkit": "^2.9.2",
     "@sentry/browser": "^5.6.3",
     "@tailwindcss/vite": "^4.1.15",
@@ -53,7 +51,6 @@
     "styled-components": "^6.1.14",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.15",
-    "typeface-poppins": "^0.0.72",
     "use-debounce": "^3.0.1"
   },
   "devDependencies": {
@@ -62,7 +59,6 @@
     "@testing-library/user-event": "^14.0.0",
     "@types/mapbox-gl": "^3.1.0",
     "@types/node": "^24.9.1",
-    "@types/reach__dialog": "^0.1.0",
     "@types/react": "^18.3.0",
     "@types/react-copy-to-clipboard": "^5.0.0",
     "@types/react-datepicker": "^2.9.2",
