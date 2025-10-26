@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-import Text from '../components/Text';
-import { Button } from '../components/Button';
+import { Typography } from '../components/Typography';
+import { Button } from '../components/ui/button';
 import { Colors, Sizes } from '../config';
 import { Analytics } from '../helpers';
 
@@ -149,35 +149,45 @@ const DownloadPage = () => {
     <Container>
       <StyledHeadingContent>
         <img src={AppLogo} />
-        <Text as="h2">tpscalls</Text>
-        <Text as="h6">By Riley Durant</Text>
+        <Typography variant="h2">tpscalls</Typography>
+        <Typography variant="h6">By Riley Durant</Typography>
 
-        <Text as="p">
+        <Typography variant="p">
           tpscalls is now available on mobile devices, bringing you a real-time
           map of Toronto Police response locations. Track incidents like
           arrests, gun calls, and collisions right from your phone. Stay
           informed with instant updates, wherever you are.
-        </Text>
+        </Typography>
       </StyledHeadingContent>
 
       <StyledDownloadButtonContent>
-        <a href={APPSTORE_DOWNLOAD_LINK} target="_blank" rel="noopener">
+        <a
+          href={APPSTORE_DOWNLOAD_LINK}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <img src={AppStoreDownloadImage} />
         </a>
         <div className="spacer" />
-        <a href={PLAYSTORE_DOWNLOAD_LINK} target="_blank" rel="noopener">
+        <a
+          href={PLAYSTORE_DOWNLOAD_LINK}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <img src={PlayStoreDownloadImage} />
         </a>
       </StyledDownloadButtonContent>
       <StyledDividerContent>
         <div className="divider" />
-        <Text as="p">OR</Text>
+        <Typography variant="p">OR</Typography>
         <div className="divider" />
       </StyledDividerContent>
       <StyledBottomDownloadContent>
-        <a href="/">
-          <Button>VIEW ON THE WEB</Button>
-        </a>
+        <Button asChild>
+          <a href="/">
+            <Typography variant="p">VIEW ON THE WEB</Typography>
+          </a>
+        </Button>
       </StyledBottomDownloadContent>
     </Container>
   );

@@ -1,65 +1,48 @@
-import styled from 'styled-components';
-import Text from '../components/Text';
-import { Button } from '../components/Button';
-import { Colors, Sizes } from '../config';
-import { useEffect } from 'react';
-import { Analytics } from '../helpers';
+import { Mail } from 'lucide-react';
+
 import { Typography } from '../components/Typography';
+import { Container } from '../components/ui/container';
+import { Button } from '../components/ui/button';
 
-const Container = styled.div`
-  height: 100vh;
-  width: 100%;
-  background-color: ${Colors.BACKGROUND};
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-
-  > h4 {
-    margin-bottom: ${Sizes.SPACING}px;
-  }
-
-  > p {
-    max-width: 50%;
-    @media only screen and (max-width: 600px) {
-      max-width: 100%;
-    }
-  }
-
-  > button {
-    margin-top: ${Sizes.SPACING}px;
-    color: ${Colors.BACKGROUND};
-  }
-`;
+import AppLogo from '../assets/images/appStoreIcon.jpg';
+import useAnalyticsPageView from '../hooks/useAnalyticsPageView';
 
 const ContactPage = () => {
-  useEffect(() => {
-    Analytics.pageview('/contact');
-  }, []);
+  useAnalyticsPageView({ path: '/contact' });
 
   return (
-    <Container>
-      <Typography variant="h1">Contact</Typography>
-      <Text as="h4">tpscalls</Text>
-      <Text as="h1">Contact</Text>
-      <Text as="p">
-        We would love to hear from you! Whether you have a question about
-        tpscalls, need assistance, or just want to provide feedback, feel free
-        to reach out. I'm here to help you with any inquiries you may have. You
-        can contact me via email at{' '}
-        <a href="mailto:riley@drnt.ca">riley@drnt.ca</a> with the subject line
-        "tpscalls". I look forward to connecting with you!
-      </Text>
-      <Button
-        onClick={() => {
-          window.open('mailto:riley@drnt.ca');
-        }}
-      >
-        Email Me
-      </Button>
-    </Container>
+    <div className="bg-zinc-100 h-full w-full">
+      <Container>
+        <div className="w-full h-auto py-4">
+          <a href="/" className="h-full p-0">
+            <img
+              src={AppLogo}
+              alt="App Logo"
+              className="w-12 h-12 rounded-md shadow-md"
+            />
+          </a>
+        </div>
+        <div className="flex flex-col items-start justify-center h-full min-h-svh">
+          <Typography variant="h2" className="mb-2">
+            Contact
+          </Typography>
+
+          <Typography variant="p">
+            Whether you have a question about tpscalls, a bug report, or just
+            want to provide feedback, feel free to reach out.
+          </Typography>
+          <Button
+            asChild
+            className="mt-8 bg-secondary hover:bg-primary/20 hover:text-secondary text-primary"
+          >
+            <a href="mailto:riley@drnt.ca">
+              <Mail />
+              <Typography variant="p">Email</Typography>
+            </a>
+          </Button>
+        </div>
+      </Container>
+    </div>
   );
 };
 
