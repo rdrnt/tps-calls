@@ -15,6 +15,7 @@ import store from './store';
 
 import Loader from './components/Loader';
 import Modal from './components/Modal';
+import TorontoCamerasListener from './components/Listeners/Cameras';
 
 const App: React.FunctionComponent = () => (
   <>
@@ -22,6 +23,7 @@ const App: React.FunctionComponent = () => (
       <Provider store={store}>
         <>
           <IncidentListener />
+          <TorontoCamerasListener />
           <LocationListener />
           <Loader />
 

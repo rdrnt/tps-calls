@@ -5,12 +5,14 @@ import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 import incidentsReducer from './slices/incidents';
 import uiReducer from './slices/ui';
 import userReducer from './slices/user';
+import camerasReducer from './slices/cameras';
 
 export const store = configureStore({
   reducer: {
     incidents: incidentsReducer,
     ui: uiReducer,
     user: userReducer,
+    cameras: camerasReducer,
   },
   devTools: true,
 });

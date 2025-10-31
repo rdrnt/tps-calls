@@ -2,13 +2,15 @@ import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Button } from '../ui/button';
 import MapSidebarItem from './parts/Item';
-import { useAppSelector } from '../../store';
+import { useAppDispatch, useAppSelector } from '../../store';
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from '../ui/input-group';
 import { Search, X } from 'lucide-react';
+import { Incident } from '@rdrnt/tps-calls-shared';
+import { setSelectedIncident, toggleDrawer } from '../../store/actions';
 
 /**
  * Props interface for the MapSidebar component
@@ -37,8 +39,14 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
   onClose,
   children,
 }) => {
+  const dispatch = useAppDispatch();
   const incidents = useAppSelector(state => state.incidents.list);
   const filter = useAppSelector(state => state.incidents.filter);
+
+  const onItemClick = (incident: Incident<any>) => {
+    dispatch(toggleDrawer(false));
+    dispatch(setSelectedIncident(incident));
+  };
 
   return (
     <AnimatePresence mode="wait">
@@ -153,7 +161,7 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
                   <MapSidebarItem
                     key={incident.id}
                     incident={incident}
-                    onClick={() => {}}
+                    onClick={() => onItemClick(incident)}
                   />
                 ))}
               </motion.div>

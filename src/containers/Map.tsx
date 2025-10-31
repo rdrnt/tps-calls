@@ -28,12 +28,14 @@ import {
   openLoader,
   openModal,
   setRequestingLocationPermissions,
+  setSelectedCamera,
   setSelectedIncident,
   toggleDrawer,
 } from '../store/actions';
 import { toast } from 'sonner';
 import MapSidebar from '../components/MapSidebar';
 import { SafeArea } from '../components/SafeArea';
+import MapCameraInfo from '../components/MapCameraInfo';
 
 const DEFAULTS = {
   latitude: 43.653225,
@@ -56,6 +58,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
   const incidents = useAppSelector(state => state.incidents);
   const ui = useAppSelector(state => state.ui);
   const user = useAppSelector(state => state.user);
+  const cameras = useAppSelector(state => state.cameras);
 
   // I want to reffer to mapRef instead of mapRef.current throughout the app
   // thats why theres two vars lol
@@ -239,6 +242,12 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
             close={() => unselectIncidentWithAnimation(true)}
           />
 
+          <MapCameraInfo
+            camera={cameras.selected}
+            drawerOpen={ui.drawerOpen}
+            close={() => dispatch(setSelectedCamera(undefined))}
+          />
+
           <ButtonGroup
             className="absolute bottom-[25px] right-[25px]"
             hidden={Boolean(ui.drawerOpen || incidents.selected)}
@@ -288,6 +297,25 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
             size={22}
           />
         )}
+
+        {incidents.selected && (
+          <AnimatedMapMarker
+            color={Colors.ERROR}
+            coordinates={incidents.selected?.coordinates as any}
+            size={22}
+          />
+        )}
+
+        {cameras.list.map(camera => (
+          <MapMarker
+            key={camera.id}
+            coordinates={camera.location as any}
+            onClick={() => {
+              dispatch(setSelectedCamera(camera));
+            }}
+            color={Colors.SUCCESS}
+          />
+        ))}
 
         {/* The incident features */}
         {incidents.list
