@@ -1,7 +1,9 @@
 import * as React from 'react';
-import styled from 'styled-components';
-import { motion, AnimatePresence } from 'motion/react';
+
+import { AnimatePresence } from 'motion/react';
 import { Incident } from '@rdrnt/tps-calls-shared';
+import { toast } from 'sonner';
+import { Link, Megaphone } from 'lucide-react';
 
 import {
   Card,
@@ -16,7 +18,7 @@ import { DateHelper } from '../../helpers';
 
 import { Button } from '../ui/button';
 
-import { Link, Megaphone } from 'lucide-react';
+import { createShareUrl } from '../../helpers/url';
 
 interface MapIncidentInfoProps {
   incident?: Incident<any>;
@@ -28,6 +30,14 @@ const MapIncidentInfo: React.FunctionComponent<MapIncidentInfoProps> = ({
   incident,
   drawerOpen,
 }) => {
+  const onClickCopyToClipboard = () => {
+    if (!incident || !navigator) return;
+    navigator.clipboard.writeText(createShareUrl(incident.id));
+    toast.success('Share link copied to clipboard', {
+      position: 'top-center',
+    });
+  };
+
   return (
     <AnimatePresence>
       {incident && !drawerOpen && (
@@ -46,7 +56,12 @@ const MapIncidentInfo: React.FunctionComponent<MapIncidentInfoProps> = ({
 
           <Separator />
           <CardFooter className="gap-2 justify-center items-center">
-            <Button variant="outline" size="icon" className="rounded-full">
+            <Button
+              variant="outline"
+              size="icon"
+              className="rounded-full"
+              onClick={onClickCopyToClipboard}
+            >
               <Link />
             </Button>
             <Button variant="outline" size="icon" className="rounded-full">
