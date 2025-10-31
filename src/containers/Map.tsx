@@ -229,10 +229,15 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
           {!ui.drawerOpen && (
             <Button
               size="icon-lg"
-              className={`absolute top-[20px] left-[20px]`}
-              onClick={() => dispatch(toggleDrawer(true))}
+              className={`absolute top-[20px] left-[20px] bg-background hover:bg-background/80`}
+              onClick={() => {
+                dispatch(toggleDrawer(true));
+                if (incidents.selected) {
+                  dispatch(setSelectedIncident(undefined));
+                }
+              }}
             >
-              <MenuIcon />
+              <MenuIcon className="text-primary" />
             </Button>
           )}
 
@@ -255,19 +260,21 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
             <Button
               size="icon-lg"
               onClick={() => dispatch(openModal('mobile-app-download'))}
+              className="bg-background hover:bg-background/80"
             >
-              <TabletSmartphoneIcon />
+              <TabletSmartphoneIcon className="text-primary" />
             </Button>
             <ButtonGroupSeparator />
             {user.location.available && (
               <>
                 <Button
                   size="icon-lg"
+                  className="bg-background hover:bg-background/80"
                   onClick={() =>
                     dispatch(setRequestingLocationPermissions(true))
                   }
                 >
-                  <NavigationIcon />
+                  <NavigationIcon className="text-primary" />
                 </Button>
                 <ButtonGroupSeparator />
               </>
@@ -276,8 +283,9 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
             <Button
               size="icon-lg"
               onClick={() => dispatch(openModal('project-info'))}
+              className="bg-background hover:bg-background/80"
             >
-              <InfoIcon />
+              <InfoIcon className="text-primary" />
             </Button>
           </ButtonGroup>
         </SafeArea>

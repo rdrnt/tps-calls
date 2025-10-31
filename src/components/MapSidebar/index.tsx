@@ -71,7 +71,7 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
           /* Responsive Width: Full width on mobile, 384px on small screens, 400px on medium+ */
           w-full sm:w-96 md:w-[400px] 
           /* Visual Styling */
-          bg-white shadow-xl z-50
+          bg-background shadow-xl z-50
           /* Desktop Override: Always visible on large screens */
           lg:translate-x-0
         `}
