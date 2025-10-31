@@ -19,7 +19,7 @@ const Loader: React.FunctionComponent = () => {
       {open && (
         <motion.div
           key="loader"
-          className="absolute top-0 left-0 h-full w-full z-[999] bg-[#fefefe] flex flex-col justify-center items-center"
+          className="absolute top-0 left-0 h-full w-full z-[999] bg-background flex flex-col justify-center items-center"
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onAnimationEnd={() => {
@@ -29,9 +29,9 @@ const Loader: React.FunctionComponent = () => {
           <BounceLoader color={Colors.PRIMARY} />
           {message && (
             <Typography
-              variant="h1"
+              variant="h2"
               align="center"
-              className="max-sm:text-[43px] mt-4"
+              className="max-sm:text-[43px] mt-4 text-primary"
             >
               {message}
             </Typography>
