@@ -87,7 +87,7 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
             initial={{ opacity: 0, y: -20 }} // Start slightly transparent and moved up
             animate={{ opacity: 1, y: 0 }} // Fade in and slide to position
             transition={{ delay: 0.1, duration: 0.1 }} // Slight delay for staggered effect
-            className="sticky top-0 z-10 bg-white"
+            className="sticky top-0 z-10"
           >
             <div className="flex flex-row items-center justify-between p-4 pb-0">
               {/* 
@@ -100,7 +100,7 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2, duration: 0.1 }}
-                className="text-lg font-semibold text-gray-900"
+                className="text-lg font-semibold text-foreground"
               >
                 Incidents
               </motion.h2>

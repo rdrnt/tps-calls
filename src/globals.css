@@ -14,3 +14,11 @@
     padding-bottom: calc(var(--safe-bottom) + 3.5rem); /* ~56px zone */
   }
 }
+
+/* Set cursor to pointer for buttons and links */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}

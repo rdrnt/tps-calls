@@ -28,7 +28,7 @@ const MapSidebarItem: React.FunctionComponent<MapSidebarItemProps> = ({
   return (
     <Item
       onClick={onClick}
-      className="bg-neutral-100 hover:bg-neutral-300 mb-2 text-neutral-950 mt-0"
+      className="bg-accent hover:bg-muted/40 mb-2 text-foreground mt-0 hover:cursor-pointer"
     >
       <ItemContent>
         <ItemTitle className="font-bold">{incident.name}</ItemTitle>
