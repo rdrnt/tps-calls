@@ -9,6 +9,8 @@ import BetaFeature from './containers/BetaFeature';
 
 import { Toaster } from './components/ui/sonner';
 
+import { ThemeProvider } from './theme-provider';
+
 import { LocationListener, IncidentListener } from './components/Listeners';
 
 import store from './store';
@@ -19,27 +21,29 @@ import TorontoCamerasListener from './components/Listeners/Cameras';
 
 const App: React.FunctionComponent = () => (
   <>
-    <Router>
-      <Provider store={store}>
-        <>
-          <IncidentListener />
-          <TorontoCamerasListener />
-          <LocationListener />
-          <Loader />
+    <ThemeProvider defaultTheme="system" storageKey="tpscalls-ui-theme">
+      <Router>
+        <Provider store={store}>
+          <>
+            <IncidentListener />
+            <TorontoCamerasListener />
+            <LocationListener />
+            <Loader />
 
-          <Modal />
+            <Modal />
 
-          <Toaster />
+            <Toaster />
 
-          <Switch>
-            <Route exact path="/contact" component={ContactPage} />
-            <Route exact path="/download" component={DownloadPage} />
-            <Route exact path="/beta-feature" component={BetaFeature} />
-            <Route path={['/:id', '/']} component={Map} />
-          </Switch>
-        </>
-      </Provider>
-    </Router>
+            <Switch>
+              <Route exact path="/contact" component={ContactPage} />
+              <Route exact path="/download" component={DownloadPage} />
+              <Route exact path="/beta-feature" component={BetaFeature} />
+              <Route path={['/:id', '/']} component={Map} />
+            </Switch>
+          </>
+        </Provider>
+      </Router>
+    </ThemeProvider>
   </>
 );
 
