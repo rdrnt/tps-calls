@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router';
 
 import Map from './containers/Map';
 import ContactPage from './containers/Contact';
@@ -30,12 +30,13 @@ const App: React.FunctionComponent = () => (
 
             <Modal />
 
-            <Switch>
-              <Route exact path="/contact" component={ContactPage} />
-              <Route exact path="/download" component={DownloadPage} />
-              <Route exact path="/beta-feature" component={BetaFeature} />
-              <Route path={['/:id', '/']} component={Map} />
-            </Switch>
+            <Routes>
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/download" element={<DownloadPage />} />
+              <Route path="/beta-feature" element={<BetaFeature />} />
+              <Route path="/:id" element={<Map />} />
+              <Route path="/" element={<Map />} />
+            </Routes>
           </>
         </Provider>
       </Router>

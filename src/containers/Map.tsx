@@ -1,7 +1,8 @@
+import 'mapbox-gl/dist/mapbox-gl.css';
 import * as React from 'react';
 import { Coordinates, Incident } from '@rdrnt/tps-calls-shared';
 import ReactMapGl, { AttributionControl, MapRef } from 'react-map-gl';
-import { match } from 'react-router';
+import { useParams } from 'react-router';
 import {
   MenuIcon,
   NavigationIcon,
@@ -48,12 +49,9 @@ interface MapState {
   zoom: number;
 }
 
-interface MapProps {
-  match: match<{ id?: string }>;
-}
-
-const Map: React.FunctionComponent<MapProps> = ({ match }) => {
+const Map: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
+  const { id } = useParams<{ id?: string }>();
 
   const incidents = useAppSelector(state => state.incidents);
   const ui = useAppSelector(state => state.ui);
@@ -128,7 +126,6 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
       }, 500);
 
       // If we have an id in the params, see if there's a matching incident in the db/store
-      const { id } = match.params;
       if (id) {
         getIncidentWithId(id, true).then(incident => {
           if (!incident) {
@@ -142,7 +139,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
         });
       }
     }
-  }, [isMapLoaded, incidents.list.length, match.params.id]);
+  }, [isMapLoaded, incidents.list.length, id]);
 
   // Close the drawer if we're interacting with the map & the drawer is open d
   React.useEffect(() => {

@@ -1,5 +1,5 @@
 import { Mail } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import { Typography } from '../components/Typography';
 import { Container } from '../components/ui/container';

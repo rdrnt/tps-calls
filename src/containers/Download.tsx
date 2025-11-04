@@ -1,5 +1,5 @@
 import { Map } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import { Typography } from '../components/Typography';
 import { Button } from '../components/ui/button';
