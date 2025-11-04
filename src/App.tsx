@@ -7,8 +7,6 @@ import ContactPage from './containers/Contact';
 import DownloadPage from './containers/Download';
 import BetaFeature from './containers/BetaFeature';
 
-import { Toaster } from './components/ui/sonner';
-
 import { ThemeProvider } from './theme-provider';
 
 import { LocationListener, IncidentListener } from './components/Listeners';
@@ -31,8 +29,6 @@ const App: React.FunctionComponent = () => (
             <Loader />
 
             <Modal />
-
-            <Toaster />
 
             <Switch>
               <Route exact path="/contact" component={ContactPage} />

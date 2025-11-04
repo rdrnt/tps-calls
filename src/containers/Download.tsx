@@ -1,4 +1,5 @@
 import { Map } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 import { Typography } from '../components/Typography';
 import { Button } from '../components/ui/button';
@@ -20,26 +21,24 @@ const DownloadPage = () => {
   useAnalyticsPageView({ path: '/download' });
 
   return (
-    <div className="bg-zinc-100 h-full w-full">
-      <Container>
-        <div className="flex flex-col items-start justify-center h-full min-h-svh">
+    <div className="bg-background h-screen w-full">
+      <Container className="h-full">
+        <div className="flex flex-col items-center justify-center h-full">
           <img
             src={AppLogo}
             alt="App Logo"
-            className="w-18 h-18 rounded-md shadow-md mb-4"
+            className="w-18 h-18 rounded-md shadow-md mb-10"
           />
           <Typography variant="h2" className="mb-2">
-            Mobile App
+            Download the App
           </Typography>
 
-          <Typography variant="p">
-            tpscalls is now available on mobile devices, bringing you a
-            real-time map of Toronto Police response locations. Track incidents
-            like arrests, gun calls, and collisions right from your phone. Stay
-            informed with instant updates, wherever you are.
+          <Typography variant="p" className="text-center max-w-md">
+            Know what’s happening near you in real time. Available on iOS and
+            Android.
           </Typography>
 
-          <div className="flex flex-col items-start justify-center mt-6 ">
+          <div className="flex flex-col items-center justify-center mt-10">
             <div className="flex flex-row items-center justify-center gap-4">
               <a
                 href={APPSTORE_DOWNLOAD_LINK}
@@ -59,10 +58,10 @@ const DownloadPage = () => {
             <Separator className="my-4 w-full" />
 
             <Button asChild>
-              <a href="/">
+              <Link to="/">
                 <Map />
                 <Typography variant="p">View On The Web</Typography>
-              </a>
+              </Link>
             </Button>
           </div>
         </div>

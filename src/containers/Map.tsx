@@ -32,7 +32,7 @@ import {
   setSelectedIncident,
   toggleDrawer,
 } from '../store/actions';
-import { toast } from 'sonner';
+import { toast, Toaster } from 'sonner';
 import MapSidebar from '../components/MapSidebar';
 import { SafeArea } from '../components/SafeArea';
 import MapCameraInfo from '../components/MapCameraInfo';
@@ -353,6 +353,7 @@ const Map: React.FunctionComponent<MapProps> = ({ match }) => {
         isOpen={ui.drawerOpen}
         onClose={() => dispatch(toggleDrawer(false))}
       />
+      <Toaster />
     </>
   );
 };
