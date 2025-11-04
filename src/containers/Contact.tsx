@@ -1,4 +1,5 @@
 import { Mail } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 import { Typography } from '../components/Typography';
 import { Container } from '../components/ui/container';
@@ -11,35 +12,41 @@ const ContactPage = () => {
   useAnalyticsPageView({ path: '/contact' });
 
   return (
-    <div className="bg-zinc-100 h-full w-full">
-      <Container>
-        <div className="w-full h-auto py-4">
-          <a href="/" className="h-full p-0">
-            <img
-              src={AppLogo}
-              alt="App Logo"
-              className="w-12 h-12 rounded-md shadow-md"
-            />
-          </a>
-        </div>
-        <div className="flex flex-col items-start justify-center h-full min-h-svh">
-          <Typography variant="h2" className="mb-2">
-            Contact
-          </Typography>
-
-          <Typography variant="p">
-            Whether you have a question about tpscalls, a bug report, or just
-            want to provide feedback, feel free to reach out.
-          </Typography>
-          <Button
-            asChild
-            className="mt-8 bg-secondary hover:bg-primary/20 hover:text-secondary text-primary"
-          >
-            <a href="mailto:riley@drnt.ca">
-              <Mail />
-              <Typography variant="p">Email</Typography>
+    <div className="bg-background w-full h-screen">
+      <Container className="h-full">
+        <div className="flex flex-col h-full">
+          <div className="w-full py-6 flex items-center justify-start">
+            <a href="/" className="h-full p-0">
+              <img
+                src={AppLogo}
+                alt="App Logo"
+                className="w-12 h-12 rounded-md shadow-md"
+              />
             </a>
-          </Button>
+          </div>
+          <div className="flex flex-col items-center justify-center h-full grow">
+            <Typography variant="h1" className="mb-4">
+              Contact
+            </Typography>
+
+            <Typography variant="p" className="text-center max-w-md">
+              Have a question about the project or want to connect? Get in touch
+              via the button below.
+            </Typography>
+            <Button asChild className="mt-10">
+              <a href="mailto:riley@drnt.ca">
+                <Mail />
+                <Typography variant="p">Email Me</Typography>
+              </a>
+            </Button>
+          </div>
+          <footer className="flex flex-col items-center justify-center w-full py-6">
+            <Link to="/">
+              <Typography variant="p" className="text-foreground text-sm">
+                Back to Map
+              </Typography>
+            </Link>
+          </footer>
         </div>
       </Container>
     </div>
