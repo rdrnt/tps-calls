@@ -19,6 +19,8 @@ import { DateHelper } from '../../helpers';
 import { Button } from '../ui/button';
 
 import { createShareUrl } from '../../helpers/url';
+import CameraSection from './parts/CameraSection';
+import { TorontoTrafficCamera } from '../../containers/BetaFeature';
 
 interface MapIncidentInfoProps {
   incident?: Incident<any>;
@@ -41,8 +43,8 @@ const MapIncidentInfo: React.FunctionComponent<MapIncidentInfoProps> = ({
   return (
     <AnimatePresence>
       {incident && !drawerOpen && (
-        <Card className="absolute bottom-[25px] left-1/2 -translate-x-1/2 w-auto sm:w-full md:w-auto min-w-[375px] p-6">
-          <CardHeader className="gap-1 px-0">
+        <Card className="absolute bottom-[25px] left-1/2 -translate-x-1/2 w-auto sm:w-full md:w-auto min-w-[375px] p-6 gap-2">
+          <CardHeader className="gap-1 px-0 mb-2">
             <CardTitle className="text-2xl font-bold">
               {incident.name}
             </CardTitle>
@@ -53,8 +55,13 @@ const MapIncidentInfo: React.FunctionComponent<MapIncidentInfoProps> = ({
               {DateHelper.formatIncidentDate(incident.date)}
             </CardDescription>
           </CardHeader>
-
           <Separator />
+          <CameraSection
+            nearbyCameras={[
+              ...(incident.data.nearbyCameras as TorontoTrafficCamera[]),
+            ]}
+          />
+
           <CardFooter className="gap-2 justify-center items-center">
             <Button
               variant="outline"
