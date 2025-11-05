@@ -24,13 +24,13 @@ export default defineConfig({
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
-          mapbox: ['mapbox-gl'],
           redux: ['redux', 'react-redux'],
         },
       },
     },
     // Enable source maps for better debugging
-    sourcemap: true,
+    // Only enable sourcemaps in development
+    sourcemap: process.env.NODE_ENV === 'development',
     // Optimize chunk size
     chunkSizeWarningLimit: 1000,
   },
@@ -42,7 +42,7 @@ export default defineConfig({
   },
   // Optimize dependencies
   optimizeDeps: {
-    include: ['react', 'react-dom', 'mapbox-gl'],
+    include: ['react', 'react-dom'],
   },
   // Define environment variables
   define: {
