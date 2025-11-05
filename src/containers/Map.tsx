@@ -53,10 +53,13 @@ const Map: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const { id } = useParams<{ id?: string }>();
 
-  const incidents = useAppSelector(state => state.incidents);
-  const ui = useAppSelector(state => state.ui);
-  const user = useAppSelector(state => state.user);
-  const cameras = useAppSelector(state => state.cameras);
+  const incidentList = useAppSelector(state => state.incidents.list);
+  const selectedIncident = useAppSelector(state => state.incidents.selected);
+  const filter = useAppSelector(state => state.incidents.filter);
+  const { drawerOpen, loader } = useAppSelector(state => state.ui);
+  const userLocation = useAppSelector(state => state.user.location);
+  const cameraList = useAppSelector(state => state.cameras.list);
+  const selectedCamera = useAppSelector(state => state.cameras.selected);
 
   // I want to reffer to mapRef instead of mapRef.current throughout the app
   // thats why theres two vars lol
@@ -98,7 +101,7 @@ const Map: React.FunctionComponent = () => {
     id: string,
     searchDB = false
   ): Promise<Incident<any> | undefined> => {
-    const matchingIncident: Incident<any> | undefined = incidents.list.find(
+    const matchingIncident: Incident<any> | undefined = incidentList.find(
       incident => incident.id === id
     );
 
@@ -112,13 +115,13 @@ const Map: React.FunctionComponent = () => {
 
   React.useEffect(() => {
     // if the map isn't loaded, show the loader
-    if (!isMapLoaded && !ui.loader.open) {
+    if (!isMapLoaded && !loader.open) {
       dispatch(openLoader('Loading map...'));
       Analytics.pageview('/map');
     }
 
     // if the map has been loaded, and we have a list of incidents
-    if (isMapLoaded && incidents.list.length !== 0) {
+    if (isMapLoaded && incidentList.length !== 0) {
       // Close the loader if it's open
 
       setTimeout(() => {
@@ -139,33 +142,33 @@ const Map: React.FunctionComponent = () => {
         });
       }
     }
-  }, [isMapLoaded, incidents.list.length, id]);
+  }, [isMapLoaded, incidentList.length, id]);
 
   // Close the drawer if we're interacting with the map & the drawer is open d
   React.useEffect(() => {
     if (interactingWithMap) {
-      if (ui.drawerOpen) {
+      if (drawerOpen) {
         dispatch(toggleDrawer(false));
       }
 
-      if (incidents.selected) {
+      if (selectedIncident) {
         dispatch(setSelectedIncident(undefined));
       }
     }
   }, [interactingWithMap]);
 
   React.useEffect(() => {
-    if (user.location.coordinates) {
+    if (userLocation.coordinates) {
       setCenter([
-        user.location.coordinates.longitude,
-        user.location.coordinates.latitude,
+        userLocation.coordinates.longitude,
+        userLocation.coordinates.latitude,
       ]);
     }
-  }, [user.location.coordinates]);
+  }, [userLocation.coordinates]);
 
   React.useEffect(() => {
     // If the selected incident changes, zoom into it
-    if (incidents.selected && mapRef) {
+    if (selectedIncident && mapRef) {
       const currentPosition = mapRef.getCenter();
       // Save the map state
       setMapState({
@@ -178,14 +181,14 @@ const Map: React.FunctionComponent = () => {
 
       mapRef.flyTo({
         center: [
-          incidents.selected.coordinates.longitude,
-          incidents.selected.coordinates.latitude,
+          selectedIncident.coordinates.longitude,
+          selectedIncident.coordinates.latitude,
         ],
         speed: 1,
         zoom: 15,
       });
     }
-  }, [incidents.selected]);
+  }, [selectedIncident]);
 
   return (
     <>
@@ -202,8 +205,8 @@ const Map: React.FunctionComponent = () => {
         style={{ width: '100vw', height: '100vh' }}
         minZoom={9}
         //disables zooming while an incident is selected
-        interactive={!incidents.selected}
-        scrollZoom={!incidents.selected}
+        interactive={!selectedIncident}
+        scrollZoom={!selectedIncident}
         onLoad={() => {
           setIsMapLoaded(true);
         }}
@@ -214,7 +217,7 @@ const Map: React.FunctionComponent = () => {
           setInteractingWithMap(false);
         }}
         onClick={() => {
-          if (ui.drawerOpen) {
+          if (drawerOpen) {
             dispatch(toggleDrawer(false));
           }
         }}
@@ -223,13 +226,13 @@ const Map: React.FunctionComponent = () => {
           <AttributionControl compact={true} position="bottom-left" />
 
           {/* Overlay button for opening the drawer */}
-          {!ui.drawerOpen && (
+          {!drawerOpen && (
             <Button
               size="icon-lg"
               className={`absolute top-[20px] left-[20px] bg-background hover:bg-background/80`}
               onClick={() => {
                 dispatch(toggleDrawer(true));
-                if (incidents.selected) {
+                if (selectedIncident) {
                   dispatch(setSelectedIncident(undefined));
                 }
               }}
@@ -239,20 +242,20 @@ const Map: React.FunctionComponent = () => {
           )}
 
           <MapIncidentInfo
-            incident={incidents.selected}
-            drawerOpen={ui.drawerOpen}
+            incident={selectedIncident}
+            drawerOpen={drawerOpen}
             close={() => unselectIncidentWithAnimation(true)}
           />
 
           <MapCameraInfo
-            camera={cameras.selected}
-            drawerOpen={ui.drawerOpen}
+            camera={selectedCamera}
+            drawerOpen={drawerOpen}
             close={() => dispatch(setSelectedCamera(undefined))}
           />
 
           <ButtonGroup
             className="absolute bottom-[25px] right-[25px]"
-            hidden={Boolean(ui.drawerOpen || incidents.selected)}
+            hidden={Boolean(drawerOpen || selectedIncident)}
           >
             <Button
               size="icon-lg"
@@ -262,7 +265,7 @@ const Map: React.FunctionComponent = () => {
               <TabletSmartphoneIcon className="text-primary" />
             </Button>
             <ButtonGroupSeparator />
-            {user.location.available && (
+            {userLocation.available && (
               <>
                 <Button
                   size="icon-lg"
@@ -287,31 +290,31 @@ const Map: React.FunctionComponent = () => {
           </ButtonGroup>
         </SafeArea>
 
-        {user.location.coordinates && (
+        {userLocation.coordinates && (
           <AnimatedMapMarker
             color={Colors.BLACK}
-            coordinates={user.location.coordinates}
+            coordinates={userLocation.coordinates}
             size={10}
           />
         )}
 
-        {incidents.selected && (
+        {selectedIncident && (
           <AnimatedMapMarker
             color="#007bff"
-            coordinates={incidents.selected.coordinates}
+            coordinates={selectedIncident.coordinates}
             size={22}
           />
         )}
 
-        {incidents.selected && (
+        {selectedIncident && (
           <AnimatedMapMarker
             color={Colors.ERROR}
-            coordinates={incidents.selected?.coordinates as any}
+            coordinates={selectedIncident?.coordinates as any}
             size={22}
           />
         )}
 
-        {cameras.list.map(camera => (
+        {cameraList.map(camera => (
           <MapMarker
             key={camera.id}
             coordinates={camera.location as any}
@@ -323,10 +326,10 @@ const Map: React.FunctionComponent = () => {
         ))}
 
         {/* The incident features */}
-        {incidents.list
+        {incidentList
           .map(incident => {
             const selected = Boolean(
-              incidents.selected && incidents.selected.id === incident.id
+              selectedIncident && selectedIncident.id === incident.id
             );
             if (!selected) {
               return (
@@ -334,7 +337,7 @@ const Map: React.FunctionComponent = () => {
                   key={incident.id}
                   coordinates={incident.coordinates}
                   onClick={() => {
-                    if (!incidents.selected) {
+                    if (!selectedIncident) {
                       dispatch(setSelectedIncident(incident));
                     }
                   }}
@@ -347,7 +350,7 @@ const Map: React.FunctionComponent = () => {
           .filter(incidentFeature => Boolean(incidentFeature))}
       </ReactMapGl>
       <MapSidebar
-        isOpen={ui.drawerOpen}
+        isOpen={drawerOpen}
         onClose={() => dispatch(toggleDrawer(false))}
       />
       <Toaster />

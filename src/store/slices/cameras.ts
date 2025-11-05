@@ -1,8 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Incident } from '@rdrnt/tps-calls-shared';
-import { Timestamp } from 'firebase/firestore';
 
-import { DateHelper } from '../../helpers';
 import { TorontoTrafficCamera } from '../../containers/BetaFeature';
 
 export interface CameraState {
@@ -16,7 +13,7 @@ const initialState: CameraState = {
 };
 
 const camerasSlice = createSlice({
-  name: 'incidents',
+  name: 'cameras',
   initialState,
   reducers: {
     setCameraList: (state, action: PayloadAction<TorontoTrafficCamera[]>) => {

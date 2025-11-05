@@ -18,8 +18,9 @@ import { Timestamp } from 'firebase/firestore';
 
 const IncidentListener: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
-  const { incidents, user } = useAppSelector((state: AppState) => state);
-  const { filter, list } = incidents;
+  const incidents = useAppSelector(state => state.incidents.list);
+  const incidentFilter = useAppSelector(state => state.incidents.filter);
+  const userLocation = useAppSelector(state => state.user.location);
 
   // Store the default incidents
   const [defaultIncidentList, setDefaultIncidentList] = React.useState<
@@ -85,18 +86,20 @@ const IncidentListener: React.FunctionComponent = () => {
       const filteredIncidents: Incident<any>[] = [];
 
       const getIncidentsToFilter = async () => {
-        const hasDateFilters = Boolean(filter.startDate && filter.endDate);
+        const hasDateFilters = Boolean(
+          incidentFilter.startDate && incidentFilter.endDate
+        );
         const dateFiltersDifferent =
-          previousFilters.startDate !== filter.startDate ||
-          previousFilters.endDate !== filter.endDate;
+          previousFilters.startDate !== incidentFilter.startDate ||
+          previousFilters.endDate !== incidentFilter.endDate;
         // Check if we have date filters
         if (hasDateFilters) {
           // If we have date filters, but they're different, get the incidents for that date
           if (dateFiltersDifferent) {
             const incidentsForDate = await FirebaseIncidents.getIncidentsAtDate(
               {
-                startDate: filter.startDate!,
-                endDate: filter.endDate!,
+                startDate: incidentFilter.startDate!,
+                endDate: incidentFilter.endDate!,
               }
             );
 
@@ -117,37 +120,37 @@ const IncidentListener: React.FunctionComponent = () => {
 
       // If we're only filtering by date, set the filtered incidents to the date
       if (
-        filter.startDate &&
-        filter.endDate &&
-        Object.keys(filter).length == 2
+        incidentFilter.startDate &&
+        incidentFilter.endDate &&
+        Object.keys(incidentFilter).length == 2
       ) {
         filteredIncidents.push(...incidentsToFilter);
       }
 
       if (
-        filter.distance &&
-        filter.distance !== 0 &&
-        user.location.coordinates
+        incidentFilter.distance &&
+        incidentFilter.distance !== 0 &&
+        userLocation.coordinates
       ) {
         const withinPoint: Incident<any>[] = incidentsToFilter.filter(
           incident =>
             isPointWithinRadius(
               incident.coordinates,
-              user.location.coordinates!,
-              filter.distance! * 1000
+              userLocation.coordinates!,
+              incidentFilter.distance! * 1000
             )
         );
         filteredIncidents.push(...withinPoint);
       }
 
-      if (filter.search) {
+      if (incidentFilter.search) {
         const matchingSearchIncidents = incidentsToFilter.filter(incident => {
           const nameMatch = incident.name
             .toLowerCase()
-            .includes(filter.search!.toLowerCase());
+            .includes(incidentFilter.search!.toLowerCase());
           const locationMatch = incident.location
             .toLowerCase()
-            .includes(filter.search!.toLowerCase());
+            .includes(incidentFilter.search!.toLowerCase());
 
           return nameMatch || locationMatch;
         });
@@ -172,7 +175,7 @@ const IncidentListener: React.FunctionComponent = () => {
       }
 
       // Set the filters for comparison
-      setPreviousFilters(filter);
+      setPreviousFilters(incidentFilter);
     } catch (error) {
       console.log('Error filtering', error);
     }
@@ -181,15 +184,15 @@ const IncidentListener: React.FunctionComponent = () => {
   // Filtering
   React.useEffect(() => {
     // if we have any filter options
-    const doesHaveFilter = Object.keys(filter).length > 0;
+    const doesHaveFilter = Object.keys(incidentFilter).length > 0;
 
     // if we don't have any filter options, and the lists aren't equal, set the default list
-    if (!doesHaveFilter && list.length !== defaultIncidentList.length) {
+    if (!doesHaveFilter && incidents.length !== defaultIncidentList.length) {
       setIncidents(defaultIncidentList);
     } else {
       applyFilters();
     }
-  }, [filter]);
+  }, [incidentFilter]);
 
   return null;
 };
