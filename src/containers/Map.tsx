@@ -300,30 +300,25 @@ const Map: React.FunctionComponent = () => {
 
         {selectedIncident && (
           <AnimatedMapMarker
-            color="#007bff"
-            coordinates={selectedIncident.coordinates}
-            size={22}
-          />
-        )}
-
-        {selectedIncident && (
-          <AnimatedMapMarker
             color={Colors.ERROR}
-            coordinates={selectedIncident?.coordinates as any}
+            coordinates={selectedIncident?.coordinates}
             size={22}
           />
         )}
 
-        {cameraList.map(camera => (
-          <MapMarker
-            key={camera.id}
-            coordinates={camera.location as any}
-            onClick={() => {
-              dispatch(setSelectedCamera(camera));
-            }}
-            color={Colors.SUCCESS}
-          />
-        ))}
+        {cameraList.map(
+          camera =>
+            Boolean('dog' === 'cat') && (
+              <MapMarker
+                key={camera.id}
+                coordinates={camera.location as any}
+                onClick={() => {
+                  dispatch(setSelectedCamera(camera));
+                }}
+                color={Colors.SUCCESS}
+              />
+            )
+        )}
 
         {/* The incident features */}
         {incidentList
@@ -337,9 +332,7 @@ const Map: React.FunctionComponent = () => {
                   key={incident.id}
                   coordinates={incident.coordinates}
                   onClick={() => {
-                    if (!selectedIncident) {
-                      dispatch(setSelectedIncident(incident));
-                    }
+                    dispatch(setSelectedIncident(incident));
                   }}
                 />
               );
