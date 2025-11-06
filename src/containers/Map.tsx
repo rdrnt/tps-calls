@@ -71,30 +71,10 @@ const Map: React.FunctionComponent = () => {
     DEFAULTS.longitude,
     DEFAULTS.latitude,
   ]);
-  const [mapState, setMapState] = React.useState<MapState | undefined>();
 
   const [isMapLoaded, setIsMapLoaded] = React.useState<boolean>(false);
   const [interactingWithMap, setInteractingWithMap] =
     React.useState<boolean>(false);
-
-  // Unselects the selected incident and animates to the users original position
-  const unselectIncidentWithAnimation = (animated?: boolean) => {
-    // Clear the selected incident
-    dispatch(setSelectedIncident(undefined));
-
-    // If we have the map state, go back to their original position
-    // before they selected the incident
-    if (animated && mapRef && mapState) {
-      mapRef.flyTo({
-        center: [mapState.position.longitude, mapState.position.latitude],
-        speed: 1,
-        zoom: mapState.zoom,
-      });
-    }
-
-    // Reset the map state
-    setMapState(undefined);
-  };
 
   // Finds and returns an incident from the store or database
   const getIncidentWithId = async (
@@ -169,16 +149,6 @@ const Map: React.FunctionComponent = () => {
   React.useEffect(() => {
     // If the selected incident changes, zoom into it
     if (selectedIncident && mapRef) {
-      const currentPosition = mapRef.getCenter();
-      // Save the map state
-      setMapState({
-        zoom: mapRef.getZoom(),
-        position: {
-          latitude: currentPosition.lat,
-          longitude: currentPosition.lng,
-        },
-      });
-
       mapRef.flyTo({
         center: [
           selectedIncident.coordinates.longitude,
@@ -244,7 +214,7 @@ const Map: React.FunctionComponent = () => {
           <MapIncidentInfo
             incident={selectedIncident}
             drawerOpen={drawerOpen}
-            close={() => unselectIncidentWithAnimation(true)}
+            close={() => dispatch(setSelectedIncident(undefined))}
           />
 
           <MapCameraInfo

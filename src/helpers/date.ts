@@ -21,7 +21,7 @@ export const formatIncidentDate = (incidentTimestamp: Timestamp) => {
   const timestampToDate = convertTimestampToDate(incidentTimestamp);
 
   if (isToday(timestampToDate)) {
-    return `today @ ${format(timestampToDate, 'h:mma')}`;
+    return `Today @ ${format(timestampToDate, 'h:mma')}`;
   }
 
   return format(timestampToDate, 'MMM Do YYYY @ h:mma');

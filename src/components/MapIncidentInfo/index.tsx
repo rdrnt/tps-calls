@@ -3,7 +3,8 @@ import * as React from 'react';
 import { AnimatePresence } from 'motion/react';
 import { Incident } from '@rdrnt/tps-calls-shared';
 import { toast } from 'sonner';
-import { Link, Megaphone } from 'lucide-react';
+import { Copy, Link, Megaphone } from 'lucide-react';
+import { useState } from 'react';
 
 import {
   Card,
@@ -21,6 +22,15 @@ import { Button } from '../ui/button';
 import { createShareUrl } from '../../helpers/url';
 import CameraSection from './parts/CameraSection';
 import { TorontoTrafficCamera } from '../../containers/BetaFeature';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from '../ui/sheet';
+import { formatIncidentDate } from '../../helpers/date';
 
 interface MapIncidentInfoProps {
   incident?: Incident<any>;
@@ -30,7 +40,8 @@ interface MapIncidentInfoProps {
 
 const MapIncidentInfo: React.FunctionComponent<MapIncidentInfoProps> = ({
   incident,
-  drawerOpen,
+
+  close,
 }) => {
   const onClickCopyToClipboard = () => {
     if (!incident || !navigator) return;
@@ -40,44 +51,44 @@ const MapIncidentInfo: React.FunctionComponent<MapIncidentInfoProps> = ({
     });
   };
 
-  return (
-    <AnimatePresence>
-      {incident && !drawerOpen && (
-        <Card className="absolute bottom-[25px] left-1/2 -translate-x-1/2 w-auto sm:w-full md:w-auto min-w-[375px] p-6 gap-2">
-          <CardHeader className="gap-1 px-0 mb-2">
-            <CardTitle className="text-2xl font-bold">
-              {incident.name}
-            </CardTitle>
-            <CardDescription className="text-base text-primary">
-              {incident.location}
-            </CardDescription>
-            <CardDescription className="uppercase text-xs">
-              {DateHelper.formatIncidentDate(incident.date)}
-            </CardDescription>
-          </CardHeader>
-          <Separator />
-          <CameraSection
-            nearbyCameras={[
-              ...(incident.data.nearbyCameras as TorontoTrafficCamera[]),
-            ]}
-          />
+  if (!incident) return null;
 
-          <CardFooter className="gap-2 justify-center items-center">
-            <Button
-              variant="outline"
-              size="icon"
-              className="rounded-full"
-              onClick={onClickCopyToClipboard}
-            >
-              <Link />
-            </Button>
-            <Button variant="outline" size="icon" className="rounded-full">
-              <Megaphone />
-            </Button>
-          </CardFooter>
-        </Card>
-      )}
-    </AnimatePresence>
+  return (
+    <Sheet
+      open={true}
+      onOpenChange={open => {
+        if (!open) {
+          close();
+        }
+      }}
+    >
+      <SheetContent overlayClassName="bg-background/20">
+        <SheetHeader>
+          <SheetTitle className="text-2xl font-bold">
+            {incident?.name}
+          </SheetTitle>
+          <SheetDescription>{incident?.location}</SheetDescription>
+          <SheetDescription className="text-sm text-gray-500">
+            {formatIncidentDate(incident?.date)}
+          </SheetDescription>
+          <Separator />
+        </SheetHeader>
+        <div className="grid flex-1 auto-rows-min gap-6 px-4">
+          <CameraSection nearbyCameras={[...incident.data.nearbyCameras]} />
+        </div>
+
+        <SheetFooter>
+          <Button onClick={close}>
+            <Link />
+            Copy to Clipboard
+          </Button>
+          <Button onClick={close}>
+            <Megaphone />
+            Share on Twitter
+          </Button>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   );
 };
 
