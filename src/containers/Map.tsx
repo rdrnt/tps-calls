@@ -276,20 +276,6 @@ const Map: React.FunctionComponent = () => {
           />
         )}
 
-        {cameraList.map(
-          camera =>
-            Boolean('dog' === 'cat') && (
-              <MapMarker
-                key={camera.id}
-                coordinates={camera.location as any}
-                onClick={() => {
-                  dispatch(setSelectedCamera(camera));
-                }}
-                color={Colors.SUCCESS}
-              />
-            )
-        )}
-
         {/* The incident features */}
         {incidentList
           .map(incident => {
