@@ -9,13 +9,15 @@ import BetaFeature from './containers/BetaFeature';
 
 import { ThemeProvider } from './theme-provider';
 
-import { LocationListener, IncidentListener } from './components/Listeners';
+import {
+  LocationListener,
+  IncidentListener,
+  CameraListener,
+} from './components/Listeners';
 
 import store from './store';
 
-import Loader from './components/Loader';
-import Modal from './components/Modal';
-import TorontoCamerasListener from './components/Listeners/Cameras';
+import Loader, { StaticLoader } from './components/Loader';
 
 const App: React.FunctionComponent = () => (
   <>
@@ -24,11 +26,9 @@ const App: React.FunctionComponent = () => (
         <Provider store={store}>
           <>
             <IncidentListener />
-            <TorontoCamerasListener />
+            <CameraListener />
             <LocationListener />
             <Loader />
-
-            <Modal />
 
             <Routes>
               <Route path="/contact" element={<ContactPage />} />
@@ -37,7 +37,7 @@ const App: React.FunctionComponent = () => (
               <Route
                 path="/:id"
                 element={
-                  <React.Suspense fallback={<div>Loading...</div>}>
+                  <React.Suspense fallback={<StaticLoader />}>
                     <Map />
                   </React.Suspense>
                 }
@@ -45,7 +45,7 @@ const App: React.FunctionComponent = () => (
               <Route
                 path="/"
                 element={
-                  <React.Suspense fallback={<div>Loading...</div>}>
+                  <React.Suspense fallback={<StaticLoader />}>
                     <Map />
                   </React.Suspense>
                 }
