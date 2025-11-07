@@ -18,6 +18,7 @@ import {
 import store from './store';
 
 import Loader, { StaticLoader } from './components/Loader';
+import Modal from './components/Modal';
 
 const App: React.FunctionComponent = () => (
   <>
@@ -29,6 +30,7 @@ const App: React.FunctionComponent = () => (
             <CameraListener />
             <LocationListener />
             <Loader />
+            <Modal />
 
             <Routes>
               <Route path="/contact" element={<ContactPage />} />
