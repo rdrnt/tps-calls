@@ -26,7 +26,6 @@ const TorontoCamerasListener = () => {
     timer.current = setTimeout(
       () => {
         fetchCameras();
-        toast.success('Cameras refreshed');
       },
       CAMERAS_REFRESH_INTERVAL_IN_MINUTES * 60 * 1000
     );
