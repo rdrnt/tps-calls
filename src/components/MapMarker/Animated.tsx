@@ -14,13 +14,13 @@ const AnimatedMapMarker: React.FunctionComponent<AnimatedMapMarkerProps> = ({
   size = 15,
 }) => (
   <Marker {...coordinates} style={{ zIndex: 0 }} anchor="center">
-    <div className="animate-ping bg-white fixed h-[22px] w-[22px] rounded-full" />
+    <div className={`animate-ping bg-white fixed size-full rounded-full`} />
     <div
-      className="border-2 border-white"
+      className="border-2 border-white rounded-full"
       style={{
         height: `${size}px`,
         width: `${size}px`,
-        borderRadius: `${size / 2}px`,
+
         backgroundColor: darken(0.2, color),
       }}
     />

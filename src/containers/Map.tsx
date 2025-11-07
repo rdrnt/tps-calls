@@ -9,6 +9,7 @@ import {
   InfoIcon,
   TabletSmartphoneIcon,
 } from 'lucide-react';
+import { toast, Toaster } from 'sonner';
 
 import { MAPBOX_THEME_URL, Colors } from '../config';
 import { Environment, Analytics } from '../helpers';
@@ -33,7 +34,7 @@ import {
   setSelectedIncident,
   toggleDrawer,
 } from '../store/actions';
-import { toast, Toaster } from 'sonner';
+
 import MapSidebar from '../components/MapSidebar';
 import { SafeArea } from '../components/SafeArea';
 import MapCameraInfo from '../components/MapCameraInfo';
@@ -43,11 +44,6 @@ const DEFAULTS = {
   longitude: -79.383186,
   zoom: 11.0,
 };
-
-interface MapState {
-  position: Coordinates;
-  zoom: number;
-}
 
 const Map: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
@@ -173,6 +169,10 @@ const Map: React.FunctionComponent = () => {
           longitude: -79.383186,
           zoom: 11.0,
         }}
+        maxBounds={[
+          [-79.75, 43.55], // Southwest (includes a bit of Mississauga & Lake Ontario)
+          [-79.0, 43.9], // Northeast (includes a bit of Pickering & Vaughan)
+        ]}
         style={{ width: '100vw', height: '100vh' }}
         minZoom={9}
         //disables zooming while an incident is selected
@@ -262,15 +262,15 @@ const Map: React.FunctionComponent = () => {
 
         {userLocation.coordinates && (
           <AnimatedMapMarker
-            color={Colors.BLACK}
+            color={Colors.SECONDARY}
             coordinates={userLocation.coordinates}
-            size={10}
+            size={15}
           />
         )}
 
         {selectedIncident && (
           <AnimatedMapMarker
-            color={Colors.ERROR}
+            color={Colors.PRIMARY}
             coordinates={selectedIncident?.coordinates}
             size={22}
           />
