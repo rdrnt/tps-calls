@@ -1,25 +1,17 @@
 import * as React from 'react';
 
-import { AnimatePresence } from 'motion/react';
 import { Incident } from '@rdrnt/tps-calls-shared';
 import { toast } from 'sonner';
-import { Copy, Link, Megaphone } from 'lucide-react';
-import { useState } from 'react';
+import { Link } from 'lucide-react';
 
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '../ui/card';
 import { Separator } from '../ui/separator';
 
 import { DateHelper } from '../../helpers';
 
 import { Button } from '../ui/button';
+import { TwitterIcon } from '../Icon/custom/Twitter';
 
-import { createShareUrl } from '../../helpers/url';
+import { createShareUrl, createTwitterShareUrl } from '../../helpers/url';
 import CameraSection from './parts/CameraSection';
 import { TorontoTrafficCamera } from '../../containers/BetaFeature';
 import {
@@ -47,11 +39,16 @@ const MapIncidentInfo: React.FunctionComponent<MapIncidentInfoProps> = ({
   const { isMobile } = useIsMobile();
 
   const onClickCopyToClipboard = () => {
-    if (!incident || !navigator) return;
+    if (!incident || !navigator || navigator.clipboard === undefined) return;
     navigator.clipboard.writeText(createShareUrl(incident.id));
     toast.success('Share link copied to clipboard', {
       position: 'top-center',
     });
+  };
+
+  const onClickShareOnTwitter = () => {
+    if (!incident) return;
+    window.open(`${createTwitterShareUrl(incident)}`, '_blank');
   };
 
   if (!incident) return null;
@@ -84,12 +81,12 @@ const MapIncidentInfo: React.FunctionComponent<MapIncidentInfoProps> = ({
         </div>
 
         <SheetFooter>
-          <Button onClick={close}>
+          <Button onClick={onClickCopyToClipboard}>
             <Link />
             Copy to Clipboard
           </Button>
-          <Button onClick={close}>
-            <Megaphone />
+          <Button onClick={onClickShareOnTwitter}>
+            <TwitterIcon />
             Share on Twitter
           </Button>
         </SheetFooter>
