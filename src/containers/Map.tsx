@@ -156,6 +156,7 @@ const Map: React.FunctionComponent = () => {
         ],
         speed: 1,
         zoom: 15,
+        offset: [0, -150],
       });
     }
   }, [selectedIncident]);
@@ -176,7 +177,6 @@ const Map: React.FunctionComponent = () => {
         minZoom={9}
         //disables zooming while an incident is selected
         interactive={!selectedIncident}
-        scrollZoom={!selectedIncident}
         onLoad={() => {
           setIsMapLoaded(true);
         }}

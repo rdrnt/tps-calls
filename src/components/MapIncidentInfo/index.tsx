@@ -31,6 +31,7 @@ import {
   SheetTitle,
 } from '../ui/sheet';
 import { formatIncidentDate } from '../../helpers/date';
+import useIsMobile from '../../hooks/useIsMobile';
 
 interface MapIncidentInfoProps {
   incident?: Incident<any>;
@@ -43,6 +44,8 @@ const MapIncidentInfo: React.FunctionComponent<MapIncidentInfoProps> = ({
 
   close,
 }) => {
+  const { isMobile } = useIsMobile();
+
   const onClickCopyToClipboard = () => {
     if (!incident || !navigator) return;
     navigator.clipboard.writeText(createShareUrl(incident.id));
@@ -62,7 +65,10 @@ const MapIncidentInfo: React.FunctionComponent<MapIncidentInfoProps> = ({
         }
       }}
     >
-      <SheetContent overlayClassName="bg-background/20">
+      <SheetContent
+        overlayClassName="bg-background/20"
+        side={isMobile ? 'bottom' : 'right'}
+      >
         <SheetHeader>
           <SheetTitle className="text-2xl font-bold">
             {incident?.name}

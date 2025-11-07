@@ -44,8 +44,11 @@ const CameraSection: FunctionComponent<CameraSectionProps> = ({
       <Typography variant="h5">Nearby Cameras</Typography>
       <ItemGroup
         className={cn(
-          `grid gap-4 max-w-full`,
-          nearbyCameras.length === 1 ? 'grid-cols-1' : 'grid-cols-2'
+          `grid gap-2 max-w-full`,
+          // Mobile: if 3+ items → 3 cols, else → 2 cols
+          nearbyCameras.length >= 3 ? 'grid-cols-3' : 'grid-cols-2',
+          // Desktop (md+): if 1 item → 1 col, else → 2 cols
+          nearbyCameras.length === 1 ? 'md:grid-cols-1' : 'md:grid-cols-2'
         )}
       >
         {nearbyCameras.map(parentCamera => {
