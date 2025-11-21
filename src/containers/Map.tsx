@@ -151,7 +151,6 @@ const Map: React.FunctionComponent = () => {
         ],
         speed: 1,
         zoom: 15,
-        offset: [0, -150],
       });
     }
   }, [selectedIncident]);
