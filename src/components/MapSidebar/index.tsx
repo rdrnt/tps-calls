@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../store';
 import {
   InputGroup,
   InputGroupAddon,
+  InputGroupButton,
   InputGroupInput,
 } from '../ui/input-group';
 
@@ -60,11 +61,6 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
     setLocalSearchInputValue(filter?.search || '');
   }, [filter?.search]);
 
-  const onItemClick = (incident: Incident<any>) => {
-    dispatch(toggleDrawer(false));
-    dispatch(setSelectedIncident(incident));
-  };
-
   // Debounced function to update Redux search filter
   const [debouncedUpdateReduxSearch] = useDebouncedCallback(
     (searchValue: string) => {
@@ -78,12 +74,14 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
   );
 
   // Update local state immediately, debounce Redux update
-  const handleLocalSearchInputChange = (
-    e: React.ChangeEvent<React.ElementRef<typeof InputGroupInput>>
-  ) => {
-    const newValue = e.target.value;
+  const handleLocalSearchInputChange = (newValue: string) => {
     setLocalSearchInputValue(newValue); // local: immediate
     debouncedUpdateReduxSearch(newValue); // redux: debounced
+  };
+
+  const onItemClick = (incident: Incident<any>) => {
+    dispatch(toggleDrawer(false));
+    dispatch(setSelectedIncident(incident));
   };
 
   return (
@@ -165,11 +163,24 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
                 <InputGroupInput
                   placeholder="Arrest, Yonge St, etc..."
                   value={localSearchInputValue}
-                  onChange={handleLocalSearchInputChange}
+                  onChange={event =>
+                    handleLocalSearchInputChange(event.target.value)
+                  }
                 />
                 <InputGroupAddon>
-                  <Search />
+                  {localSearchInputValue ? (
+                    <InputGroupButton
+                      onClick={() => handleLocalSearchInputChange('')}
+                      variant="ghost"
+                      size="icon-sm"
+                    >
+                      <X />
+                    </InputGroupButton>
+                  ) : (
+                    <Search />
+                  )}
                 </InputGroupAddon>
+
                 {incidents.length > 0 && filter?.search && (
                   <InputGroupAddon align="inline-end">
                     {incidents.length} results
