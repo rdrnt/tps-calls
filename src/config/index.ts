@@ -24,5 +24,10 @@ export enum ZIndex {
   MODAL = 3,
 }
 
+export enum APPSTORE_DOWNLOAD_LINK {
+  IOS = 'https://apps.apple.com/us/app/tpscalls/id6754499909',
+  ANDROID = 'https://play.google.com/store/apps/details?id=ca.drnt.tpscalls',
+}
+
 export const MAPBOX_THEME_URL =
   'mapbox://styles/drnt/cmi89nj7n004i01s4cshw1tn4';

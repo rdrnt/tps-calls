@@ -2,8 +2,11 @@ import * as React from 'react';
 
 import { ModalProps } from '.';
 
+import AppStoreIcon from '../../assets/images/appStoreDownload.png';
+import PlayStoreIcon from '../../assets/images/googlePlayDownload.png';
+
 import { Analytics } from '../../helpers';
-import { DialogHeader, DialogTitle } from '../ui/dialog';
+import { DialogFooter, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Button } from '../ui/button';
 import {
   Accordion,
@@ -12,6 +15,8 @@ import {
   AccordionContent,
 } from '../ui/accordion';
 import { Heart, Mail } from 'lucide-react';
+import { APPSTORE_DOWNLOAD_LINK } from '../../config';
+import { Typography } from '../Typography';
 
 type ProjectInfoModalProps = ModalProps;
 
@@ -32,7 +37,7 @@ const ProjectInfoModal: React.FunctionComponent<ProjectInfoModalProps> = () => {
         <AccordionItem value="item-1">
           <AccordionTrigger>About</AccordionTrigger>
           <AccordionContent>
-            {`tpscalls.live is a real-time map of locations where the Toronto Police have responded to a call for service. These calls include incidents such as arrests, gun calls, collisions involving people or property, assaults, industrial accidents or disputes. Some calls for service will be, or are being, excluded for privacy reasons, including calls respecting domestic violence, sexual assault, or medical distress. Others calls may be excluded because they are part of an ongoing police operation.`}
+            {`tpscalls.live gives a live overview of TPS activity in Toronto. You can see arrests, gun calls, collisions, assaults and various emergency incidents. Anything sensitive or tied to an active investigation is filtered out to maintain privacy and safety.`}
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-2">
@@ -59,11 +64,23 @@ const ProjectInfoModal: React.FunctionComponent<ProjectInfoModalProps> = () => {
         <AccordionItem value="item-4">
           <AccordionTrigger>Download the mobile app</AccordionTrigger>
           <AccordionContent>
-            <Button type="button" variant="outline" className="w-fit" asChild>
-              <a href="/download" target="_blank" rel="noopener noreferrer">
-                Visit Download Page
+            <div className="flex flex-row gap-2">
+              <a
+                href={APPSTORE_DOWNLOAD_LINK.IOS}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={AppStoreIcon} />
               </a>
-            </Button>
+
+              <a
+                href={APPSTORE_DOWNLOAD_LINK.ANDROID}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={PlayStoreIcon} />
+              </a>
+            </div>
           </AccordionContent>
         </AccordionItem>
 
@@ -94,25 +111,21 @@ const ProjectInfoModal: React.FunctionComponent<ProjectInfoModalProps> = () => {
             </div>
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem value="item-6">
-          <AccordionTrigger>Donate</AccordionTrigger>
-          <AccordionContent>
-            <div className="flex flex-col gap-2">
-              {`Your donations are greatly appreciated! They help cover project costs and keep the project alive.`}
-              <Button type="button" variant="outline" className="w-fit" asChild>
-                <a
-                  href="https://ko-fi.com/drnt_"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Heart />
-                  Donate on Ko-fi
-                </a>
-              </Button>
-            </div>
-          </AccordionContent>
-        </AccordionItem>
       </Accordion>
+      <DialogFooter className="justify-center align-middle">
+        <div className="flex flex-row gap-2 justify-center align-middle w-full">
+          <Button type="button" variant="outline" asChild>
+            <a
+              href="https://ko-fi.com/drnt_"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Heart />
+              Donate on Ko-fi
+            </a>
+          </Button>
+        </div>
+      </DialogFooter>
     </>
   );
 };
