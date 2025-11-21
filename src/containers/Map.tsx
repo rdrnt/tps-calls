@@ -162,7 +162,7 @@ const Map: React.FunctionComponent = () => {
       <ReactMapGl
         ref={refForMap}
         mapboxAccessToken={Environment.config.MAPBOX_API_KEY}
-        mapStyle={'mapbox://styles/drnt/cmh4091dh002w01sg6i7nb4sl'}
+        mapStyle={'mapbox://styles/drnt/cmi89nj7n004i01s4cshw1tn4'}
         attributionControl={false}
         initialViewState={{
           latitude: 43.653225,
@@ -233,7 +233,7 @@ const Map: React.FunctionComponent = () => {
           >
             <TabletSmartphoneIcon className="text-primary" />
           </Button>
-          <ButtonGroupSeparator />
+          <ButtonGroupSeparator className="bg-accent" />
           {userLocation.available && (
             <>
               <Button
@@ -243,7 +243,7 @@ const Map: React.FunctionComponent = () => {
               >
                 <NavigationIcon className="text-primary" />
               </Button>
-              <ButtonGroupSeparator />
+              <ButtonGroupSeparator className="bg-accent" />
             </>
           )}
 
