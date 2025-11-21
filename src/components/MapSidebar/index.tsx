@@ -1,5 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useDebouncedCallback } from 'use-debounce';
+import { Search, X } from 'lucide-react';
+import { Incident } from '@rdrnt/tps-calls-shared';
+
 import { Button } from '../ui/button';
 import MapSidebarItem from './parts/Item';
 import { useAppDispatch, useAppSelector } from '../../store';
@@ -8,9 +12,12 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from '../ui/input-group';
-import { Search, X } from 'lucide-react';
-import { Incident } from '@rdrnt/tps-calls-shared';
-import { setSelectedIncident, toggleDrawer } from '../../store/actions';
+
+import {
+  setSelectedIncident,
+  toggleDrawer,
+  setIncidentFilter,
+} from '../../store/actions';
 
 /**
  * Props interface for the MapSidebar component
@@ -43,9 +50,40 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
   const incidents = useAppSelector(state => state.incidents.list);
   const filter = useAppSelector(state => state.incidents.filter);
 
+  // Local state for search input (updates immediately, prevents lag)
+  const [localSearchInputValue, setLocalSearchInputValue] = useState(
+    filter?.search || ''
+  );
+
+  // Sync local search input with Redux when filter changes externally
+  useEffect(() => {
+    setLocalSearchInputValue(filter?.search || '');
+  }, [filter?.search]);
+
   const onItemClick = (incident: Incident<any>) => {
     dispatch(toggleDrawer(false));
     dispatch(setSelectedIncident(incident));
+  };
+
+  // Debounced function to update Redux search filter
+  const [debouncedUpdateReduxSearch] = useDebouncedCallback(
+    (searchValue: string) => {
+      dispatch(
+        setIncidentFilter({
+          values: { search: searchValue.trim() || undefined },
+        })
+      );
+    },
+    100
+  );
+
+  // Update local state immediately, debounce Redux update
+  const handleLocalSearchInputChange = (
+    e: React.ChangeEvent<React.ElementRef<typeof InputGroupInput>>
+  ) => {
+    const newValue = e.target.value;
+    setLocalSearchInputValue(newValue); // local: immediate
+    debouncedUpdateReduxSearch(newValue); // redux: debounced
   };
 
   return (
@@ -124,7 +162,11 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
             </div>
             <div className="p-4">
               <InputGroup>
-                <InputGroupInput placeholder="Arrest, Yonge St, etc..." />
+                <InputGroupInput
+                  placeholder="Arrest, Yonge St, etc..."
+                  value={localSearchInputValue}
+                  onChange={handleLocalSearchInputChange}
+                />
                 <InputGroupAddon>
                   <Search />
                 </InputGroupAddon>
