@@ -172,7 +172,7 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
                 </InputGroupAddon>
                 {incidents.length > 0 && filter?.search && (
                   <InputGroupAddon align="inline-end">
-                    12 results
+                    {incidents.length} results
                   </InputGroupAddon>
                 )}
               </InputGroup>

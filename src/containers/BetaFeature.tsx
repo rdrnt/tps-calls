@@ -67,7 +67,7 @@ const BetaFeature = () => {
             <p className="text-muted-foreground">Loading traffic cameras...</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
             {torontoTrafficCameras.map(camera => (
               <Card
                 key={camera.id}
@@ -93,25 +93,30 @@ const BetaFeature = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 gap-4">
-                    {camera.cameras.map((cameraView, index) => (
-                      <div key={`${camera.id}-${index}`} className="space-y-2">
-                        <div className="aspect-video bg-muted rounded-lg overflow-hidden">
-                          <img
-                            src={cameraView.imageUrl}
-                            alt={`${camera.name} - ${cameraView.direction}`}
-                            className="w-full h-full object-cover"
-                            onError={e => {
-                              const target = e.target as HTMLImageElement;
-                              target.src =
-                                'https://via.placeholder.com/300x200/6B7280/FFFFFF?text=Image+Not+Available';
-                            }}
-                          />
+                    {camera.cameras
+                      .filter(cam => cam.direction === 'Default')
+                      .map((cameraView, index) => (
+                        <div
+                          key={`${camera.id}-${index}`}
+                          className="space-y-2"
+                        >
+                          <div className="aspect-video bg-muted rounded-lg overflow-hidden">
+                            <img
+                              src={cameraView.imageUrl}
+                              alt={`${camera.name} - ${cameraView.direction}`}
+                              className="w-full h-full object-cover"
+                              onError={e => {
+                                const target = e.target as HTMLImageElement;
+                                target.src =
+                                  'https://via.placeholder.com/300x200/6B7280/FFFFFF?text=Image+Not+Available';
+                              }}
+                            />
+                          </div>
+                          <h4 className="text-sm font-medium text-center">
+                            {cameraView.direction}
+                          </h4>
                         </div>
-                        <h4 className="text-sm font-medium text-center">
-                          {cameraView.direction}
-                        </h4>
-                      </div>
-                    ))}
+                      ))}
                   </div>
                 </CardContent>
               </Card>

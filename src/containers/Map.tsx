@@ -1,6 +1,6 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 import * as React from 'react';
-import { Coordinates, Incident } from '@rdrnt/tps-calls-shared';
+import { Incident } from '@rdrnt/tps-calls-shared';
 import ReactMapGl, { AttributionControl, MapRef } from 'react-map-gl';
 import { useParams } from 'react-router';
 import {
@@ -51,10 +51,9 @@ const Map: React.FunctionComponent = () => {
 
   const incidentList = useAppSelector(state => state.incidents.list);
   const selectedIncident = useAppSelector(state => state.incidents.selected);
-  const filter = useAppSelector(state => state.incidents.filter);
   const { drawerOpen, loader } = useAppSelector(state => state.ui);
   const userLocation = useAppSelector(state => state.user.location);
-  const cameraList = useAppSelector(state => state.cameras.list);
+
   const selectedCamera = useAppSelector(state => state.cameras.selected);
 
   // I want to reffer to mapRef instead of mapRef.current throughout the app
@@ -162,7 +161,7 @@ const Map: React.FunctionComponent = () => {
       <ReactMapGl
         ref={refForMap}
         mapboxAccessToken={Environment.config.MAPBOX_API_KEY}
-        mapStyle={'mapbox://styles/drnt/cmi89nj7n004i01s4cshw1tn4'}
+        mapStyle={MAPBOX_THEME_URL}
         attributionControl={false}
         initialViewState={{
           latitude: 43.653225,

@@ -6,14 +6,11 @@ import { Link } from 'lucide-react';
 
 import { Separator } from '../ui/separator';
 
-import { DateHelper } from '../../helpers';
-
 import { Button } from '../ui/button';
 import { TwitterIcon } from '../Icon/custom/Twitter';
 
 import { createShareUrl, createTwitterShareUrl } from '../../helpers/url';
 import CameraSection from './parts/CameraSection';
-import { TorontoTrafficCamera } from '../../containers/BetaFeature';
 import {
   Sheet,
   SheetContent,
@@ -66,7 +63,7 @@ const MapIncidentInfo: React.FunctionComponent<MapIncidentInfoProps> = ({
         overlayClassName="bg-background/20"
         side={isMobile ? 'bottom' : 'right'}
       >
-        <SheetHeader>
+        <SheetHeader className="pb-0">
           <SheetTitle className="text-2xl font-bold">
             {incident?.name}
           </SheetTitle>
@@ -74,9 +71,12 @@ const MapIncidentInfo: React.FunctionComponent<MapIncidentInfoProps> = ({
           <SheetDescription className="text-sm text-gray-500">
             {formatIncidentDate(incident?.date)}
           </SheetDescription>
-          <Separator />
         </SheetHeader>
-        <div className="grid flex-1 auto-rows-min gap-6 px-4">
+        <div className="px-4">
+          <Separator />
+        </div>
+
+        <div className="grid auto-rows-min gap-6 px-4">
           <CameraSection nearbyCameras={[...incident.data.nearbyCameras]} />
         </div>
 

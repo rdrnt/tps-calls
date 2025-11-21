@@ -18,11 +18,6 @@ export enum Sizes {
   MAX_MOBILE_WIDTH = 375,
 }
 
-export enum Defaults {
-  PRIMARY_FONT = 'Poppins',
-  SECONDARY_FONT = 'Helvetica',
-}
-
 export enum ZIndex {
   DRAWER = 1,
   TOAST = 2,
@@ -30,4 +25,4 @@ export enum ZIndex {
 }
 
 export const MAPBOX_THEME_URL =
-  'mapbox://styles/drnt/cjmwb7zbo1f5b2ro8sqfdkaql';
+  'mapbox://styles/drnt/cmi89nj7n004i01s4cshw1tn4';
