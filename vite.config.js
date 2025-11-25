@@ -16,6 +16,7 @@ export default defineConfig({
     sentryVitePlugin({
       org: 'rileyd',
       project: 'tps-calls',
+      telemetry: false,
     }),
   ],
   resolve: {
