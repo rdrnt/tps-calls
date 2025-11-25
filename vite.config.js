@@ -1,3 +1,4 @@
+import { sentryVitePlugin } from '@sentry/vite-plugin';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
@@ -12,6 +13,10 @@ export default defineConfig({
       include: '**/*.{jsx,tsx}',
     }),
     tailwindcss(),
+    sentryVitePlugin({
+      org: 'rileyd',
+      project: 'tps-calls',
+    }),
   ],
   resolve: {
     alias: {
@@ -30,7 +35,7 @@ export default defineConfig({
     },
     // Enable source maps for better debugging
     // Only enable sourcemaps in development
-    sourcemap: process.env.NODE_ENV === 'development',
+    sourcemap: true,
     // Optimize chunk size
     chunkSizeWarningLimit: 1000,
   },
