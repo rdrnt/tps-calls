@@ -6,6 +6,7 @@ import incidentsReducer from './slices/incidents';
 import uiReducer from './slices/ui';
 import userReducer from './slices/user';
 import camerasReducer from './slices/cameras';
+import { isDevelopment } from '../helpers/environment';
 
 export const store = configureStore({
   reducer: {
@@ -14,7 +15,7 @@ export const store = configureStore({
     user: userReducer,
     cameras: camerasReducer,
   },
-  devTools: true,
+  devTools: isDevelopment, // Disable dev tools in production
 });
 
 export type AppState = ReturnType<typeof store.getState>;
