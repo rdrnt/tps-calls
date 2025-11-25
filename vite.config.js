@@ -33,9 +33,8 @@ export default defineConfig({
         },
       },
     },
-    // Enable source maps for better debugging
-    // Only enable sourcemaps in development
-    sourcemap: true,
+    // Source maps are hidden in production but uploaded to Sentry
+    sourcemap: 'hidden',
     // Optimize chunk size
     chunkSizeWarningLimit: 1000,
   },
