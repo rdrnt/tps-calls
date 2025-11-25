@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@theme {
+  /* Shading */
+  --color-tpscalls-primary: oklch(0.5759 0.1859 262.86);
+}
+
 body {
   margin: 0;
   overflow: hidden;

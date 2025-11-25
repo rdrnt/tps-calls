@@ -1,17 +1,8 @@
 import * as React from 'react';
 import { Marker } from 'react-map-gl';
-import styled from 'styled-components';
 import { Coordinates } from '@rdrnt/tps-calls-shared';
 
 import { Colors } from '../../config';
-
-const StyledMarkerDot = styled.div`
-  height: 17px;
-  width: 17px;
-  border-radius: 8.5px;
-  background-color: ${Colors.PRIMARY};
-  border: 2px solid white;
-`;
 
 interface MapMarkerProps {
   selected?: boolean;

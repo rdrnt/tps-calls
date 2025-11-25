@@ -256,7 +256,7 @@ const Map: React.FunctionComponent = () => {
 
         {userLocation.coordinates && (
           <AnimatedMapMarker
-            color={Colors.SECONDARY}
+            color="secondary"
             coordinates={userLocation.coordinates}
             size={15}
           />
@@ -264,7 +264,6 @@ const Map: React.FunctionComponent = () => {
 
         {selectedIncident && (
           <AnimatedMapMarker
-            color={Colors.PRIMARY}
             coordinates={selectedIncident?.coordinates}
             size={22}
           />
