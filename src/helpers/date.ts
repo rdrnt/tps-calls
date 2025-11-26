@@ -3,7 +3,7 @@ import {
   setHours,
   setMinutes,
   differenceInHours,
-  distanceInWordsToNow,
+  formatDistanceToNow,
   isToday,
 } from 'date-fns';
 import { Timestamp } from './firebase';
@@ -21,7 +21,7 @@ export const formatIncidentDate = (incidentTimestamp: Timestamp) => {
   const timestampToDate = convertTimestampToDate(incidentTimestamp);
 
   if (isToday(timestampToDate)) {
-    return `Today @ ${format(timestampToDate, 'h:mma')}`;
+    return `Today @ ${format(timestampToDate, 'h:mm a')}`;
   }
 
   return format(timestampToDate, 'MMM Do YYYY @ h:mma');
@@ -45,4 +45,4 @@ export const compareHourDifference = (
   );
 
 export const distanceInWords = (timestamp: Timestamp): string =>
-  distanceInWordsToNow(convertTimestampToDate(timestamp));
+  formatDistanceToNow(convertTimestampToDate(timestamp));
