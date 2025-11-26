@@ -1,13 +1,10 @@
-import { FunctionComponent, useMemo } from 'react';
+import { FunctionComponent } from 'react';
+import { Cctv } from 'lucide-react';
+
 import { TorontoTrafficCamera } from '../../../containers/BetaFeature';
-import { Card, CardDescription, CardHeader, CardTitle } from '../../ui/card';
+
 import { Typography } from '../../Typography';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '../../ui/accordion';
+
 import {
   Item,
   ItemContent,
@@ -16,8 +13,8 @@ import {
   ItemTitle,
 } from '../../ui/item';
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle } from '../../ui/empty';
-import { Cctv } from 'lucide-react';
 import { cn } from '../../../lib/utils';
+import { Alert, AlertTitle } from '../../ui/alert';
 
 interface CameraSectionProps {
   nearbyCameras: TorontoTrafficCamera[];
@@ -28,14 +25,26 @@ const CameraSection: FunctionComponent<CameraSectionProps> = ({
 }) => {
   if (nearbyCameras.length === 0) {
     return (
-      <Empty className="bg-secondary">
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
+      <>
+        {/* Mobile only */}
+        <div className="block md:hidden">
+          <Alert>
             <Cctv />
-          </EmptyMedia>
-          <EmptyTitle>No nearby cameras</EmptyTitle>
-        </EmptyHeader>
-      </Empty>
+            <AlertTitle>No nearby cameras</AlertTitle>
+          </Alert>
+        </div>
+        {/* Tablet / desktop only */}
+        <div className="hidden md:block">
+          <Empty className="bg-secondary">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <Cctv />
+              </EmptyMedia>
+              <EmptyTitle>No nearby cameras</EmptyTitle>
+            </EmptyHeader>
+          </Empty>
+        </div>
+      </>
     );
   }
 
