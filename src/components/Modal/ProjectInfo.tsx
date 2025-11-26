@@ -121,7 +121,7 @@ const ProjectInfoModal: React.FunctionComponent<ProjectInfoModalProps> = () => {
               rel="noopener noreferrer"
             >
               <Heart />
-              Donate on Ko-fi
+              Support the project
             </a>
           </Button>
         </div>
