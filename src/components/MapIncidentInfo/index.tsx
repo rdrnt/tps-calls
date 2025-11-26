@@ -1,8 +1,8 @@
-import * as React from 'react';
-
 import { Incident } from '@rdrnt/tps-calls-shared';
 import { toast } from 'sonner';
 import { Link } from 'lucide-react';
+import { MapRef } from 'react-map-gl';
+import { FunctionComponent, useEffect } from 'react';
 
 import { Separator } from '../ui/separator';
 
@@ -26,12 +26,13 @@ interface MapIncidentInfoProps {
   incident?: Incident<any>;
   drawerOpen: boolean;
   close: () => void;
+  mapRef: MapRef | null;
 }
 
-const MapIncidentInfo: React.FunctionComponent<MapIncidentInfoProps> = ({
+const MapIncidentInfo: FunctionComponent<MapIncidentInfoProps> = ({
   incident,
-
   close,
+  mapRef,
 }) => {
   const { isMobile } = useIsMobile();
 
@@ -47,6 +48,43 @@ const MapIncidentInfo: React.FunctionComponent<MapIncidentInfoProps> = ({
     if (!incident) return;
     window.open(`${createTwitterShareUrl(incident)}`, '_blank');
   };
+
+  useEffect(() => {
+    // When an incident is selected on mobile, bring it into view with offset for the drawer
+    if (incident && isMobile && mapRef) {
+      // Wait for the sheet animation to complete before measuring
+      // The sheet has a 500ms animation duration (data-[state=open]:duration-500)
+      const measureSheetHeight = () => {
+        // Find the sheet content element by its data attribute
+        const sheetElement = document.querySelector(
+          '[data-slot="sheet-content"]'
+        ) as HTMLElement;
+        if (!sheetElement) return;
+
+        // Get the actual height of the sheet content
+        const sheetHeight = sheetElement.getBoundingClientRect().height;
+
+        // Offset upward by half the drawer height so the marker appears in the visible area above the drawer
+        // The offset is [x, y] in pixels, negative y moves upward
+        const offsetY = -(sheetHeight / 2);
+
+        mapRef.flyTo({
+          center: [
+            incident.coordinates.longitude,
+            incident.coordinates.latitude,
+          ],
+          offset: [0, offsetY],
+          speed: 1,
+          zoom: 15,
+        });
+      };
+
+      // Wait for the sheet to finish animating in (500ms) before measuring
+      const timeoutId = setTimeout(measureSheetHeight, 600);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [incident, isMobile, mapRef]);
 
   if (!incident) return null;
 

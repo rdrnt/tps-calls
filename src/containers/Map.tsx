@@ -212,6 +212,7 @@ const Map: React.FunctionComponent = () => {
           incident={selectedIncident}
           drawerOpen={drawerOpen}
           close={() => dispatch(setSelectedIncident(undefined))}
+          mapRef={mapRef}
         />
 
         <MapCameraInfo
