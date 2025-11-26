@@ -25,8 +25,8 @@ export enum ZIndex {
 }
 
 export enum APPSTORE_DOWNLOAD_LINK {
-  IOS = 'https://apps.apple.com/us/app/tpscalls/id6754499909',
-  ANDROID = 'https://play.google.com/store/apps/details?id=ca.drnt.tpscalls',
+  IOS = 'https://apps.apple.com/us/app/tpscalls/id6502376708',
+  ANDROID = 'https://play.google.com/store/apps/details?id=com.drnt.tpscalls',
 }
 
 export const MAPBOX_THEME_URL =

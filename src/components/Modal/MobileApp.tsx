@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import { Button } from '../ui/button';
-
 import { ModalProps } from '.';
 
 import { Analytics } from '../../helpers';
@@ -42,21 +40,23 @@ const DownloadMobileAppModal: React.FunctionComponent<
           Available on the App Store and Google Play.
         </DialogDescription>
       </DialogHeader>
-      <DialogFooter className="sm:justify-start">
+      <DialogFooter className="flex-row justify-center gap-4">
         <a
           href={APPSTORE_DOWNLOAD_LINK.IOS}
           target="_blank"
           rel="noopener noreferrer"
+          className="inline-block"
         >
-          <img src={AppStoreIcon} />
+          <img src={AppStoreIcon} className="h-auto w-auto max-w-[140px]" />
         </a>
 
         <a
           href={APPSTORE_DOWNLOAD_LINK.ANDROID}
           target="_blank"
           rel="noopener noreferrer"
+          className="inline-block"
         >
-          <img src={PlayStoreIcon} />
+          <img src={PlayStoreIcon} className="h-auto w-auto max-w-[140px]" />
         </a>
       </DialogFooter>
     </>
