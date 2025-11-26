@@ -14,6 +14,7 @@ export default defineConfig({
     }),
     tailwindcss(),
     sentryVitePlugin({
+      disable: process.env.NODE_ENV === 'development',
       org: 'rileyd',
       project: 'tps-calls',
       telemetry: false,
