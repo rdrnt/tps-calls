@@ -4,8 +4,8 @@ import { Coordinates } from '@rdrnt/tps-calls-shared';
 import { cn } from '../../lib/utils';
 
 const COLOR_CLASSES = {
-  primary: 'bg-tpscalls-primary border-tpscalls-primary',
-  secondary: 'bg-amber-700 border-amber-700',
+  primary: 'bg-tpscalls-primary border-white',
+  secondary: 'bg-amber-700 border-amber-200',
   // add more here
 } as const;
 
@@ -21,7 +21,7 @@ const AnimatedMapMarker: React.FunctionComponent<AnimatedMapMarkerProps> = ({
   size = 15,
 }) => (
   <Marker {...coordinates} style={{ zIndex: 0 }} anchor="center">
-    <div className={`animate-ping bg-white fixed size-full rounded-full`} />
+    <div className={`animate-ping bg-white fixed size-full rounded-full `} />
     <div
       className={cn(
         'border-2 rounded-full',
