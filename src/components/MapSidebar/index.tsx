@@ -201,7 +201,7 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.2 }}
-            className="p-4 overflow-y-auto h-[calc(100vh-73px)]"
+            className="p-4 overflow-y-auto h-[calc(100dvh-73px)]"
           >
             {children || (
               <motion.div

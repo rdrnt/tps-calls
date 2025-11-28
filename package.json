@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "start": "vite",
-    "build": "vite build",
-    "build:dev": "NODE_ENV=development vite build",
+    "build:clean": "rm -rf dist",
+    "build": "yarn build:clean && vite build",
+    "build:dev": "yarn build:clean && NODE_ENV=development vite build",
     "test": "vitest",
     "netlify-deploy": "NODE_ENV=development yarn build && netlify deploy --dir dist",
     "netlify-deploy:prod": "netlify deploy --prod --dir dist",

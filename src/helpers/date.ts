@@ -24,7 +24,7 @@ export const formatIncidentDate = (incidentTimestamp: Timestamp) => {
     return `Today @ ${format(timestampToDate, 'h:mm a')}`;
   }
 
-  return format(timestampToDate, 'MMM Do YYYY @ h:mma');
+  return format(timestampToDate, 'MMM Do yyyy @ h:mma');
 };
 
 export const createDateWithHoursAndMinutes = ({
