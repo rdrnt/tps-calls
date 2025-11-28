@@ -61,12 +61,6 @@ const Map: React.FunctionComponent = () => {
   const refForMap = React.useRef<MapRef | null>(null);
   const mapRef = refForMap.current;
 
-  // https://github.com/alex3165/react-mapbox-gl/issues/461
-  const [, setCenter] = React.useState<[number, number]>([
-    DEFAULTS.longitude,
-    DEFAULTS.latitude,
-  ]);
-
   const [isMapLoaded, setIsMapLoaded] = React.useState<boolean>(false);
   const [interactingWithMap, setInteractingWithMap] =
     React.useState<boolean>(false);
@@ -133,13 +127,17 @@ const Map: React.FunctionComponent = () => {
   }, [interactingWithMap]);
 
   React.useEffect(() => {
-    if (userLocation.coordinates) {
-      setCenter([
-        userLocation.coordinates.longitude,
-        userLocation.coordinates.latitude,
-      ]);
+    if (userLocation.coordinates && mapRef) {
+      mapRef.flyTo({
+        center: [
+          userLocation.coordinates.longitude,
+          userLocation.coordinates.latitude,
+        ],
+        speed: 1,
+        zoom: 15,
+      });
     }
-  }, [userLocation.coordinates]);
+  }, [userLocation.available, userLocation.coordinates]);
 
   React.useEffect(() => {
     // If the selected incident changes, zoom into it
