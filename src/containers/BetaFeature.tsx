@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+
 import { Analytics } from '../helpers';
 import {
   Card,
@@ -8,41 +10,33 @@ import {
   CardHeader,
   CardTitle,
 } from '../components/ui/card';
-import {
-  collection,
-  getDocs,
-  orderBy,
-  query,
-  Timestamp,
-} from 'firebase/firestore';
+
 import { firestore } from '../helpers/firebase';
 import { Button } from '../components/ui/button';
-
-export interface TorontoTrafficCameraView {
-  direction: string;
-  imageUrl: string;
-}
-
-export interface TorontoTrafficCamera {
-  id: string; // REC_ID as string
-  name: string; // "<MAINROAD> & <CROSSROAD>"
-  location: { latitude: number; longitude: number };
-  date: Timestamp; // when mapped
-  cameras: TorontoTrafficCameraView[]; // IMAGEURL/REFURL* + DIRECTION*
-}
+import {
+  ServerTorontoTrafficCamera,
+  LocalTorontoTrafficCamera,
+} from '../types';
 
 const BetaFeature = () => {
   const [torontoTrafficCameras, setTorontoTrafficCameras] = useState<
-    TorontoTrafficCamera[]
+    LocalTorontoTrafficCamera[]
   >([]);
 
   useEffect(() => {
     const camerasCollection = collection(firestore, 'toronto-traffic-cameras');
     const camerasQuery = query(camerasCollection, orderBy('date', 'desc'));
     getDocs(camerasQuery).then(docs => {
-      const cameras = docs.docs.map(doc => doc.data() as TorontoTrafficCamera);
-      console.log('cams', cameras);
-      setTorontoTrafficCameras(cameras);
+      const cameras = docs.docs.map(
+        doc => doc.data() as ServerTorontoTrafficCamera
+      );
+      const convertedCameras: LocalTorontoTrafficCamera[] = cameras.map(
+        camera => ({
+          ...camera,
+          date: camera.date.toDate(),
+        })
+      );
+      setTorontoTrafficCameras(convertedCameras);
     });
   }, []);
   useEffect(() => {

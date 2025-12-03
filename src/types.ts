@@ -12,7 +12,7 @@ export interface TorontoTrafficCameraView {
   imageUrl: string;
 }
 
-export interface TorontoTrafficCamera {
+export interface ServerTorontoTrafficCamera {
   id: string; // REC_ID as string
   name: string; // "<MAINROAD> & <CROSSROAD>"
   location: { latitude: number; longitude: number };
@@ -20,6 +20,9 @@ export interface TorontoTrafficCamera {
   cameras: TorontoTrafficCameraView[]; // IMAGEURL/REFURL* + DIRECTION*
 }
 
-export type LocalTorontoTrafficCamera = Omit<TorontoTrafficCamera, 'date'> & {
+export type LocalTorontoTrafficCamera = Omit<
+  ServerTorontoTrafficCamera,
+  'date'
+> & {
   date: Date;
 };

@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { TorontoTrafficCamera } from '../../containers/BetaFeature';
+import { LocalTorontoTrafficCamera } from '../../types';
 
 export interface CameraState {
-  list: TorontoTrafficCamera[];
-  selected?: TorontoTrafficCamera;
+  list: LocalTorontoTrafficCamera[];
+  selected?: LocalTorontoTrafficCamera;
 }
 
 const initialState: CameraState = {
@@ -16,12 +16,15 @@ const camerasSlice = createSlice({
   name: 'cameras',
   initialState,
   reducers: {
-    setCameraList: (state, action: PayloadAction<TorontoTrafficCamera[]>) => {
+    setCameraList: (
+      state,
+      action: PayloadAction<LocalTorontoTrafficCamera[]>
+    ) => {
       state.list = action.payload;
     },
     setSelectedCamera: (
       state,
-      action: PayloadAction<TorontoTrafficCamera | undefined>
+      action: PayloadAction<LocalTorontoTrafficCamera | undefined>
     ) => {
       state.selected = action.payload;
     },
