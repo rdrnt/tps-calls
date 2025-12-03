@@ -1,20 +1,14 @@
 import * as React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Incident, FirestoreCollections } from '@rdrnt/tps-calls-shared';
 import { useDebouncedCallback } from 'use-debounce';
 import { isPointWithinRadius } from 'geolib';
 
+import { LocalIncident } from '../../types';
+
 import { DateHelper } from '../../helpers';
-import {
-  setIncidentList,
-  setFilterNewestDate,
-  setFilterOldestDate,
-} from '../../store/actions';
-import { AppState, useAppDispatch, useAppSelector } from '../../store';
-import { IncidentFilterState } from '../../store/slices/incidents';
+import { setIncidentList } from '../../store/actions';
+import { useAppDispatch, useAppSelector } from '../../store';
 
 import * as FirebaseIncidents from '../../helpers/firebase/incident';
-import { Timestamp } from 'firebase/firestore';
 
 const IncidentListener: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
@@ -24,54 +18,28 @@ const IncidentListener: React.FunctionComponent = () => {
 
   // Store the default incidents
   const [defaultIncidentList, setDefaultIncidentList] = React.useState<
-    Incident<any>[]
+    LocalIncident[]
   >([]);
 
   // Sets the incidents in the store
-  const [setIncidents] = useDebouncedCallback((incidents: Incident<any>[]) => {
+  const [setIncidents] = useDebouncedCallback((incidents: LocalIncident[]) => {
     dispatch(setIncidentList(incidents));
   }, 300);
-
-  // Store the previous filter options
-  const [previousFilters, setPreviousFilters] =
-    React.useState<IncidentFilterState>({});
-
-  // Store the list of incidents for a specific date
-  const [incidentsAtDate, setIncidentsAtDate] = React.useState<Incident<any>[]>(
-    []
-  );
-
-  const loadOldestIncidentDate = async () => {
-    const oldestIncident: Incident<any> =
-      await FirebaseIncidents.getOldestIncident();
-    // FIX THE TYPE HERE
-    dispatch(setFilterOldestDate(oldestIncident.date as Timestamp));
-  };
 
   // Set the listener
   React.useEffect(() => {
     const incidentListener = FirebaseIncidents.listener(newIncidents => {
+      const convertedIncidents: LocalIncident[] = newIncidents.map(
+        incident => ({
+          ...incident,
+          date: DateHelper.convertTimestampToDate(incident.date),
+        })
+      );
       // Set the incidents in the store
-      setIncidents(newIncidents);
+      setIncidents(convertedIncidents);
       // Set the default incidents
-      setDefaultIncidentList(newIncidents);
-
-      // Sets the newest incident for filtering
-      const newestIncident = newIncidents.reduce((pre, current) => {
-        const previousDate = DateHelper.convertTimestampToDate(pre.date);
-        const currentDateToCompare = DateHelper.convertTimestampToDate(
-          current.date
-        );
-
-        return previousDate > currentDateToCompare ? pre : current;
-      });
-
-      // FIX THE TYPE HERE
-      dispatch(setFilterNewestDate(newestIncident.date as Timestamp));
+      setDefaultIncidentList(convertedIncidents);
     });
-
-    // set the oldest date for filtering
-    loadOldestIncidentDate();
 
     return () => {
       // Remove the listener
@@ -81,103 +49,53 @@ const IncidentListener: React.FunctionComponent = () => {
     };
   }, []);
 
-  const applyFilters = async () => {
-    try {
-      const filteredIncidents: Incident<any>[] = [];
+  const applyFilters = () => {
+    const filteredIncidents: LocalIncident[] = [];
 
-      const getIncidentsToFilter = async () => {
-        const hasDateFilters = Boolean(
-          incidentFilter.startDate && incidentFilter.endDate
-        );
-        const dateFiltersDifferent =
-          previousFilters.startDate !== incidentFilter.startDate ||
-          previousFilters.endDate !== incidentFilter.endDate;
-        // Check if we have date filters
-        if (hasDateFilters) {
-          // If we have date filters, but they're different, get the incidents for that date
-          if (dateFiltersDifferent) {
-            const incidentsForDate = await FirebaseIncidents.getIncidentsAtDate(
-              {
-                startDate: incidentFilter.startDate!,
-                endDate: incidentFilter.endDate!,
-              }
-            );
+    if (
+      incidentFilter.distance &&
+      incidentFilter.distance !== 0 &&
+      userLocation.coordinates
+    ) {
+      const withinPoint: LocalIncident[] = incidents.filter(incident =>
+        isPointWithinRadius(
+          incident.coordinates,
+          userLocation.coordinates!,
+          incidentFilter.distance! * 1000
+        )
+      );
+      filteredIncidents.push(...withinPoint);
+    }
 
-            setIncidentsAtDate(incidentsForDate);
+    if (incidentFilter.search) {
+      const matchingSearchIncidents = filteredIncidents.filter(incident => {
+        const nameMatch = incident.name
+          .toLowerCase()
+          .includes(incidentFilter.search!.toLowerCase());
+        const locationMatch = incident.location
+          .toLowerCase()
+          .includes(incidentFilter.search!.toLowerCase());
 
-            return incidentsForDate;
+        return nameMatch || locationMatch;
+      });
+      filteredIncidents.push(...matchingSearchIncidents);
+    }
+
+    // if we have incidents to filter, remove the duplicates that may arise
+    if (filteredIncidents.length) {
+      const filteredDuplicateIncidents = filteredIncidents.reduce(
+        (acc: LocalIncident[], current) => {
+          const x = acc.find(item => item.id === current.id);
+          if (!x) {
+            return acc.concat([current]);
           } else {
-            // If the date filters are the same, fallback on the previous incidents from that date
-            return incidentsAtDate;
+            return acc;
           }
-        }
+        },
+        []
+      );
 
-        // If we're not fitering by date, return the default incident list
-        return defaultIncidentList;
-      };
-
-      const incidentsToFilter = await getIncidentsToFilter();
-
-      // If we're only filtering by date, set the filtered incidents to the date
-      if (
-        incidentFilter.startDate &&
-        incidentFilter.endDate &&
-        Object.keys(incidentFilter).length == 2
-      ) {
-        filteredIncidents.push(...incidentsToFilter);
-      }
-
-      if (
-        incidentFilter.distance &&
-        incidentFilter.distance !== 0 &&
-        userLocation.coordinates
-      ) {
-        const withinPoint: Incident<any>[] = incidentsToFilter.filter(
-          incident =>
-            isPointWithinRadius(
-              incident.coordinates,
-              userLocation.coordinates!,
-              incidentFilter.distance! * 1000
-            )
-        );
-        filteredIncidents.push(...withinPoint);
-      }
-
-      if (incidentFilter.search) {
-        const matchingSearchIncidents = incidentsToFilter.filter(incident => {
-          const nameMatch = incident.name
-            .toLowerCase()
-            .includes(incidentFilter.search!.toLowerCase());
-          const locationMatch = incident.location
-            .toLowerCase()
-            .includes(incidentFilter.search!.toLowerCase());
-
-          return nameMatch || locationMatch;
-        });
-        filteredIncidents.push(...matchingSearchIncidents);
-      }
-
-      // if we have incidents to filter, remove the duplicates that may arise
-      if (filteredIncidents.length) {
-        const filteredDuplicateIncidents = filteredIncidents.reduce(
-          (acc: Incident<any>[], current) => {
-            const x = acc.find(item => item.id === current.id);
-            if (!x) {
-              return acc.concat([current]);
-            } else {
-              return acc;
-            }
-          },
-          []
-        );
-
-        setIncidents(filteredDuplicateIncidents);
-      }
-
-      // Set the filters for comparison
-      setPreviousFilters(incidentFilter);
-    } catch (error) {
-      console.log('Error filtering', error);
+      setIncidents(filteredDuplicateIncidents);
     }
   };
 

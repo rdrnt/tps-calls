@@ -1,42 +1,33 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Incident } from '@rdrnt/tps-calls-shared';
-import { Timestamp } from 'firebase/firestore';
-
-import { DateHelper } from '../../helpers';
+import { LocalIncident } from '../../types';
 
 export interface IncidentFilterState {
   search?: string;
-  startDate?: Timestamp;
-  endDate?: Timestamp;
   distance?: number; // The number of kilometers
 }
 
 export interface IncidentsState {
-  list: Incident<any>[];
-  selected?: Incident<any>;
+  list: LocalIncident[];
+  selected?: LocalIncident;
   filter: IncidentFilterState;
-  oldestIncidentDate: Timestamp;
-  newestIncidentDate: Timestamp;
 }
 
 const initialState: IncidentsState = {
   list: [],
   selected: undefined,
   filter: {},
-  oldestIncidentDate: DateHelper.now(),
-  newestIncidentDate: DateHelper.now(),
 };
 
 const incidentsSlice = createSlice({
   name: 'incidents',
   initialState,
   reducers: {
-    setIncidentList: (state, action: PayloadAction<Incident<any>[]>) => {
+    setIncidentList: (state, action: PayloadAction<LocalIncident[]>) => {
       state.list = action.payload;
     },
     setSelectedIncident: (
       state,
-      action: PayloadAction<Incident<any> | undefined>
+      action: PayloadAction<LocalIncident | undefined>
     ) => {
       state.selected = action.payload;
     },
@@ -64,21 +55,10 @@ const incidentsSlice = createSlice({
         }
       });
     },
-    setFilterOldestDate: (state, action: PayloadAction<Timestamp>) => {
-      state.oldestIncidentDate = action.payload;
-    },
-    setFilterNewestDate: (state, action: PayloadAction<Timestamp>) => {
-      state.newestIncidentDate = action.payload;
-    },
   },
 });
 
-export const {
-  setIncidentList,
-  setSelectedIncident,
-  setIncidentFilter,
-  setFilterOldestDate,
-  setFilterNewestDate,
-} = incidentsSlice.actions;
+export const { setIncidentList, setSelectedIncident, setIncidentFilter } =
+  incidentsSlice.actions;
 
 export default incidentsSlice.reducer;
