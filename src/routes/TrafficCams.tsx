@@ -1,24 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 
 import { Analytics } from '../helpers';
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from '../components/ui/card';
+import { Input } from '../components/ui/input';
 
 import { firestore } from '../helpers/firebase';
-import { Button } from '../components/ui/button';
+
 import {
   ServerTorontoTrafficCamera,
   LocalTorontoTrafficCamera,
 } from '../types';
 
-const BetaFeature = () => {
+const TrafficCams = () => {
+  const [search, setSearch] = useState('');
   const [torontoTrafficCameras, setTorontoTrafficCameras] = useState<
     LocalTorontoTrafficCamera[]
   >([]);
@@ -33,15 +34,25 @@ const BetaFeature = () => {
       const convertedCameras: LocalTorontoTrafficCamera[] = cameras.map(
         camera => ({
           ...camera,
-          date: camera.date.toDate(),
+          date: camera.date.toDate().valueOf(),
         })
       );
       setTorontoTrafficCameras(convertedCameras);
     });
   }, []);
+
   useEffect(() => {
-    Analytics.pageview('/beta-feature');
+    Analytics.pageview('/traffic-cams');
   }, []);
+
+  const camerasToUse = useMemo(() => {
+    if (search.length === 0) {
+      return torontoTrafficCameras;
+    }
+    return torontoTrafficCameras.filter(camera =>
+      camera.name.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [torontoTrafficCameras, search]);
 
   return (
     <div className="bg-background p-6 overflow-y-auto h-screen">
@@ -52,8 +63,14 @@ const BetaFeature = () => {
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Real-time traffic camera feeds from intersections across Toronto.
-            Click on any camera to view live traffic conditions.
           </p>
+          <Input
+            type="search"
+            placeholder="Search for a camera"
+            className="w-full max-w-md mx-auto mt-4"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
         </div>
 
         {torontoTrafficCameras.length === 0 ? (
@@ -62,18 +79,21 @@ const BetaFeature = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-            {torontoTrafficCameras.map(camera => (
+            {camerasToUse.map(camera => (
               <Card
                 key={camera.id}
                 className="overflow-hidden hover:shadow-lg transition-shadow"
               >
                 <CardHeader>
                   <CardTitle className="text-xl">{camera.name}</CardTitle>
+
                   <CardDescription className="text-base">
                     {camera.location.latitude.toFixed(4)},{' '}
                     {camera.location.longitude.toFixed(4)}
                   </CardDescription>
+                  {/* 
                   <CardAction>
+                    
                     <Button asChild>
                       <a
                         href={`https://www.google.com/maps/search/${camera.location.latitude},${camera.location.longitude}`}
@@ -83,7 +103,9 @@ const BetaFeature = () => {
                         View On Map
                       </a>
                     </Button>
+                    
                   </CardAction>
+                  */}
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 gap-4">
@@ -106,9 +128,6 @@ const BetaFeature = () => {
                               }}
                             />
                           </div>
-                          <h4 className="text-sm font-medium text-center">
-                            {cameraView.direction}
-                          </h4>
                         </div>
                       ))}
                   </div>
@@ -122,4 +141,4 @@ const BetaFeature = () => {
   );
 };
 
-export default BetaFeature;
+export default TrafficCams;

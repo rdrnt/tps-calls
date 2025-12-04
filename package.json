@@ -9,7 +9,7 @@
     "build": "yarn build:clean && vite build",
     "build:dev": "yarn build:clean && NODE_ENV=development vite build",
     "test": "vitest",
-    "netlify-deploy": "NODE_ENV=development yarn build && netlify deploy --dir dist",
+    "netlify-deploy": "yarn build && netlify deploy --dir dist",
     "netlify-deploy:prod": "netlify deploy --prod --dir dist",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

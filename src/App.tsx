@@ -2,10 +2,9 @@ import * as React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Routes } from 'react-router';
 
-const Map = React.lazy(() => import('./containers/Map'));
-import ContactPage from './containers/Contact';
-import DownloadPage from './containers/Download';
-import BetaFeature from './containers/BetaFeature';
+const Map = React.lazy(() => import('./routes/Map'));
+import ContactPage from './routes/Contact';
+import DownloadPage from './routes/Download';
 
 import { ThemeProvider } from './theme-provider';
 
@@ -19,6 +18,7 @@ import store from './store';
 
 import Loader, { StaticLoader } from './components/Loader';
 import Modal from './components/Modal';
+import TrafficCams from './routes/TrafficCams';
 
 const App: React.FunctionComponent = () => (
   <>
@@ -35,7 +35,7 @@ const App: React.FunctionComponent = () => (
             <Routes>
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/download" element={<DownloadPage />} />
-              <Route path="/beta-feature" element={<BetaFeature />} />
+              <Route path="/traffic-cams" element={<TrafficCams />} />
               <Route
                 path="/:id"
                 element={

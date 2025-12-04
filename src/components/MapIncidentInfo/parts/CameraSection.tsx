@@ -1,8 +1,6 @@
 import { FunctionComponent } from 'react';
 import { Cctv } from 'lucide-react';
 
-import { LocalTorontoTrafficCamera } from '../../../types';
-
 import { Typography } from '../../Typography';
 
 import {

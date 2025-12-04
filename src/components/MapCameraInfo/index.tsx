@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from '../ui/card';
 
-import { TorontoTrafficCamera } from '../../containers/BetaFeature';
+import { TorontoTrafficCamera } from '../../routes/TrafficCams';
 import {
   Accordion,
   AccordionContent,
