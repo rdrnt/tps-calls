@@ -32,7 +32,7 @@ const IncidentListener: React.FunctionComponent = () => {
       const convertedIncidents: LocalIncident[] = newIncidents.map(
         incident => ({
           ...incident,
-          date: DateHelper.convertTimestampToDate(incident.date),
+          date: incident.date.toDate().valueOf(),
         })
       );
       // Set the incidents in the store

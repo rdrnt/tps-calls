@@ -2,7 +2,7 @@ import { Incident } from '@rdrnt/tps-calls-shared';
 import { Timestamp } from 'firebase/firestore';
 
 export type LocalIncident = Omit<Incident<any>, 'date'> & {
-  date: Date;
+  date: number;
 };
 
 // Toronto Traffic Cameras
@@ -24,5 +24,5 @@ export type LocalTorontoTrafficCamera = Omit<
   ServerTorontoTrafficCamera,
   'date'
 > & {
-  date: Date;
+  date: number;
 };

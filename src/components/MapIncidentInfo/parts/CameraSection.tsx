@@ -1,7 +1,7 @@
 import { FunctionComponent } from 'react';
 import { Cctv } from 'lucide-react';
 
-import { TorontoTrafficCamera } from '../../../containers/BetaFeature';
+import { LocalTorontoTrafficCamera } from '../../../types';
 
 import { Typography } from '../../Typography';
 
@@ -15,14 +15,18 @@ import {
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle } from '../../ui/empty';
 import { cn } from '../../../lib/utils';
 import { Alert, AlertTitle } from '../../ui/alert';
+import { useAppSelector } from '../../../store';
 
 interface CameraSectionProps {
-  nearbyCameras: TorontoTrafficCamera[];
+  nearbyCameraIds: string[];
 }
 
 const CameraSection: FunctionComponent<CameraSectionProps> = ({
-  nearbyCameras,
+  nearbyCameraIds,
 }) => {
+  const nearbyCameras = useAppSelector(state => state.cameras.list).filter(
+    camera => nearbyCameraIds.includes(camera.id)
+  );
   if (nearbyCameras.length === 0) {
     return (
       <>

@@ -1,4 +1,3 @@
-import { Incident } from '@rdrnt/tps-calls-shared';
 import { toast } from 'sonner';
 import { Link } from 'lucide-react';
 import { MapRef } from 'react-map-gl';
@@ -22,8 +21,10 @@ import {
 import { formatIncidentDate } from '../../helpers/date';
 import useIsMobile from '../../hooks/useIsMobile';
 
+import { LocalIncident } from '../../types';
+
 interface MapIncidentInfoProps {
-  incident?: Incident<any>;
+  incident?: LocalIncident;
   drawerOpen: boolean;
   close: () => void;
   mapRef: MapRef | null;
@@ -107,7 +108,7 @@ const MapIncidentInfo: FunctionComponent<MapIncidentInfoProps> = ({
           </SheetTitle>
           <SheetDescription>{incident?.location}</SheetDescription>
           <SheetDescription className="text-sm text-gray-500">
-            {formatIncidentDate(incident?.date)}
+            {formatIncidentDate(new Date(incident?.date))}
           </SheetDescription>
         </SheetHeader>
         <div className="px-4">
@@ -115,7 +116,7 @@ const MapIncidentInfo: FunctionComponent<MapIncidentInfoProps> = ({
         </div>
 
         <div className="grid auto-rows-min gap-6 px-4">
-          <CameraSection nearbyCameras={[...incident.data.nearbyCameras]} />
+          <CameraSection nearbyCameraIds={[...incident.data.nearbyCameras]} />
         </div>
 
         <SheetFooter>

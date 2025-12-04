@@ -17,14 +17,12 @@ export const convertDateToTimestamp = (date: Date): Timestamp =>
 
 export const now = (): Timestamp => TimestampClass.now();
 
-export const formatIncidentDate = (incidentTimestamp: Timestamp) => {
-  const timestampToDate = convertTimestampToDate(incidentTimestamp);
-
-  if (isToday(timestampToDate)) {
-    return `Today @ ${format(timestampToDate, 'h:mm a')}`;
+export const formatIncidentDate = (incidentDate: Date) => {
+  if (isToday(incidentDate)) {
+    return `Today @ ${format(incidentDate, 'h:mm a')}`;
   }
 
-  return format(timestampToDate, 'MMM Do yyyy @ h:mma');
+  return format(incidentDate, 'MMM Do yyyy @ h:mma');
 };
 
 export const createDateWithHoursAndMinutes = ({
@@ -44,5 +42,5 @@ export const compareHourDifference = (
     convertTimestampToDate(secondDate)
   );
 
-export const distanceInWords = (timestamp: Timestamp): string =>
-  formatDistanceToNow(convertTimestampToDate(timestamp));
+export const distanceInWords = (date: Date): string =>
+  formatDistanceToNow(date);
