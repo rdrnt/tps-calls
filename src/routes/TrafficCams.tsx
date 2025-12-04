@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+import Fuse from 'fuse.js';
 
 import { Analytics } from '../helpers';
 import {
@@ -23,6 +24,8 @@ const TrafficCams = () => {
   const [torontoTrafficCameras, setTorontoTrafficCameras] = useState<
     LocalTorontoTrafficCamera[]
   >([]);
+  const [defaultTorontoTrafficCameras, setDefaultTorontoTrafficCameras] =
+    useState<LocalTorontoTrafficCamera[]>([]);
 
   useEffect(() => {
     const camerasCollection = collection(firestore, 'toronto-traffic-cameras');
@@ -38,6 +41,7 @@ const TrafficCams = () => {
         })
       );
       setTorontoTrafficCameras(convertedCameras);
+      setDefaultTorontoTrafficCameras(convertedCameras);
     });
   }, []);
 
@@ -46,12 +50,12 @@ const TrafficCams = () => {
   }, []);
 
   const camerasToUse = useMemo(() => {
-    if (search.length === 0) {
-      return torontoTrafficCameras;
+    if (search.length > 0) {
+      const fuse = new Fuse(torontoTrafficCameras, { keys: ['name'] });
+      const results = fuse.search(search);
+      return results.map(result => result.item);
     }
-    return torontoTrafficCameras.filter(camera =>
-      camera.name.toLowerCase().includes(search.toLowerCase())
-    );
+    return defaultTorontoTrafficCameras;
   }, [torontoTrafficCameras, search]);
 
   return (
@@ -73,7 +77,7 @@ const TrafficCams = () => {
           />
         </div>
 
-        {torontoTrafficCameras.length === 0 ? (
+        {defaultTorontoTrafficCameras.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-muted-foreground">Loading traffic cameras...</p>
           </div>

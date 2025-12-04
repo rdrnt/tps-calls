@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useDebouncedCallback } from 'use-debounce';
 import { Search, X } from 'lucide-react';
-import { Incident } from '@rdrnt/tps-calls-shared';
 
 import { Button } from '../ui/button';
 import MapSidebarItem from './parts/Item';
@@ -19,29 +18,16 @@ import {
   toggleDrawer,
   setIncidentFilter,
 } from '../../store/actions';
+import { LocalIncident } from '../../types';
 
-/**
- * Props interface for the MapSidebar component
- */
 interface MapSidebarProps {
-  /** Controls whether the sidebar is visible or hidden */
   isOpen: boolean;
-  /** Callback function to close the sidebar */
+
   onClose: () => void;
-  /** Optional content to render inside the sidebar */
+
   children?: React.ReactNode;
 }
 
-/**
- * MapSidebar Component
- *
- * A responsive sidebar component that:
- * - Takes full screen width on mobile devices
- * - Uses 400px width on larger screens
- * - Has a sticky header that stays visible when scrolling
- * - Includes smooth slide-in/out animations
- * - Provides a close button for mobile/tablet users
- */
 const MapSidebar: React.FC<MapSidebarProps> = ({
   isOpen,
   onClose,
@@ -70,7 +56,7 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
         })
       );
     },
-    100
+    300
   );
 
   // Update local state immediately, debounce Redux update
@@ -79,7 +65,7 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
     debouncedUpdateReduxSearch(newValue); // redux: debounced
   };
 
-  const onItemClick = (incident: Incident<any>) => {
+  const onItemClick = (incident: LocalIncident) => {
     dispatch(toggleDrawer(false));
     dispatch(setSelectedIncident(incident));
   };
@@ -88,7 +74,7 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
     <AnimatePresence mode="wait">
       {/* 
         Sidebar container with Framer Motion animations
-        AnimatePresence handles enter/exit animations smoothly
+     
       */}
       {isOpen && (
         <motion.div
@@ -96,10 +82,10 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
           animate={{ x: 0 }} // Slide in to normal position
           exit={{ x: '-100%' }} // Slide out to the left when closing
           transition={{
-            type: 'spring', // Use spring animation for natural feel
-            stiffness: 300, // Controls spring tension
-            damping: 30, // Controls spring damping (higher = less bouncy)
-            mass: 0.8, // Controls spring mass (affects animation speed)
+            type: 'spring',
+            stiffness: 300,
+            damping: 30,
+            mass: 0.8,
           }}
           className={`
           /* Positioning and Layout */
@@ -116,8 +102,6 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
             Sticky Header Container with subtle fade-in animation
             - sticky top-0: Sticks to the top of the viewport when scrolling
             - z-10: Ensures header stays above content
-            - bg-white: Solid background to cover scrolling content
-            - border-b border-gray-200: Subtle bottom border for visual separation
           */}
           <motion.div
             initial={{ opacity: 0, y: -20 }} // Start slightly transparent and moved up
@@ -126,12 +110,6 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
             className="sticky top-0 z-10"
           >
             <div className="flex flex-row items-center justify-between p-4 pb-0">
-              {/* 
-                Header Title with slide-in animation
-                - text-lg: Large text size
-                - font-semibold: Medium font weight
-                - text-gray-900: Dark gray color for good contrast
-              */}
               <motion.h2
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -140,14 +118,7 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
               >
                 Incidents
               </motion.h2>
-              {/* 
-                Close Button with scale animation on hover
-                - lg:hidden: Hidden on large screens (desktop doesn't need close button)
-                - p-2: Padding for touch-friendly target
-                - rounded-md: Medium border radius
-                - hover:bg-gray-100: Light gray background on hover
-                - aria-label: Accessibility label for screen readers
-              */}
+
               <Button
                 variant="ghost"
                 size="icon-lg"
@@ -192,8 +163,6 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
 
           {/* 
             Scrollable Content Area with staggered content animation
-            - p-4: Padding on all sides
-            - overflow-y-auto: Vertical scrolling when content exceeds height
             - h-[calc(100vh-73px)]: Height calculation to account for sticky header
               (73px is approximate header height including padding and border)
           */}
