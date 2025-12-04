@@ -7,8 +7,6 @@ import { resolve } from 'path';
 export default defineConfig({
   plugins: [
     react({
-      // Enable React Fast Refresh
-      fastRefresh: true,
       // Include .tsx files
       include: '**/*.{jsx,tsx}',
     }),
@@ -27,11 +25,18 @@ export default defineConfig({
   },
   build: {
     target: 'es2022',
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+      },
+    },
     rollupOptions: {
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
-          redux: ['redux', 'react-redux'],
+          redux: ['@reduxjs/toolkit', 'react-redux'],
+          mapbox: ['mapbox-gl', 'react-map-gl'], // Split large map libraries
         },
       },
     },
