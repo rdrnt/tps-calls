@@ -99,7 +99,7 @@ const MapIncidentInfo: FunctionComponent<MapIncidentInfoProps> = ({
       }}
     >
       <SheetContent
-        overlayClassName="bg-background/20"
+        overlayClassName="bg-transparent"
         side={isMobile ? 'bottom' : 'right'}
       >
         <SheetHeader className="pb-0">
