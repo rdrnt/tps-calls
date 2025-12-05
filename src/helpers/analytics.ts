@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/browser';
+import * as Sentry from '@sentry/react';
 import ReactGA from 'react-ga4';
 import { Environment } from '.';
 
@@ -6,12 +6,22 @@ import { Environment } from '.';
 export const initialize = () => {
   const { SENTRY_DSN, GOOGLEANALYTICS_KEY } = Environment.config;
 
+  // Initialize Sentry and ReactGA in production
   if (!Environment.isDevelopment) {
-    Sentry.init({ dsn: SENTRY_DSN });
+    Sentry.init({
+      dsn: SENTRY_DSN,
+      environment: 'production',
+      release: `tpscalls-frontend@${import.meta.env.npm_package_version}`,
+      tracesSampleRate: 0.1, // 10% of transactions for performance monitoring
+      beforeSend(event) {
+        // Filter out known non-critical errors
+        return event;
+      },
+    });
 
     ReactGA.initialize(GOOGLEANALYTICS_KEY);
   } else {
-    console.warn('Not initializing analytics for development build');
+    console.info('Not initializing analytics for development build');
   }
 };
 

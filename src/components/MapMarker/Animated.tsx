@@ -1,48 +1,37 @@
 import * as React from 'react';
-import styled from 'styled-components';
 import { Marker } from 'react-map-gl';
 import { Coordinates } from '@rdrnt/tps-calls-shared';
-import { darken, rgba } from 'polished';
-import { motion } from 'motion/react';
+import { cn } from '../../lib/utils';
 
-interface AnimatedMapMarker {
+const COLOR_CLASSES = {
+  primary: 'bg-tpscalls-primary border-white',
+  secondary: 'bg-amber-700 border-amber-200',
+  // add more here
+} as const;
+
+interface AnimatedMapMarkerProps {
   coordinates: Coordinates;
-  color: string;
+  color?: keyof typeof COLOR_CLASSES;
   size?: number;
 }
 
-const getRgbaForAnimation = (opacity: number, color: string) =>
-  rgba(darken(0.2, color), opacity);
-
-const Dot = styled(motion.div)<{ color: string; size: number }>`
-  height: ${(props) => props.size}px;
-  width: ${(props) => props.size}px;
-  border-radius: ${(props) => props.size / 2}px;
-  background-color: ${(props) => props.color};
-`;
-
-const AnimatedMapMarker: React.FunctionComponent<AnimatedMapMarker> = ({
+const AnimatedMapMarker: React.FunctionComponent<AnimatedMapMarkerProps> = ({
   coordinates,
-  color,
+  color = 'primary',
   size = 15,
 }) => (
   <Marker {...coordinates} style={{ zIndex: 0 }} anchor="center">
-    <Dot
-      animate={{
-        boxShadow: `0px 0px 0px 0px ${getRgbaForAnimation(0.8, color)}`,
-        transition: () => ({
-          type: 'keyframes',
-          values: [
-            `0px 0px 0px 0px ${getRgbaForAnimation(0.8, color)}`,
-            `0px 0px 0px 20px ${getRgbaForAnimation(0.0, color)}`,
-            `0px 0px 0px 0px ${getRgbaForAnimation(0, color)}`,
-          ],
-          duration: 1500,
-          loop: Infinity,
-        }),
+    <div className={`animate-ping bg-white fixed size-full rounded-full `} />
+    <div
+      className={cn(
+        'border-2 rounded-full',
+        COLOR_CLASSES[color],
+        'z-10 relative'
+      )}
+      style={{
+        height: `${size}px`,
+        width: `${size}px`,
       }}
-      color={color}
-      size={size}
     />
   </Marker>
 );

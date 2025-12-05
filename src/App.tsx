@@ -1,55 +1,62 @@
 import * as React from 'react';
-import { createGlobalStyle } from 'styled-components';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router';
 
-import Map from './containers/Map';
-import ContactPage from './containers/Contact';
-import DownloadPage from './containers/Download';
+const Map = React.lazy(() => import('./routes/Map'));
+import ContactPage from './routes/Contact';
+import DownloadPage from './routes/Download';
 
-import { LocationListener, IncidentListener } from './components/Listeners';
+import { ThemeProvider } from './theme-provider';
+
+import {
+  LocationListener,
+  IncidentListener,
+  CameraListener,
+} from './components/Listeners';
 
 import store from './store';
-import Drawer from './components/Drawer';
-import Loader from './components/Loader';
+
+import Loader, { StaticLoader } from './components/Loader';
 import Modal from './components/Modal';
-import Toast from './components/Toast';
-
-const GlobalStyle = createGlobalStyle`
-  body {
-    margin: 0;
-    overflow: hidden;
-    width: 100vw;
-    height: 100vh;
-    font-family: 'Poppins', arial, sans-serif;
-  }
-
-  * {
-    box-sizing: border-box;
-  }
-`;
+import TrafficCams from './routes/TrafficCams';
 
 const App: React.FunctionComponent = () => (
   <>
-    <GlobalStyle />
-    <Router>
-      <Provider store={store}>
-        <>
-          <IncidentListener />
-          <LocationListener />
-          <Loader />
-          <Drawer />
-          <Modal />
-          <Toast />
+    <ThemeProvider defaultTheme="system" storageKey="tpscalls-ui-theme">
+      <Router>
+        <Provider store={store}>
+          <>
+            <IncidentListener />
+            <CameraListener />
+            <LocationListener />
+            <Loader />
+            <Modal />
 
-          <Switch>
-            <Route exact path="/contact" component={ContactPage} />
-            <Route exact path="/download" component={DownloadPage} />
-            <Route path={['/:id', '/']} component={Map} />
-          </Switch>
-        </>
-      </Provider>
-    </Router>
+            <Routes>
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/download" element={<DownloadPage />} />
+              <Route path="/traffic-cams" element={<TrafficCams />} />
+              <Route
+                path="/:id"
+                element={
+                  <React.Suspense fallback={<StaticLoader />}>
+                    <Map />
+                  </React.Suspense>
+                }
+              />
+              <Route
+                path="/"
+                element={
+                  <React.Suspense fallback={<StaticLoader />}>
+                    <Map />
+                  </React.Suspense>
+                }
+              />
+            </Routes>
+          </>
+        </Provider>
+      </Router>
+    </ThemeProvider>
   </>
 );
 

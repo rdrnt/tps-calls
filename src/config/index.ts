@@ -1,7 +1,7 @@
 export enum Colors {
   PRIMARY = '#3a71e5',
   // SECONDARY = '#343d82',
-  SECONDARY = '#b6e5ca',
+  SECONDARY = '#f77f00',
   TEXT_PRIMARY = '#000000',
   TEXT_SECONDARY = '#919191',
   BACKGROUND = '#fefefe',
@@ -18,16 +18,16 @@ export enum Sizes {
   MAX_MOBILE_WIDTH = 375,
 }
 
-export enum Defaults {
-  PRIMARY_FONT = 'Poppins',
-  SECONDARY_FONT = 'Helvetica',
-}
-
 export enum ZIndex {
   DRAWER = 1,
   TOAST = 2,
   MODAL = 3,
 }
 
+export enum APPSTORE_DOWNLOAD_LINK {
+  IOS = 'https://apps.apple.com/us/app/tpscalls/id6502376708',
+  ANDROID = 'https://play.google.com/store/apps/details?id=com.drnt.tpscalls',
+}
+
 export const MAPBOX_THEME_URL =
-  'mapbox://styles/drnt/cjmwb7zbo1f5b2ro8sqfdkaql';
+  'mapbox://styles/drnt/cmi89nj7n004i01s4cshw1tn4';
