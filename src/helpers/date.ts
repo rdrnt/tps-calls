@@ -3,7 +3,8 @@ import {
   setHours,
   setMinutes,
   differenceInHours,
-  distanceInWordsToNow,
+  formatDistanceToNow,
+  isToday,
 } from 'date-fns';
 import { Timestamp } from './firebase';
 import { Timestamp as TimestampClass } from 'firebase/firestore';
@@ -16,9 +17,12 @@ export const convertDateToTimestamp = (date: Date): Timestamp =>
 
 export const now = (): Timestamp => TimestampClass.now();
 
-export const formatIncidentDate = (incidentTimestamp: Timestamp) => {
-  const timestampToDate = convertTimestampToDate(incidentTimestamp);
-  return format(timestampToDate, 'MMM Do YYYY @ h:mma');
+export const formatIncidentDate = (incidentDate: Date) => {
+  if (isToday(incidentDate)) {
+    return `Today @ ${format(incidentDate, 'h:mm a')}`;
+  }
+
+  return format(incidentDate, 'MMM Do yyyy @ h:mma');
 };
 
 export const createDateWithHoursAndMinutes = ({
@@ -38,5 +42,5 @@ export const compareHourDifference = (
     convertTimestampToDate(secondDate)
   );
 
-export const distanceInWords = (timestamp: Timestamp): string =>
-  distanceInWordsToNow(convertTimestampToDate(timestamp));
+export const distanceInWords = (date: Date): string =>
+  formatDistanceToNow(date);

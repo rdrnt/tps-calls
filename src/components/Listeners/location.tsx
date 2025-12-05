@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Coordinates } from '@rdrnt/tps-calls-shared';
 
 import { Permissions } from '../../helpers';
@@ -7,14 +6,12 @@ import {
   setLocationCoordinates,
   setLocationAvailable,
   setRequestingLocationPermissions,
-} from '../../store/user/actions';
-import { AppState } from '../../store';
+} from '../../store/actions';
+import { AppState, useAppDispatch, useAppSelector } from '../../store';
 
-interface LocationListener {}
-
-const LocationListener: React.FunctionComponent<LocationListener> = ({}) => {
-  const dispatch = useDispatch();
-  const userLocationState = useSelector(
+const LocationListener: React.FunctionComponent = () => {
+  const dispatch = useAppDispatch();
+  const userLocationState = useAppSelector(
     (state: AppState) => state.user.location
   );
 

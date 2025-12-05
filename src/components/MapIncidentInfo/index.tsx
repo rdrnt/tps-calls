@@ -1,117 +1,136 @@
-import * as React from 'react';
-import styled from 'styled-components';
-import { motion, AnimatePresence } from 'motion/react';
-import { Incident } from '@rdrnt/tps-calls-shared';
+import { toast } from 'sonner';
+import { Link } from 'lucide-react';
+import { MapRef } from 'react-map-gl';
+import { FunctionComponent, useEffect } from 'react';
 
-import { DateHelper } from '../../helpers';
-import { Sizes, Colors } from '../../config';
-import Text from '../Text';
-import { IconButton } from '../Button';
+import { Separator } from '../ui/separator';
 
-import MapInfoExtraContent from './Extra';
+import { Button } from '../ui/button';
+import { TwitterIcon } from '../Icon/custom/Twitter';
 
-const WIDTH = 335;
+import { createShareUrl, createTwitterShareUrl } from '../../helpers/url';
+import CameraSection from './parts/CameraSection';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from '../ui/sheet';
+import { formatIncidentDate } from '../../helpers/date';
+import useIsMobile from '../../hooks/useIsMobile';
 
-const Container = styled(motion.div)`
-  position: absolute;
-  bottom: ${Sizes.SPACING * 3}px;
-  left: calc(50% - ${WIDTH / 2}px);
-  width: ${WIDTH}px;
-  height: auto;
-  min-height: 50px;
-  background-color: ${Colors.BACKGROUND};
-  border-radius: 8px;
-  box-shadow:
-    0px 5px 5px -3px rgba(0, 0, 0, 0.2),
-    0px 8px 10px 1px rgba(0, 0, 0, 0.14),
-    0px 3px 14px 2px rgba(0, 0, 0, 0.12);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+import { LocalIncident } from '../../types';
 
-const Content = styled.div`
-  height: 100%;
-  width: 100%;
-  padding: ${Sizes.SPACING / 2}px;
-  padding-bottom: 0;
-
-  > div:first-child {
-    padding: ${Sizes.SPACING / 3}px 0;
-  }
-  > div {
-    &:first-child {
-      margin-top: 0;
-    }
-  }
-`;
-
-const IncidentContent = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-
-  /* Incident info */
-  > div {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-
-    > h4,
-    p {
-      margin-bottom: ${Sizes.SPACING / 4}px;
-    }
-  }
-
-  > button {
-    margin-left: 5px;
-    min-width: 17px;
-  }
-`;
-
-interface MapIncidentInfo {
-  incident?: Incident<any>;
+interface MapIncidentInfoProps {
+  incident?: LocalIncident;
   drawerOpen: boolean;
   close: () => void;
+  mapRef: MapRef | null;
 }
 
-const MapIncidentInfo: React.FunctionComponent<MapIncidentInfo> = ({
+const MapIncidentInfo: FunctionComponent<MapIncidentInfoProps> = ({
   incident,
-  drawerOpen,
   close,
+  mapRef,
 }) => {
+  const { isMobile } = useIsMobile();
+
+  const onClickCopyToClipboard = () => {
+    if (!incident || !navigator || navigator.clipboard === undefined) return;
+    navigator.clipboard.writeText(createShareUrl(incident.id));
+    toast.success('Share link copied to clipboard', {
+      position: 'top-center',
+    });
+  };
+
+  const onClickShareOnTwitter = () => {
+    if (!incident) return;
+    window.open(`${createTwitterShareUrl(incident)}`, '_blank');
+  };
+
+  useEffect(() => {
+    // When an incident is selected on mobile, bring it into view with offset for the drawer
+    if (incident && isMobile && mapRef) {
+      // Wait for the sheet animation to complete before measuring
+      // The sheet has a 500ms animation duration (data-[state=open]:duration-500)
+      const measureSheetHeight = () => {
+        // Find the sheet content element by its data attribute
+        const sheetElement = document.querySelector(
+          '[data-slot="sheet-content"]'
+        ) as HTMLElement;
+        if (!sheetElement) return;
+
+        // Get the actual height of the sheet content
+        const sheetHeight = sheetElement.getBoundingClientRect().height;
+
+        // Offset upward by half the drawer height so the marker appears in the visible area above the drawer
+        // The offset is [x, y] in pixels, negative y moves upward
+        const offsetY = -(sheetHeight / 2);
+
+        mapRef.flyTo({
+          center: [
+            incident.coordinates.longitude,
+            incident.coordinates.latitude,
+          ],
+          offset: [0, offsetY],
+          speed: 1,
+          zoom: 15,
+        });
+      };
+
+      // Wait for the sheet to finish animating in (500ms) before measuring
+      const timeoutId = setTimeout(measureSheetHeight, 600);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [incident, isMobile, mapRef]);
+
+  if (!incident) return null;
+
   return (
-    <AnimatePresence>
-      {incident && !drawerOpen && (
-        <Container key="info" animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-          <Content>
-            <IncidentContent>
-              <div>
-                <Text as="h4" size={22} weight="500" lineHeight={22}>
-                  {incident.name}
-                </Text>
-                <Text as="p" lineHeight={21}>
-                  {incident.location}
-                </Text>
-                <Text as="span" size={12}>
-                  {DateHelper.formatIncidentDate(incident.date)}
-                </Text>
-              </div>
-              <IconButton
-                size={17}
-                backgroundColor={Colors.TEXT_SECONDARY}
-                borderRadius={8.5}
-                iconProps={{ size: 13, name: 'x', color: 'white' }}
-                onClick={close}
-              />
-            </IncidentContent>
-            <MapInfoExtraContent incident={incident} close={close} />
-          </Content>
-        </Container>
-      )}
-    </AnimatePresence>
+    <Sheet
+      open={true}
+      onOpenChange={open => {
+        if (!open) {
+          close();
+        }
+      }}
+    >
+      <SheetContent
+        overlayClassName="bg-transparent"
+        side={isMobile ? 'bottom' : 'right'}
+      >
+        <SheetHeader className="pb-0">
+          <SheetTitle className="text-2xl font-bold">
+            {incident?.name}
+          </SheetTitle>
+          <SheetDescription>{incident?.location}</SheetDescription>
+          <SheetDescription className="text-sm text-gray-500">
+            {formatIncidentDate(new Date(incident?.date))}
+          </SheetDescription>
+        </SheetHeader>
+        <div className="px-4">
+          <Separator />
+        </div>
+
+        <div className="grid auto-rows-min gap-6 px-4">
+          <CameraSection nearbyCameraIds={[...incident.data.nearbyCameras]} />
+        </div>
+
+        <SheetFooter>
+          <Button onClick={onClickCopyToClipboard}>
+            <Link />
+            Copy to Clipboard
+          </Button>
+          <Button onClick={onClickShareOnTwitter}>
+            <TwitterIcon />
+            Share on Twitter
+          </Button>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   );
 };
 

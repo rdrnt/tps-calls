@@ -1,5 +1,5 @@
-import { Incident } from '@rdrnt/tps-calls-shared';
 import { Environment, DateHelper } from '.';
+import { LocalIncident } from '../types';
 
 export const createShareUrl = (incidentId: string): string => {
   let baseUrl = `${window.location.protocol}//${window.location.hostname}`;
@@ -13,7 +13,7 @@ export const createShareUrl = (incidentId: string): string => {
   return baseUrl;
 };
 
-export const createTwitterShareUrl = (incident: Incident<any>) => {
+export const createTwitterShareUrl = (incident: LocalIncident) => {
   let url = `https://twitter.com/intent/tweet`;
 
   const tweetText = `${incident.name} @ ${

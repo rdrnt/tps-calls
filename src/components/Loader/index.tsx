@@ -1,57 +1,72 @@
-import * as React from 'react';
-import styled from 'styled-components';
+import { FunctionComponent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { AppState } from '../../store';
-import { connect } from 'react-redux';
-import BounceLoader from 'react-spinners/BounceLoader';
 
-import { Colors } from '../../config';
+import { useAppDispatch, useAppSelector } from '../../store';
 
-import Text from '../Text';
+import { closeLoader } from '../../store/slices/ui';
+import { Typography } from '../Typography';
+import { cn } from '../../lib/utils';
 
-const Container = styled(motion.div)`
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  z-index: 999;
-  background-color: ${Colors.BACKGROUND};
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  /* Make the loader message smaller on mobile devices */
-  > h1 {
-    @media only screen and (max-width: 600px) {
-      font-size: 43px;
-    }
-  }
-`;
-
-export interface Loader {
-  open: boolean;
-  message?: string;
-}
-
-const Loader: React.FunctionComponent<Loader> = ({ open, message }) => (
-  <AnimatePresence>
-    {open && (
-      <Container key="loader" animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-        <BounceLoader color={Colors.PRIMARY} />
-        {message && (
-          <Text as="h1" weight="bold">
-            {message}
-          </Text>
+const LoaderSpinner = ({ animate = true }: { animate?: boolean }) => {
+  return (
+    <div className={cn('rounded-full h-12 w-12 bg-tpscalls-primary')}>
+      <div
+        className={cn(
+          'fixed rounded-full bg-tpscalls-primary h-12 w-12',
+          animate && 'animate-ping'
         )}
-      </Container>
-    )}
-  </AnimatePresence>
-);
+      />
+    </div>
+  );
+};
 
-const mapStateToProps = (state: AppState) => ({
-  ...state.ui.loader,
-});
+export const StaticLoader: FunctionComponent<{ message?: string }> = ({
+  message = 'Loading map...',
+}) => {
+  return (
+    <div className="absolute top-0 left-0 h-full w-full z-999 bg-background flex flex-col justify-center items-center">
+      <LoaderSpinner animate={false} />
+      <Typography
+        variant="h2"
+        align="center"
+        className="max-sm:text-[43px] mt-4 text-primary"
+      >
+        {message}
+      </Typography>
+    </div>
+  );
+};
 
-export default connect(mapStateToProps)(Loader);
+const Loader: FunctionComponent = () => {
+  const { open, message } = useAppSelector(state => state.ui.loader);
+  const dispatch = useAppDispatch();
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          key="loader"
+          className="absolute top-0 left-0 h-full w-full z-999 bg-background flex flex-col justify-center items-center"
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onAnimationEnd={() => {
+            dispatch(closeLoader());
+          }}
+        >
+          <LoaderSpinner animate={true} />
+          {message && (
+            <Typography
+              variant="h2"
+              align="center"
+              className="max-sm:text-[43px] mt-4 text-primary"
+            >
+              {message}
+            </Typography>
+          )}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+export default Loader;
