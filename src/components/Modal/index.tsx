@@ -10,8 +10,12 @@ import ProjectInfoModal from './ProjectInfo';
 import DownloadMobileAppModal from './MobileApp';
 
 import { Dialog, DialogContent } from '../ui/dialog';
+import IncidentFiltersModal from './IncidentFilters';
 
-export type ModalTypes = 'project-info' | 'mobile-app-download';
+export type ModalTypes =
+  | 'project-info'
+  | 'mobile-app-download'
+  | 'incident-filters';
 
 export interface ModalProps {
   close: () => void;
@@ -19,7 +23,7 @@ export interface ModalProps {
 
 const ModalTable: { [key in ModalTypes]?: any } = {
   'project-info': ProjectInfoModal,
-
+  'incident-filters': IncidentFiltersModal,
   'mobile-app-download': DownloadMobileAppModal,
 };
 

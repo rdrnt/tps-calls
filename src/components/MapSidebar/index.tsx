@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useDebouncedCallback } from 'use-debounce';
-import { Search, X } from 'lucide-react';
+import { Filter, Search, SlidersHorizontal, X } from 'lucide-react';
 
 import { Button } from '../ui/button';
 import MapSidebarItem from './parts/Item';
@@ -17,6 +17,7 @@ import {
   setSelectedIncident,
   toggleDrawer,
   setIncidentFilter,
+  openModal,
 } from '../../store/actions';
 import { LocalIncident } from '../../types';
 
@@ -157,6 +158,15 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
                     {incidents.length} results
                   </InputGroupAddon>
                 )}
+                <InputGroupButton
+                  onClick={() => {
+                    dispatch(openModal('incident-filters'));
+                  }}
+                  variant="ghost"
+                  size="icon-sm"
+                >
+                  <SlidersHorizontal />
+                </InputGroupButton>
               </InputGroup>
             </div>
           </motion.div>
