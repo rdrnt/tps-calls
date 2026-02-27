@@ -1,36 +1,13 @@
 import { FunctionComponent, ReactNode, useState } from 'react';
 
-import { DialogHeader, DialogFooter, DialogTitle } from '../ui/dialog';
+import { DialogHeader, DialogFooter, DialogTitle } from '../../ui/dialog';
 
-import { Slider } from '../ui/slider';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible';
-import { Button } from '../ui/button';
-import { Switch } from '../ui/switch';
-import { ModalProps } from '.';
+import { Slider } from '../../ui/slider';
 
-const FilterSection: FunctionComponent<{
-  title: string;
-  content: ReactNode;
-  defaultOpen?: boolean;
-}> = ({ title, content, defaultOpen = true }) => {
-  return (
-    <Collapsible defaultOpen={defaultOpen}>
-      <div className="flex items-center justify-between">
-        <h5 className="text-sm font-medium">{title}</h5>
-        <CollapsibleTrigger asChild>
-          <Switch className="bg-tpscalls-primary data-[state=closed]:bg-tpscalls-primary/60" />
-        </CollapsibleTrigger>
-      </div>
-      <CollapsibleContent className="mt-2 py-2 rounded-sm">
-        {content}
-      </CollapsibleContent>
-    </Collapsible>
-  );
-};
+import { Button } from '../../ui/button';
+
+import { ModalProps } from '..';
+import FilterSection from './parts/FilterSection';
 
 const IncidentFiltersModal: FunctionComponent<ModalProps> = ({ close }) => {
   const [distance, setDistance] = useState(10);
@@ -47,6 +24,8 @@ const IncidentFiltersModal: FunctionComponent<ModalProps> = ({ close }) => {
       </DialogHeader>
       <div className="grid gap-4">
         <div className="grid gap-3">
+          {/* Search bar */}
+          {/* TODO: Distance Filter */}
           <FilterSection
             title="Distance"
             content={
