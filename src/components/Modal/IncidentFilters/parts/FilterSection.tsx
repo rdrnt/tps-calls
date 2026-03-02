@@ -29,12 +29,9 @@ const FilterSection: FunctionComponent<FilterSectionProps> = ({
   return (
     <Collapsible open={enabled} onOpenChange={onEnabledChange}>
       <div className="flex items-center justify-between">
-        <h5 className="text-sm font-medium">{title}</h5>
+        <h5 className="text-md font-semibold">{title}</h5>
         <CollapsibleTrigger asChild>
-          <Switch
-            checked={enabled}
-            className="bg-tpscalls-primary data-[state=unchecked]:bg-tpscalls-primary/60"
-          />
+          <Switch checked={enabled} />
         </CollapsibleTrigger>
       </div>
       <CollapsibleContent className="mt-2 py-2 rounded-sm">

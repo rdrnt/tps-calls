@@ -87,7 +87,6 @@ const DateRangeFilter: FunctionComponent = () => {
       <div className="grid gap-4">
         {/* Calendar range picker */}
         <div className="grid gap-1.5">
-          <Label>Date Range</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -176,8 +175,8 @@ const DateRangeFilter: FunctionComponent = () => {
         <Alert>
           <Info className="size-4" />
           <AlertDescription>
-            Maximum window of {MAX_RANGE_HOURS} hours. End date/time cannot be
-            in the future.
+            Note: There is a {MAX_RANGE_HOURS} hour limit on the range. For
+            longer ranges, please contact me.
           </AlertDescription>
         </Alert>
       </div>
