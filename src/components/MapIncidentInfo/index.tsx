@@ -116,7 +116,9 @@ const MapIncidentInfo: FunctionComponent<MapIncidentInfoProps> = ({
         </div>
 
         <div className="grid auto-rows-min gap-6 px-4">
-          <CameraSection nearbyCameraIds={[...incident.data.nearbyCameras]} />
+          <CameraSection
+            nearbyCameraIds={[...(incident.data?.nearbyCameras ?? [])]}
+          />
         </div>
 
         <SheetFooter>
