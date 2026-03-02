@@ -1,27 +1,44 @@
-import {
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@radix-ui/react-collapsible';
+/**
+ * Collapsible toggle wrapper shared by all filter sections.
+ * The Switch doubles as the Collapsible trigger via Radix `asChild`.
+ * Fully controlled — parent owns `enabled` state (from the form).
+ */
+
 import { FunctionComponent, ReactNode } from 'react';
 
-import { Collapsible } from '../../../ui/collapsible';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '../../../ui/collapsible';
 import { Switch } from '../../../ui/switch';
 
-const FilterSection: FunctionComponent<{
+interface FilterSectionProps {
   title: string;
-  content: ReactNode;
-  defaultOpen?: boolean;
-}> = ({ title, content, defaultOpen = true }) => {
+  children: ReactNode;
+  enabled: boolean;
+  onEnabledChange: (enabled: boolean) => void;
+}
+
+const FilterSection: FunctionComponent<FilterSectionProps> = ({
+  title,
+  children,
+  enabled,
+  onEnabledChange,
+}) => {
   return (
-    <Collapsible defaultOpen={defaultOpen}>
+    <Collapsible open={enabled} onOpenChange={onEnabledChange}>
       <div className="flex items-center justify-between">
         <h5 className="text-sm font-medium">{title}</h5>
         <CollapsibleTrigger asChild>
-          <Switch className="bg-tpscalls-primary data-[state=closed]:bg-tpscalls-primary/60" />
+          <Switch
+            checked={enabled}
+            className="bg-tpscalls-primary data-[state=unchecked]:bg-tpscalls-primary/60"
+          />
         </CollapsibleTrigger>
       </div>
       <CollapsibleContent className="mt-2 py-2 rounded-sm">
-        {content}
+        {children}
       </CollapsibleContent>
     </Collapsible>
   );

@@ -1,60 +1,104 @@
-import { FunctionComponent, ReactNode, useState } from 'react';
+/**
+ * Incident filters modal — react-hook-form + Zod.
+ * FormProvider wraps children so filter components use useFormContext.
+ * Reads/writes Redux filter state for persistence across open/close.
+ */
+
+import { FunctionComponent } from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { DialogHeader, DialogFooter, DialogTitle } from '../../ui/dialog';
-
-import { Slider } from '../../ui/slider';
-
 import { Button } from '../../ui/button';
 
 import { ModalProps } from '..';
-import FilterSection from './parts/FilterSection';
+import DistanceFilter from './parts/DistanceFilter';
+import DateRangeFilter from './parts/DateRangeFilter';
+
+import {
+  incidentFiltersSchema,
+  getDefaultFormValues,
+  formValuesFromRedux,
+  combineDateAndTime,
+  type IncidentFiltersFormValues,
+} from './schema';
+import { setIncidentFilter } from '../../../store/slices/incidents';
+import type { AppState } from '../../../store';
 
 const IncidentFiltersModal: FunctionComponent<ModalProps> = ({ close }) => {
-  const [distance, setDistance] = useState(10);
+  const dispatch = useDispatch();
+  const currentFilter = useSelector(
+    (state: AppState) => state.incidents.filter
+  );
 
-  const onResetFilters = () => {
-    // Do something
+  const methods = useForm<IncidentFiltersFormValues>({
+    resolver: zodResolver(incidentFiltersSchema),
+    defaultValues: formValuesFromRedux(currentFilter),
+  });
+
+  /** Map form values → Redux shape and dispatch. */
+  const onSubmit = (data: IncidentFiltersFormValues) => {
+    const distance = data.distanceFilter.enabled
+      ? data.distanceFilter.value
+      : undefined;
+
+    let dateRange: { startDate: string; endDate: string } | undefined;
+    if (data.dateRangeFilter.enabled) {
+      const start = combineDateAndTime(
+        data.dateRangeFilter.startDate,
+        data.dateRangeFilter.startTime
+      );
+      const end = combineDateAndTime(
+        data.dateRangeFilter.endDate,
+        data.dateRangeFilter.endTime
+      );
+      if (start && end) {
+        dateRange = {
+          startDate: start.toISOString(),
+          endDate: end.toISOString(),
+        };
+      }
+    }
+
+    dispatch(
+      setIncidentFilter({
+        values: { distance, dateRange },
+        merge: false,
+      })
+    );
+
+    // TODO: trigger Firebase query from filter values
+
+    close();
+  };
+
+  const onReset = () => {
+    methods.reset(getDefaultFormValues());
+    dispatch(setIncidentFilter({ values: {}, merge: false }));
     close();
   };
 
   return (
-    <>
-      <DialogHeader className="mb-2">
-        <DialogTitle>Filters</DialogTitle>
-      </DialogHeader>
-      <div className="grid gap-4">
-        <div className="grid gap-3">
-          {/* Search bar */}
-          {/* TODO: Distance Filter */}
-          <FilterSection
-            title="Distance"
-            content={
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground w-20">
-                  {distance} km
-                </span>
-                <Slider
-                  defaultValue={[10]}
-                  max={20}
-                  min={0.1}
-                  step={0.1}
-                  className="w-full lg:w-[60%]"
-                  value={[distance]}
-                  onValueChange={value => setDistance(value[0])}
-                />
-              </div>
-            }
-          />
+    <FormProvider {...methods}>
+      <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
+        <DialogHeader className="mb-6">
+          <DialogTitle>Filters</DialogTitle>
+        </DialogHeader>
+
+        <div className="grid gap-4">
+          <DistanceFilter />
+          <DateRangeFilter />
         </div>
-        <FilterSection title="Date" content={null} />
-      </div>
-      <DialogFooter className="flex-row justify-center gap-4 mt-4">
-        <Button variant="outline" onClick={onResetFilters}>
-          Reset
-        </Button>
-        <Button>Apply</Button>
-      </DialogFooter>
-    </>
+
+        <DialogFooter className="flex-row justify-center gap-4 mt-4">
+          <Button type="button" variant="outline" onClick={onReset}>
+            Reset
+          </Button>
+          <Button type="submit">Apply</Button>
+        </DialogFooter>
+      </form>
+    </FormProvider>
   );
 };
 

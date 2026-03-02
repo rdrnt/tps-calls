@@ -1,9 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LocalIncident } from '../../types';
 
+/** ISO date range used by the date filter (start/end as ISO-8601 strings). */
+export interface IncidentDateRangeFilter {
+  startDate: string;
+  endDate: string;
+}
+
 export interface IncidentFilterState {
   search?: string;
   distance?: number; // The number of kilometers
+  dateRange?: IncidentDateRangeFilter;
 }
 
 export interface IncidentsState {
