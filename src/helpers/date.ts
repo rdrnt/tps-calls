@@ -22,7 +22,7 @@ export const formatIncidentDate = (incidentDate: Date) => {
     return `Today @ ${format(incidentDate, 'h:mm a')}`;
   }
 
-  return format(incidentDate, 'MMM Do yyyy @ h:mma');
+  return format(incidentDate, 'MMM do yyyy @ h:mma');
 };
 
 export const createDateWithHoursAndMinutes = ({
