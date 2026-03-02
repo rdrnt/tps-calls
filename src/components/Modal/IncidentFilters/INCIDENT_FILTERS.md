@@ -47,8 +47,35 @@ Constraints:
 3. Extend `IncidentFilterState` in `store/slices/incidents.ts`
 4. Create `parts/NewFilter.tsx` using `useFormContext` + `FilterSection`
 5. Render in `index.tsx`, map to Redux in `onSubmit`
+6. If the filter is a Firestore concern (reduces data over the wire), add it to `IncidentListener`
+7. If the filter is a client-side concern, add it to `selectFilteredIncidents` in `store/selectors.ts`
 
-## TODO: Firebase query
+## Architecture
 
-Filters save to Redux but don't query Firestore yet. Use `convertDateToTimestamp()` + `getIncidentsAtDate()` when wiring up.
+Filters are split into two layers based on where they can run:
+
+**Data source (Firestore)** — `IncidentListener` + `fetchFilteredIncidents` thunk
+
+- Date range changes which documents are fetched. When active, the real-time
+  `onSnapshot` listener is unsubscribed and replaced by a one-shot query via
+  `getIncidentsAtDate()`. When cleared, the listener re-subscribes.
+- Writes raw results to `state.incidents.list`.
+
+**Client-side (selector)** — `selectFilteredIncidents` in `store/selectors.ts`
+
+- Distance and search filter the already-fetched list.
+- Distance uses `geolib.getDistance` against the user's coordinates.
+- Search uses Fuse.js fuzzy matching on `name` and `location`.
+- Memoized via `createSelector` — only recomputes when inputs change.
+- `Map.tsx` and `MapSidebar` read through this selector.
+
+```
+Firestore (date range)  →  state.incidents.list (raw)
+                                    ↓
+                         selectFilteredIncidents
+                           ├─ distance (geolib)
+                           └─ search   (fuse.js)
+                                    ↓
+                           Map.tsx / MapSidebar
+```
 

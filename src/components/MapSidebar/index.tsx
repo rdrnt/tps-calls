@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useDebouncedCallback } from 'use-debounce';
-import { Filter, Search, SlidersHorizontal, X } from 'lucide-react';
+import { Search, SlidersHorizontal, X } from 'lucide-react';
 
 import { Button } from '../ui/button';
 import MapSidebarItem from './parts/Item';
 import { useAppDispatch, useAppSelector } from '../../store';
+import { selectFilteredIncidents } from '../../store/selectors';
 import {
   InputGroup,
   InputGroupAddon,
@@ -35,7 +36,7 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
   children,
 }) => {
   const dispatch = useAppDispatch();
-  const incidents = useAppSelector(state => state.incidents.list);
+  const incidents = useAppSelector(selectFilteredIncidents);
   const filter = useAppSelector(state => state.incidents.filter);
 
   // Local state for search input (updates immediately, prevents lag)

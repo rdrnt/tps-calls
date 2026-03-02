@@ -68,8 +68,6 @@ const IncidentFiltersModal: FunctionComponent<ModalProps> = ({ close }) => {
       })
     );
 
-    // TODO: trigger Firebase query from filter values
-
     close();
   };
 

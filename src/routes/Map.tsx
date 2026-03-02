@@ -16,6 +16,7 @@ import { Environment, Analytics } from '../helpers';
 import * as FirebaseIncidents from '../helpers/firebase/incident';
 
 import { useAppDispatch, useAppSelector } from '../store';
+import { selectFilteredIncidents } from '../store/selectors';
 
 import MapIncidentInfo from '../components/MapIncidentInfo';
 import AnimatedMapMarker from '../components/MapMarker/Animated';
@@ -49,7 +50,7 @@ const Map: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const { id } = useParams<{ id?: string }>();
 
-  const incidentList = useAppSelector(state => state.incidents.list);
+  const incidentList = useAppSelector(selectFilteredIncidents);
   const selectedIncident = useAppSelector(state => state.incidents.selected);
   const { drawerOpen, loader } = useAppSelector(state => state.ui);
   const userLocation = useAppSelector(state => state.user.location);
