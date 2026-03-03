@@ -11,6 +11,10 @@ import type { IncidentFilterState } from '../../../store/slices/incidents';
 // ── Constants ───────────────────────────────────────────────────────
 
 export const MAX_RANGE_HOURS = 6;
+
+/** Earliest available incident data — nothing exists before this timestamp. (prod) */
+export const MIN_DATE = new Date('2019-09-25T04:08:00-04:00');
+
 export const DISTANCE_MIN_KM = 0.1;
 export const DISTANCE_MAX_KM = 20;
 export const DISTANCE_STEP_KM = 0.1;
@@ -126,6 +130,15 @@ export const incidentFiltersSchema = z.object({
         ctx.addIssue({
           code: 'custom',
           message: 'Start must be before end',
+          path: ['startDate'],
+        });
+      }
+
+      // No incident data exists before MIN_DATE
+      if (start < MIN_DATE) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'No data available before Sep 25, 2019',
           path: ['startDate'],
         });
       }

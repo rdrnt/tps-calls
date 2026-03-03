@@ -4,6 +4,9 @@
  * Dates are stored as "yyyy-MM-dd" strings in the form, converted to/from
  * Date objects for the Calendar via parse/format. Time inputs use register
  * directly. Errors render inline beneath the relevant control.
+ *
+ * The calendar disables dates before MIN_DATE (earliest available incident
+ * data) and after today. The schema performs the exact-timestamp validation.
  */
 
 import { FunctionComponent, useMemo } from 'react';
@@ -25,7 +28,11 @@ import { Label } from '../../../ui/label';
 import { Separator } from '../../../ui/separator';
 import { Alert, AlertDescription } from '../../../ui/alert';
 import FilterSection from './FilterSection';
-import { MAX_RANGE_HOURS, type IncidentFiltersFormValues } from '../schema';
+import {
+  MAX_RANGE_HOURS,
+  MIN_DATE,
+  type IncidentFiltersFormValues,
+} from '../schema';
 
 const REF_DATE = new Date();
 
@@ -109,7 +116,7 @@ const DateRangeFilter: FunctionComponent = () => {
                 selected={selectedRange}
                 onSelect={handleRangeSelect}
                 numberOfMonths={1}
-                disabled={{ after: today }}
+                disabled={[{ before: MIN_DATE }, { after: today }]}
                 defaultMonth={selectedRange.from ?? today}
               />
             </PopoverContent>
