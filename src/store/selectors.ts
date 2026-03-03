@@ -3,6 +3,7 @@ import { getDistance } from 'geolib';
 import Fuse from 'fuse.js';
 import type { AppState } from '.';
 import type { LocalIncident } from '../types';
+import { useSelector } from 'react-redux';
 
 /**
  * Unified client-side filtering selector.
@@ -49,3 +50,7 @@ export const selectFilteredIncidents = createSelector(
     return filtered;
   }
 );
+
+export const useReduxIncidents = () => {
+  return useSelector(selectFilteredIncidents);
+};

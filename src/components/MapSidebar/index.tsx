@@ -6,7 +6,7 @@ import { Search, SlidersHorizontal, X } from 'lucide-react';
 import { Button } from '../ui/button';
 import MapSidebarItem from './parts/Item';
 import { useAppDispatch, useAppSelector } from '../../store';
-import { selectFilteredIncidents } from '../../store/selectors';
+import { useReduxIncidents } from '../../store/selectors';
 import {
   InputGroup,
   InputGroupAddon,
@@ -36,7 +36,7 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
   children,
 }) => {
   const dispatch = useAppDispatch();
-  const incidents = useAppSelector(selectFilteredIncidents);
+  const incidents = useReduxIncidents();
   const filter = useAppSelector(state => state.incidents.filter);
 
   // Local state for search input (updates immediately, prevents lag)

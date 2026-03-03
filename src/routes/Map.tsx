@@ -16,7 +16,7 @@ import { Environment, Analytics } from '../helpers';
 import * as FirebaseIncidents from '../helpers/firebase/incident';
 
 import { useAppDispatch, useAppSelector } from '../store';
-import { selectFilteredIncidents } from '../store/selectors';
+import { useReduxIncidents } from '../store/selectors';
 
 import MapIncidentInfo from '../components/MapIncidentInfo';
 import AnimatedMapMarker from '../components/MapMarker/Animated';
@@ -40,17 +40,11 @@ import MapSidebar from '../components/MapSidebar';
 import { SafeArea } from '../components/SafeArea';
 import MapCameraInfo from '../components/MapCameraInfo';
 
-const DEFAULTS = {
-  latitude: 43.653225,
-  longitude: -79.383186,
-  zoom: 11.0,
-};
-
 const Map: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const { id } = useParams<{ id?: string }>();
 
-  const incidentList = useAppSelector(selectFilteredIncidents);
+  const incidentList = useReduxIncidents();
   const selectedIncident = useAppSelector(state => state.incidents.selected);
   const { drawerOpen, loader } = useAppSelector(state => state.ui);
   const userLocation = useAppSelector(state => state.user.location);
