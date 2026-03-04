@@ -1,16 +1,11 @@
 /**
  * Collapsible toggle wrapper shared by all filter sections.
- * The Switch doubles as the Collapsible trigger via Radix `asChild`.
  * Fully controlled — parent owns `enabled` state (from the form).
  */
 
 import { FunctionComponent, ReactNode } from 'react';
 
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '../../../ui/collapsible';
+import { Collapsible, CollapsibleContent } from '../../../ui/collapsible';
 import { Switch } from '../../../ui/switch';
 
 interface FilterSectionProps {
@@ -30,9 +25,7 @@ const FilterSection: FunctionComponent<FilterSectionProps> = ({
     <Collapsible open={enabled} onOpenChange={onEnabledChange}>
       <div className="flex items-center justify-between">
         <h5 className="text-md font-semibold">{title}</h5>
-        <CollapsibleTrigger asChild>
-          <Switch checked={enabled} />
-        </CollapsibleTrigger>
+        <Switch checked={enabled} onCheckedChange={onEnabledChange} />
       </div>
       <CollapsibleContent className="mt-2 py-2 rounded-sm">
         {children}
