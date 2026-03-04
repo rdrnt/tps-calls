@@ -177,6 +177,8 @@ const DateRangeFilter: FunctionComponent = () => {
           </div>
         </div>
 
+        <Separator />
+
         <Alert>
           <Info className="size-4" />
           <AlertDescription>
