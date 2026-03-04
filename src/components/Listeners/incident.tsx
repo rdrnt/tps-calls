@@ -1,64 +1,66 @@
-import { useEffect, FunctionComponent, useState } from 'react';
+/**
+ * Manages the Firestore data-source lifecycle for incidents.
+ *
+ * - No date-range filter → real-time `onSnapshot` listener (latest 100).
+ * - Date-range filter active → unsubscribes from real-time and dispatches
+ *   `fetchFilteredIncidents` thunk for a one-shot Firestore query.
+ *
+ * All client-side filtering (distance, search) is handled by the
+ * `selectFilteredIncidents` selector — this component only writes the
+ * raw list to `state.incidents.list`.
+ */
+
+import { useEffect, useRef, useCallback, FunctionComponent } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
-import Fuse from 'fuse.js';
 
 import { LocalIncident } from '../../types';
 
-import { setIncidentList } from '../../store/actions';
+import { setIncidentList, fetchFilteredIncidents } from '../../store/actions';
 import { useAppDispatch, useAppSelector } from '../../store';
 
 import * as FirebaseIncidents from '../../helpers/firebase/incident';
 
 const IncidentListener: FunctionComponent = () => {
   const dispatch = useAppDispatch();
-  const incidents = useAppSelector(state => state.incidents.list);
-  const incidentFilter = useAppSelector(state => state.incidents.filter);
+  const dateRange = useAppSelector(state => state.incidents.filter.dateRange);
 
-  // Store the default incidents
-  const [defaultIncidentList, setDefaultIncidentList] = useState<
-    LocalIncident[]
-  >([]);
+  const listenerRef = useRef<ReturnType<typeof FirebaseIncidents.listener> | null>(null);
 
-  // Sets the incidents in the store
   const [setIncidents] = useDebouncedCallback((incidents: LocalIncident[]) => {
     dispatch(setIncidentList(incidents));
   }, 300);
 
-  // Set the listener
-  useEffect(() => {
-    const incidentListener = FirebaseIncidents.listener(newIncidents => {
+  const subscribe = useCallback(() => {
+    if (listenerRef.current) return;
+
+    listenerRef.current = FirebaseIncidents.listener(newIncidents => {
       const convertedIncidents: LocalIncident[] = newIncidents.map(
         incident => ({
           ...incident,
           date: incident.date.toDate().valueOf(),
         })
       );
-      // Set the incidents in the store
       setIncidents(convertedIncidents);
-      // Set the default incidents
-      setDefaultIncidentList(convertedIncidents);
     });
+  }, [setIncidents]);
 
-    return () => {
-      // Remove the listener
-      if (incidentListener) {
-        incidentListener();
-      }
-    };
+  const unsubscribe = useCallback(() => {
+    if (listenerRef.current) {
+      listenerRef.current();
+      listenerRef.current = null;
+    }
   }, []);
 
   useEffect(() => {
-    if (incidentFilter.search) {
-      const fuse = new Fuse(incidents, { keys: ['name', 'location'] });
-      const results = fuse.search(incidentFilter.search);
-      console.log('results', results);
-      setIncidents(results.map(result => result.item));
+    if (dateRange) {
+      unsubscribe();
+      dispatch(fetchFilteredIncidents(dateRange));
+    } else {
+      subscribe();
     }
 
-    return () => {
-      setIncidents(defaultIncidentList);
-    };
-  }, [incidentFilter.search]);
+    return () => unsubscribe();
+  }, [dateRange, subscribe, unsubscribe, dispatch]);
 
   return null;
 };
