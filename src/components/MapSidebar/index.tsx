@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useDebouncedCallback } from 'use-debounce';
-import { Search, X } from 'lucide-react';
+import { Search, SlidersHorizontal, X } from 'lucide-react';
 
 import { Button } from '../ui/button';
 import MapSidebarItem from './parts/Item';
 import { useAppDispatch, useAppSelector } from '../../store';
+import { useReduxIncidents } from '../../store/selectors';
 import {
   InputGroup,
   InputGroupAddon,
@@ -17,6 +18,7 @@ import {
   setSelectedIncident,
   toggleDrawer,
   setIncidentFilter,
+  openModal,
 } from '../../store/actions';
 import { LocalIncident } from '../../types';
 
@@ -34,7 +36,7 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
   children,
 }) => {
   const dispatch = useAppDispatch();
-  const incidents = useAppSelector(state => state.incidents.list);
+  const incidents = useReduxIncidents();
   const filter = useAppSelector(state => state.incidents.filter);
 
   // Local state for search input (updates immediately, prevents lag)
@@ -157,6 +159,15 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
                     {incidents.length} results
                   </InputGroupAddon>
                 )}
+                <InputGroupButton
+                  onClick={() => {
+                    dispatch(openModal('incident-filters'));
+                  }}
+                  variant="ghost"
+                  size="icon-sm"
+                >
+                  <SlidersHorizontal />
+                </InputGroupButton>
               </InputGroup>
             </div>
           </motion.div>
