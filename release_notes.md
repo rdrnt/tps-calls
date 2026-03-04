@@ -1,7 +1,12 @@
+# 3.0.1
+
+- Brings back advanced filters
+
 # 3.0.0
 
 - Moved project to use Vite
-- Other small changes to styling
+- Shadcn
+- General complete re-write
 
 # 2.3.0
 
