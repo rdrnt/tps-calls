@@ -134,13 +134,11 @@ const DateRangeFilter: FunctionComponent = () => {
           )}
         </div>
 
-        <Separator />
-
         {/* Time inputs */}
         <div className="grid grid-cols-2 gap-3">
-          <div className="grid gap-1.5">
+          <div className="grid gap-2">
             <Label htmlFor="filter-start-time">Start Time</Label>
-            <InputGroup>
+            <InputGroup className="mt-1">
               <InputGroupAddon>
                 <Clock className="size-4" />
               </InputGroupAddon>
@@ -158,9 +156,9 @@ const DateRangeFilter: FunctionComponent = () => {
             )}
           </div>
 
-          <div className="grid gap-1.5">
+          <div className="grid gap-2">
             <Label htmlFor="filter-end-time">End Time</Label>
-            <InputGroup>
+            <InputGroup className="mt-1">
               <InputGroupAddon>
                 <Clock className="size-4" />
               </InputGroupAddon>
@@ -182,8 +180,7 @@ const DateRangeFilter: FunctionComponent = () => {
         <Alert>
           <Info className="size-4" />
           <AlertDescription>
-            Note: There is a {MAX_RANGE_HOURS} hour limit on the range. For
-            longer ranges, please contact me.
+            Note: There is a {MAX_RANGE_HOURS} hour limit on the range.
           </AlertDescription>
         </Alert>
       </div>

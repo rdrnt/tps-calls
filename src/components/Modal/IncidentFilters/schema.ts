@@ -10,7 +10,7 @@ import type { IncidentFilterState } from '../../../store/slices/incidents';
 
 // ── Constants ───────────────────────────────────────────────────────
 
-export const MAX_RANGE_HOURS = 6;
+export const MAX_RANGE_HOURS = 10;
 
 /** Earliest available incident data — nothing exists before this timestamp. (prod) */
 export const MIN_DATE = new Date('2019-09-25T04:08:00-04:00');
