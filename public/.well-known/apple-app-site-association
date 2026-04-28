@@ -1,0 +1,38 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "5Q5PTY9868.com.drnt.tpscalls"
+        ],
+        "components": [
+          {
+            "/": "/",
+            "exclude": true,
+            "comment": "Exclude homepage"
+          },
+          {
+            "/": "/contact",
+            "exclude": true
+          },
+          {
+            "/": "/download",
+            "exclude": true
+          },
+          {
+            "/": "/traffic-cams",
+            "exclude": true
+          },
+          {
+            "/": "/.well-known/*",
+            "exclude": true
+          },
+          {
+            "/": "/*",
+            "comment": "Match incident IDs like /ABC123"
+          }
+        ]
+      }
+    ]
+  }
+}

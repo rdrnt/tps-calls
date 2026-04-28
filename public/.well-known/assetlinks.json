@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.drnt.tpscalls",
+      "sha256_cert_fingerprints": [
+        "9A:43:58:E8:C2:CF:90:9A:08:FE:89:62:5A:EB:02:AB:E9:17:B6:52:36:82:17:67:85:83:D9:E8:FF:69:68:C1"
+      ]
+    }
+  }
+]
