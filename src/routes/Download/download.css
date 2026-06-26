@@ -1,0 +1,65 @@
+/**
+ * Minimal scoped styles for the public download / landing page.
+ *
+ * Colors are handled with Tailwind/shadcn classes in the components; this file
+ * only covers the few things that can't be expressed as utilities: the marquee
+ * + pulse keyframes, and the ticker edge-fade (which references the theme's
+ * `--background` token so it adapts to light/dark automatically).
+ */
+
+@keyframes dl-pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, currentColor 50%, transparent);
+  }
+  70% {
+    box-shadow: 0 0 0 8px color-mix(in srgb, currentColor 0%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, currentColor 0%, transparent);
+  }
+}
+
+@keyframes dl-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Pulsing live dot — inherits its color from the parent (currentColor). */
+.dl-dot {
+  width: 7px;
+  height: 7px;
+  flex: none;
+  display: inline-block;
+  border-radius: 9999px;
+  background: currentColor;
+  animation: dl-pulse 2.2s infinite;
+}
+
+.dl-marquee {
+  display: flex;
+  width: max-content;
+  animation: dl-marquee 42s linear infinite;
+}
+
+.dl-marquee-wrap:hover .dl-marquee {
+  animation-play-state: paused;
+}
+
+/* Edge fade for the ticker; matches the page background in both themes. */
+.dl-ticker-fade {
+  background: linear-gradient(
+    90deg,
+    var(--background),
+    transparent 7%,
+    transparent 93%,
+    var(--background)
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dl-dot,
+  .dl-marquee {
+    animation: none !important;
+  }
+}
