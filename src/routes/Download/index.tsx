@@ -4,6 +4,8 @@ import { Radio, MousePointerClick, Eye } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
+import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/SiteFooter';
 import useAnalyticsPageView from '@/hooks/useAnalyticsPageView';
 import { useAppSelector } from '@/store';
 
@@ -66,15 +68,7 @@ const DownloadPage: FunctionComponent = () => {
     <div className="bg-background text-foreground h-screen w-full overflow-y-auto antialiased">
       <div className="mx-auto w-full max-w-5xl px-5">
         {/* Wordmark */}
-        <div className="flex items-center py-6 text-[15px] font-semibold">
-          <Link
-            to="/"
-            className="flex items-center transition-opacity hover:opacity-80"
-          >
-            tpscalls
-            <span className="text-tpscalls-primary font-medium">.live</span>
-          </Link>
-        </div>
+        <SiteHeader />
 
         {/* Hero */}
         <header className="grid items-center gap-10 pb-16 pt-4 md:grid-cols-2 md:gap-8 md:pb-24">
@@ -134,26 +128,16 @@ const DownloadPage: FunctionComponent = () => {
         </section>
 
         {/* Footer */}
-        <footer className="flex flex-col gap-4 border-t py-8 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <div className="text-[15px] font-semibold">
-              tpscalls
-              <span className="text-tpscalls-primary font-medium">.live</span>
-            </div>
-            <p className="text-muted-foreground mt-2 max-w-md font-mono text-[11px] leading-relaxed">
-              Built from public Toronto Police Service dispatch data. Details
-              are preliminary. Not affiliated with the Toronto Police Service or
-              the City of Toronto.
-            </p>
-            <Link
-              to="/contact"
-              className="text-muted-foreground hover:text-foreground mt-3 inline-block font-mono text-[11px] underline underline-offset-4 transition-colors"
-            >
-              Contact
-            </Link>
-          </div>
-          <DownloadButtons className="flex gap-3" withIcons />
-        </footer>
+        <SiteFooter
+          actions={<DownloadButtons className="flex gap-3" withIcons />}
+        >
+          <Link
+            to="/contact"
+            className="text-muted-foreground hover:text-foreground mt-3 inline-block font-mono text-[11px] underline underline-offset-4 transition-colors"
+          >
+            Contact
+          </Link>
+        </SiteFooter>
       </div>
     </div>
   );
