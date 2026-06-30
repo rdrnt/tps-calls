@@ -167,7 +167,7 @@ const Map: React.FunctionComponent = () => {
         ]}
         style={{
           width: '100vw',
-          height: '100vh',
+          height: '100dvh',
         }}
         minZoom={9}
         //disables zooming while an incident is selected
@@ -189,7 +189,7 @@ const Map: React.FunctionComponent = () => {
       >
         <AttributionControl compact={true} position="bottom-left" />
 
-        <SafeArea className="h-dvh pb-safe-bottom">
+        <SafeArea top className="h-dvh">
           {/* Overlay button for opening the drawer */}
           {!drawerOpen && (
             <Button
@@ -220,7 +220,8 @@ const Map: React.FunctionComponent = () => {
           />
 
           <ButtonGroup
-            className="absolute bottom-[25px] right-[25px]"
+            className="absolute right-[25px]"
+            style={{ bottom: 'calc(25px + var(--safe-bottom))' }}
             hidden={Boolean(drawerOpen || selectedIncident)}
           >
             <Button
