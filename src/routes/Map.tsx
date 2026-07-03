@@ -15,6 +15,7 @@ import { toast, Toaster } from 'sonner';
 import { MAPBOX_THEME_URL } from '../config';
 import { Environment, Analytics } from '../helpers';
 import * as FirebaseIncidents from '../helpers/firebase/incident';
+import { useForceMapLayout } from '../hooks/useForceMapLayout';
 
 import { useAppDispatch, useAppSelector } from '../store';
 import { useReduxIncidents } from '../store/selectors';
@@ -51,17 +52,15 @@ const Map: React.FunctionComponent = () => {
 
   const selectedCamera = useAppSelector(state => state.cameras.selected);
 
-  // I want to reffer to mapRef instead of mapRef.current throughout the app
-  // thats why theres two vars lol
   const refForMap = React.useRef<MapRef | null>(null);
-  const mapViewportRef = React.useRef<HTMLDivElement | null>(null);
   const mapRef = refForMap.current;
+  const { containerRef, size, ready, sync, onMapLoad } =
+    useForceMapLayout(refForMap);
 
   const [isMapLoaded, setIsMapLoaded] = React.useState<boolean>(false);
   const [interactingWithMap, setInteractingWithMap] =
     React.useState<boolean>(false);
 
-  // Finds and returns an incident from the store or database
   const getIncidentWithId = async (
     id: string,
     searchDB = false
@@ -79,21 +78,16 @@ const Map: React.FunctionComponent = () => {
   };
 
   React.useEffect(() => {
-    // if the map isn't loaded, show the loader
     if (!isMapLoaded && !loader.open) {
       dispatch(openLoader('Loading map...'));
       Analytics.pageview('/map');
     }
 
-    // if the map has been loaded, and we have a list of incidents
     if (isMapLoaded && incidentList.length !== 0) {
-      // Close the loader if it's open
-
       setTimeout(() => {
         dispatch(closeLoader());
       }, 500);
 
-      // If we have an id in the params, see if there's a matching incident in the db/store
       if (id) {
         getIncidentWithId(id, true).then(incident => {
           if (!incident) {
@@ -109,7 +103,6 @@ const Map: React.FunctionComponent = () => {
     }
   }, [isMapLoaded, incidentList.length, id]);
 
-  // Close the drawer if we're interacting with the map & the drawer is open d
   React.useEffect(() => {
     if (interactingWithMap) {
       if (drawerOpen) {
@@ -136,7 +129,6 @@ const Map: React.FunctionComponent = () => {
   }, [userLocation.available, userLocation.coordinates]);
 
   React.useEffect(() => {
-    // If the selected incident changes, zoom into it
     if (selectedIncident && mapRef) {
       mapRef.flyTo({
         center: [
@@ -150,50 +142,17 @@ const Map: React.FunctionComponent = () => {
   }, [selectedIncident]);
 
   React.useEffect(() => {
-    if (!isMapLoaded) {
-      return;
+    if (isMapLoaded) {
+      sync();
     }
-
-    const resizeMap = () => {
-      refForMap.current?.resize();
-    };
-
-    resizeMap();
-    requestAnimationFrame(resizeMap);
-
-    const viewportEl = mapViewportRef.current;
-    const resizeObserver =
-      viewportEl &&
-      new ResizeObserver(() => {
-        resizeMap();
-      });
-    if (viewportEl && resizeObserver) {
-      resizeObserver.observe(viewportEl);
-    }
-
-    window.addEventListener('resize', resizeMap);
-    window.visualViewport?.addEventListener('resize', resizeMap);
-
-    return () => {
-      resizeObserver?.disconnect();
-      window.removeEventListener('resize', resizeMap);
-      window.visualViewport?.removeEventListener('resize', resizeMap);
-    };
-  }, [isMapLoaded]);
+  }, [size.width, size.height, isMapLoaded, sync]);
 
   React.useEffect(() => {
     if (!loader.open && isMapLoaded) {
-      refForMap.current?.resize();
+      sync();
     }
-  }, [loader.open, isMapLoaded]);
+  }, [loader.open, isMapLoaded, sync]);
 
-  const handleMapLoad = React.useCallback(() => {
-    setIsMapLoaded(true);
-    refForMap.current?.resize();
-    requestAnimationFrame(() => refForMap.current?.resize());
-  }, []);
-
-  // Dark backdrop while the map route is mounted so any sub-pixel gap isn't white.
   React.useEffect(() => {
     document.documentElement.classList.add('map-route');
     return () => {
@@ -201,32 +160,44 @@ const Map: React.FunctionComponent = () => {
     };
   }, []);
 
+  const handleMapLoad = React.useCallback(() => {
+    setIsMapLoaded(true);
+    onMapLoad();
+  }, [onMapLoad]);
+
+  const mapStyle = React.useMemo(
+    () => ({
+      position: 'absolute' as const,
+      top: 0,
+      left: 0,
+      width: size.width,
+      height: size.height,
+    }),
+    [size.width, size.height]
+  );
+
   const mapLayer = (
-    <div ref={mapViewportRef} className="map-viewport">
-      <ReactMapGl
-        ref={refForMap}
-        mapboxAccessToken={Environment.config.MAPBOX_API_KEY}
-        mapStyle={MAPBOX_THEME_URL}
-        attributionControl={false}
-        trackResize={true}
-        initialViewState={{
-          latitude: 43.653225,
-          longitude: -79.383186,
-          zoom: 11.0,
-        }}
-        maxBounds={[
-          [-79.75, 43.55],
-          [-79.0, 43.9],
-        ]}
-        style={{
-          position: 'absolute',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-        }}
-        minZoom={9}
-        interactive={!selectedIncident}
-        onLoad={handleMapLoad}
+    <div ref={containerRef} className="map-viewport">
+      {ready && (
+        <ReactMapGl
+          ref={refForMap}
+          mapboxAccessToken={Environment.config.MAPBOX_API_KEY}
+          mapStyle={MAPBOX_THEME_URL}
+          attributionControl={false}
+          trackResize={true}
+          initialViewState={{
+            latitude: 43.653225,
+            longitude: -79.383186,
+            zoom: 11.0,
+          }}
+          maxBounds={[
+            [-79.75, 43.55],
+            [-79.0, 43.9],
+          ]}
+          style={mapStyle}
+          minZoom={9}
+          interactive={!selectedIncident}
+          onLoad={handleMapLoad}
           onDragStart={() => {
             setInteractingWithMap(true);
           }}
@@ -341,6 +312,7 @@ const Map: React.FunctionComponent = () => {
             })
             .filter(incidentFeature => Boolean(incidentFeature))}
         </ReactMapGl>
+      )}
     </div>
   );
 

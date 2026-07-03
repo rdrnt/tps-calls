@@ -23,25 +23,21 @@ html.map-route body {
   background: #0a1628;
 }
 
-/* Map layer is portaled to body — identical to the working diag page. */
+/* Portaled map shell — dimensions are set in JS (useForceMapLayout). */
 .map-viewport {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
   margin: 0;
   padding: 0;
   overflow: hidden;
-}
-
-.map-viewport .mapboxgl-map,
-.map-viewport .mapboxgl-canvas-container,
-.map-viewport .mapboxgl-canvas {
-  width: 100% !important;
-  height: 100% !important;
+  z-index: 0;
 }
 
 .map-viewport .mapboxgl-map {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
 }
 
 * {
