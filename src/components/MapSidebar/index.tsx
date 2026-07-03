@@ -109,7 +109,7 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
             initial={{ opacity: 0, y: -20 }} // Start slightly transparent and moved up
             animate={{ opacity: 1, y: 0 }} // Fade in and slide to position
             transition={{ delay: 0.1, duration: 0.1 }} // Slight delay for staggered effect
-            className="sticky top-0 z-10"
+            className="sticky top-0 z-10 pt-safe-top pl-safe-left pr-safe-right bg-background"
           >
             <div className="flex flex-row items-center justify-between p-4 pb-0">
               <motion.h2

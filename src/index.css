@@ -159,4 +159,22 @@ body {
   .pb-safe-bottom-zone {
     padding-bottom: calc(var(--safe-bottom) + 3.5rem); /* ~56px zone */
   }
+
+  /* Margin variants of the safe insets. Padding does NOT move an
+     absolutely-positioned child, but margin does, so floating controls pinned
+     to a viewport corner use these to stay clear of the notch / home indicator
+     once the map draws edge-to-edge. */
+  .mt-safe-top { margin-top: var(--safe-top); }
+  .mr-safe-right { margin-right: var(--safe-right); }
+  .mb-safe-bottom { margin-bottom: var(--safe-bottom); }
+  .ml-safe-left { margin-left: var(--safe-left); }
+
+  /* Bottom-anchored interactive controls (the map's FAB group, incident/camera
+     cards). On touch devices add the extra zone so they float above Safari's
+     bottom URL/search bar; on desktop only the raw inset (0px) applies, so the
+     layout there is unchanged. */
+  .mb-safe-bottom-zone { margin-bottom: var(--safe-bottom); }
+  @media (pointer: coarse) {
+    .mb-safe-bottom-zone { margin-bottom: calc(var(--safe-bottom) + 3.5rem); }
+  }
 }

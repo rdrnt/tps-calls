@@ -194,7 +194,7 @@ const Map: React.FunctionComponent = () => {
           {!drawerOpen && (
             <Button
               size="icon-lg"
-              className={`absolute top-[20px] left-[20px] bg-background hover:bg-background/80`}
+              className={`absolute top-[20px] left-[20px] mt-safe-top ml-safe-left bg-background hover:bg-background/80`}
               onClick={() => {
                 dispatch(toggleDrawer(true));
                 if (selectedIncident) {
@@ -220,7 +220,7 @@ const Map: React.FunctionComponent = () => {
           />
 
           <ButtonGroup
-            className="absolute bottom-[25px] right-[25px]"
+            className="absolute bottom-[25px] right-[25px] mb-safe-bottom-zone mr-safe-right"
             hidden={Boolean(drawerOpen || selectedIncident)}
           >
             <Button

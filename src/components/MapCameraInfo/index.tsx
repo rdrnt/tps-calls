@@ -41,7 +41,7 @@ const MapIncidentInfo: React.FunctionComponent<MapCameraInfoProps> = ({
   return (
     <AnimatePresence>
       {camera && !drawerOpen && (
-        <Card className="absolute bottom-[25px] left-1/2 -translate-x-1/2 w-auto sm:w-full md:w-auto min-w-[375px] p-6">
+        <Card className="absolute bottom-[25px] left-1/2 -translate-x-1/2 mb-safe-bottom-zone w-auto sm:w-full md:w-auto min-w-[375px] p-6">
           <CardHeader className="gap-1 px-0">
             <CardTitle className="text-2xl font-bold">{camera.name}</CardTitle>
             <CardDescription className="text-base text-primary">

@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    <!-- Do NOT add `height=device-height` here: on iOS Safari it breaks `viewport-fit=cover`, which makes Safari letterbox the page with black bars in the safe-area regions instead of drawing content edge-to-edge behind them. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <!-- Make status bar translucent so content shows through with blur -->
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
