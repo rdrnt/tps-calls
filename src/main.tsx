@@ -4,7 +4,9 @@ import './index.css';
 import App from './App';
 
 import { Analytics } from './helpers';
+import { initViewportMetrics } from './helpers/viewport';
 
+initViewportMetrics();
 Analytics.initialize();
 
 const domNode = document.getElementById('root');

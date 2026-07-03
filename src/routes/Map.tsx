@@ -37,7 +37,6 @@ import {
 } from '../store/actions';
 
 import MapSidebar from '../components/MapSidebar';
-import { SafeArea } from '../components/SafeArea';
 import MapCameraInfo from '../components/MapCameraInfo';
 
 const Map: React.FunctionComponent = () => {
@@ -148,6 +147,24 @@ const Map: React.FunctionComponent = () => {
     }
   }, [selectedIncident]);
 
+  React.useEffect(() => {
+    if (!isMapLoaded) {
+      return;
+    }
+
+    const resizeMap = () => {
+      refForMap.current?.resize();
+    };
+
+    window.addEventListener('resize', resizeMap);
+    window.visualViewport?.addEventListener('resize', resizeMap);
+
+    return () => {
+      window.removeEventListener('resize', resizeMap);
+      window.visualViewport?.removeEventListener('resize', resizeMap);
+    };
+  }, [isMapLoaded]);
+
   return (
     <>
       <ReactMapGl
@@ -166,11 +183,10 @@ const Map: React.FunctionComponent = () => {
           [-79.0, 43.9], // Northeast (includes a bit of Pickering & Vaughan)
         ]}
         style={{
-          // Dynamic viewport units so the map matches what's actually visible
-          // on iOS Safari (100vh is the *large* viewport and leaves the bottom
-          // of the map hidden behind Safari's toolbar).
-          width: '100dvw',
-          height: '100dvh',
+          // visualViewport-driven size (via --app-height) tracks the visible area on
+          // iOS Safari; 100vh is the large viewport and leaves map tiles clipped.
+          width: 'var(--app-width, 100dvw)',
+          height: 'var(--app-height, 100dvh)',
         }}
         minZoom={9}
         //disables zooming while an incident is selected
@@ -192,72 +208,69 @@ const Map: React.FunctionComponent = () => {
       >
         <AttributionControl compact={true} position="bottom-left" />
 
-        <SafeArea className="h-dvh pb-safe-bottom">
-          {/* Overlay button for opening the drawer */}
-          {!drawerOpen && (
-            <Button
-              size="icon-lg"
-              className={`absolute top-[20px] left-[20px] mt-safe-top ml-safe-left bg-background hover:bg-background/80`}
-              onClick={() => {
-                dispatch(toggleDrawer(true));
-                if (selectedIncident) {
-                  dispatch(setSelectedIncident(undefined));
+        {!drawerOpen && (
+          <Button
+            size="icon-lg"
+            className={`absolute top-[20px] left-[20px] mt-safe-top ml-safe-left bg-background hover:bg-background/80`}
+            onClick={() => {
+              dispatch(toggleDrawer(true));
+              if (selectedIncident) {
+                dispatch(setSelectedIncident(undefined));
+              }
+            }}
+          >
+            <MenuIcon className="text-primary" />
+          </Button>
+        )}
+
+        <MapIncidentInfo
+          incident={selectedIncident}
+          drawerOpen={drawerOpen}
+          close={() => dispatch(setSelectedIncident(undefined))}
+          mapRef={mapRef}
+        />
+
+        <MapCameraInfo
+          camera={selectedCamera}
+          drawerOpen={drawerOpen}
+          close={() => dispatch(setSelectedCamera(undefined))}
+        />
+
+        <ButtonGroup
+          className="absolute bottom-[25px] right-[25px] mb-safe-bottom-zone mr-safe-right"
+          hidden={Boolean(drawerOpen || selectedIncident)}
+        >
+          <Button
+            size="icon-lg"
+            onClick={() => dispatch(openModal('mobile-app-download'))}
+            className="bg-background hover:bg-background/80"
+          >
+            <TabletSmartphoneIcon className="text-primary" />
+          </Button>
+          <ButtonGroupSeparator className="bg-accent" />
+          {userLocation.available && (
+            <>
+              <Button
+                size="icon-lg"
+                className="bg-background hover:bg-background/80"
+                onClick={() =>
+                  dispatch(setRequestingLocationPermissions(true))
                 }
-              }}
-            >
-              <MenuIcon className="text-primary" />
-            </Button>
+              >
+                <NavigationIcon className="text-primary" />
+              </Button>
+              <ButtonGroupSeparator className="bg-accent" />
+            </>
           )}
 
-          <MapIncidentInfo
-            incident={selectedIncident}
-            drawerOpen={drawerOpen}
-            close={() => dispatch(setSelectedIncident(undefined))}
-            mapRef={mapRef}
-          />
-
-          <MapCameraInfo
-            camera={selectedCamera}
-            drawerOpen={drawerOpen}
-            close={() => dispatch(setSelectedCamera(undefined))}
-          />
-
-          <ButtonGroup
-            className="absolute bottom-[25px] right-[25px] mb-safe-bottom-zone mr-safe-right"
-            hidden={Boolean(drawerOpen || selectedIncident)}
+          <Button
+            size="icon-lg"
+            onClick={() => dispatch(openModal('project-info'))}
+            className="bg-background hover:bg-background/80"
           >
-            <Button
-              size="icon-lg"
-              onClick={() => dispatch(openModal('mobile-app-download'))}
-              className="bg-background hover:bg-background/80"
-            >
-              <TabletSmartphoneIcon className="text-primary" />
-            </Button>
-            <ButtonGroupSeparator className="bg-accent" />
-            {userLocation.available && (
-              <>
-                <Button
-                  size="icon-lg"
-                  className="bg-background hover:bg-background/80"
-                  onClick={() =>
-                    dispatch(setRequestingLocationPermissions(true))
-                  }
-                >
-                  <NavigationIcon className="text-primary" />
-                </Button>
-                <ButtonGroupSeparator className="bg-accent" />
-              </>
-            )}
-
-            <Button
-              size="icon-lg"
-              onClick={() => dispatch(openModal('project-info'))}
-              className="bg-background hover:bg-background/80"
-            >
-              <InfoIcon className="text-primary" />
-            </Button>
-          </ButtonGroup>
-        </SafeArea>
+            <InfoIcon className="text-primary" />
+          </Button>
+        </ButtonGroup>
 
         {userLocation.coordinates && (
           <AnimatedMapMarker

@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <!-- Make status bar translucent so content shows through with blur -->
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#252525" media="(prefers-color-scheme: dark)" />
 
 
     <title>tpscalls.live</title>
@@ -30,6 +32,12 @@
 
   </head>
   <body>
+    <script>
+      // Seed --app-height before React/CSS load so the first paint matches innerHeight
+      // (critical on iOS 26 Safari where 100vh is larger than the visible viewport).
+      document.documentElement.style.setProperty('--app-height', window.innerHeight + 'px');
+      document.documentElement.style.setProperty('--app-width', window.innerWidth + 'px');
+    </script>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <!-- Vite injects the script during build -->

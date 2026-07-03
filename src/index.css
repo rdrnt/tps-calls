@@ -9,9 +9,8 @@
 body {
   margin: 0;
   overflow: hidden;
-  width: 100vw;
-  height: 100vh; /* fallback for browsers without dvh */
-  height: 100dvh;
+  width: var(--app-width, 100dvw);
+  height: var(--app-height, 100dvh);
 }
 
 * {
@@ -92,10 +91,14 @@ body {
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
+  --app-height: 100dvh;
+  --app-width: 100dvw;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-right: env(safe-area-inset-right, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-left: env(safe-area-inset-left, 0px);
+  /* Extra clearance for Safari's floating bottom bar when it overlays content. */
+  --safe-bottom-zone-extra: 3.5rem;
 }
 
 .dark {
@@ -158,7 +161,7 @@ body {
      So we add some extra breathing room on top of the safe inset.
   */
   .pb-safe-bottom-zone {
-    padding-bottom: calc(var(--safe-bottom) + 3.5rem); /* ~56px zone */
+    padding-bottom: calc(var(--safe-bottom) + var(--safe-bottom-zone-extra));
   }
 
   /* Margin variants of the safe insets. Padding does NOT move an
@@ -174,8 +177,11 @@ body {
      cards). On touch devices add the extra zone so they float above Safari's
      bottom URL/search bar; on desktop only the raw inset (0px) applies, so the
      layout there is unchanged. */
-  .mb-safe-bottom-zone { margin-bottom: var(--safe-bottom); }
-  @media (pointer: coarse) {
-    .mb-safe-bottom-zone { margin-bottom: calc(var(--safe-bottom) + 3.5rem); }
+  .mb-safe-bottom-zone {
+    margin-bottom: calc(var(--safe-bottom) + var(--safe-bottom-zone-extra));
   }
+
+  .h-app { height: var(--app-height); }
+  .w-app { width: var(--app-width); }
+  .min-h-app { min-height: var(--app-height); }
 }
