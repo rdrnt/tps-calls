@@ -167,45 +167,44 @@ const Map: React.FunctionComponent = () => {
 
   return (
     <>
-      <ReactMapGl
-        ref={refForMap}
-        mapboxAccessToken={Environment.config.MAPBOX_API_KEY}
-        mapStyle={MAPBOX_THEME_URL}
-        attributionControl={false}
-        trackResize={true}
-        initialViewState={{
-          latitude: 43.653225,
-          longitude: -79.383186,
-          zoom: 11.0,
-        }}
-        maxBounds={[
-          [-79.75, 43.55], // Southwest (includes a bit of Mississauga & Lake Ontario)
-          [-79.0, 43.9], // Northeast (includes a bit of Pickering & Vaughan)
-        ]}
-        style={{
-          // visualViewport-driven size (via --app-height) tracks the visible area on
-          // iOS Safari; 100vh is the large viewport and leaves map tiles clipped.
-          width: 'var(--app-width, 100dvw)',
-          height: 'var(--app-height, 100dvh)',
-        }}
-        minZoom={9}
-        //disables zooming while an incident is selected
-        interactive={!selectedIncident}
-        onLoad={() => {
-          setIsMapLoaded(true);
-        }}
-        onDragStart={() => {
-          setInteractingWithMap(true);
-        }}
-        onDragEnd={() => {
-          setInteractingWithMap(false);
-        }}
-        onClick={() => {
-          if (drawerOpen) {
-            dispatch(toggleDrawer(false));
-          }
-        }}
-      >
+      <div className="fixed inset-0">
+        <ReactMapGl
+          ref={refForMap}
+          mapboxAccessToken={Environment.config.MAPBOX_API_KEY}
+          mapStyle={MAPBOX_THEME_URL}
+          attributionControl={false}
+          trackResize={true}
+          initialViewState={{
+            latitude: 43.653225,
+            longitude: -79.383186,
+            zoom: 11.0,
+          }}
+          maxBounds={[
+            [-79.75, 43.55], // Southwest (includes a bit of Mississauga & Lake Ontario)
+            [-79.0, 43.9], // Northeast (includes a bit of Pickering & Vaughan)
+          ]}
+          style={{
+            width: '100%',
+            height: '100%',
+          }}
+          minZoom={9}
+          //disables zooming while an incident is selected
+          interactive={!selectedIncident}
+          onLoad={() => {
+            setIsMapLoaded(true);
+          }}
+          onDragStart={() => {
+            setInteractingWithMap(true);
+          }}
+          onDragEnd={() => {
+            setInteractingWithMap(false);
+          }}
+          onClick={() => {
+            if (drawerOpen) {
+              dispatch(toggleDrawer(false));
+            }
+          }}
+        >
         <AttributionControl compact={true} position="bottom-left" />
 
         {!drawerOpen && (
@@ -308,7 +307,8 @@ const Map: React.FunctionComponent = () => {
             return null;
           })
           .filter(incidentFeature => Boolean(incidentFeature))}
-      </ReactMapGl>
+        </ReactMapGl>
+      </div>
 
       <MapSidebar
         isOpen={drawerOpen}

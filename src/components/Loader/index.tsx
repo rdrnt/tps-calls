@@ -24,7 +24,7 @@ export const StaticLoader: FunctionComponent<{ message?: string }> = ({
   message = 'Loading map...',
 }) => {
   return (
-    <div className="absolute top-0 left-0 h-app w-app z-999 bg-background flex flex-col justify-center items-center">
+    <div className="fixed inset-0 z-999 bg-background flex flex-col justify-center items-center">
       <LoaderSpinner animate={false} />
       <Typography
         variant="h2"
@@ -46,7 +46,7 @@ const Loader: FunctionComponent = () => {
       {open && (
         <motion.div
           key="loader"
-          className="absolute top-0 left-0 h-app w-app z-999 bg-background flex flex-col justify-center items-center"
+          className="fixed inset-0 z-999 bg-background flex flex-col justify-center items-center"
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onAnimationEnd={() => {

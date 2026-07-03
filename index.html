@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="/favicon.ico" />
-    <!-- Do NOT add `height=device-height` here: on iOS Safari it breaks `viewport-fit=cover`, which makes Safari letterbox the page with black bars in the safe-area regions instead of drawing content edge-to-edge behind them. -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <!-- Match mobile Safari sites (e.g. Stack Overflow): height=device-height fills
+         the screen; viewport-fit=cover + env() is unreliable on iOS 26 Safari. -->
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0">
     <!-- Make status bar translucent so content shows through with blur -->
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
@@ -32,12 +33,6 @@
 
   </head>
   <body>
-    <script>
-      // Seed --app-height before React/CSS load so the first paint matches innerHeight
-      // (critical on iOS 26 Safari where 100vh is larger than the visible viewport).
-      document.documentElement.style.setProperty('--app-height', window.innerHeight + 'px');
-      document.documentElement.style.setProperty('--app-width', window.innerWidth + 'px');
-    </script>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <!-- Vite injects the script during build -->
