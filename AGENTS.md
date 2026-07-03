@@ -33,15 +33,17 @@ The dev environment cannot fully run without owner-controlled credentials:
   In dev (`yarn start`), `import.meta.env.DEV === true` so `development.json` is
   used. Each file is the standard Firebase web config object
   (`apiKey`, `authDomain`, `projectId`, `storageBucket`, `messagingSenderId`, `appId`).
-  Provide them via the `FIREBASE_DEVELOPMENT_CONFIG` / `FIREBASE_PRODUCTION_CONFIG`
-  secrets (write the JSON to those files during setup) or place the files
-  directly. The Firestore project is `toronto-emergency-calls`; its web config
-  is public (served in the live `tpscalls.live` JS bundle) and the `incidents`
-  collection is public-read, so it can be recovered from the live site if needed.
-- `VITE_MAPBOX_API_KEY` (in `.env`) — without a valid Mapbox token the home
-  page (`/` and `/:id`, the map) stays on "Loading map…" and never finishes.
-  Other env vars read in `src/helpers/environment.ts`: `VITE_SENTRY_DSN`,
-  `VITE_GANALYTICS_KEY` (both optional for local dev).
+  These are provided via the `FIREBASE_DEVELOPMENT_CONFIG` /
+  `FIREBASE_PRODUCTION_CONFIG` secrets, and the **update script materializes them
+  into the two files** on startup. If only `FIREBASE_DEVELOPMENT_CONFIG` is set,
+  the update script also uses it for `production.json`. If you need to recreate
+  them by hand:
+  `mkdir -p src/config/firebase && printf '%s' "$FIREBASE_DEVELOPMENT_CONFIG" > src/config/firebase/development.json`.
+- `VITE_MAPBOX_API_KEY` — required for the map (`/` and `/:id`); without it the
+  home page stays on "Loading map…". Vite reads `VITE_`-prefixed vars straight
+  from `process.env`, so the injected secret is picked up automatically — no
+  `.env` file is needed in cloud sessions. Other optional vars in
+  `src/helpers/environment.ts`: `VITE_SENTRY_DSN`, `VITE_GANALYTICS_KEY`.
 
 ### Map rendering requires WebGL (GUI test caveat)
 
