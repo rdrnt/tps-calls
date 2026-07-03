@@ -1,5 +1,6 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 import * as React from 'react';
+import { createPortal } from 'react-dom';
 import { Incident } from '@rdrnt/tps-calls-shared';
 import ReactMapGl, { AttributionControl, MapRef } from 'react-map-gl';
 import { useParams } from 'react-router';
@@ -11,9 +12,10 @@ import {
 } from 'lucide-react';
 import { toast, Toaster } from 'sonner';
 
-import { MAPBOX_THEME_URL, Colors } from '../config';
+import { MAPBOX_THEME_URL } from '../config';
 import { Environment, Analytics } from '../helpers';
 import * as FirebaseIncidents from '../helpers/firebase/incident';
+import { useViewportSize } from '../hooks/useViewportSize';
 
 import { useAppDispatch, useAppSelector } from '../store';
 import { useReduxIncidents } from '../store/selectors';
@@ -55,6 +57,15 @@ const Map: React.FunctionComponent = () => {
   const refForMap = React.useRef<MapRef | null>(null);
   const mapViewportRef = React.useRef<HTMLDivElement | null>(null);
   const mapRef = refForMap.current;
+  const viewportSize = useViewportSize();
+
+  const mapDimensions = React.useMemo(
+    () => ({
+      width: viewportSize.width,
+      height: viewportSize.height,
+    }),
+    [viewportSize.width, viewportSize.height]
+  );
 
   const [isMapLoaded, setIsMapLoaded] = React.useState<boolean>(false);
   const [interactingWithMap, setInteractingWithMap] =
@@ -149,7 +160,7 @@ const Map: React.FunctionComponent = () => {
   }, [selectedIncident]);
 
   React.useEffect(() => {
-    if (!isMapLoaded) {
+    if (!isMapLoaded || mapDimensions.height === 0) {
       return;
     }
 
@@ -157,15 +168,8 @@ const Map: React.FunctionComponent = () => {
       refForMap.current?.resize();
     };
 
-    // Mapbox often misses the first layout pass on iOS; hit resize a few times.
     resizeMap();
     requestAnimationFrame(resizeMap);
-    const t0 = window.setTimeout(resizeMap, 0);
-    const t1 = window.setTimeout(resizeMap, 100);
-    const t2 = window.setTimeout(resizeMap, 300);
-
-    window.addEventListener('resize', resizeMap);
-    window.visualViewport?.addEventListener('resize', resizeMap);
 
     const viewportEl = mapViewportRef.current;
     const resizeObserver =
@@ -178,33 +182,31 @@ const Map: React.FunctionComponent = () => {
     }
 
     return () => {
-      window.clearTimeout(t0);
-      window.clearTimeout(t1);
-      window.clearTimeout(t2);
-      window.removeEventListener('resize', resizeMap);
-      window.visualViewport?.removeEventListener('resize', resizeMap);
       resizeObserver?.disconnect();
     };
-  }, [isMapLoaded]);
+  }, [isMapLoaded, mapDimensions.height, mapDimensions.width]);
 
-  // Loader covers the map during init; resize once it clears so the canvas
-  // matches the viewport (common Mapbox + iOS Safari timing issue).
   React.useEffect(() => {
     if (!loader.open && isMapLoaded) {
       refForMap.current?.resize();
-      requestAnimationFrame(() => refForMap.current?.resize());
     }
-  }, [loader.open, isMapLoaded]);
+  }, [loader.open, isMapLoaded, mapDimensions.height, mapDimensions.width]);
 
   const handleMapLoad = React.useCallback(() => {
     setIsMapLoaded(true);
     refForMap.current?.resize();
-    requestAnimationFrame(() => refForMap.current?.resize());
   }, []);
 
-  return (
-    <>
-      <div ref={mapViewportRef} className="map-viewport fixed inset-0">
+  const mapLayer =
+    mapDimensions.height > 0 ? (
+      <div
+        ref={mapViewportRef}
+        className="map-viewport"
+        style={{
+          width: mapDimensions.width,
+          height: mapDimensions.height,
+        }}
+      >
         <ReactMapGl
           ref={refForMap}
           mapboxAccessToken={Environment.config.MAPBOX_API_KEY}
@@ -217,17 +219,17 @@ const Map: React.FunctionComponent = () => {
             zoom: 11.0,
           }}
           maxBounds={[
-            [-79.75, 43.55], // Southwest (includes a bit of Mississauga & Lake Ontario)
-            [-79.0, 43.9], // Northeast (includes a bit of Pickering & Vaughan)
+            [-79.75, 43.55],
+            [-79.0, 43.9],
           ]}
           style={{
             position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
+            top: 0,
+            left: 0,
+            width: mapDimensions.width,
+            height: mapDimensions.height,
           }}
           minZoom={9}
-          //disables zooming while an incident is selected
           interactive={!selectedIncident}
           onLoad={handleMapLoad}
           onDragStart={() => {
@@ -242,110 +244,114 @@ const Map: React.FunctionComponent = () => {
             }
           }}
         >
-        <AttributionControl compact={true} position="bottom-left" />
+          <AttributionControl compact={true} position="bottom-left" />
 
-        {!drawerOpen && (
-          <Button
-            size="icon-lg"
-            className={`absolute top-[20px] left-[20px] mt-safe-top ml-safe-left bg-background hover:bg-background/80`}
-            onClick={() => {
-              dispatch(toggleDrawer(true));
-              if (selectedIncident) {
-                dispatch(setSelectedIncident(undefined));
-              }
-            }}
-          >
-            <MenuIcon className="text-primary" />
-          </Button>
-        )}
-
-        <MapIncidentInfo
-          incident={selectedIncident}
-          drawerOpen={drawerOpen}
-          close={() => dispatch(setSelectedIncident(undefined))}
-          mapRef={mapRef}
-        />
-
-        <MapCameraInfo
-          camera={selectedCamera}
-          drawerOpen={drawerOpen}
-          close={() => dispatch(setSelectedCamera(undefined))}
-        />
-
-        <ButtonGroup
-          className="absolute bottom-[25px] right-[25px] mb-safe-bottom-zone mr-safe-right"
-          hidden={Boolean(drawerOpen || selectedIncident)}
-        >
-          <Button
-            size="icon-lg"
-            onClick={() => dispatch(openModal('mobile-app-download'))}
-            className="bg-background hover:bg-background/80"
-          >
-            <TabletSmartphoneIcon className="text-primary" />
-          </Button>
-          <ButtonGroupSeparator className="bg-accent" />
-          {userLocation.available && (
-            <>
-              <Button
-                size="icon-lg"
-                className="bg-background hover:bg-background/80"
-                onClick={() =>
-                  dispatch(setRequestingLocationPermissions(true))
+          {!drawerOpen && (
+            <Button
+              size="icon-lg"
+              className={`absolute top-[20px] left-[20px] mt-safe-top ml-safe-left bg-background hover:bg-background/80`}
+              onClick={() => {
+                dispatch(toggleDrawer(true));
+                if (selectedIncident) {
+                  dispatch(setSelectedIncident(undefined));
                 }
-              >
-                <NavigationIcon className="text-primary" />
-              </Button>
-              <ButtonGroupSeparator className="bg-accent" />
-            </>
+              }}
+            >
+              <MenuIcon className="text-primary" />
+            </Button>
           )}
 
-          <Button
-            size="icon-lg"
-            onClick={() => dispatch(openModal('project-info'))}
-            className="bg-background hover:bg-background/80"
+          <MapIncidentInfo
+            incident={selectedIncident}
+            drawerOpen={drawerOpen}
+            close={() => dispatch(setSelectedIncident(undefined))}
+            mapRef={mapRef}
+          />
+
+          <MapCameraInfo
+            camera={selectedCamera}
+            drawerOpen={drawerOpen}
+            close={() => dispatch(setSelectedCamera(undefined))}
+          />
+
+          <ButtonGroup
+            className="absolute bottom-[25px] right-[25px] mb-safe-bottom-zone mr-safe-right"
+            hidden={Boolean(drawerOpen || selectedIncident)}
           >
-            <InfoIcon className="text-primary" />
-          </Button>
-        </ButtonGroup>
+            <Button
+              size="icon-lg"
+              onClick={() => dispatch(openModal('mobile-app-download'))}
+              className="bg-background hover:bg-background/80"
+            >
+              <TabletSmartphoneIcon className="text-primary" />
+            </Button>
+            <ButtonGroupSeparator className="bg-accent" />
+            {userLocation.available && (
+              <>
+                <Button
+                  size="icon-lg"
+                  className="bg-background hover:bg-background/80"
+                  onClick={() =>
+                    dispatch(setRequestingLocationPermissions(true))
+                  }
+                >
+                  <NavigationIcon className="text-primary" />
+                </Button>
+                <ButtonGroupSeparator className="bg-accent" />
+              </>
+            )}
 
-        {userLocation.coordinates && (
-          <AnimatedMapMarker
-            color="secondary"
-            coordinates={userLocation.coordinates}
-            size={15}
-          />
-        )}
+            <Button
+              size="icon-lg"
+              onClick={() => dispatch(openModal('project-info'))}
+              className="bg-background hover:bg-background/80"
+            >
+              <InfoIcon className="text-primary" />
+            </Button>
+          </ButtonGroup>
 
-        {selectedIncident && (
-          <AnimatedMapMarker
-            coordinates={selectedIncident?.coordinates}
-            size={22}
-          />
-        )}
+          {userLocation.coordinates && (
+            <AnimatedMapMarker
+              color="secondary"
+              coordinates={userLocation.coordinates}
+              size={15}
+            />
+          )}
 
-        {/* The incident features */}
-        {incidentList
-          .map(incident => {
-            const selected = Boolean(
-              selectedIncident && selectedIncident.id === incident.id
-            );
-            if (!selected) {
-              return (
-                <MapMarker
-                  key={incident.id}
-                  coordinates={incident.coordinates}
-                  onClick={() => {
-                    dispatch(setSelectedIncident(incident));
-                  }}
-                />
+          {selectedIncident && (
+            <AnimatedMapMarker
+              coordinates={selectedIncident?.coordinates}
+              size={22}
+            />
+          )}
+
+          {incidentList
+            .map(incident => {
+              const selected = Boolean(
+                selectedIncident && selectedIncident.id === incident.id
               );
-            }
+              if (!selected) {
+                return (
+                  <MapMarker
+                    key={incident.id}
+                    coordinates={incident.coordinates}
+                    onClick={() => {
+                      dispatch(setSelectedIncident(incident));
+                    }}
+                  />
+                );
+              }
 
-            return null;
-          })
-          .filter(incidentFeature => Boolean(incidentFeature))}
+              return null;
+            })
+            .filter(incidentFeature => Boolean(incidentFeature))}
         </ReactMapGl>
       </div>
+    ) : null;
+
+  return (
+    <>
+      {createPortal(mapLayer, document.body)}
 
       <MapSidebar
         isOpen={drawerOpen}

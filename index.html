@@ -10,6 +10,23 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#252525" media="(prefers-color-scheme: dark)" />
+    <!-- Critical layout: match the standalone diag page (fixed document + 100% chain). -->
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      #root {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+    </style>
 
 
     <title>tpscalls.live</title>
