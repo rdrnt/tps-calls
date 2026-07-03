@@ -7,37 +7,38 @@ This repo is `tpscalls-frontend`: a Vite + React 19 + TypeScript single-page app
 (the web frontend) and no backend in this repo — data is read from a remote
 Firebase Firestore project, and tiles come from Mapbox.
 
-### Required external credentials (must be provided as secrets)
+### Required credentials
 
-The dev environment cannot fully run without owner-controlled credentials:
+> This is a public repo. Never commit secret values (tokens, API keys, Firebase
+> config) or paste them into this file. Supply them only via Cursor Secrets;
+> they are injected as env vars at runtime and the gitignored files below are
+> generated from them.
 
-- `PERSONAL_GITHUB_TOKEN` — **required for every `yarn` command**. `.npmrc`
-  routes the `@rdrnt` scope (the private `@rdrnt/tps-calls-shared` types package)
-  to GitHub Packages (`https://npm.pkg.github.com`) and authenticates with this
-  token. It needs `read:packages` for the `rdrnt` account (the repo owner's own
-  PAT works; the default Cursor `gh` token does NOT — it returns 403).
-  - The token is injected as an env var in cloud sessions, so the update script
-    and the agent's shells have it automatically. **Caveat:** because `.npmrc`
-    uses `${PERSONAL_GITHUB_TOKEN}`, yarn (classic v1) hard-errors with
+The dev environment needs these secrets (names only — values live in Cursor Secrets):
+
+- `PERSONAL_GITHUB_TOKEN` — **required for every `yarn` command**. `.npmrc` points
+  the private npm scope at GitHub Packages and authenticates with this token
+  (needs `read:packages` for that scope's owner). The default Cursor `gh` token
+  does NOT have access.
+  - Injected as an env var in cloud sessions, so the update script and the
+    agent's shells have it automatically. **Caveat:** because `.npmrc` uses
+    `${PERSONAL_GITHUB_TOKEN}`, yarn (classic v1) hard-errors with
     "Failed to replace env in config" on ANY command (even `yarn start`) if the
     variable is unset in that shell. If you start a long-running process in a
     fresh `tmux` server that predates the secret, pass the var through
     (`tmux new-session ... -e "PERSONAL_GITHUB_TOKEN=$PERSONAL_GITHUB_TOKEN"`) or
     start tmux from a shell that already has it.
-  - Note: the committed `.npmrc` previously used `$PERSONAL_GITHUB_TOKEN` (no
-    braces), which npm/yarn never expand → install failed with 401. It is now
-    `${PERSONAL_GITHUB_TOKEN}`.
-- Firebase config files: `src/config/firebase/development.json` and
-  `src/config/firebase/production.json` are gitignored and imported directly by
-  `src/helpers/firebase/index.ts`. The app fails to build/run if they are absent.
-  In dev (`yarn start`), `import.meta.env.DEV === true` so `development.json` is
-  used. Each file is the standard Firebase web config object
-  (`apiKey`, `authDomain`, `projectId`, `storageBucket`, `messagingSenderId`, `appId`).
-  These are provided via the `FIREBASE_DEVELOPMENT_CONFIG` /
-  `FIREBASE_PRODUCTION_CONFIG` secrets, and the **update script materializes them
-  into the two files** on startup. If only `FIREBASE_DEVELOPMENT_CONFIG` is set,
-  the update script also uses it for `production.json`. If you need to recreate
-  them by hand:
+  - Note: `.npmrc` must use `${PERSONAL_GITHUB_TOKEN}` (with braces); npm/yarn
+    never expand the unbraced `$PERSONAL_GITHUB_TOKEN`, so that form fails with 401.
+- Firebase config: `src/config/firebase/development.json` and `production.json`
+  are gitignored and imported directly by `src/helpers/firebase/index.ts`, so the
+  app fails to build/run if absent. In dev (`yarn start`) `import.meta.env.DEV`
+  is true, so `development.json` is used. Each is a standard Firebase web config
+  object (`apiKey`, `authDomain`, `projectId`, `storageBucket`,
+  `messagingSenderId`, `appId`). They are generated from the
+  `FIREBASE_DEVELOPMENT_CONFIG` / `FIREBASE_PRODUCTION_CONFIG` secrets by the
+  update script (if only the development one is set, it is used for both). To
+  recreate by hand:
   `mkdir -p src/config/firebase && printf '%s' "$FIREBASE_DEVELOPMENT_CONFIG" > src/config/firebase/development.json`.
 - `VITE_MAPBOX_API_KEY` — required for the map (`/` and `/:id`); without it the
   home page stays on "Loading map…". Vite reads `VITE_`-prefixed vars straight
