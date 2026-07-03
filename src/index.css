@@ -10,7 +10,8 @@ body {
   margin: 0;
   overflow: hidden;
   width: 100vw;
-  height: 100vh;
+  height: 100vh; /* fallback for browsers without dvh */
+  height: 100dvh;
 }
 
 * {

@@ -166,8 +166,11 @@ const Map: React.FunctionComponent = () => {
           [-79.0, 43.9], // Northeast (includes a bit of Pickering & Vaughan)
         ]}
         style={{
-          width: '100vw',
-          height: '100vh',
+          // Dynamic viewport units so the map matches what's actually visible
+          // on iOS Safari (100vh is the *large* viewport and leaves the bottom
+          // of the map hidden behind Safari's toolbar).
+          width: '100dvw',
+          height: '100dvh',
         }}
         minZoom={9}
         //disables zooming while an incident is selected
