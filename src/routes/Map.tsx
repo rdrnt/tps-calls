@@ -53,6 +53,7 @@ const Map: React.FunctionComponent = () => {
   // I want to reffer to mapRef instead of mapRef.current throughout the app
   // thats why theres two vars lol
   const refForMap = React.useRef<MapRef | null>(null);
+  const mapViewportRef = React.useRef<HTMLDivElement | null>(null);
   const mapRef = refForMap.current;
 
   const [isMapLoaded, setIsMapLoaded] = React.useState<boolean>(false);
@@ -156,18 +157,54 @@ const Map: React.FunctionComponent = () => {
       refForMap.current?.resize();
     };
 
+    // Mapbox often misses the first layout pass on iOS; hit resize a few times.
+    resizeMap();
+    requestAnimationFrame(resizeMap);
+    const t0 = window.setTimeout(resizeMap, 0);
+    const t1 = window.setTimeout(resizeMap, 100);
+    const t2 = window.setTimeout(resizeMap, 300);
+
     window.addEventListener('resize', resizeMap);
     window.visualViewport?.addEventListener('resize', resizeMap);
 
+    const viewportEl = mapViewportRef.current;
+    const resizeObserver =
+      viewportEl &&
+      new ResizeObserver(() => {
+        resizeMap();
+      });
+    if (viewportEl && resizeObserver) {
+      resizeObserver.observe(viewportEl);
+    }
+
     return () => {
+      window.clearTimeout(t0);
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
       window.removeEventListener('resize', resizeMap);
       window.visualViewport?.removeEventListener('resize', resizeMap);
+      resizeObserver?.disconnect();
     };
   }, [isMapLoaded]);
 
+  // Loader covers the map during init; resize once it clears so the canvas
+  // matches the viewport (common Mapbox + iOS Safari timing issue).
+  React.useEffect(() => {
+    if (!loader.open && isMapLoaded) {
+      refForMap.current?.resize();
+      requestAnimationFrame(() => refForMap.current?.resize());
+    }
+  }, [loader.open, isMapLoaded]);
+
+  const handleMapLoad = React.useCallback(() => {
+    setIsMapLoaded(true);
+    refForMap.current?.resize();
+    requestAnimationFrame(() => refForMap.current?.resize());
+  }, []);
+
   return (
     <>
-      <div className="fixed inset-0">
+      <div ref={mapViewportRef} className="map-viewport fixed inset-0">
         <ReactMapGl
           ref={refForMap}
           mapboxAccessToken={Environment.config.MAPBOX_API_KEY}
@@ -184,15 +221,15 @@ const Map: React.FunctionComponent = () => {
             [-79.0, 43.9], // Northeast (includes a bit of Pickering & Vaughan)
           ]}
           style={{
+            position: 'absolute',
+            inset: 0,
             width: '100%',
             height: '100%',
           }}
           minZoom={9}
           //disables zooming while an incident is selected
           interactive={!selectedIncident}
-          onLoad={() => {
-            setIsMapLoaded(true);
-          }}
+          onLoad={handleMapLoad}
           onDragStart={() => {
             setInteractingWithMap(true);
           }}

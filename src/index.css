@@ -18,6 +18,16 @@ body {
   overflow: hidden;
 }
 
+/* Mapbox GL sizes its WebGL canvas from the container's offsetHeight at init.
+   On iOS Safari the container can fill the viewport while the canvas stays at
+   the default 300×400 until resize() — pin the map layer like the diag page. */
+.map-viewport > .mapboxgl-map {
+  position: absolute !important;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
 * {
   box-sizing: border-box;
 }
