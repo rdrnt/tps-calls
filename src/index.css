@@ -18,11 +18,15 @@ body {
   overflow: hidden;
 }
 
-/* Map layer is portaled to body; fill the measured viewport box exactly. */
+html.map-route,
+html.map-route body {
+  background: #0a1628;
+}
+
+/* Map layer is portaled to body — identical to the working diag page. */
 .map-viewport {
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0;
   margin: 0;
   padding: 0;
   overflow: hidden;

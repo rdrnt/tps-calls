@@ -15,7 +15,6 @@ import { toast, Toaster } from 'sonner';
 import { MAPBOX_THEME_URL } from '../config';
 import { Environment, Analytics } from '../helpers';
 import * as FirebaseIncidents from '../helpers/firebase/incident';
-import { useViewportSize } from '../hooks/useViewportSize';
 
 import { useAppDispatch, useAppSelector } from '../store';
 import { useReduxIncidents } from '../store/selectors';
@@ -57,15 +56,6 @@ const Map: React.FunctionComponent = () => {
   const refForMap = React.useRef<MapRef | null>(null);
   const mapViewportRef = React.useRef<HTMLDivElement | null>(null);
   const mapRef = refForMap.current;
-  const viewportSize = useViewportSize();
-
-  const mapDimensions = React.useMemo(
-    () => ({
-      width: viewportSize.width,
-      height: viewportSize.height,
-    }),
-    [viewportSize.width, viewportSize.height]
-  );
 
   const [isMapLoaded, setIsMapLoaded] = React.useState<boolean>(false);
   const [interactingWithMap, setInteractingWithMap] =
@@ -160,7 +150,7 @@ const Map: React.FunctionComponent = () => {
   }, [selectedIncident]);
 
   React.useEffect(() => {
-    if (!isMapLoaded || mapDimensions.height === 0) {
+    if (!isMapLoaded) {
       return;
     }
 
@@ -181,57 +171,62 @@ const Map: React.FunctionComponent = () => {
       resizeObserver.observe(viewportEl);
     }
 
+    window.addEventListener('resize', resizeMap);
+    window.visualViewport?.addEventListener('resize', resizeMap);
+
     return () => {
       resizeObserver?.disconnect();
+      window.removeEventListener('resize', resizeMap);
+      window.visualViewport?.removeEventListener('resize', resizeMap);
     };
-  }, [isMapLoaded, mapDimensions.height, mapDimensions.width]);
+  }, [isMapLoaded]);
 
   React.useEffect(() => {
     if (!loader.open && isMapLoaded) {
       refForMap.current?.resize();
     }
-  }, [loader.open, isMapLoaded, mapDimensions.height, mapDimensions.width]);
+  }, [loader.open, isMapLoaded]);
 
   const handleMapLoad = React.useCallback(() => {
     setIsMapLoaded(true);
     refForMap.current?.resize();
+    requestAnimationFrame(() => refForMap.current?.resize());
   }, []);
 
-  const mapLayer =
-    mapDimensions.height > 0 ? (
-      <div
-        ref={mapViewportRef}
-        className="map-viewport"
-        style={{
-          width: mapDimensions.width,
-          height: mapDimensions.height,
+  // Dark backdrop while the map route is mounted so any sub-pixel gap isn't white.
+  React.useEffect(() => {
+    document.documentElement.classList.add('map-route');
+    return () => {
+      document.documentElement.classList.remove('map-route');
+    };
+  }, []);
+
+  const mapLayer = (
+    <div ref={mapViewportRef} className="map-viewport">
+      <ReactMapGl
+        ref={refForMap}
+        mapboxAccessToken={Environment.config.MAPBOX_API_KEY}
+        mapStyle={MAPBOX_THEME_URL}
+        attributionControl={false}
+        trackResize={true}
+        initialViewState={{
+          latitude: 43.653225,
+          longitude: -79.383186,
+          zoom: 11.0,
         }}
-      >
-        <ReactMapGl
-          ref={refForMap}
-          mapboxAccessToken={Environment.config.MAPBOX_API_KEY}
-          mapStyle={MAPBOX_THEME_URL}
-          attributionControl={false}
-          trackResize={true}
-          initialViewState={{
-            latitude: 43.653225,
-            longitude: -79.383186,
-            zoom: 11.0,
-          }}
-          maxBounds={[
-            [-79.75, 43.55],
-            [-79.0, 43.9],
-          ]}
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: mapDimensions.width,
-            height: mapDimensions.height,
-          }}
-          minZoom={9}
-          interactive={!selectedIncident}
-          onLoad={handleMapLoad}
+        maxBounds={[
+          [-79.75, 43.55],
+          [-79.0, 43.9],
+        ]}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+        }}
+        minZoom={9}
+        interactive={!selectedIncident}
+        onLoad={handleMapLoad}
           onDragStart={() => {
             setInteractingWithMap(true);
           }}
@@ -346,8 +341,8 @@ const Map: React.FunctionComponent = () => {
             })
             .filter(incidentFeature => Boolean(incidentFeature))}
         </ReactMapGl>
-      </div>
-    ) : null;
+    </div>
+  );
 
   return (
     <>
