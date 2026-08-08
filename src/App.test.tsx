@@ -30,9 +30,10 @@ describe('static application routes', () => {
     expect(
       screen.getByRole('heading', { name: /get in touch/i })
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole('link', { name: 'riley@drnt.ca' })
-    ).toHaveAttribute('href', 'mailto:riley@drnt.ca');
+    expect(screen.getByRole('link', { name: 'riley@drnt.ca' })).toHaveAttribute(
+      'href',
+      'mailto:riley@drnt.ca'
+    );
   });
 
   it('renders the download page and product features', () => {
@@ -42,6 +43,8 @@ describe('static application routes', () => {
       screen.getByRole('heading', { name: /know what that siren was/i })
     ).toBeInTheDocument();
     expect(screen.getByText('Live. Actually live.')).toBeInTheDocument();
-    expect(screen.getByText(/calls in the last 20 minutes/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/calls in the last 20 minutes/i)
+    ).toBeInTheDocument();
   });
 });

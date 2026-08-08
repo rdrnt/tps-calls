@@ -65,9 +65,7 @@ const Map: React.FunctionComponent = () => {
     id: string,
     searchDB = false
   ): Promise<LocalIncident | undefined> => {
-    const matchingIncident = incidentList.find(
-      incident => incident.id === id
-    );
+    const matchingIncident = incidentList.find(incident => incident.id === id);
 
     if (!matchingIncident && searchDB) {
       const incidentFromDB = await FirebaseIncidents.getIncidentFromId(id);
