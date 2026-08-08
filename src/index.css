@@ -6,11 +6,38 @@
   --color-tpscalls-primary: oklch(0.5759 0.1859 262.86);
 }
 
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+}
+
 body {
   margin: 0;
   overflow: hidden;
-  width: 100vw;
-  height: 100vh;
+}
+
+html.map-route,
+html.map-route body {
+  background: #0a1628;
+}
+
+/* Portaled map shell — dimensions are set in JS (useForceMapLayout). */
+.map-viewport {
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.map-viewport .mapboxgl-map {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 * {
@@ -157,6 +184,24 @@ body {
      So we add some extra breathing room on top of the safe inset.
   */
   .pb-safe-bottom-zone {
-    padding-bottom: calc(var(--safe-bottom) + 3.5rem); /* ~56px zone */
+    padding-bottom: calc(var(--safe-bottom) + 3.5rem);
+  }
+
+  /* Margin variants of the safe insets. Padding does NOT move an
+     absolutely-positioned child, but margin does, so floating controls pinned
+     to a viewport corner use these to stay clear of the notch / home indicator
+     once the map draws edge-to-edge. */
+  .mt-safe-top { margin-top: var(--safe-top); }
+  .mr-safe-right { margin-right: var(--safe-right); }
+  .mb-safe-bottom { margin-bottom: var(--safe-bottom); }
+  .ml-safe-left { margin-left: var(--safe-left); }
+
+  /* Bottom-anchored interactive controls (the map's FAB group, incident/camera
+     cards). On touch devices add the extra zone so they float above Safari's
+     bottom URL/search bar; on desktop only the raw inset (0px) applies, so the
+     layout there is unchanged. */
+  .mb-safe-bottom-zone { margin-bottom: var(--safe-bottom); }
+  @media (pointer: coarse) {
+    .mb-safe-bottom-zone { margin-bottom: calc(var(--safe-bottom) + 3.5rem); }
   }
 }

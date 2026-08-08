@@ -3,9 +3,27 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    <!-- Match mobile Safari sites (e.g. Stack Overflow): height=device-height fills
+         the screen; viewport-fit=cover + env() is unreliable on iOS 26 Safari. -->
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0">
     <!-- Make status bar translucent so content shows through with blur -->
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#252525" media="(prefers-color-scheme: dark)" />
+    <!-- Critical layout: match the standalone diag page. -->
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+      }
+      #root {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+    </style>
 
 
     <title>tpscalls.live</title>
