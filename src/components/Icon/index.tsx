@@ -36,7 +36,15 @@ export type IconNames =
   | 'link'
   | 'twitter';
 
-const AllIcons: { [key in IconNames]?: React.ReactElement } = {
+interface IconElementProps {
+  color?: string;
+  size?: number;
+  children?: React.ReactNode;
+}
+
+const AllIcons: Partial<
+  Record<IconNames, React.ReactElement<IconElementProps>>
+> = {
   alert: <IoMdAlert />,
   slider: <FiSliders />,
   search: <GoSearch />,
@@ -59,6 +67,7 @@ export interface IconProps {
   name: IconNames;
   color?: string;
   size?: number;
+  children?: React.ReactNode;
 }
 
 const Icon: React.FunctionComponent<IconProps> = ({

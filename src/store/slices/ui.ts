@@ -1,10 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Loader } from '../../components/Loader';
 import { ModalTypes } from '../../components/Modal';
+
+export interface LoaderState {
+  open: boolean;
+  message?: string;
+}
 
 export interface UIState {
   drawerOpen: boolean;
-  loader: Loader;
+  loader: LoaderState;
   modal: {
     open: boolean;
     type?: ModalTypes;

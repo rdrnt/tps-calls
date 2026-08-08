@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { IncidentType, IncidentSourceType } from '@rdrnt/tps-calls-shared';
 import { GiKnifeThrust } from 'react-icons/gi';
 
@@ -12,8 +11,7 @@ export const getIconForIncidentType = (incidentType: IncidentType) => {
 };
 
 export const getNameForIncidentSource = (
-  source: IncidentSourceType,
-  shorthand?: boolean
+  source: IncidentSourceType
 ): string => {
   switch (source) {
     case IncidentSourceType.TORONTO_POLICE:

@@ -12,7 +12,6 @@ import {
 } from 'firebase/firestore';
 import { firestore } from '.';
 import { Incident, FirestoreCollections } from '@rdrnt/tps-calls-shared';
-import { DateHelper } from '..';
 
 export const listener = (
   onChange: (incidents: Incident<any>[]) => void
