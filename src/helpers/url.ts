@@ -18,7 +18,7 @@ export const createTwitterShareUrl = (incident: LocalIncident) => {
 
   const tweetText = `${incident.name} @ ${
     incident.location
-  } (${DateHelper.distanceInWords(new Date(incident.date))} ago)\n\n${createShareUrl(
+  } (${DateHelper.distanceInWords(incident.date)} ago)\n\n${createShareUrl(
     incident.id
   )}`;
 

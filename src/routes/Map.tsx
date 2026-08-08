@@ -1,5 +1,6 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 import * as React from 'react';
+import { Incident } from '@rdrnt/tps-calls-shared';
 import ReactMapGl, { AttributionControl, MapRef } from 'react-map-gl';
 import { useParams } from 'react-router';
 import {
@@ -10,10 +11,9 @@ import {
 } from 'lucide-react';
 import { toast, Toaster } from 'sonner';
 
-import { MAPBOX_THEME_URL } from '../config';
+import { MAPBOX_THEME_URL, Colors } from '../config';
 import { Environment, Analytics } from '../helpers';
 import * as FirebaseIncidents from '../helpers/firebase/incident';
-import { LocalIncident } from '../types';
 
 import { useAppDispatch, useAppSelector } from '../store';
 import { useReduxIncidents } from '../store/selectors';
@@ -64,18 +64,14 @@ const Map: React.FunctionComponent = () => {
   const getIncidentWithId = async (
     id: string,
     searchDB = false
-  ): Promise<LocalIncident | undefined> => {
-    const matchingIncident = incidentList.find(incident => incident.id === id);
+  ): Promise<Incident<any> | undefined> => {
+    const matchingIncident: Incident<any> | undefined = incidentList.find(
+      incident => incident.id === id
+    );
 
     if (!matchingIncident && searchDB) {
       const incidentFromDB = await FirebaseIncidents.getIncidentFromId(id);
-      if (!incidentFromDB) return undefined;
-
-      // Redux stores client incidents with numeric dates, while Firestore returns Timestamp objects.
-      return {
-        ...incidentFromDB,
-        date: incidentFromDB.date.toDate().valueOf(),
-      };
+      return incidentFromDB;
     }
 
     return matchingIncident;

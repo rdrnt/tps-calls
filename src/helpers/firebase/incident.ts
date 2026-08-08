@@ -12,6 +12,7 @@ import {
 } from 'firebase/firestore';
 import { firestore } from '.';
 import { Incident, FirestoreCollections } from '@rdrnt/tps-calls-shared';
+import { DateHelper } from '..';
 
 export const listener = (
   onChange: (incidents: Incident<any>[]) => void
@@ -75,7 +76,7 @@ export const getIncidentsAtDate = async ({
     }));
 
     return dateIncidents;
-  } catch {
+  } catch (error) {
     return [];
   }
 };
@@ -90,7 +91,7 @@ export const getIncidentFromId = async (
     return incidentDoc.exists()
       ? (incidentDoc.data() as Incident<any>)
       : undefined;
-  } catch {
+  } catch (error) {
     return undefined;
   }
 };

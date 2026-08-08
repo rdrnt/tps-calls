@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { AnimatePresence } from 'motion/react';
+import styled from 'styled-components';
+import { motion, AnimatePresence } from 'motion/react';
+import { Incident } from '@rdrnt/tps-calls-shared';
 
 import {
   Card,
@@ -10,7 +12,7 @@ import {
   CardTitle,
 } from '../ui/card';
 
-import { LocalTorontoTrafficCamera } from '../../types';
+import { TorontoTrafficCamera } from '../../routes/TrafficCams';
 import {
   Accordion,
   AccordionContent,
@@ -20,7 +22,7 @@ import {
 import { Button } from '../ui/button';
 
 interface MapCameraInfoProps {
-  camera?: LocalTorontoTrafficCamera;
+  camera?: TorontoTrafficCamera;
   drawerOpen: boolean;
   close: () => void;
 }

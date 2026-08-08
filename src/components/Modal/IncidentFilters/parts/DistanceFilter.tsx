@@ -15,13 +15,16 @@ import {
   DISTANCE_STEP_KM,
   type IncidentFiltersFormValues,
 } from '../schema';
-import { useAppSelector } from '../../../../store';
-import { Info } from 'lucide-react';
+import { useAppDispatch, useAppSelector } from '../../../../store';
+import { Info, NavigationIcon } from 'lucide-react';
 import { Alert, AlertDescription } from '../../../ui/alert';
+import { setRequestingLocationPermissions } from '../../../../store/slices/user';
+import { Button } from '../../../ui/button';
 
 const DistanceFilter: FunctionComponent = () => {
   const { watch, setValue } = useFormContext<IncidentFiltersFormValues>();
   const userLocation = useAppSelector(state => state.user.location);
+  const dispatch = useAppDispatch();
 
   const enabled = watch('distanceFilter.enabled');
   const distance = watch('distanceFilter.value');
