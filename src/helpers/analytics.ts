@@ -1,6 +1,10 @@
 import * as Sentry from '@sentry/react';
-import ReactGA from 'react-ga4';
+import ReactGAImport from 'react-ga4';
 import { Environment } from '.';
+
+// react-ga4 is CJS; Rolldown surfaces its default export one level deeper than Rollup did.
+const ReactGA =
+  (ReactGAImport as { default?: typeof ReactGAImport }).default ?? ReactGAImport;
 
 // Initializes the analytics
 export const initialize = () => {

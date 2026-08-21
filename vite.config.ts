@@ -31,12 +31,23 @@ export default defineConfig({
         drop_console: true,
       },
     },
-    rollupOptions: {
+    rolldownOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          redux: ['@reduxjs/toolkit', 'react-redux'],
-          mapbox: ['mapbox-gl', 'react-map-gl'], // Split large map libraries
+        codeSplitting: {
+          groups: [
+            {
+              name: 'vendor',
+              test: /node_modules\/(react|react-dom)\//,
+            },
+            {
+              name: 'redux',
+              test: /node_modules\/(@reduxjs\/toolkit|react-redux)\//,
+            },
+            {
+              name: 'mapbox',
+              test: /node_modules\/(mapbox-gl|react-map-gl)\//,
+            },
+          ],
         },
       },
     },
