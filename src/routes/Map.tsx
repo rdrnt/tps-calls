@@ -1,7 +1,8 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 import * as React from 'react';
 import { Incident } from '@rdrnt/tps-calls-shared';
-import ReactMapGl, { AttributionControl, MapRef } from 'react-map-gl';
+// v8 requires the renderer-specific /mapbox entry point for Mapbox GL v3.
+import ReactMapGl, { AttributionControl, MapRef } from 'react-map-gl/mapbox';
 import { useParams } from 'react-router';
 import {
   MenuIcon,
@@ -51,10 +52,7 @@ const Map: React.FunctionComponent = () => {
 
   const selectedCamera = useAppSelector(state => state.cameras.selected);
 
-  // I want to reffer to mapRef instead of mapRef.current throughout the app
-  // thats why theres two vars lol
   const refForMap = React.useRef<MapRef | null>(null);
-  const mapRef = refForMap.current;
 
   const [isMapLoaded, setIsMapLoaded] = React.useState<boolean>(false);
   const [interactingWithMap, setInteractingWithMap] =
@@ -122,8 +120,9 @@ const Map: React.FunctionComponent = () => {
   }, [interactingWithMap]);
 
   React.useEffect(() => {
-    if (userLocation.coordinates && mapRef) {
-      mapRef.flyTo({
+    const map = refForMap.current;
+    if (userLocation.coordinates && map) {
+      map.flyTo({
         center: [
           userLocation.coordinates.longitude,
           userLocation.coordinates.latitude,
@@ -136,8 +135,9 @@ const Map: React.FunctionComponent = () => {
 
   React.useEffect(() => {
     // If the selected incident changes, zoom into it
-    if (selectedIncident && mapRef) {
-      mapRef.flyTo({
+    const map = refForMap.current;
+    if (selectedIncident && map) {
+      map.flyTo({
         center: [
           selectedIncident.coordinates.longitude,
           selectedIncident.coordinates.latitude,
@@ -210,7 +210,7 @@ const Map: React.FunctionComponent = () => {
             incident={selectedIncident}
             drawerOpen={drawerOpen}
             close={() => dispatch(setSelectedIncident(undefined))}
-            mapRef={mapRef}
+            mapRef={refForMap}
           />
 
           <MapCameraInfo

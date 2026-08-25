@@ -1,7 +1,7 @@
 import { toast } from 'sonner';
 import { Link } from 'lucide-react';
-import { MapRef } from 'react-map-gl';
-import { FunctionComponent, useEffect } from 'react';
+import { MapRef } from 'react-map-gl/mapbox';
+import { FunctionComponent, useEffect, RefObject } from 'react';
 
 import { Separator } from '../ui/separator';
 
@@ -27,7 +27,7 @@ interface MapIncidentInfoProps {
   incident?: LocalIncident;
   drawerOpen: boolean;
   close: () => void;
-  mapRef: MapRef | null;
+  mapRef: RefObject<MapRef | null>;
 }
 
 const MapIncidentInfo: FunctionComponent<MapIncidentInfoProps> = ({
@@ -52,7 +52,8 @@ const MapIncidentInfo: FunctionComponent<MapIncidentInfoProps> = ({
 
   useEffect(() => {
     // When an incident is selected on mobile, bring it into view with offset for the drawer
-    if (incident && isMobile && mapRef) {
+    const map = mapRef.current;
+    if (incident && isMobile && map) {
       // Wait for the sheet animation to complete before measuring
       // The sheet has a 500ms animation duration (data-[state=open]:duration-500)
       const measureSheetHeight = () => {
@@ -69,7 +70,7 @@ const MapIncidentInfo: FunctionComponent<MapIncidentInfoProps> = ({
         // The offset is [x, y] in pixels, negative y moves upward
         const offsetY = -(sheetHeight / 2);
 
-        mapRef.flyTo({
+        map.flyTo({
           center: [
             incident.coordinates.longitude,
             incident.coordinates.latitude,
