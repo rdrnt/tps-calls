@@ -26,7 +26,7 @@ const IncidentListener: FunctionComponent = () => {
 
   const listenerRef = useRef<ReturnType<typeof FirebaseIncidents.listener> | null>(null);
 
-  const [setIncidents] = useDebouncedCallback((incidents: LocalIncident[]) => {
+  const setIncidents = useDebouncedCallback((incidents: LocalIncident[]) => {
     dispatch(setIncidentList(incidents));
   }, 300);
 

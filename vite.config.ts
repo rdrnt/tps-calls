@@ -2,7 +2,7 @@ import { sentryVitePlugin } from '@sentry/vite-plugin';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
-import { resolve } from 'path';
+import { resolve } from 'node:path';
 
 export default defineConfig({
   plugins: [
@@ -20,7 +20,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': resolve(__dirname, './src'),
+      '@': resolve(import.meta.dirname, './src'),
     },
   },
   build: {
@@ -31,12 +31,23 @@ export default defineConfig({
         drop_console: true,
       },
     },
-    rollupOptions: {
+    rolldownOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          redux: ['@reduxjs/toolkit', 'react-redux'],
-          mapbox: ['mapbox-gl', 'react-map-gl'], // Split large map libraries
+        codeSplitting: {
+          groups: [
+            {
+              name: 'vendor',
+              test: /node_modules\/(react|react-dom)\//,
+            },
+            {
+              name: 'redux',
+              test: /node_modules\/(@reduxjs\/toolkit|react-redux)\//,
+            },
+            {
+              name: 'mapbox',
+              test: /node_modules\/(mapbox-gl|react-map-gl)\//,
+            },
+          ],
         },
       },
     },

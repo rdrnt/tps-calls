@@ -7,8 +7,10 @@ import prettier from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
 import globals from 'globals';
 
+// eslint-plugin-react@7.x does not yet declare ESLint 10 peer support; stay on ESLint 9 until it does.
 export default [
   js.configs.recommended,
+  reactHooks.configs.flat.recommended,
   {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
@@ -28,13 +30,11 @@ export default [
     plugins: {
       '@typescript-eslint': typescript,
       react,
-      'react-hooks': reactHooks,
       prettier,
     },
     rules: {
       ...typescript.configs.recommended.rules,
       ...react.configs.recommended.rules,
-      ...reactHooks.configs.recommended.rules,
       ...prettierConfig.rules,
       'prettier/prettier': 'error',
       '@typescript-eslint/no-unused-vars': [
@@ -66,12 +66,10 @@ export default [
     },
     plugins: {
       react,
-      'react-hooks': reactHooks,
       prettier,
     },
     rules: {
       ...react.configs.recommended.rules,
-      ...reactHooks.configs.recommended.rules,
       ...prettierConfig.rules,
       'prettier/prettier': 'error',
       'react/react-in-jsx-scope': 'off',
