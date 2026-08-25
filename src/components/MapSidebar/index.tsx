@@ -50,7 +50,7 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
   }, [filter?.search]);
 
   // Debounced function to update Redux search filter
-  const [debouncedUpdateReduxSearch] = useDebouncedCallback(
+  const debouncedUpdateReduxSearch = useDebouncedCallback(
     (searchValue: string) => {
       dispatch(
         setIncidentFilter({

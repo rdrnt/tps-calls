@@ -13,7 +13,7 @@ import { FunctionComponent, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { format, parse } from 'date-fns';
 import { CalendarDays, Clock, Info } from 'lucide-react';
-import type { DateRange } from 'react-day-picker';
+import type { DateRange } from '@daypicker/react';
 
 import { cn } from '../../../../lib/utils';
 import { Button } from '../../../ui/button';

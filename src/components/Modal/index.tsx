@@ -31,7 +31,7 @@ const Modal: React.FunctionComponent = () => {
   const dispatch = useDispatch();
   const { open, type } = useSelector((appState: AppState) => appState.ui.modal);
 
-  const [dismissModal] = useDebouncedCallback(() => {
+  const dismissModal = useDebouncedCallback(() => {
     dispatch(closeModal());
   }, 200);
 

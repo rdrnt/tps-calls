@@ -1,7 +1,8 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 import * as React from 'react';
 import { Incident } from '@rdrnt/tps-calls-shared';
-import ReactMapGl, { AttributionControl, MapRef } from 'react-map-gl';
+// v8 requires the renderer-specific /mapbox entry point for Mapbox GL v3.
+import ReactMapGl, { AttributionControl, MapRef } from 'react-map-gl/mapbox';
 import { useParams } from 'react-router';
 import {
   MenuIcon,

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Marker } from 'react-map-gl';
+import { Marker } from 'react-map-gl/mapbox';
 import { Coordinates } from '@rdrnt/tps-calls-shared';
 
 import { Colors } from '../../config';

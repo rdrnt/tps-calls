@@ -1,6 +1,6 @@
 import { toast } from 'sonner';
 import { Link } from 'lucide-react';
-import { MapRef } from 'react-map-gl';
+import { MapRef } from 'react-map-gl/mapbox';
 import { FunctionComponent, useEffect } from 'react';
 
 import { Separator } from '../ui/separator';
