@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useDebouncedCallback } from 'use-debounce';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
@@ -39,15 +39,17 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
   const incidents = useReduxIncidents();
   const filter = useAppSelector(state => state.incidents.filter);
 
-  // Local state for search input (updates immediately, prevents lag)
-  const [localSearchInputValue, setLocalSearchInputValue] = useState(
-    filter?.search || ''
-  );
+  // Sync local search input with Redux when filter changes externally (e.g. reset filters).
+  const externalSearch = filter?.search || '';
+  const [localSearchInputValue, setLocalSearchInputValue] =
+    useState(externalSearch);
+  const [syncedExternalSearch, setSyncedExternalSearch] =
+    useState(externalSearch);
 
-  // Sync local search input with Redux when filter changes externally
-  useEffect(() => {
-    setLocalSearchInputValue(filter?.search || '');
-  }, [filter?.search]);
+  if (externalSearch !== syncedExternalSearch) {
+    setSyncedExternalSearch(externalSearch);
+    setLocalSearchInputValue(externalSearch);
+  }
 
   // Debounced function to update Redux search filter
   const debouncedUpdateReduxSearch = useDebouncedCallback(
