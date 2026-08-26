@@ -6,7 +6,9 @@ import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import { DOWNLOAD_METADATA } from '@/config/seo';
 import useAnalyticsPageView from '@/hooks/useAnalyticsPageView';
+import usePageMetadata from '@/hooks/usePageMetadata';
 import { useAppSelector } from '@/store';
 
 import { RECENT_WINDOW_MINUTES } from './lib';
@@ -60,6 +62,7 @@ const FEATURES = [
 ];
 
 const DownloadPage: FunctionComponent = () => {
+  usePageMetadata(DOWNLOAD_METADATA);
   useAnalyticsPageView({ path: '/download' });
 
   const recentCalls = useRecentCallCount();
