@@ -67,3 +67,5 @@ Disallow: /*?*_format=json
 Allow: /
 Allow: /contact
 Allow: /download
+
+Sitemap: https://www.tpscalls.live/sitemap.xml
