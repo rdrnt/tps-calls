@@ -35,3 +35,12 @@ export const TRAFFIC_CAMS_METADATA: RouteMetadata = {
     'Real-time traffic camera feeds from intersections across Toronto.',
   canonicalPath: '/traffic-cams',
 };
+
+export const buildIncidentTitle = (name: string, location: string): string => {
+  // Historical incidents can omit cross streets, so the title must not expose an empty `at` fragment.
+  if (location.trim()) {
+    return `${name} at ${location} | ${SITE_NAME}`;
+  }
+
+  return `${name} | ${SITE_NAME}`;
+};
