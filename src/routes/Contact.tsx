@@ -4,7 +4,9 @@ import { Link } from 'react-router';
 import { Button } from '@/components/ui/button';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import { CONTACT_METADATA } from '@/config/seo';
 import useAnalyticsPageView from '@/hooks/useAnalyticsPageView';
+import usePageMetadata from '@/hooks/usePageMetadata';
 
 // Kept as separate parts (never a contiguous `user@domain` literal) so the
 // address doesn't appear in the served HTML/JS bundle for regex-based email
@@ -14,6 +16,7 @@ const EMAIL_USER = 'riley';
 const EMAIL_DOMAIN = 'drnt.ca';
 
 const ContactPage: FunctionComponent = () => {
+  usePageMetadata(CONTACT_METADATA);
   useAnalyticsPageView({ path: '/contact' });
 
   const email = `${EMAIL_USER}@${EMAIL_DOMAIN}`;

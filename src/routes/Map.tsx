@@ -13,6 +13,8 @@ import {
 import { toast, Toaster } from 'sonner';
 
 import { MAPBOX_THEME_URL, Colors } from '../config';
+import { buildIncidentTitle, MAP_METADATA } from '@/config/seo';
+import usePageMetadata from '@/hooks/usePageMetadata';
 import { Environment, Analytics } from '../helpers';
 import * as FirebaseIncidents from '../helpers/firebase/incident';
 
@@ -57,6 +59,22 @@ const Map: React.FunctionComponent = () => {
   const [isMapLoaded, setIsMapLoaded] = React.useState<boolean>(false);
   const [interactingWithMap, setInteractingWithMap] =
     React.useState<boolean>(false);
+
+  const pageTitle = selectedIncident
+    ? buildIncidentTitle(selectedIncident.name, selectedIncident.location)
+    : MAP_METADATA.title;
+  const pageDescription = selectedIncident
+    ? selectedIncident.location.trim()
+      ? `${selectedIncident.name} at ${selectedIncident.location}. Live Toronto Police call on tpscalls.`
+      : `${selectedIncident.name}. Live Toronto Police call on tpscalls.`
+    : MAP_METADATA.description;
+  const canonicalPath = id ? `/${id}` : MAP_METADATA.canonicalPath;
+
+  usePageMetadata({
+    title: pageTitle,
+    description: pageDescription,
+    canonicalPath,
+  });
 
   // Finds and returns an incident from the store or database
   const getIncidentWithId = async (
@@ -150,6 +168,7 @@ const Map: React.FunctionComponent = () => {
 
   return (
     <>
+      <h1 className="sr-only">Live Toronto Police Calls Map</h1>
       <ReactMapGl
         ref={refForMap}
         mapboxAccessToken={Environment.config.MAPBOX_API_KEY}

@@ -2,6 +2,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import Fuse from 'fuse.js';
 
+import { TRAFFIC_CAMS_METADATA } from '@/config/seo';
+import usePageMetadata from '@/hooks/usePageMetadata';
+
 import { Analytics } from '../helpers';
 import {
   Card,
@@ -20,6 +23,8 @@ import {
 } from '../types';
 
 const TrafficCams = () => {
+  usePageMetadata(TRAFFIC_CAMS_METADATA);
+
   const [search, setSearch] = useState('');
   const [torontoTrafficCameras, setTorontoTrafficCameras] = useState<
     LocalTorontoTrafficCamera[]
