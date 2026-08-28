@@ -1,8 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { parseISO } from 'date-fns';
-import { LocalIncident } from '../../types';
-import { convertDateToTimestamp } from '../../helpers/date';
-import { getIncidentsAtDate } from '../../helpers/firebase/incident';
+import type { LocalIncident } from '../../types';
 
 /** ISO date range used by the date filter (start/end as ISO-8601 strings). */
 export interface IncidentDateRangeFilter {
@@ -29,6 +26,15 @@ export interface IncidentsState {
 export const fetchFilteredIncidents = createAsyncThunk(
   'incidents/fetchFiltered',
   async (dateRange: IncidentDateRangeFilter) => {
+    // Firestore/date-filter code is loaded only when the historical filter is used,
+    // keeping static routes out of that dependency path.
+    const [{ parseISO }, { convertDateToTimestamp }, { getIncidentsAtDate }] =
+      await Promise.all([
+        import('date-fns'),
+        import('../../helpers/date'),
+        import('../../helpers/firebase/incident'),
+      ]);
+
     const startTimestamp = convertDateToTimestamp(parseISO(dateRange.startDate));
     const endTimestamp = convertDateToTimestamp(parseISO(dateRange.endDate));
 

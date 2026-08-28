@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import { ModalProps } from '.';
+import { ModalProps } from './types';
 
-import { Analytics } from '../../helpers';
+import * as Analytics from '../../helpers/analytics';
 
 import AppStoreIcon from '../../assets/images/appStoreDownload.png';
 import PlayStoreIcon from '../../assets/images/googlePlayDownload.png';

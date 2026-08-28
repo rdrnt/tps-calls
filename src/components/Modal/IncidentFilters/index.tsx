@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { DialogHeader, DialogFooter, DialogTitle } from '../../ui/dialog';
 import { Button } from '../../ui/button';
 
-import { ModalProps } from '..';
+import { ModalProps } from '../types';
 import DistanceFilter from './parts/DistanceFilter';
 import DateRangeFilter from './parts/DateRangeFilter';
 

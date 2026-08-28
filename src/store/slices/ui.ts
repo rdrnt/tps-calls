@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Loader } from '../../components/Loader';
-import { ModalTypes } from '../../components/Modal';
+import { ModalTypes } from '../../components/Modal/types';
 
 export interface UIState {
   drawerOpen: boolean;

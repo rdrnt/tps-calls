@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import { IncidentListener } from '@/components/Listeners';
 import { DOWNLOAD_METADATA } from '@/config/seo';
 import useAnalyticsPageView from '@/hooks/useAnalyticsPageView';
 import usePageMetadata from '@/hooks/usePageMetadata';
@@ -68,7 +69,9 @@ const DownloadPage: FunctionComponent = () => {
   const recentCalls = useRecentCallCount();
 
   return (
-    <div className="bg-background text-foreground h-screen w-full overflow-y-auto antialiased">
+    <>
+      <IncidentListener />
+      <div className="bg-background text-foreground h-screen w-full overflow-y-auto antialiased">
       <div className="mx-auto w-full max-w-5xl px-5">
         {/* Wordmark */}
         <SiteHeader />
@@ -142,7 +145,8 @@ const DownloadPage: FunctionComponent = () => {
           </Link>
         </SiteFooter>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

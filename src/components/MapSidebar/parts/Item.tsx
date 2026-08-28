@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Item, ItemDescription, ItemTitle, ItemContent } from '../../ui/item';
 
-import { DateHelper } from '../../../helpers';
+import * as DateHelper from '../../../helpers/date';
 import { LocalIncident } from '../../../types';
 
 interface MapSidebarItemProps {

@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-import { ModalProps } from '.';
+import { ModalProps } from './types';
 
 import AppStoreIcon from '../../assets/images/appStoreDownload.png';
 import PlayStoreIcon from '../../assets/images/googlePlayDownload.png';
 
-import { Analytics } from '../../helpers';
+import * as Analytics from '../../helpers/analytics';
 import { DialogFooter, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Button } from '../ui/button';
 import {

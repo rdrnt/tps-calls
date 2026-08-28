@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Coordinates } from '@rdrnt/tps-calls-shared';
 
-import { Permissions } from '../../helpers';
+import * as Permissions from '../../helpers/permissions';
 import {
   setLocationCoordinates,
   setLocationAvailable,

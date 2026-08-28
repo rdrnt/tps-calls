@@ -15,11 +15,18 @@ import { toast, Toaster } from 'sonner';
 import { MAPBOX_THEME_URL, Colors } from '../config';
 import { buildIncidentTitle, MAP_METADATA } from '@/config/seo';
 import usePageMetadata from '@/hooks/usePageMetadata';
-import { Environment, Analytics } from '../helpers';
+import * as Environment from '../helpers/environment';
+import * as Analytics from '../helpers/analytics';
 import * as FirebaseIncidents from '../helpers/firebase/incident';
 
 import { useAppDispatch, useAppSelector } from '../store';
 import { useReduxIncidents } from '../store/selectors';
+
+import {
+  LocationListener,
+  IncidentListener,
+  CameraListener,
+} from '../components/Listeners';
 
 import MapIncidentInfo from '../components/MapIncidentInfo';
 import AnimatedMapMarker from '../components/MapMarker/Animated';
@@ -168,6 +175,9 @@ const Map: React.FunctionComponent = () => {
 
   return (
     <>
+      <IncidentListener />
+      <CameraListener />
+      <LocationListener />
       <h1 className="sr-only">Live Toronto Police Calls Map</h1>
       <ReactMapGl
         ref={refForMap}

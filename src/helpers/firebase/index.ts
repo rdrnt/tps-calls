@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, Timestamp } from 'firebase/firestore';
-import { Environment } from '..';
+import * as Environment from '../environment';
 
 import productionConfig from '../../config/firebase/production.json';
 import developmentConfig from '../../config/firebase/development.json';

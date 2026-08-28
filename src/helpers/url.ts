@@ -1,4 +1,5 @@
-import { Environment, DateHelper } from '.';
+import * as Environment from './environment';
+import * as DateHelper from './date';
 import { LocalIncident } from '../types';
 
 export const createShareUrl = (incidentId: string): string => {
