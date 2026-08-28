@@ -16,8 +16,15 @@ export default defineConfig({
       org: 'rileyd',
       project: 'tps-calls',
       telemetry: false,
+      sourcemaps: {
+        // Rolldown emits this helper without a source map; ignore it rather than suppressing all SOURCEMAP_BROKEN warnings.
+        ignore: ['**/rolldown-runtime-*.js'],
+      },
     }),
   ],
+  css: {
+    devSourcemap: true,
+  },
   resolve: {
     alias: {
       '@': resolve(import.meta.dirname, './src'),
@@ -25,14 +32,14 @@ export default defineConfig({
   },
   build: {
     target: 'es2022',
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true,
-      },
-    },
     rolldownOptions: {
       output: {
+        // Vite 8 exposes Oxc compression options through Rolldown output configuration.
+        minify: {
+          compress: {
+            dropConsole: true,
+          },
+        },
         codeSplitting: {
           groups: [
             {
@@ -65,9 +72,5 @@ export default defineConfig({
   // Optimize dependencies
   optimizeDeps: {
     include: ['react', 'react-dom'],
-  },
-  // Define environment variables
-  define: {
-    __APP_VERSION__: JSON.stringify(process.env.npm_package_version),
   },
 });

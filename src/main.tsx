@@ -1,11 +1,11 @@
-import { createRoot, hydrateRoot } from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
 import './index.css';
 
 import App from './App';
 
-import { Analytics } from './helpers';
+import { initialize as initializeAnalytics } from './helpers/analytics';
 
-Analytics.initialize();
+initializeAnalytics();
 
 const domNode = document.getElementById('root');
 const root = createRoot(domNode as Element);
