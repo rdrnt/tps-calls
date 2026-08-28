@@ -15,9 +15,16 @@ import { useAppSelector } from '@/store';
 import { RECENT_WINDOW_MINUTES } from './lib';
 import LiveTicker from './parts/LiveTicker';
 import DownloadButtons from './parts/DownloadButtons';
-import HeroAppPreview from '@/assets/images/heroAppPreview.png';
+import heroAppPreview300Avif from '@/assets/images/heroAppPreview-300.avif';
+import heroAppPreview600Avif from '@/assets/images/heroAppPreview-600.avif';
+import heroAppPreview300Webp from '@/assets/images/heroAppPreview-300.webp';
+import heroAppPreview600Webp from '@/assets/images/heroAppPreview-600.webp';
+import heroAppPreviewFallback from '@/assets/images/heroAppPreview-600.png';
 
 import './download.css';
+
+const HERO_PREVIEW_WIDTH = 300;
+const HERO_PREVIEW_HEIGHT = 591;
 
 /**
  * Counts how many incidents fall within a `RECENT_WINDOW_MINUTES` window.
@@ -88,7 +95,7 @@ const DownloadPage: FunctionComponent = () => {
             </Badge>
             <h1 className="mt-5 text-[40px] font-semibold leading-[1.04] tracking-tight sm:text-6xl">
               Know what that{' '}
-              <span className="text-tpscalls-primary">siren</span> was.
+              <span className="text-white">siren</span> was.
             </h1>
             <p className="text-muted-foreground mt-5 max-w-md text-base leading-relaxed sm:text-lg">
               Every Toronto Police call lands on the map the second it gets
@@ -104,12 +111,28 @@ const DownloadPage: FunctionComponent = () => {
           </div>
 
           <div className="flex justify-center md:justify-end">
-            <img
-              src={HeroAppPreview}
-              alt="The tpscalls app showing a live incident on the map with a nearby city camera"
-              className="h-auto w-[300px] max-w-[82vw] select-none"
-              draggable={false}
-            />
+            <picture>
+              <source
+                type="image/avif"
+                srcSet={`${heroAppPreview300Avif} 300w, ${heroAppPreview600Avif} 600w`}
+                sizes={`${HERO_PREVIEW_WIDTH}px`}
+              />
+              <source
+                type="image/webp"
+                srcSet={`${heroAppPreview300Webp} 300w, ${heroAppPreview600Webp} 600w`}
+                sizes={`${HERO_PREVIEW_WIDTH}px`}
+              />
+              <img
+                src={heroAppPreviewFallback}
+                alt="The tpscalls app showing a live incident on the map with a nearby city camera"
+                width={HERO_PREVIEW_WIDTH}
+                height={HERO_PREVIEW_HEIGHT}
+                decoding="async"
+                fetchPriority="high"
+                className="h-auto w-[300px] max-w-[82vw] select-none"
+                draggable={false}
+              />
+            </picture>
           </div>
         </header>
       </div>
