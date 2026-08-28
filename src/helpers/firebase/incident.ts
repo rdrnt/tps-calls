@@ -14,7 +14,8 @@ import { firestore } from '.';
 import { Incident, FirestoreCollections } from '@rdrnt/tps-calls-shared';
 
 export const listener = (
-  onChange: (incidents: Incident<any>[]) => void
+  onChange: (incidents: Incident<any>[]) => void,
+  onError?: (error: Error) => void
 ): ReturnType<typeof onSnapshot> => {
   const incidentsCollection = collection(firestore, 'incidents');
   const incidentsQuery = query(
@@ -23,14 +24,20 @@ export const listener = (
     limit(100)
   );
 
-  return onSnapshot(incidentsQuery, incidentsSnapshot => {
-    const incidents: Incident<any>[] = incidentsSnapshot.docs.map(
-      incidentDoc => ({
-        ...(incidentDoc.data() as Incident<any>),
-      })
-    );
-    onChange(incidents);
-  });
+  return onSnapshot(
+    incidentsQuery,
+    incidentsSnapshot => {
+      const incidents: Incident<any>[] = incidentsSnapshot.docs.map(
+        incidentDoc => ({
+          ...(incidentDoc.data() as Incident<any>),
+        })
+      );
+      onChange(incidents);
+    },
+    error => {
+      onError?.(error);
+    }
+  );
 };
 
 export const getOldestIncident = async (): Promise<Incident<any>> => {

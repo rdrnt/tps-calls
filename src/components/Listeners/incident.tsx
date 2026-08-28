@@ -15,7 +15,11 @@ import { useDebouncedCallback } from 'use-debounce';
 
 import { LocalIncident } from '../../types';
 
-import { setIncidentList, fetchFilteredIncidents } from '../../store/actions';
+import {
+  setIncidentList,
+  setIncidentsListReady,
+  fetchFilteredIncidents,
+} from '../../store/actions';
 import { useAppDispatch, useAppSelector } from '../../store';
 
 import * as FirebaseIncidents from '../../helpers/firebase/incident';
@@ -24,25 +28,47 @@ const IncidentListener: FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const dateRange = useAppSelector(state => state.incidents.filter.dateRange);
 
-  const listenerRef = useRef<ReturnType<typeof FirebaseIncidents.listener> | null>(null);
+  const listenerRef = useRef<ReturnType<typeof FirebaseIncidents.listener> | null>(
+    null
+  );
+  const hasReceivedInitialSnapshot = useRef(false);
 
   const setIncidents = useDebouncedCallback((incidents: LocalIncident[]) => {
     dispatch(setIncidentList(incidents));
   }, 300);
 
+  const markIncidentsReady = useCallback(() => {
+    if (hasReceivedInitialSnapshot.current) {
+      return;
+    }
+
+    hasReceivedInitialSnapshot.current = true;
+    dispatch(setIncidentsListReady(true));
+  }, [dispatch]);
+
   const subscribe = useCallback(() => {
     if (listenerRef.current) return;
 
-    listenerRef.current = FirebaseIncidents.listener(newIncidents => {
-      const convertedIncidents: LocalIncident[] = newIncidents.map(
-        incident => ({
-          ...incident,
-          date: incident.date.toDate().valueOf(),
-        })
-      );
-      setIncidents(convertedIncidents);
-    });
-  }, [setIncidents]);
+    hasReceivedInitialSnapshot.current = false;
+    dispatch(setIncidentsListReady(false));
+
+    listenerRef.current = FirebaseIncidents.listener(
+      newIncidents => {
+        markIncidentsReady();
+
+        const convertedIncidents: LocalIncident[] = newIncidents.map(
+          incident => ({
+            ...incident,
+            date: incident.date.toDate().valueOf(),
+          })
+        );
+        setIncidents(convertedIncidents);
+      },
+      () => {
+        markIncidentsReady();
+      }
+    );
+  }, [dispatch, markIncidentsReady, setIncidents]);
 
   const unsubscribe = useCallback(() => {
     if (listenerRef.current) {

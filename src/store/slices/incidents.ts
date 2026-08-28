@@ -18,6 +18,8 @@ export interface IncidentsState {
   selected?: LocalIncident;
   filter: IncidentFilterState;
   loading: boolean;
+  /** True once the active data source has returned its first snapshot or query result. */
+  listReady: boolean;
 }
 
 // ── Thunks ──────────────────────────────────────────────────────────
@@ -59,6 +61,7 @@ const initialState: IncidentsState = {
   selected: undefined,
   filter: {},
   loading: false,
+  listReady: false,
 };
 
 const incidentsSlice = createSlice({
@@ -67,6 +70,9 @@ const incidentsSlice = createSlice({
   reducers: {
     setIncidentList: (state, action: PayloadAction<LocalIncident[]>) => {
       state.list = action.payload;
+    },
+    setIncidentsListReady: (state, action: PayloadAction<boolean>) => {
+      state.listReady = action.payload;
     },
     setSelectedIncident: (
       state,
@@ -103,18 +109,25 @@ const incidentsSlice = createSlice({
     builder
       .addCase(fetchFilteredIncidents.pending, state => {
         state.loading = true;
+        state.listReady = false;
       })
       .addCase(fetchFilteredIncidents.fulfilled, (state, action) => {
         state.list = action.payload;
         state.loading = false;
+        state.listReady = true;
       })
       .addCase(fetchFilteredIncidents.rejected, state => {
         state.loading = false;
+        state.listReady = true;
       });
   },
 });
 
-export const { setIncidentList, setSelectedIncident, setIncidentFilter } =
-  incidentsSlice.actions;
+export const {
+  setIncidentList,
+  setIncidentsListReady,
+  setSelectedIncident,
+  setIncidentFilter,
+} = incidentsSlice.actions;
 
 export default incidentsSlice.reducer;

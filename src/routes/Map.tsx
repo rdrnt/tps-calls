@@ -56,6 +56,7 @@ const Map: React.FunctionComponent = () => {
 
   const incidentList = useReduxIncidents();
   const selectedIncident = useAppSelector(state => state.incidents.selected);
+  const incidentsListReady = useAppSelector(state => state.incidents.listReady);
   const { drawerOpen, loader } = useAppSelector(state => state.ui);
   const userLocation = useAppSelector(state => state.user.location);
 
@@ -101,35 +102,33 @@ const Map: React.FunctionComponent = () => {
   };
 
   React.useEffect(() => {
-    // if the map isn't loaded, show the loader
     if (!isMapLoaded && !loader.open) {
       dispatch(openLoader('Loading map...'));
       Analytics.pageview('/map');
     }
 
-    // if the map has been loaded, and we have a list of incidents
-    if (isMapLoaded && incidentList.length !== 0) {
-      // Close the loader if it's open
-
-      setTimeout(() => {
-        dispatch(closeLoader());
-      }, 500);
-
-      // If we have an id in the params, see if there's a matching incident in the db/store
-      if (id) {
-        getIncidentWithId(id, true).then(incident => {
-          if (!incident) {
-            toast.error('Incident no longer exists', {
-              description: 'The incident you are looking for no longer exists.',
-              position: 'top-center',
-            });
-          } else {
-            dispatch(setSelectedIncident(incident));
-          }
-        });
-      }
+    // Wait for the first Firestore snapshot, not a non-empty list, before revealing the map.
+    if (isMapLoaded && incidentsListReady && loader.open) {
+      dispatch(closeLoader());
     }
-  }, [isMapLoaded, incidentList.length, id]);
+  }, [isMapLoaded, incidentsListReady, loader.open, dispatch]);
+
+  React.useEffect(() => {
+    if (!isMapLoaded || !id) {
+      return;
+    }
+
+    getIncidentWithId(id, true).then(incident => {
+      if (!incident) {
+        toast.error('Incident no longer exists', {
+          description: 'The incident you are looking for no longer exists.',
+          position: 'top-center',
+        });
+      } else {
+        dispatch(setSelectedIncident(incident));
+      }
+    });
+  }, [isMapLoaded, id, incidentList.length]);
 
   // Close the drawer if we're interacting with the map & the drawer is open d
   React.useEffect(() => {
