@@ -36,6 +36,13 @@ export const TRAFFIC_CAMS_METADATA: RouteMetadata = {
   canonicalPath: '/traffic-cams',
 };
 
+export const UNSUPPORTED_METADATA: RouteMetadata = {
+  title: 'Unsupported Browser | tpscalls',
+  description:
+    'The tpscalls map needs a browser with WebGL2 support. Get the iOS or Android app instead.',
+  canonicalPath: '/unsupported',
+};
+
 export const buildIncidentTitle = (name: string, location: string): string => {
   // Historical incidents can omit cross streets, so the title must not expose an empty `at` fragment.
   if (location.trim()) {

@@ -48,9 +48,11 @@ The dev environment needs these secrets (names only — values live in Cursor Se
 
 ### Map rendering requires WebGL (GUI test caveat)
 
-The map uses `mapbox-gl`, which needs WebGL. The in-VM Chrome used by the
-computer-use tool has no WebGL, so the map throws
-`Error: Map is not supported by this browser` and stays on the loader there
+The map uses `mapbox-gl`, which needs WebGL2. `src/routes/Map.tsx` probes support
+on mount via `isMapSupported()` (`src/helpers/mapSupport.ts`, a wrapper around
+`mapboxgl.supported()`) and redirects unsupported browsers to `/unsupported`.
+The in-VM Chrome used by the computer-use tool has no WebGL, so `/` and `/:id`
+land on `/unsupported` there — that is the expected result, not a failure
 (non-map routes like `/download` and `/contact` render fine). To screenshot the
 working map, use headless Chrome with software WebGL, e.g.
 `google-chrome --headless=new --no-sandbox --user-data-dir=/tmp/p --use-gl=angle --use-angle=swiftshader-webgl --enable-unsafe-swiftshader --virtual-time-budget=20000 --screenshot=out.png http://localhost:3000/`.

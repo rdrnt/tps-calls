@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Incident } from '@rdrnt/tps-calls-shared';
 // v8 requires the renderer-specific /mapbox entry point for Mapbox GL v3.
 import ReactMapGl, { AttributionControl, MapRef } from 'react-map-gl/mapbox';
-import { useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router';
 import {
   MenuIcon,
   NavigationIcon,
@@ -18,6 +18,7 @@ import usePageMetadata from '@/hooks/usePageMetadata';
 import * as Environment from '../helpers/environment';
 import * as Analytics from '../helpers/analytics';
 import * as FirebaseIncidents from '../helpers/firebase/incident';
+import { isMapSupported } from '../helpers/mapSupport';
 
 import { useAppDispatch, useAppSelector } from '../store';
 import { useReduxIncidents } from '../store/selectors';
@@ -68,6 +69,10 @@ const Map: React.FunctionComponent = () => {
   const [interactingWithMap, setInteractingWithMap] =
     React.useState<boolean>(false);
 
+  // Lazy initializer so the WebGL2 probe runs once per mount, not per render.
+  // Support can't change mid-session, so re-checking is pure waste.
+  const [mapSupported] = React.useState(isMapSupported);
+
   const pageTitle = selectedIncident
     ? buildIncidentTitle(selectedIncident.name, selectedIncident.location)
     : MAP_METADATA.title;
@@ -102,6 +107,14 @@ const Map: React.FunctionComponent = () => {
   };
 
   React.useEffect(() => {
+    // The loader is global; leaving it open on the way out would cover /unsupported.
+    if (!mapSupported) {
+      if (loader.open) {
+        dispatch(closeLoader());
+      }
+      return;
+    }
+
     if (!isMapLoaded && !loader.open) {
       dispatch(openLoader('Loading map...'));
       Analytics.pageview('/map');
@@ -111,7 +124,7 @@ const Map: React.FunctionComponent = () => {
     if (isMapLoaded && incidentsListReady && loader.open) {
       dispatch(closeLoader());
     }
-  }, [isMapLoaded, incidentsListReady, loader.open, dispatch]);
+  }, [mapSupported, isMapLoaded, incidentsListReady, loader.open, dispatch]);
 
   React.useEffect(() => {
     if (!isMapLoaded || !id) {
@@ -171,6 +184,12 @@ const Map: React.FunctionComponent = () => {
       });
     }
   }, [selectedIncident]);
+
+  // Every hook above must run first — bailing earlier would violate the rules of hooks.
+  // `replace` so the back button doesn't bounce the user into the same dead map.
+  if (!mapSupported) {
+    return <Navigate to="/unsupported" replace />;
+  }
 
   return (
     <>

@@ -6,6 +6,7 @@ const Map = React.lazy(() => import('./routes/Map'));
 const ContactPage = React.lazy(() => import('./routes/Contact'));
 const DownloadPage = React.lazy(() => import('./routes/Download'));
 const TrafficCams = React.lazy(() => import('./routes/TrafficCams'));
+const UnsupportedPage = React.lazy(() => import('./routes/Unsupported'));
 
 import { ThemeProvider } from './theme-provider';
 
@@ -47,6 +48,15 @@ const App: React.FunctionComponent = () => (
                 element={
                   <React.Suspense fallback={routeFallback}>
                     <TrafficCams />
+                  </React.Suspense>
+                }
+              />
+              {/* Must precede /:id so the literal path isn't swallowed as an incident id. */}
+              <Route
+                path="/unsupported"
+                element={
+                  <React.Suspense fallback={routeFallback}>
+                    <UnsupportedPage />
                   </React.Suspense>
                 }
               />
