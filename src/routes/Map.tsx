@@ -1,6 +1,5 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 import * as React from 'react';
-import { Incident } from '@rdrnt/tps-calls-shared';
 // v8 requires the renderer-specific /mapbox entry point for Mapbox GL v3.
 import ReactMapGl, { AttributionControl, MapRef } from 'react-map-gl/mapbox';
 import { Navigate, useParams } from 'react-router';
@@ -50,6 +49,7 @@ import {
 import MapSidebar from '../components/MapSidebar';
 import { SafeArea } from '../components/SafeArea';
 import MapCameraInfo from '../components/MapCameraInfo';
+import { LocalIncident } from '../types';
 
 const Map: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
@@ -93,10 +93,8 @@ const Map: React.FunctionComponent = () => {
   const getIncidentWithId = async (
     id: string,
     searchDB = false
-  ): Promise<Incident<any> | undefined> => {
-    const matchingIncident: Incident<any> | undefined = incidentList.find(
-      incident => incident.id === id
-    );
+  ): Promise<LocalIncident | undefined> => {
+    const matchingIncident = incidentList.find(incident => incident.id === id);
 
     if (!matchingIncident && searchDB) {
       const incidentFromDB = await FirebaseIncidents.getIncidentFromId(id);

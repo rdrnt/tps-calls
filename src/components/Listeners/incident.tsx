@@ -28,9 +28,9 @@ const IncidentListener: FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const dateRange = useAppSelector(state => state.incidents.filter.dateRange);
 
-  const listenerRef = useRef<ReturnType<typeof FirebaseIncidents.listener> | null>(
-    null
-  );
+  const listenerRef = useRef<ReturnType<
+    typeof FirebaseIncidents.listener
+  > | null>(null);
   const hasReceivedInitialSnapshot = useRef(false);
 
   const setIncidents = useDebouncedCallback((incidents: LocalIncident[]) => {
@@ -56,13 +56,7 @@ const IncidentListener: FunctionComponent = () => {
       newIncidents => {
         markIncidentsReady();
 
-        const convertedIncidents: LocalIncident[] = newIncidents.map(
-          incident => ({
-            ...incident,
-            date: incident.date.toDate().valueOf(),
-          })
-        );
-        setIncidents(convertedIncidents);
+        setIncidents(newIncidents.map(FirebaseIncidents.toLocalIncident));
       },
       () => {
         markIncidentsReady();

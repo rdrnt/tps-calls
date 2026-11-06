@@ -13,6 +13,13 @@ import {
 import { firestore } from '.';
 import { Incident, FirestoreCollections } from '@rdrnt/tps-calls-shared';
 
+import type { LocalIncident } from '../../types';
+
+export const toLocalIncident = (incident: Incident<any>): LocalIncident => ({
+  ...incident,
+  date: incident.date.toDate().valueOf(),
+});
+
 export const listener = (
   onChange: (incidents: Incident<any>[]) => void,
   onError?: (error: Error) => void
@@ -89,13 +96,13 @@ export const getIncidentsAtDate = async ({
 
 export const getIncidentFromId = async (
   id: string
-): Promise<Incident<any> | undefined> => {
+): Promise<LocalIncident | undefined> => {
   try {
     const incidentDocRef = doc(firestore, FirestoreCollections.INCIDENTS, id);
     const incidentDoc = await getDoc(incidentDocRef);
 
     return incidentDoc.exists()
-      ? (incidentDoc.data() as Incident<any>)
+      ? toLocalIncident(incidentDoc.data() as Incident<any>)
       : undefined;
   } catch (error) {
     return undefined;
