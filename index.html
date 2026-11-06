@@ -59,11 +59,14 @@
     -->
     <link rel="manifest" href="/manifest.json" />
 
-    <!-- Map routes start dark (matching the dark loader) so loading doesn't flash white -->
+    <!-- Map routes use the map's colour so loading doesn't flash white, and iOS Safari tints its bars to match the map -->
     <style>
+      :root {
+        --map-background: #233043;
+      }
       html.map-route,
       html.map-route body {
-        background: oklch(0.145 0 0);
+        background: var(--map-background);
       }
     </style>
     <script>

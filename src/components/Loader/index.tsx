@@ -53,7 +53,7 @@ const Loader: FunctionComponent = () => {
         // Only the map opens this loader, and the map is always dark.
         <motion.div
           key="loader"
-          className="dark absolute top-0 left-0 h-screen w-full z-999 bg-background flex flex-col justify-center items-center"
+          className="dark absolute top-0 left-0 h-screen w-full z-999 bg-(--map-background) flex flex-col justify-center items-center"
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onAnimationEnd={() => {
