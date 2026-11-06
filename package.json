@@ -37,7 +37,7 @@
     "firebase": "^12.18.0",
     "fuse.js": "^7.5.0",
     "geolib": "^3.3.14",
-    "lucide-react": "^0.577.0",
+    "lucide-react": "^1.69.0",
     "mapbox-gl": "^3.29.0",
     "motion": "^14.9.1",
     "next-themes": "^0.4.6",
