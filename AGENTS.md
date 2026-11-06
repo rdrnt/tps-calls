@@ -72,10 +72,8 @@ incident has been fetched from Firestore (see `src/routes/Map.tsx`).
 
 - Run (dev): `yarn start` → Vite dev server on `http://localhost:3000`.
 - Build: `yarn build` (prod) or `yarn build:dev` (dev mode, no Sentry upload).
-- Lint: `yarn lint` (ESLint is **not** type-aware here — no `project` set).
-  Note: the repo is **not** currently lint/format clean (`yarn lint` and
-  `yarn format:check` report many pre-existing `prettier/prettier` issues);
-  this is a repo state issue, not an environment problem.
+- Lint: `yarn lint` (oxlint, configured in `.oxlintrc.json`; not type-aware).
+  Format: `yarn format` / `yarn format:check` (Prettier).
 - Type-check: `yarn type-check` (`tsc --noEmit`).
 - Test: `yarn test` (Vitest + jsdom). There are currently **no** test files in
   the repo, so this is effectively a no-op until tests are added.
