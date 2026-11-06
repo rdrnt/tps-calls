@@ -28,6 +28,7 @@ IncidentFilters/
 **Date Range** — Calendar range picker (Popover + Calendar) for dates, two time inputs. Disabled by default, pre-filled with last 6 hours.
 
 Constraints:
+
 - Start must be before end
 - Max 6 hour window (`MAX_RANGE_HOURS`)
 - End can't be in the future
@@ -78,4 +79,3 @@ Firestore (date range)  →  state.incidents.list (raw)
                                     ↓
                            Map.tsx / MapSidebar
 ```
-
