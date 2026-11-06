@@ -5,7 +5,7 @@ import Fuse from 'fuse.js';
 import { TRAFFIC_CAMS_METADATA } from '@/config/seo';
 import usePageMetadata from '@/hooks/usePageMetadata';
 
-import { Analytics } from '../helpers';
+import * as Analytics from '../helpers/analytics';
 import {
   Card,
   CardContent,

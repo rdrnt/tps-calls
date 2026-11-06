@@ -42,5 +42,5 @@ export const compareHourDifference = (
     convertTimestampToDate(secondDate)
   );
 
-export const distanceInWords = (date: Date): string =>
+export const distanceInWords = (date: Date | number): string =>
   formatDistanceToNow(date);

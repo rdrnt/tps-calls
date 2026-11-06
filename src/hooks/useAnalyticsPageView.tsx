@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Analytics } from '../helpers';
+import * as Analytics from '../helpers/analytics';
 
 interface UseAnalyticsPageViewProps {
   path: string;

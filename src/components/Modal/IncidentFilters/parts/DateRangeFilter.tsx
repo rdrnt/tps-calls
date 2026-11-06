@@ -9,7 +9,7 @@
  * data) and after today. The schema performs the exact-timestamp validation.
  */
 
-import { FunctionComponent, useMemo } from 'react';
+import { FunctionComponent, useMemo, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { format, parse } from 'date-fns';
 import { CalendarDays, Clock, Info } from 'lucide-react';
@@ -48,7 +48,7 @@ const DateRangeFilter: FunctionComponent = () => {
   const startDateStr = watch('dateRangeFilter.startDate');
   const endDateStr = watch('dateRangeFilter.endDate');
 
-  const today = new Date();
+  const [today] = useState(() => new Date());
   const dateErrors = errors.dateRangeFilter;
 
   // Calendar Date objects → form strings

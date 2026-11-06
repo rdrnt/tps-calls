@@ -1,10 +1,11 @@
 import * as Sentry from '@sentry/react';
 import ReactGAImport from 'react-ga4';
-import { Environment } from '.';
+import * as Environment from './environment';
 
 // react-ga4 is CJS; Rolldown surfaces its default export one level deeper than Rollup did.
 const ReactGA =
-  (ReactGAImport as { default?: typeof ReactGAImport }).default ?? ReactGAImport;
+  (ReactGAImport as { default?: typeof ReactGAImport }).default ??
+  ReactGAImport;
 
 // Initializes the analytics
 export const initialize = () => {
@@ -15,8 +16,9 @@ export const initialize = () => {
     Sentry.init({
       dsn: SENTRY_DSN,
       environment: 'production',
-      release: `tpscalls-frontend@${import.meta.env.npm_package_version}`,
       tracesSampleRate: 0.1, // 10% of transactions for performance monitoring
+      // v11 collects user info, cookies and bodies by default; keep v10's no-PII baseline.
+      dataCollection: { userInfo: false, cookies: false, httpBodies: [] },
       beforeSend(event) {
         // Filter out known non-critical errors
         return event;
