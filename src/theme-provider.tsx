@@ -20,6 +20,15 @@ const initialState: ThemeProviderState = {
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 
+// Safari throws a SecurityError on any localStorage access when storage is blocked.
+const readStoredTheme = (storageKey: string): Theme | null => {
+  try {
+    return localStorage.getItem(storageKey) as Theme | null;
+  } catch {
+    return null;
+  }
+};
+
 export function ThemeProvider({
   children,
   defaultTheme = 'system',
@@ -27,7 +36,7 @@ export function ThemeProvider({
   ...props
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
+    () => readStoredTheme(storageKey) || defaultTheme
   );
 
   useEffect(() => {
@@ -51,7 +60,11 @@ export function ThemeProvider({
   const value = {
     theme,
     setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme);
+      try {
+        localStorage.setItem(storageKey, theme);
+      } catch {
+        // Storage is blocked; keep the theme for this session only.
+      }
       setTheme(theme);
     },
   };
