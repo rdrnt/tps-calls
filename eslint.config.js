@@ -44,6 +44,8 @@ export default [
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
+      // TypeScript already checks for undefined names.
+      'no-undef': 'off',
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
     },

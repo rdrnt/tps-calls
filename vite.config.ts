@@ -6,7 +6,8 @@ import { resolve } from 'node:path';
 
 export default defineConfig(() => {
   // Source-map publication is deliberately opt-in to prevent local and preview builds from creating Sentry releases.
-  const uploadSentrySourceMaps = process.env.SENTRY_UPLOAD_SOURCEMAPS === 'true';
+  const uploadSentrySourceMaps =
+    process.env.SENTRY_UPLOAD_SOURCEMAPS === 'true';
 
   return {
     plugins: [
@@ -65,7 +66,7 @@ export default defineConfig(() => {
           },
         },
       },
-      sourcemap: uploadSentrySourceMaps ? 'hidden' : false,
+      sourcemap: uploadSentrySourceMaps ? ('hidden' as const) : false,
       // Optimize chunk size
       chunkSizeWarningLimit: 1000,
     },

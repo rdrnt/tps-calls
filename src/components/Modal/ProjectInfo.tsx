@@ -16,7 +16,6 @@ import {
 } from '../ui/accordion';
 import { Heart, Mail } from 'lucide-react';
 import { APPSTORE_DOWNLOAD_LINK } from '../../config';
-import { Typography } from '../Typography';
 
 type ProjectInfoModalProps = ModalProps;
 

@@ -89,7 +89,7 @@ export const getIncidentsAtDate = async ({
     }));
 
     return dateIncidents;
-  } catch (error) {
+  } catch {
     return [];
   }
 };
@@ -104,7 +104,7 @@ export const getIncidentFromId = async (
     return incidentDoc.exists()
       ? toLocalIncident(incidentDoc.data() as Incident<any>)
       : undefined;
-  } catch (error) {
+  } catch {
     return undefined;
   }
 };

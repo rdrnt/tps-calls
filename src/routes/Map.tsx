@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import { toast, Toaster } from 'sonner';
 
-import { MAPBOX_THEME_URL, Colors } from '../config';
+import { MAPBOX_THEME_URL } from '../config';
 import { buildIncidentTitle, MAP_METADATA } from '@/config/seo';
 import usePageMetadata from '@/hooks/usePageMetadata';
 import * as Environment from '../helpers/environment';
