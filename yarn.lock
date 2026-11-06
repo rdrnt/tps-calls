@@ -763,10 +763,10 @@
     protobufjs "^7.2.5"
     yargs "^17.7.2"
 
-"@hookform/resolvers@^5.9.1":
-  version "5.9.2"
-  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-5.9.2.tgz#e28d076f3b690d3d90d8f522aed21aa7aefd7238"
-  integrity sha512-RtjTnZqsC38s4NKp2XO3fD8IA5uyN4tB7McQ5C6uiMPcV+WWO8F+wVa3e+BXUpH2ScgxghAlwFRMVqjT9WChAQ==
+"@hookform/resolvers@^7.0.3":
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-7.0.3.tgz#e747670e9570e3995248e77b16cab8aa3373d145"
+  integrity sha512-beGY1JY6K5cyWlswD4BVf7UTb5MxSjKkjljrRyLPT3KIQzsTU0jOibBKqtdcKqIZYQUUyURed7roLWZtSdAtiQ==
   dependencies:
     "@standard-schema/utils" "^0.3.0"
 
