@@ -38,10 +38,14 @@ describe('usePageMetadata', () => {
 
     expect(document.title).toBe('Contact | tpscalls');
     expect(
-      document.querySelector('meta[name="description"]')?.getAttribute('content')
+      document
+        .querySelector('meta[name="description"]')
+        ?.getAttribute('content')
     ).toBe('Contact us about tpscalls.');
     expect(
-      document.querySelector('meta[property="og:title"]')?.getAttribute('content')
+      document
+        .querySelector('meta[property="og:title"]')
+        ?.getAttribute('content')
     ).toBe('Contact | tpscalls');
     expect(
       document
@@ -69,7 +73,9 @@ describe('usePageMetadata', () => {
 
     expect(document.title).toBe('Initial Title');
     expect(
-      document.querySelector('meta[name="description"]')?.getAttribute('content')
+      document
+        .querySelector('meta[name="description"]')
+        ?.getAttribute('content')
     ).toBe('Initial description');
     expect(document.querySelector('link[rel="canonical"]')).toBeNull();
   });
