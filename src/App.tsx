@@ -12,14 +12,15 @@ import { ThemeProvider } from './theme-provider';
 
 import store from './store';
 
+import ErrorBoundary from './components/ErrorBoundary';
 import Loader, { StaticLoader } from './components/Loader';
 import Modal from './components/Modal';
 
 const routeFallback = <StaticLoader message="Loading..." />;
 
 const App: React.FunctionComponent = () => (
-  <>
-    <ThemeProvider defaultTheme="system" storageKey="tpscalls-ui-theme">
+  <ThemeProvider defaultTheme="system" storageKey="tpscalls-ui-theme">
+    <ErrorBoundary>
       <Router>
         <Provider store={store}>
           <>
@@ -80,8 +81,8 @@ const App: React.FunctionComponent = () => (
           </>
         </Provider>
       </Router>
-    </ThemeProvider>
-  </>
+    </ErrorBoundary>
+  </ThemeProvider>
 );
 
 export default App;
