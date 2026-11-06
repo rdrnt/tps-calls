@@ -7,7 +7,7 @@ import prettier from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
 import globals from 'globals';
 
-// eslint-plugin-react@7.x does not yet declare ESLint 10 peer support; stay on ESLint 9 until it does.
+// eslint-plugin-react@7 can't detect the React version under ESLint 10, so it's pinned in settings.
 export default [
   js.configs.recommended,
   reactHooks.configs.flat.recommended,
@@ -49,7 +49,7 @@ export default [
     },
     settings: {
       react: {
-        version: 'detect',
+        version: '19.3',
       },
     },
   },
@@ -77,7 +77,7 @@ export default [
     },
     settings: {
       react: {
-        version: 'detect',
+        version: '19.3',
       },
     },
   },
