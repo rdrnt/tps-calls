@@ -61,9 +61,9 @@ incident has been fetched from Firestore (see `src/routes/Map.tsx`).
 
 ### Node / package manager
 
-- Use the default Node 22 toolchain (`/exec-daemon/node`) with `yarn` 1.x. The
-  committed `.nvmrc` pins `20.19.4`, but Node 22 is the environment default and
-  builds/serves the app fine; do not fight the PATH to force Node 20.
+- Use Node 24 (`.nvmrc`) with `yarn` 1.x. `firebase` 13 depends on
+  `@firebase/ai`, which requires Node 24.12 or later, so `yarn install` fails on
+  Node 22.
 - `node_modules` hot-reload caveat: after changing dependencies, restart
   `yarn start` (Vite dev server) — newly installed packages are not always picked
   up by an already-running dev server.
