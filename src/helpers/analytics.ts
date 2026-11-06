@@ -4,7 +4,8 @@ import * as Environment from './environment';
 
 // react-ga4 is CJS; Rolldown surfaces its default export one level deeper than Rollup did.
 const ReactGA =
-  (ReactGAImport as { default?: typeof ReactGAImport }).default ?? ReactGAImport;
+  (ReactGAImport as { default?: typeof ReactGAImport }).default ??
+  ReactGAImport;
 
 // Initializes the analytics
 export const initialize = () => {
@@ -16,6 +17,8 @@ export const initialize = () => {
       dsn: SENTRY_DSN,
       environment: 'production',
       tracesSampleRate: 0.1, // 10% of transactions for performance monitoring
+      // v11 collects user info, cookies and bodies by default; keep v10's no-PII baseline.
+      dataCollection: { userInfo: false, cookies: false, httpBodies: [] },
       beforeSend(event) {
         // Filter out known non-critical errors
         return event;
