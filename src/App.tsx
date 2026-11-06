@@ -2,11 +2,13 @@ import * as React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Routes } from 'react-router';
 
-const Map = React.lazy(() => import('./routes/Map'));
-const ContactPage = React.lazy(() => import('./routes/Contact'));
-const DownloadPage = React.lazy(() => import('./routes/Download'));
-const TrafficCams = React.lazy(() => import('./routes/TrafficCams'));
-const UnsupportedPage = React.lazy(() => import('./routes/Unsupported'));
+import { lazyWithReload } from './helpers/lazyWithReload';
+
+const Map = lazyWithReload(() => import('./routes/Map'));
+const ContactPage = lazyWithReload(() => import('./routes/Contact'));
+const DownloadPage = lazyWithReload(() => import('./routes/Download'));
+const TrafficCams = lazyWithReload(() => import('./routes/TrafficCams'));
+const UnsupportedPage = lazyWithReload(() => import('./routes/Unsupported'));
 
 import { ThemeProvider } from './theme-provider';
 

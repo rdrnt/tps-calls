@@ -4,13 +4,14 @@ import { useDebouncedCallback } from 'use-debounce';
 
 import { AppState } from '../../store';
 import { closeModal } from '../../store/actions';
+import { lazyWithReload } from '../../helpers/lazyWithReload';
 
 import { Dialog, DialogContent } from '../ui/dialog';
 import { ModalTypes, ModalProps } from './types';
 
-const ProjectInfoModal = React.lazy(() => import('./ProjectInfo'));
-const DownloadMobileAppModal = React.lazy(() => import('./MobileApp'));
-const IncidentFiltersModal = React.lazy(() => import('./IncidentFilters'));
+const ProjectInfoModal = lazyWithReload(() => import('./ProjectInfo'));
+const DownloadMobileAppModal = lazyWithReload(() => import('./MobileApp'));
+const IncidentFiltersModal = lazyWithReload(() => import('./IncidentFilters'));
 
 type LazyModalComponent = React.LazyExoticComponent<
   React.FunctionComponent<ModalProps>
