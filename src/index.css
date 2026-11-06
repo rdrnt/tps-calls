@@ -168,3 +168,9 @@ body {
     padding-bottom: calc(var(--safe-bottom) + 3.5rem); /* ~56px zone */
   }
 }
+
+/* The map is 100vh, which runs under iOS Safari's toolbar; lift Mapbox's logo and attribution clear of it. */
+.mapboxgl-map .mapboxgl-ctrl-bottom-left,
+.mapboxgl-map .mapboxgl-ctrl-bottom-right {
+  bottom: calc(100vh - 100dvh);
+}
