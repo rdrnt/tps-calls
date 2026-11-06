@@ -104,6 +104,12 @@ const Map: React.FunctionComponent = () => {
     return matchingIncident;
   };
 
+  // Keeps the page behind the map dark; index.html sets it before first paint.
+  React.useEffect(() => {
+    document.documentElement.classList.add('map-route');
+    return () => document.documentElement.classList.remove('map-route');
+  }, []);
+
   React.useEffect(() => {
     // The loader is global; leaving it open on the way out would cover /unsupported.
     if (!mapSupported) {

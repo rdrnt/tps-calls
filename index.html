@@ -58,6 +58,23 @@
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
     <link rel="manifest" href="/manifest.json" />
+
+    <!-- Map routes start dark (matching the dark loader) so loading doesn't flash white -->
+    <style>
+      html.map-route,
+      html.map-route body {
+        background: oklch(0.145 0 0);
+      }
+    </style>
+    <script>
+      if (
+        !/^\/(contact|download|traffic-cams|unsupported)\b/.test(
+          location.pathname
+        )
+      ) {
+        document.documentElement.classList.add('map-route');
+      }
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

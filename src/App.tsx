@@ -19,6 +19,8 @@ import Loader, { StaticLoader } from './components/Loader';
 import Modal from './components/Modal';
 
 const routeFallback = <StaticLoader message="Loading..." />;
+// Dark to match the map, so loading doesn't flash white in light mode.
+const mapFallback = <StaticLoader className="dark" />;
 
 const App: React.FunctionComponent = () => (
   <ThemeProvider defaultTheme="system" storageKey="tpscalls-ui-theme">
@@ -66,7 +68,7 @@ const App: React.FunctionComponent = () => (
               <Route
                 path="/:id"
                 element={
-                  <React.Suspense fallback={routeFallback}>
+                  <React.Suspense fallback={mapFallback}>
                     <Map />
                   </React.Suspense>
                 }
@@ -74,7 +76,7 @@ const App: React.FunctionComponent = () => (
               <Route
                 path="/"
                 element={
-                  <React.Suspense fallback={routeFallback}>
+                  <React.Suspense fallback={mapFallback}>
                     <Map />
                   </React.Suspense>
                 }
