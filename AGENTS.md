@@ -48,9 +48,11 @@ The dev environment needs these secrets (names only — values live in Cursor Se
 
 ### Map rendering requires WebGL (GUI test caveat)
 
-The map uses `mapbox-gl`, which needs WebGL. The in-VM Chrome used by the
-computer-use tool has no WebGL, so the map throws
-`Error: Map is not supported by this browser` and stays on the loader there
+The map uses `mapbox-gl`, which needs WebGL2. `src/routes/Map.tsx` probes support
+on mount via `isMapSupported()` (`src/helpers/mapSupport.ts`, a wrapper around
+`mapboxgl.supported()`) and redirects unsupported browsers to `/unsupported`.
+The in-VM Chrome used by the computer-use tool has no WebGL, so `/` and `/:id`
+land on `/unsupported` there — that is the expected result, not a failure
 (non-map routes like `/download` and `/contact` render fine). To screenshot the
 working map, use headless Chrome with software WebGL, e.g.
 `google-chrome --headless=new --no-sandbox --user-data-dir=/tmp/p --use-gl=angle --use-angle=swiftshader-webgl --enable-unsafe-swiftshader --virtual-time-budget=20000 --screenshot=out.png http://localhost:3000/`.
@@ -59,9 +61,9 @@ incident has been fetched from Firestore (see `src/routes/Map.tsx`).
 
 ### Node / package manager
 
-- Use the default Node 22 toolchain (`/exec-daemon/node`) with `yarn` 1.x. The
-  committed `.nvmrc` pins `20.19.4`, but Node 22 is the environment default and
-  builds/serves the app fine; do not fight the PATH to force Node 20.
+- Use Node 24 (`.nvmrc`) with `yarn` 1.x. `firebase` 13 depends on
+  `@firebase/ai`, which requires Node 24.12 or later, so `yarn install` fails on
+  Node 22.
 - `node_modules` hot-reload caveat: after changing dependencies, restart
   `yarn start` (Vite dev server) — newly installed packages are not always picked
   up by an already-running dev server.
@@ -70,10 +72,8 @@ incident has been fetched from Firestore (see `src/routes/Map.tsx`).
 
 - Run (dev): `yarn start` → Vite dev server on `http://localhost:3000`.
 - Build: `yarn build` (prod) or `yarn build:dev` (dev mode, no Sentry upload).
-- Lint: `yarn lint` (ESLint is **not** type-aware here — no `project` set).
-  Note: the repo is **not** currently lint/format clean (`yarn lint` and
-  `yarn format:check` report many pre-existing `prettier/prettier` issues);
-  this is a repo state issue, not an environment problem.
+- Lint: `yarn lint` (oxlint, configured in `.oxlintrc.json`; not type-aware).
+  Format: `yarn format` / `yarn format:check` (oxfmt, configured in `.oxfmtrc.json`).
 - Type-check: `yarn type-check` (`tsc --noEmit`).
 - Test: `yarn test` (Vitest + jsdom). There are currently **no** test files in
   the repo, so this is effectively a no-op until tests are added.

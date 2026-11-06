@@ -1,0 +1,13 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "react", "unicorn", "oxc"],
+  "categories": { "correctness": "error" },
+  "env": { "browser": true, "node": true },
+  "ignorePatterns": ["dist/**"],
+  "rules": {
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "warn",
+    "typescript/no-explicit-any": "warn"
+  }
+}

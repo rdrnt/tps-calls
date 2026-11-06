@@ -12,10 +12,17 @@ import {
 } from 'firebase/firestore';
 import { firestore } from '.';
 import { Incident, FirestoreCollections } from '@rdrnt/tps-calls-shared';
-import { DateHelper } from '..';
+
+import type { LocalIncident } from '../../types';
+
+export const toLocalIncident = (incident: Incident<any>): LocalIncident => ({
+  ...incident,
+  date: incident.date.toDate().valueOf(),
+});
 
 export const listener = (
-  onChange: (incidents: Incident<any>[]) => void
+  onChange: (incidents: Incident<any>[]) => void,
+  onError?: (error: Error) => void
 ): ReturnType<typeof onSnapshot> => {
   const incidentsCollection = collection(firestore, 'incidents');
   const incidentsQuery = query(
@@ -24,14 +31,20 @@ export const listener = (
     limit(100)
   );
 
-  return onSnapshot(incidentsQuery, incidentsSnapshot => {
-    const incidents: Incident<any>[] = incidentsSnapshot.docs.map(
-      incidentDoc => ({
-        ...(incidentDoc.data() as Incident<any>),
-      })
-    );
-    onChange(incidents);
-  });
+  return onSnapshot(
+    incidentsQuery,
+    incidentsSnapshot => {
+      const incidents: Incident<any>[] = incidentsSnapshot.docs.map(
+        incidentDoc => ({
+          ...(incidentDoc.data() as Incident<any>),
+        })
+      );
+      onChange(incidents);
+    },
+    error => {
+      onError?.(error);
+    }
+  );
 };
 
 export const getOldestIncident = async (): Promise<Incident<any>> => {
@@ -76,22 +89,22 @@ export const getIncidentsAtDate = async ({
     }));
 
     return dateIncidents;
-  } catch (error) {
+  } catch {
     return [];
   }
 };
 
 export const getIncidentFromId = async (
   id: string
-): Promise<Incident<any> | undefined> => {
+): Promise<LocalIncident | undefined> => {
   try {
     const incidentDocRef = doc(firestore, FirestoreCollections.INCIDENTS, id);
     const incidentDoc = await getDoc(incidentDocRef);
 
     return incidentDoc.exists()
-      ? (incidentDoc.data() as Incident<any>)
+      ? toLocalIncident(incidentDoc.data() as Incident<any>)
       : undefined;
-  } catch (error) {
+  } catch {
     return undefined;
   }
 };

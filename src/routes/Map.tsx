@@ -1,9 +1,8 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 import * as React from 'react';
-import { Incident } from '@rdrnt/tps-calls-shared';
 // v8 requires the renderer-specific /mapbox entry point for Mapbox GL v3.
 import ReactMapGl, { AttributionControl, MapRef } from 'react-map-gl/mapbox';
-import { useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router';
 import {
   MenuIcon,
   NavigationIcon,
@@ -12,14 +11,22 @@ import {
 } from 'lucide-react';
 import { toast, Toaster } from 'sonner';
 
-import { MAPBOX_THEME_URL, Colors } from '../config';
+import { MAPBOX_THEME_URL } from '../config';
 import { buildIncidentTitle, MAP_METADATA } from '@/config/seo';
 import usePageMetadata from '@/hooks/usePageMetadata';
-import { Environment, Analytics } from '../helpers';
+import * as Environment from '../helpers/environment';
+import * as Analytics from '../helpers/analytics';
 import * as FirebaseIncidents from '../helpers/firebase/incident';
+import { isMapSupported } from '../helpers/mapSupport';
 
 import { useAppDispatch, useAppSelector } from '../store';
 import { useReduxIncidents } from '../store/selectors';
+
+import {
+  LocationListener,
+  IncidentListener,
+  CameraListener,
+} from '../components/Listeners';
 
 import MapIncidentInfo from '../components/MapIncidentInfo';
 import AnimatedMapMarker from '../components/MapMarker/Animated';
@@ -42,6 +49,7 @@ import {
 import MapSidebar from '../components/MapSidebar';
 import { SafeArea } from '../components/SafeArea';
 import MapCameraInfo from '../components/MapCameraInfo';
+import { LocalIncident } from '../types';
 
 const Map: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
@@ -49,6 +57,7 @@ const Map: React.FunctionComponent = () => {
 
   const incidentList = useReduxIncidents();
   const selectedIncident = useAppSelector(state => state.incidents.selected);
+  const incidentsListReady = useAppSelector(state => state.incidents.listReady);
   const { drawerOpen, loader } = useAppSelector(state => state.ui);
   const userLocation = useAppSelector(state => state.user.location);
 
@@ -59,6 +68,10 @@ const Map: React.FunctionComponent = () => {
   const [isMapLoaded, setIsMapLoaded] = React.useState<boolean>(false);
   const [interactingWithMap, setInteractingWithMap] =
     React.useState<boolean>(false);
+
+  // Lazy initializer so the WebGL2 probe runs once per mount, not per render.
+  // Support can't change mid-session, so re-checking is pure waste.
+  const [mapSupported] = React.useState(isMapSupported);
 
   const pageTitle = selectedIncident
     ? buildIncidentTitle(selectedIncident.name, selectedIncident.location)
@@ -80,10 +93,8 @@ const Map: React.FunctionComponent = () => {
   const getIncidentWithId = async (
     id: string,
     searchDB = false
-  ): Promise<Incident<any> | undefined> => {
-    const matchingIncident: Incident<any> | undefined = incidentList.find(
-      incident => incident.id === id
-    );
+  ): Promise<LocalIncident | undefined> => {
+    const matchingIncident = incidentList.find(incident => incident.id === id);
 
     if (!matchingIncident && searchDB) {
       const incidentFromDB = await FirebaseIncidents.getIncidentFromId(id);
@@ -94,35 +105,41 @@ const Map: React.FunctionComponent = () => {
   };
 
   React.useEffect(() => {
-    // if the map isn't loaded, show the loader
+    // The loader is global; leaving it open on the way out would cover /unsupported.
+    if (!mapSupported) {
+      if (loader.open) {
+        dispatch(closeLoader());
+      }
+      return;
+    }
+
     if (!isMapLoaded && !loader.open) {
       dispatch(openLoader('Loading map...'));
       Analytics.pageview('/map');
     }
 
-    // if the map has been loaded, and we have a list of incidents
-    if (isMapLoaded && incidentList.length !== 0) {
-      // Close the loader if it's open
-
-      setTimeout(() => {
-        dispatch(closeLoader());
-      }, 500);
-
-      // If we have an id in the params, see if there's a matching incident in the db/store
-      if (id) {
-        getIncidentWithId(id, true).then(incident => {
-          if (!incident) {
-            toast.error('Incident no longer exists', {
-              description: 'The incident you are looking for no longer exists.',
-              position: 'top-center',
-            });
-          } else {
-            dispatch(setSelectedIncident(incident));
-          }
-        });
-      }
+    // Wait for the first Firestore snapshot, not a non-empty list, before revealing the map.
+    if (isMapLoaded && incidentsListReady && loader.open) {
+      dispatch(closeLoader());
     }
-  }, [isMapLoaded, incidentList.length, id]);
+  }, [mapSupported, isMapLoaded, incidentsListReady, loader.open, dispatch]);
+
+  React.useEffect(() => {
+    if (!isMapLoaded || !id) {
+      return;
+    }
+
+    getIncidentWithId(id, true).then(incident => {
+      if (!incident) {
+        toast.error('Incident no longer exists', {
+          description: 'The incident you are looking for no longer exists.',
+          position: 'top-center',
+        });
+      } else {
+        dispatch(setSelectedIncident(incident));
+      }
+    });
+  }, [isMapLoaded, id, incidentList.length]);
 
   // Close the drawer if we're interacting with the map & the drawer is open d
   React.useEffect(() => {
@@ -166,8 +183,17 @@ const Map: React.FunctionComponent = () => {
     }
   }, [selectedIncident]);
 
+  // Every hook above must run first — bailing earlier would violate the rules of hooks.
+  // `replace` so the back button doesn't bounce the user into the same dead map.
+  if (!mapSupported) {
+    return <Navigate to="/unsupported" replace />;
+  }
+
   return (
     <>
+      <IncidentListener />
+      <CameraListener />
+      <LocationListener />
       <h1 className="sr-only">Live Toronto Police Calls Map</h1>
       <ReactMapGl
         ref={refForMap}

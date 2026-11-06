@@ -1,5 +1,5 @@
 import { Incident } from '@rdrnt/tps-calls-shared';
-import { Timestamp } from 'firebase/firestore';
+import type { Timestamp } from 'firebase/firestore';
 
 export type LocalIncident = Omit<Incident<any>, 'date'> & {
   date: number;

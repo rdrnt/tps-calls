@@ -4,24 +4,21 @@ import { useDebouncedCallback } from 'use-debounce';
 
 import { AppState } from '../../store';
 import { closeModal } from '../../store/actions';
-
-import ProjectInfoModal from './ProjectInfo';
-
-import DownloadMobileAppModal from './MobileApp';
+import { lazyWithReload } from '../../helpers/lazyWithReload';
 
 import { Dialog, DialogContent } from '../ui/dialog';
-import IncidentFiltersModal from './IncidentFilters';
+import { ModalTypes, ModalProps } from './types';
 
-export type ModalTypes =
-  | 'project-info'
-  | 'mobile-app-download'
-  | 'incident-filters';
+const ProjectInfoModal = lazyWithReload(() => import('./ProjectInfo'));
+const DownloadMobileAppModal = lazyWithReload(() => import('./MobileApp'));
+const IncidentFiltersModal = lazyWithReload(() => import('./IncidentFilters'));
 
-export interface ModalProps {
-  close: () => void;
-}
+type LazyModalComponent = React.LazyExoticComponent<
+  React.FunctionComponent<ModalProps>
+>;
 
-const ModalTable: { [key in ModalTypes]?: any } = {
+// Modal bodies stay deferred until the user opens a specific modal type.
+const ModalTable: { [key in ModalTypes]?: LazyModalComponent } = {
   'project-info': ProjectInfoModal,
   'incident-filters': IncidentFiltersModal,
   'mobile-app-download': DownloadMobileAppModal,
@@ -40,8 +37,11 @@ const Modal: React.FunctionComponent = () => {
   return (
     <Dialog open={open} onOpenChange={open => !open && dismissModal()}>
       <DialogContent showCloseButton={true}>
-        {/* The modal content aka DialogContent children */}
-        {ModalFromType && <ModalFromType close={dismissModal} />}
+        {ModalFromType && (
+          <React.Suspense fallback={null}>
+            <ModalFromType close={dismissModal} />
+          </React.Suspense>
+        )}
       </DialogContent>
     </Dialog>
   );
