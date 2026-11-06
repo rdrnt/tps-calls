@@ -104,10 +104,20 @@ const Map: React.FunctionComponent = () => {
     return matchingIncident;
   };
 
-  // Keeps the page behind the map dark; index.html sets it before first paint.
-  React.useEffect(() => {
-    document.documentElement.classList.add('map-route');
-    return () => document.documentElement.classList.remove('map-route');
+  // Keeps the page behind the map in its colour (index.html sets it before first paint), and scrolls
+  // past the map's top overhang so iOS Safari draws the map under its bars. Users can't scroll it back
+  // because the body is overflow: hidden.
+  React.useLayoutEffect(() => {
+    const root = document.documentElement;
+    root.classList.add('map-route');
+    window.scrollTo(
+      0,
+      parseFloat(getComputedStyle(root).getPropertyValue('--map-bleed'))
+    );
+    return () => {
+      root.classList.remove('map-route');
+      window.scrollTo(0, 0);
+    };
   }, []);
 
   React.useEffect(() => {
@@ -213,12 +223,12 @@ const Map: React.FunctionComponent = () => {
           zoom: 11.0,
         }}
         maxBounds={[
-          [-79.75, 43.55], // Southwest (includes a bit of Mississauga & Lake Ontario)
+          [-79.75, 43.5], // Southwest (includes a bit of Mississauga, and enough Lake Ontario that the map's overhang doesn't push downtown off-centre)
           [-79.0, 43.9], // Northeast (includes a bit of Pickering & Vaughan)
         ]}
         style={{
           width: '100vw',
-          height: '100vh',
+          height: 'var(--map-height)',
         }}
         minZoom={9}
         //disables zooming while an incident is selected
@@ -245,7 +255,7 @@ const Map: React.FunctionComponent = () => {
           {!drawerOpen && (
             <Button
               size="icon-lg"
-              className={`absolute top-[20px] left-[20px] bg-background hover:bg-background/80`}
+              className={`absolute top-[calc(var(--map-bleed)_+_20px)] left-[20px] bg-background hover:bg-background/80`}
               onClick={() => {
                 dispatch(toggleDrawer(true));
                 if (selectedIncident) {
@@ -271,7 +281,7 @@ const Map: React.FunctionComponent = () => {
           />
 
           <ButtonGroup
-            className="absolute bottom-[25px] right-[25px]"
+            className="absolute bottom-[calc(var(--map-inset-bottom)_+_25px)] right-[25px]"
             hidden={Boolean(drawerOpen || selectedIncident)}
           >
             <Button
