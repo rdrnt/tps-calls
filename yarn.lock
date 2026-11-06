@@ -441,7 +441,7 @@
     "@firebase/util" "1.15.3"
     tslib "^2.1.0"
 
-"@firebase/app-types@^0.9.3", "@firebase/app-types@0.9.6", "@firebase/app-types@0.x":
+"@firebase/app-types@0.9.6", "@firebase/app-types@0.x", "@firebase/app-types@^0.9.6":
   version "0.9.6"
   resolved "https://registry.npmjs.org/@firebase/app-types/-/app-types-0.9.6.tgz"
   integrity sha512-yPLahy7Esfu2w/yme3msVK4xTkDXQqq6szfQn8yVOQpCKiT5GVFjqNpLbuz6NkX0WuTwUidkmPewW3r4xkvpeg==
@@ -553,7 +553,7 @@
     "@firebase/util" "1.15.3"
     tslib "^2.1.0"
 
-"@firebase/firestore-types@^3.0.3", "@firebase/firestore-types@3.0.5":
+"@firebase/firestore-types@3.0.5", "@firebase/firestore-types@^3.0.5":
   version "3.0.5"
   resolved "https://registry.npmjs.org/@firebase/firestore-types/-/firestore-types-3.0.5.tgz"
   integrity sha512-dbdMAQkMd5dwWc48eupz/Y6/E9ruat3+gY5lhVKscvvT/HnDBEEMzJW38zdKhgdnglZHGk2vUsJMOHAphMHGMA==
@@ -1619,13 +1619,13 @@
   resolved "https://registry.npmjs.org/@radix-ui/rect/-/rect-1.1.3.tgz"
   integrity sha512-JtyZR+mqgBibTo8xea3B6ZRmzZiM/YeVBtUkas6zMuXjAlfIFIW2FgqeM9eLyvEaYX66vr6DJMK+4U6LV0KhNw==
 
-"@rdrnt/tps-calls-shared@^0.2.1":
-  version "0.2.1"
-  resolved "https://npm.pkg.github.com/download/@rdrnt/tps-calls-shared/0.2.1/e6c9d062e74a927e77f39c89753fed5ab02f91b4"
-  integrity sha512-8lj7SQR31dpxHzOQuihRzoz0P374xgFL7B5xEcj5nAXeFYSv6IxDj8ag16tXVtFsmnPhMSXZzkfHl8J/UyAc7w==
+"@rdrnt/tps-calls-shared@^1.1.0":
+  version "1.1.0"
+  resolved "https://npm.pkg.github.com/download/@rdrnt/tps-calls-shared/1.1.0/68a32723a53ba418f95d951c104675652fae6731#68a32723a53ba418f95d951c104675652fae6731"
+  integrity sha512-xbKJ3nNra9+tdt08wHw/KSYdJiEik1cfZmf00qfA4rXa0fdjl3P917W9OW4IIaHXQ/m1c3s8BbgunHboU9RYQg==
   dependencies:
-    "@firebase/app-types" "^0.9.3"
-    "@firebase/firestore-types" "^3.0.3"
+    "@firebase/app-types" "^0.9.6"
+    "@firebase/firestore-types" "^3.0.5"
 
 "@reduxjs/toolkit@^2.12.0":
   version "2.12.0"
