@@ -96,9 +96,7 @@ body {
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-left: env(safe-area-inset-left, 0px);
 
-  /* iOS Safari only draws a page under its status bar and toolbar once it's scrolled, so the map
-     overhangs the viewport by --map-bleed and Map scrolls past the top overhang.
-     --map-inset-bottom is the gap between the map's bottom edge and the visible area's. */
+  /* The map overhangs the viewport so it can sit under iOS Safari's bars; see Map.tsx. */
   --map-bleed: 120px;
   --map-height: calc(100vh + 2 * var(--map-bleed));
   --map-inset-bottom: calc(100vh - 100dvh + var(--map-bleed));

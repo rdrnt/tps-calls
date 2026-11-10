@@ -104,17 +104,29 @@ const Map: React.FunctionComponent = () => {
     return matchingIncident;
   };
 
-  // Keeps the page behind the map in its colour (index.html sets it before first paint), and scrolls
-  // past the map's top overhang so iOS Safari draws the map under its bars. Users can't scroll it back
-  // because the body is overflow: hidden.
+  // Scrolling past the map's top overhang makes iOS Safari draw the map under its bars.
   React.useLayoutEffect(() => {
     const root = document.documentElement;
-    root.classList.add('map-route');
-    window.scrollTo(
-      0,
-      parseFloat(getComputedStyle(root).getPropertyValue('--map-bleed'))
+    const bleed = parseFloat(
+      getComputedStyle(root).getPropertyValue('--map-bleed')
     );
+    // The keyboard, focus and resizes can move the page; put it back unless a field is being edited.
+    const restore = () => {
+      if (document.activeElement?.matches('input, textarea')) return;
+      if (window.scrollY !== bleed) window.scrollTo(0, bleed);
+    };
+
+    root.classList.add('map-route');
+    restore();
+    window.addEventListener('scroll', restore);
+    window.addEventListener('resize', restore);
+    window.visualViewport?.addEventListener('resize', restore);
+    document.addEventListener('focusout', restore);
     return () => {
+      window.removeEventListener('scroll', restore);
+      window.removeEventListener('resize', restore);
+      window.visualViewport?.removeEventListener('resize', restore);
+      document.removeEventListener('focusout', restore);
       root.classList.remove('map-route');
       window.scrollTo(0, 0);
     };
