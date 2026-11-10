@@ -104,6 +104,8 @@ const MapIncidentInfo: FunctionComponent<MapIncidentInfoProps> = ({
         side={isMobile ? 'bottom' : 'right'}
         // Leave room for the map on short screens like the iPhone Duo.
         className={isMobile ? 'max-h-[65dvh] overflow-y-auto' : undefined}
+        // Focusing the first button on open draws a ring on "Copy to Clipboard".
+        onOpenAutoFocus={event => event.preventDefault()}
       >
         <SheetHeader className="pb-0">
           <SheetTitle className="text-2xl font-bold">
