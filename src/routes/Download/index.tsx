@@ -94,7 +94,7 @@ const DownloadPage: FunctionComponent = () => {
                 {recentCalls} calls in the last {RECENT_WINDOW_MINUTES} minutes
               </Badge>
               <h1 className="mt-5 text-[40px] font-semibold leading-[1.04] tracking-tight sm:text-6xl">
-                Know what that <span className="text-white">siren</span> was.
+                Know what that siren was.
               </h1>
               <p className="text-muted-foreground mt-5 max-w-md text-base leading-relaxed sm:text-lg">
                 Every Toronto Police call lands on the map the second it gets
