@@ -19,10 +19,20 @@ export const initialize = () => {
       tracesSampleRate: 0.1, // 10% of transactions for performance monitoring
       // v11 collects user info, cookies and bodies by default; keep v10's no-PII baseline.
       dataCollection: { userInfo: false, cookies: false, httpBodies: [] },
-      beforeSend(event) {
-        // Filter out known non-critical errors
-        return event;
-      },
+      // Errors from extensions, in-app browsers and the OS, not our code.
+      ignoreErrors: [
+        'runtime.sendMessage',
+        'Database deleted by request of the user',
+        'AbortError',
+        'Java object is gone',
+        'Java bridge method invocation error',
+        'window.webkit.messageHandlers',
+        'WKWebView API client did not respond',
+        'window.ethereum',
+        'window._META',
+        "Can't find variable: _G",
+      ],
+      denyUrls: [/^(chrome|moz|safari(-web)?)-extension:\/\//],
     });
 
     ReactGA.initialize(GOOGLEANALYTICS_KEY);
