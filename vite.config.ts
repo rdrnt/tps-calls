@@ -25,6 +25,8 @@ export default defineConfig(() => {
               sourcemaps: {
                 // Rolldown emits this helper without a source map; ignore it rather than suppressing all SOURCEMAP_BROKEN warnings.
                 ignore: ['**/rolldown-runtime-*.js'],
+                // Keep maps in Sentry only, not on the public site.
+                deleteSourcemapsAfterUpload: true,
               },
             }),
           ]
