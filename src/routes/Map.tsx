@@ -104,6 +104,34 @@ const Map: React.FunctionComponent = () => {
     return matchingIncident;
   };
 
+  // Scrolling past the map's top overhang makes iOS Safari draw the map under its bars.
+  React.useLayoutEffect(() => {
+    const root = document.documentElement;
+    const bleed = parseFloat(
+      getComputedStyle(root).getPropertyValue('--map-bleed')
+    );
+    // The keyboard, focus and resizes can move the page; put it back unless a field is being edited.
+    const restore = () => {
+      if (document.activeElement?.matches('input, textarea')) return;
+      if (window.scrollY !== bleed) window.scrollTo(0, bleed);
+    };
+
+    root.classList.add('map-route');
+    restore();
+    window.addEventListener('scroll', restore);
+    window.addEventListener('resize', restore);
+    window.visualViewport?.addEventListener('resize', restore);
+    document.addEventListener('focusout', restore);
+    return () => {
+      window.removeEventListener('scroll', restore);
+      window.removeEventListener('resize', restore);
+      window.visualViewport?.removeEventListener('resize', restore);
+      document.removeEventListener('focusout', restore);
+      root.classList.remove('map-route');
+      window.scrollTo(0, 0);
+    };
+  }, []);
+
   React.useEffect(() => {
     // The loader is global; leaving it open on the way out would cover /unsupported.
     if (!mapSupported) {
@@ -207,12 +235,12 @@ const Map: React.FunctionComponent = () => {
           zoom: 11.0,
         }}
         maxBounds={[
-          [-79.75, 43.55], // Southwest (includes a bit of Mississauga & Lake Ontario)
+          [-79.75, 43.5], // Southwest (includes a bit of Mississauga, and enough Lake Ontario that the map's overhang doesn't push downtown off-centre)
           [-79.0, 43.9], // Northeast (includes a bit of Pickering & Vaughan)
         ]}
         style={{
           width: '100vw',
-          height: '100vh',
+          height: 'var(--map-height)',
         }}
         minZoom={9}
         //disables zooming while an incident is selected
@@ -239,7 +267,7 @@ const Map: React.FunctionComponent = () => {
           {!drawerOpen && (
             <Button
               size="icon-lg"
-              className={`absolute top-[20px] left-[20px] bg-background hover:bg-background/80`}
+              className={`absolute top-[calc(var(--map-bleed)_+_20px)] left-[20px] bg-background hover:bg-background/80`}
               onClick={() => {
                 dispatch(toggleDrawer(true));
                 if (selectedIncident) {
@@ -265,7 +293,7 @@ const Map: React.FunctionComponent = () => {
           />
 
           <ButtonGroup
-            className="absolute bottom-[25px] right-[25px]"
+            className="absolute bottom-[calc(var(--map-inset-bottom)_+_25px)] right-[25px]"
             hidden={Boolean(drawerOpen || selectedIncident)}
           >
             <Button

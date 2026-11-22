@@ -16,7 +16,8 @@ const SiteFooter: FunctionComponent<SiteFooterProps> = ({
   actions,
   children,
 }) => (
-  <footer className="flex flex-col gap-4 border-t py-8 sm:flex-row sm:items-end sm:justify-between">
+  // The extra bottom padding clears iOS Safari's toolbar, which covers the end of these 100vh pages.
+  <footer className="flex flex-col gap-4 border-t pt-8 pb-[calc(2rem_+_100vh_-_100dvh)] sm:flex-row sm:items-end sm:justify-between">
     <div>
       <div className="text-[15px] font-semibold">
         tpscalls
