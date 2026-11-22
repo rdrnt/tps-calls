@@ -9,10 +9,10 @@ import { cn } from '../../lib/utils';
 
 const LoaderSpinner = ({ animate = true }: { animate?: boolean }) => {
   return (
-    <div className={cn('rounded-full h-12 w-12 bg-tpscalls-primary')}>
+    <div className={cn('relative rounded-full h-12 w-12 bg-tpscalls-primary')}>
       <div
         className={cn(
-          'fixed rounded-full bg-tpscalls-primary h-12 w-12',
+          'absolute inset-0 rounded-full bg-tpscalls-primary',
           animate && 'animate-ping'
         )}
       />
@@ -20,11 +20,17 @@ const LoaderSpinner = ({ animate = true }: { animate?: boolean }) => {
   );
 };
 
-export const StaticLoader: FunctionComponent<{ message?: string }> = ({
-  message = 'Loading map...',
-}) => {
+export const StaticLoader: FunctionComponent<{
+  message?: string;
+  className?: string;
+}> = ({ message = 'Loading map...', className }) => {
   return (
-    <div className="absolute top-0 left-0 h-full w-full z-999 bg-background flex flex-col justify-center items-center">
+    <div
+      className={cn(
+        'absolute top-0 left-0 h-screen w-full z-999 bg-background flex flex-col justify-center items-center',
+        className
+      )}
+    >
       <LoaderSpinner animate={false} />
       <Typography
         variant="h2"
@@ -44,9 +50,10 @@ const Loader: FunctionComponent = () => {
   return (
     <AnimatePresence>
       {open && (
+        // Only the map opens this loader, and the map is always dark.
         <motion.div
           key="loader"
-          className="absolute top-0 left-0 h-full w-full z-999 bg-background flex flex-col justify-center items-center"
+          className="dark absolute top-0 left-0 h-(--map-height) w-full z-999 bg-(--map-background) flex flex-col justify-center items-center"
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onAnimationEnd={() => {
