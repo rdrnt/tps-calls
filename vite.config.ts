@@ -39,7 +39,8 @@ export default defineConfig(() => {
       },
     },
     build: {
-      target: 'es2022',
+      // iOS 15 can't parse the class static blocks Rolldown emits for es2022.
+      target: ['es2022', 'safari15'],
       rolldownOptions: {
         output: {
           // Vite 8 exposes Oxc compression options through Rolldown output configuration.
