@@ -75,8 +75,8 @@ incident has been fetched from Firestore (see `src/routes/Map.tsx`).
 - Lint: `yarn lint` (oxlint, configured in `.oxlintrc.json`; not type-aware).
   Format: `yarn format` / `yarn format:check` (oxfmt, configured in `.oxfmtrc.json`).
 - Type-check: `yarn type-check` (`tsc --noEmit`).
-- Test: `yarn test` (Vitest + jsdom). There are currently **no** test files in
-  the repo, so this is effectively a no-op until tests are added.
+- Test: `yarn test` (Vitest + jsdom, watch mode); `yarn test --run` for a
+  single pass. Tests live next to their source as `*.test.ts(x)`.
 
 ### Useful routes for smoke-testing without Mapbox/Firebase data
 
