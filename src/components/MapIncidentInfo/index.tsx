@@ -104,7 +104,7 @@ const MapIncidentInfo: FunctionComponent<MapIncidentInfoProps> = ({
         side={isMobile ? 'bottom' : 'right'}
         // Leave room for the map on short screens like the iPhone Duo.
         className={isMobile ? 'max-h-[65dvh] overflow-y-auto' : undefined}
-        // Focusing the first button on open draws a ring on "Copy to Clipboard".
+        // Focusing the first button on open draws a ring on "Copy link".
         onOpenAutoFocus={event => event.preventDefault()}
       >
         <SheetHeader className="pb-0">
@@ -129,7 +129,7 @@ const MapIncidentInfo: FunctionComponent<MapIncidentInfoProps> = ({
         <SheetFooter>
           <Button onClick={onClickCopyToClipboard}>
             <Link />
-            Copy to Clipboard
+            Copy link
           </Button>
           <Button onClick={onClickShareOnTwitter}>
             <TwitterIcon />
