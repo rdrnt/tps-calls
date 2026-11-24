@@ -276,7 +276,7 @@ const Map: React.FunctionComponent = () => {
             <MapButton
               label="Incidents"
               tooltipSide="right"
-              className="absolute top-[calc(var(--map-bleed)_+_20px)] left-[20px]"
+              className="absolute top-[calc(var(--map-bleed)_+_20px)] left-[20px] lg:top-[calc(var(--map-bleed)_+_24px)] lg:left-[24px]"
               onClick={() => {
                 dispatch(toggleDrawer(true));
                 if (selectedIncident) {
@@ -302,7 +302,7 @@ const Map: React.FunctionComponent = () => {
           />
 
           <ButtonGroup
-            className="absolute bottom-[calc(var(--map-inset-bottom)_+_25px)] right-[25px]"
+            className="absolute bottom-[calc(var(--map-inset-bottom)_+_20px)] right-[20px] lg:bottom-[calc(var(--map-inset-bottom)_+_24px)] lg:right-[24px]"
             hidden={Boolean(drawerOpen || selectedIncident)}
           >
             <MapButton

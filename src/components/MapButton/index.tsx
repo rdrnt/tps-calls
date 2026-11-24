@@ -22,7 +22,7 @@ const MapButton: React.FunctionComponent<MapButtonProps> = ({
         size="icon-lg"
         aria-label={label}
         className={cn(
-          'bg-background hover:bg-background/80 [&_svg]:text-primary',
+          "bg-background hover:bg-background/80 [&_svg]:text-primary lg:size-12 lg:[&_svg:not([class*='size-'])]:size-5",
           className
         )}
         {...props}
