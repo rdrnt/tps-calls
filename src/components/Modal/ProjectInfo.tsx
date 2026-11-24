@@ -15,11 +15,14 @@ import {
   AccordionContent,
 } from '../ui/accordion';
 import { Heart, Mail } from 'lucide-react';
+import { Link } from 'react-router';
 import { APPSTORE_DOWNLOAD_LINK } from '../../config';
 
 type ProjectInfoModalProps = ModalProps;
 
-const ProjectInfoModal: React.FunctionComponent<ProjectInfoModalProps> = () => {
+const ProjectInfoModal: React.FunctionComponent<ProjectInfoModalProps> = ({
+  close,
+}) => {
   React.useEffect(() => {
     Analytics.event({
       category: 'UI',
@@ -52,10 +55,10 @@ const ProjectInfoModal: React.FunctionComponent<ProjectInfoModalProps> = () => {
               Have a question? Feedback? Bug report? Feel free to connect with
               me via the button below.
               <Button type="button" variant="outline" className="w-fit" asChild>
-                <a href="mailto:riley@drnt.ca">
+                <Link to="/contact" onClick={close}>
                   <Mail />
                   Contact
-                </a>
+                </Link>
               </Button>
             </div>
           </AccordionContent>
