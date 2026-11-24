@@ -63,7 +63,7 @@ const IncidentFiltersModal: FunctionComponent<ModalProps> = ({ close }) => {
 
     dispatch(
       setIncidentFilter({
-        values: { distance, dateRange },
+        values: { distance, dateRange, search: currentFilter.search },
         merge: false,
       })
     );
@@ -73,7 +73,12 @@ const IncidentFiltersModal: FunctionComponent<ModalProps> = ({ close }) => {
 
   const onReset = () => {
     methods.reset(getDefaultFormValues());
-    dispatch(setIncidentFilter({ values: {}, merge: false }));
+    dispatch(
+      setIncidentFilter({
+        values: { search: currentFilter.search },
+        merge: false,
+      })
+    );
     close();
   };
 
