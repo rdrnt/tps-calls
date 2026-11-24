@@ -6,7 +6,7 @@ import { Navigate, useParams } from 'react-router';
 import {
   MenuIcon,
   NavigationIcon,
-  InfoIcon,
+  CircleQuestionMarkIcon,
   TabletSmartphoneIcon,
 } from 'lucide-react';
 import { toast, Toaster } from 'sonner';
@@ -18,6 +18,7 @@ import * as Environment from '../helpers/environment';
 import * as Analytics from '../helpers/analytics';
 import * as FirebaseIncidents from '../helpers/firebase/incident';
 import { isMapSupported } from '../helpers/mapSupport';
+import useIsMobile from '../hooks/useIsMobile';
 
 import { useAppDispatch, useAppSelector } from '../store';
 import { useReduxIncidents } from '../store/selectors';
@@ -60,6 +61,7 @@ const Map: React.FunctionComponent = () => {
   const incidentsListReady = useAppSelector(state => state.incidents.listReady);
   const { drawerOpen, loader } = useAppSelector(state => state.ui);
   const userLocation = useAppSelector(state => state.user.location);
+  const { isMobile } = useIsMobile();
 
   const selectedCamera = useAppSelector(state => state.cameras.selected);
 
@@ -260,7 +262,12 @@ const Map: React.FunctionComponent = () => {
           }
         }}
       >
-        <AttributionControl compact={true} position="bottom-left" />
+        {/* Phones get Mapbox's ⓘ button; wider screens show the text so it isn't mistaken for About. */}
+        <AttributionControl
+          key={String(isMobile)}
+          compact={isMobile}
+          position="bottom-left"
+        />
 
         <SafeArea className="h-dvh pb-safe-bottom">
           {/* Overlay button for opening the drawer */}
@@ -324,7 +331,7 @@ const Map: React.FunctionComponent = () => {
               onClick={() => dispatch(openModal('project-info'))}
               className="bg-background hover:bg-background/80"
             >
-              <InfoIcon className="text-primary" />
+              <CircleQuestionMarkIcon className="text-primary" />
             </Button>
           </ButtonGroup>
         </SafeArea>
