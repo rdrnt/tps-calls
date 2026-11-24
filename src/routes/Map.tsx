@@ -32,7 +32,8 @@ import {
 import MapIncidentInfo from '../components/MapIncidentInfo';
 import AnimatedMapMarker from '../components/MapMarker/Animated';
 import MapMarker from '../components/MapMarker';
-import { Button } from '../components/ui/button';
+import MapButton from '../components/MapButton';
+import { TooltipProvider } from '../components/ui/tooltip';
 import {
   ButtonGroup,
   ButtonGroupSeparator,
@@ -220,7 +221,7 @@ const Map: React.FunctionComponent = () => {
   }
 
   return (
-    <>
+    <TooltipProvider>
       <IncidentListener />
       <CameraListener />
       <LocationListener />
@@ -272,9 +273,10 @@ const Map: React.FunctionComponent = () => {
         <SafeArea className="h-dvh pb-safe-bottom">
           {/* Overlay button for opening the drawer */}
           {!drawerOpen && (
-            <Button
-              size="icon-lg"
-              className={`absolute top-[calc(var(--map-bleed)_+_20px)] left-[20px] bg-background hover:bg-background/80`}
+            <MapButton
+              label="Incidents"
+              tooltipSide="right"
+              className="absolute top-[calc(var(--map-bleed)_+_20px)] left-[20px]"
               onClick={() => {
                 dispatch(toggleDrawer(true));
                 if (selectedIncident) {
@@ -282,8 +284,8 @@ const Map: React.FunctionComponent = () => {
                 }
               }}
             >
-              <MenuIcon className="text-primary" />
-            </Button>
+              <MenuIcon />
+            </MapButton>
           )}
 
           <MapIncidentInfo
@@ -303,36 +305,33 @@ const Map: React.FunctionComponent = () => {
             className="absolute bottom-[calc(var(--map-inset-bottom)_+_25px)] right-[25px]"
             hidden={Boolean(drawerOpen || selectedIncident)}
           >
-            <Button
-              size="icon-lg"
+            <MapButton
+              label="Get the app"
               onClick={() => dispatch(openModal('mobile-app-download'))}
-              className="bg-background hover:bg-background/80"
             >
-              <TabletSmartphoneIcon className="text-primary" />
-            </Button>
+              <TabletSmartphoneIcon />
+            </MapButton>
             <ButtonGroupSeparator className="bg-accent" />
             {userLocation.available && (
               <>
-                <Button
-                  size="icon-lg"
-                  className="bg-background hover:bg-background/80"
+                <MapButton
+                  label="Show my location"
                   onClick={() =>
                     dispatch(setRequestingLocationPermissions(true))
                   }
                 >
-                  <NavigationIcon className="text-primary" />
-                </Button>
+                  <NavigationIcon />
+                </MapButton>
                 <ButtonGroupSeparator className="bg-accent" />
               </>
             )}
 
-            <Button
-              size="icon-lg"
+            <MapButton
+              label="About"
               onClick={() => dispatch(openModal('project-info'))}
-              className="bg-background hover:bg-background/80"
             >
-              <CircleQuestionMarkIcon className="text-primary" />
-            </Button>
+              <CircleQuestionMarkIcon />
+            </MapButton>
           </ButtonGroup>
         </SafeArea>
 
@@ -379,7 +378,7 @@ const Map: React.FunctionComponent = () => {
         onClose={() => dispatch(toggleDrawer(false))}
       />
       <Toaster />
-    </>
+    </TooltipProvider>
   );
 };
 
