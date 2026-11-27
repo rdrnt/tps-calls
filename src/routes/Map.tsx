@@ -2,7 +2,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import * as React from 'react';
 // v8 requires the renderer-specific /mapbox entry point for Mapbox GL v3.
 import ReactMapGl, { AttributionControl, MapRef } from 'react-map-gl/mapbox';
-import { Navigate, useParams } from 'react-router';
+import { Navigate, useNavigate, useParams } from 'react-router';
 import {
   MenuIcon,
   NavigationIcon,
@@ -19,8 +19,9 @@ import * as Analytics from '../helpers/analytics';
 import * as FirebaseIncidents from '../helpers/firebase/incident';
 import { isMapSupported } from '../helpers/mapSupport';
 import useIsMobile from '../hooks/useIsMobile';
+import useSelectIncident from '../hooks/useSelectIncident';
 
-import { useAppDispatch, useAppSelector } from '../store';
+import { useAppDispatch, useAppSelector, useAppStore } from '../store';
 import { useReduxIncidents } from '../store/selectors';
 
 import {
@@ -51,10 +52,12 @@ import {
 import MapSidebar from '../components/MapSidebar';
 import { SafeArea } from '../components/SafeArea';
 import MapCameraInfo from '../components/MapCameraInfo';
-import { LocalIncident } from '../types';
 
 const Map: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
+  const store = useAppStore();
+  const navigate = useNavigate();
+  const selectIncident = useSelectIncident();
   const { id } = useParams<{ id?: string }>();
 
   const incidentList = useReduxIncidents();
@@ -91,21 +94,6 @@ const Map: React.FunctionComponent = () => {
     description: pageDescription,
     canonicalPath,
   });
-
-  // Finds and returns an incident from the store or database
-  const getIncidentWithId = async (
-    id: string,
-    searchDB = false
-  ): Promise<LocalIncident | undefined> => {
-    const matchingIncident = incidentList.find(incident => incident.id === id);
-
-    if (!matchingIncident && searchDB) {
-      const incidentFromDB = await FirebaseIncidents.getIncidentFromId(id);
-      return incidentFromDB;
-    }
-
-    return matchingIncident;
-  };
 
   // Scrolling past the map's top overhang makes iOS Safari draw the map under its bars.
   React.useLayoutEffect(() => {
@@ -155,35 +143,53 @@ const Map: React.FunctionComponent = () => {
     }
   }, [mapSupported, isMapLoaded, incidentsListReady, loader.open, dispatch]);
 
+  // The URL decides which incident is open, so shared links and back/forward stay in step.
   React.useEffect(() => {
-    if (!isMapLoaded || !id) {
+    if (!isMapLoaded || !incidentsListReady) return;
+
+    const { list, selected } = store.getState().incidents;
+    if (!id) {
+      if (selected) dispatch(setSelectedIncident(undefined));
+      return;
+    }
+    if (selected?.id === id) return;
+
+    const fromList = list.find(incident => incident.id === id);
+    if (fromList) {
+      dispatch(setSelectedIncident(fromList));
       return;
     }
 
-    getIncidentWithId(id, true).then(incident => {
-      if (!incident) {
+    let cancelled = false;
+    FirebaseIncidents.getIncidentFromId(id).then(incident => {
+      if (cancelled) return;
+      if (incident) {
+        dispatch(setSelectedIncident(incident));
+      } else {
         toast.error('Incident no longer exists', {
           description: 'The incident you are looking for no longer exists.',
           position: 'top-center',
         });
-      } else {
-        dispatch(setSelectedIncident(incident));
+        navigate('/', { replace: true });
       }
     });
-  }, [isMapLoaded, id, incidentList.length]);
+    return () => {
+      cancelled = true;
+    };
+  }, [id, isMapLoaded, incidentsListReady, store, dispatch, navigate]);
 
-  // Close the drawer if we're interacting with the map & the drawer is open d
+  // Dragging the map closes the drawer and the open incident.
   React.useEffect(() => {
-    if (interactingWithMap) {
-      if (drawerOpen) {
-        dispatch(toggleDrawer(false));
-      }
-
-      if (selectedIncident) {
-        dispatch(setSelectedIncident(undefined));
-      }
-    }
-  }, [interactingWithMap]);
+    if (!interactingWithMap) return;
+    if (drawerOpen) dispatch(toggleDrawer(false));
+    if (selectedIncident) selectIncident(undefined);
+  }, [
+    interactingWithMap,
+    drawerOpen,
+    selectedIncident,
+    dispatch,
+    selectIncident,
+  ]);
 
   React.useEffect(() => {
     const map = refForMap.current;
@@ -198,21 +204,6 @@ const Map: React.FunctionComponent = () => {
       });
     }
   }, [userLocation.available, userLocation.coordinates]);
-
-  React.useEffect(() => {
-    // If the selected incident changes, zoom into it
-    const map = refForMap.current;
-    if (selectedIncident && map) {
-      map.flyTo({
-        center: [
-          selectedIncident.coordinates.longitude,
-          selectedIncident.coordinates.latitude,
-        ],
-        speed: 1,
-        zoom: 15,
-      });
-    }
-  }, [selectedIncident]);
 
   // Every hook above must run first — bailing earlier would violate the rules of hooks.
   // `replace` so the back button doesn't bounce the user into the same dead map.
@@ -279,9 +270,7 @@ const Map: React.FunctionComponent = () => {
               className="absolute top-[calc(var(--map-bleed)_+_20px)] left-[20px] lg:top-[calc(var(--map-bleed)_+_24px)] lg:left-[24px]"
               onClick={() => {
                 dispatch(toggleDrawer(true));
-                if (selectedIncident) {
-                  dispatch(setSelectedIncident(undefined));
-                }
+                if (selectedIncident) selectIncident(undefined);
               }}
             >
               <MenuIcon />
@@ -291,7 +280,7 @@ const Map: React.FunctionComponent = () => {
           <MapIncidentInfo
             incident={selectedIncident}
             drawerOpen={drawerOpen}
-            close={() => dispatch(setSelectedIncident(undefined))}
+            close={() => selectIncident(undefined)}
             mapRef={refForMap}
           />
 
@@ -361,9 +350,7 @@ const Map: React.FunctionComponent = () => {
                 <MapMarker
                   key={incident.id}
                   coordinates={incident.coordinates}
-                  onClick={() => {
-                    dispatch(setSelectedIncident(incident));
-                  }}
+                  onClick={() => selectIncident(incident)}
                 />
               );
             }

@@ -16,11 +16,11 @@ import {
 } from '../ui/input-group';
 
 import {
-  setSelectedIncident,
   toggleDrawer,
   setIncidentFilter,
   openModal,
 } from '../../store/actions';
+import useSelectIncident from '../../hooks/useSelectIncident';
 import { LocalIncident } from '../../types';
 
 interface MapSidebarProps {
@@ -37,6 +37,7 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
   children,
 }) => {
   const dispatch = useAppDispatch();
+  const selectIncident = useSelectIncident();
   const incidents = useReduxIncidents();
   const filter = useAppSelector(state => state.incidents.filter);
   const filtersActive = Boolean(filter?.distance || filter?.dateRange);
@@ -73,7 +74,7 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
 
   const onItemClick = (incident: LocalIncident) => {
     dispatch(toggleDrawer(false));
-    dispatch(setSelectedIncident(incident));
+    selectIncident(incident);
   };
 
   return (

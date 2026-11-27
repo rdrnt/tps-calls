@@ -56,7 +56,6 @@ const App: React.FunctionComponent = () => (
                   </React.Suspense>
                 }
               />
-              {/* Must precede /:id so the literal path isn't swallowed as an incident id. */}
               <Route
                 path="/unsupported"
                 element={
@@ -65,16 +64,9 @@ const App: React.FunctionComponent = () => (
                   </React.Suspense>
                 }
               />
+              {/* One route for / and /:id, so opening an incident doesn't remount the map. */}
               <Route
-                path="/:id"
-                element={
-                  <React.Suspense fallback={mapFallback}>
-                    <Map />
-                  </React.Suspense>
-                }
-              />
-              <Route
-                path="/"
+                path="/:id?"
                 element={
                   <React.Suspense fallback={mapFallback}>
                     <Map />
