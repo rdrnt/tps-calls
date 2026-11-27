@@ -30,20 +30,19 @@ export const fetchFilteredIncidents = createAsyncThunk(
   async (dateRange: IncidentDateRangeFilter) => {
     // Firestore/date-filter code is loaded only when the historical filter is used,
     // keeping static routes out of that dependency path.
+    // A dynamic import('date-fns') would pull in the whole library, so parse with Date.
     const [
-      { parseISO },
       { convertDateToTimestamp },
       { getIncidentsAtDate, toLocalIncident },
     ] = await Promise.all([
-      import('date-fns'),
       import('../../helpers/date'),
       import('../../helpers/firebase/incident'),
     ]);
 
     const startTimestamp = convertDateToTimestamp(
-      parseISO(dateRange.startDate)
+      new Date(dateRange.startDate)
     );
-    const endTimestamp = convertDateToTimestamp(parseISO(dateRange.endDate));
+    const endTimestamp = convertDateToTimestamp(new Date(dateRange.endDate));
 
     const incidents = await getIncidentsAtDate({
       startDate: startTimestamp,
