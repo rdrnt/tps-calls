@@ -3,23 +3,11 @@ import * as React from 'react';
 import { ModalProps } from './types';
 
 import * as Analytics from '../../helpers/analytics';
+import DownloadButtons from '@/routes/Download/parts/DownloadButtons';
 
-import AppStoreIcon from '../../assets/images/appStoreDownload.png';
-import PlayStoreIcon from '../../assets/images/googlePlayDownload.png';
+import { DialogHeader, DialogTitle, DialogDescription } from '../ui/dialog';
 
-type ProjectInfoModal = ModalProps;
-
-import {
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from '../ui/dialog';
-import { APPSTORE_DOWNLOAD_LINK } from '../../config';
-
-const DownloadMobileAppModal: React.FunctionComponent<
-  ProjectInfoModal
-> = () => {
+const DownloadMobileAppModal: React.FunctionComponent<ModalProps> = () => {
   React.useEffect(() => {
     Analytics.event({
       category: 'UI',
@@ -31,34 +19,12 @@ const DownloadMobileAppModal: React.FunctionComponent<
     <>
       <DialogHeader>
         <DialogTitle>Download the mobile app</DialogTitle>
-        <DialogDescription>
-          Now, you can access real-time police incidents across Toronto wherever
-          you go. Download the app today to stay informed on the move, wherever
-          you are in the city.
-        </DialogDescription>
-        <DialogDescription>
-          Available on the App Store and Google Play.
+        <DialogDescription className="leading-relaxed">
+          Follow Toronto Police calls wherever you are in the city, with alerts
+          for incidents near you. Available on the App Store and Google Play.
         </DialogDescription>
       </DialogHeader>
-      <DialogFooter className="flex-row justify-center gap-4">
-        <a
-          href={APPSTORE_DOWNLOAD_LINK.IOS}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-block"
-        >
-          <img src={AppStoreIcon} className="h-auto w-auto max-w-[140px]" />
-        </a>
-
-        <a
-          href={APPSTORE_DOWNLOAD_LINK.ANDROID}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-block"
-        >
-          <img src={PlayStoreIcon} className="h-auto w-auto max-w-[140px]" />
-        </a>
-      </DialogFooter>
+      <DownloadButtons className="grid grid-cols-2 gap-2" withIcons />
     </>
   );
 };

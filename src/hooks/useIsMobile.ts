@@ -12,8 +12,8 @@ export const useIsMobile = (): UseIsMobileReturn => {
 
   useEffect(() => {
     const checkIsMobile = () => {
-      // Check using media query
-      const mediaQuery = window.matchMedia('(max-width: 768px)');
+      // Matches Tailwind's md breakpoint, so components agree on what counts as mobile.
+      const mediaQuery = window.matchMedia('(max-width: 767px)');
 
       // Check using user agent (additional detection)
       const userAgent = navigator.userAgent.toLowerCase();
@@ -34,7 +34,7 @@ export const useIsMobile = (): UseIsMobileReturn => {
 
       // Combine both checks - prioritize media query but consider user agent
       const isMobileDevice =
-        mediaQuery.matches || (isMobileUA && window.innerWidth <= 768);
+        mediaQuery.matches || (isMobileUA && window.innerWidth < 768);
 
       setIsMobile(isMobileDevice);
       setIsLoading(false);
@@ -44,7 +44,7 @@ export const useIsMobile = (): UseIsMobileReturn => {
     checkIsMobile();
 
     // Listen for media query changes
-    const mediaQuery = window.matchMedia('(max-width: 768px)');
+    const mediaQuery = window.matchMedia('(max-width: 767px)');
     const handleChange = () => checkIsMobile();
 
     if (mediaQuery.addEventListener) {

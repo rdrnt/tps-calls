@@ -179,3 +179,11 @@ body {
 .mapboxgl-map .mapboxgl-ctrl-bottom-right {
   bottom: var(--map-inset-bottom);
 }
+
+/* Mapbox's default light strip stands out on the always-dark map. */
+.mapboxgl-map .mapboxgl-ctrl-attrib:not(.mapboxgl-compact) {
+  background-color: rgb(0 0 0 / 0.4);
+}
+.mapboxgl-map .mapboxgl-ctrl-attrib:not(.mapboxgl-compact) a {
+  color: rgb(255 255 255 / 0.75);
+}

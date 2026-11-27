@@ -18,11 +18,11 @@ export const convertDateToTimestamp = (date: Date): Timestamp =>
 export const now = (): Timestamp => TimestampClass.now();
 
 export const formatIncidentDate = (incidentDate: Date) => {
-  if (isToday(incidentDate)) {
-    return `Today @ ${format(incidentDate, 'h:mm a')}`;
-  }
-
-  return format(incidentDate, 'MMM do yyyy @ h:mma');
+  const time = format(incidentDate, 'h:mm a');
+  const day = isToday(incidentDate)
+    ? 'Today'
+    : format(incidentDate, 'MMM d, yyyy');
+  return `${day} @ ${time}`;
 };
 
 export const createDateWithHoursAndMinutes = ({
