@@ -11,3 +11,7 @@
 /.well-known/assetlinks.json
   Content-Type: application/json
   Cache-Control: public, max-age=3600
+
+# Built files have content hashes in their names, so they never change.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
