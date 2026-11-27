@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useDebouncedCallback } from 'use-debounce';
 
 import { AppState } from '../../store';
 import { closeModal } from '../../store/actions';
@@ -28,11 +27,11 @@ const Modal: React.FunctionComponent = () => {
   const dispatch = useDispatch();
   const { open, type } = useSelector((appState: AppState) => appState.ui.modal);
 
-  const dismissModal = useDebouncedCallback(() => {
+  const dismissModal = React.useCallback(() => {
     dispatch(closeModal());
-  }, 200);
+  }, [dispatch]);
 
-  const ModalFromType = open && type ? ModalTable[type] : null;
+  const ModalFromType = type ? ModalTable[type] : null;
 
   return (
     <Dialog open={open} onOpenChange={open => !open && dismissModal()}>

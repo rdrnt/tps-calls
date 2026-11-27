@@ -51,10 +51,9 @@ const uiSlice = createSlice({
         type: action.payload,
       };
     },
+    // Keep the type so the content stays visible while the modal animates out.
     closeModal: state => {
-      state.modal = {
-        open: false,
-      };
+      state.modal.open = false;
     },
   },
 });
