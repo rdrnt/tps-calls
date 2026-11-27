@@ -79,7 +79,10 @@ const CameraSection: FunctionComponent<CameraSectionProps> = ({
                 <img
                   src={defaultCameraView.imageUrl}
                   alt={`An image of the ${defaultCameraView.direction} direction of the ${parentCamera.name}`}
-                  className="rounded-sm object-cover"
+                  // City camera images are 320x240; reserving the space keeps the sheet's height fixed.
+                  width={320}
+                  height={240}
+                  className="bg-muted aspect-[4/3] w-full rounded-sm object-cover"
                 />
               </ItemHeader>
               <ItemContent>

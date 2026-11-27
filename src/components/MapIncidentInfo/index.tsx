@@ -1,7 +1,13 @@
 import { toast } from 'sonner';
 import { Link } from 'lucide-react';
 import { MapRef } from 'react-map-gl/mapbox';
-import { FunctionComponent, useEffect, RefObject } from 'react';
+import {
+  FunctionComponent,
+  useEffect,
+  useRef,
+  useState,
+  RefObject,
+} from 'react';
 
 import { Separator } from '../ui/separator';
 
@@ -50,49 +56,40 @@ const MapIncidentInfo: FunctionComponent<MapIncidentInfoProps> = ({
     window.open(`${createTwitterShareUrl(incident)}`, '_blank');
   };
 
+  const sheetRef = useRef<HTMLDivElement>(null);
+
+  // Keep the last incident on screen while the sheet slides out.
+  const [shown, setShown] = useState(incident);
+  if (incident && incident !== shown) {
+    setShown(incident);
+  }
+
   useEffect(() => {
-    // When an incident is selected on mobile, bring it into view with offset for the drawer
     const map = mapRef.current;
-    if (incident && isMobile && map) {
-      // Wait for the sheet animation to complete before measuring
-      // The sheet has a 500ms animation duration (data-[state=open]:duration-500)
-      const measureSheetHeight = () => {
-        // Find the sheet content element by its data attribute
-        const sheetElement = document.querySelector(
-          '[data-slot="sheet-content"]'
-        ) as HTMLElement;
-        if (!sheetElement) return;
+    if (!incident || !map) return;
 
-        // Get the actual height of the sheet content
-        const sheetHeight = sheetElement.getBoundingClientRect().height;
+    // The sheet has mounted by the next frame, and sliding in doesn't change its size.
+    const frame = requestAnimationFrame(() => {
+      const sheet = sheetRef.current?.getBoundingClientRect();
+      map.flyTo({
+        center: [incident.coordinates.longitude, incident.coordinates.latitude],
+        // Centre the incident in the part of the map the sheet leaves visible.
+        offset: isMobile
+          ? [0, -(sheet?.height ?? 0) / 2]
+          : [-(sheet?.width ?? 0) / 2, 0],
+        speed: 1.2,
+        zoom: 15,
+      });
+    });
 
-        // Offset upward by half the drawer height so the marker appears in the visible area above the drawer
-        // The offset is [x, y] in pixels, negative y moves upward
-        const offsetY = -(sheetHeight / 2);
-
-        map.flyTo({
-          center: [
-            incident.coordinates.longitude,
-            incident.coordinates.latitude,
-          ],
-          offset: [0, offsetY],
-          speed: 1,
-          zoom: 15,
-        });
-      };
-
-      // Wait for the sheet to finish animating in (500ms) before measuring
-      const timeoutId = setTimeout(measureSheetHeight, 600);
-
-      return () => clearTimeout(timeoutId);
-    }
+    return () => cancelAnimationFrame(frame);
   }, [incident, isMobile, mapRef]);
 
-  if (!incident) return null;
+  if (!shown) return null;
 
   return (
     <Sheet
-      open={true}
+      open={Boolean(incident)}
       onOpenChange={open => {
         if (!open) {
           close();
@@ -100,6 +97,7 @@ const MapIncidentInfo: FunctionComponent<MapIncidentInfoProps> = ({
       }}
     >
       <SheetContent
+        ref={sheetRef}
         overlayClassName="bg-transparent"
         side={isMobile ? 'bottom' : 'right'}
         // Leave room for the map on short screens like the iPhone Duo.
@@ -108,12 +106,10 @@ const MapIncidentInfo: FunctionComponent<MapIncidentInfoProps> = ({
         onOpenAutoFocus={event => event.preventDefault()}
       >
         <SheetHeader className="pb-0">
-          <SheetTitle className="text-2xl font-bold">
-            {incident?.name}
-          </SheetTitle>
-          <SheetDescription>{incident?.location}</SheetDescription>
+          <SheetTitle className="text-2xl font-bold">{shown.name}</SheetTitle>
+          <SheetDescription>{shown.location}</SheetDescription>
           <SheetDescription className="text-sm text-gray-500">
-            {formatIncidentDate(new Date(incident?.date))}
+            {formatIncidentDate(new Date(shown.date))}
           </SheetDescription>
         </SheetHeader>
         <div className="px-4">
@@ -122,7 +118,7 @@ const MapIncidentInfo: FunctionComponent<MapIncidentInfoProps> = ({
 
         <div className="grid auto-rows-min gap-6 px-4">
           <CameraSection
-            nearbyCameraIds={[...(incident.data?.nearbyCameras ?? [])]}
+            nearbyCameraIds={[...(shown.data?.nearbyCameras ?? [])]}
           />
         </div>
 
