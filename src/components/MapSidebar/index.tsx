@@ -4,6 +4,7 @@ import { useDebouncedCallback } from 'use-debounce';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
 
 import { Button } from '../ui/button';
+import { cn } from '@/lib/utils';
 import MapSidebarItem from './parts/Item';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { useReduxIncidents } from '../../store/selectors';
@@ -38,6 +39,7 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
   const dispatch = useAppDispatch();
   const incidents = useReduxIncidents();
   const filter = useAppSelector(state => state.incidents.filter);
+  const filtersActive = Boolean(filter?.distance || filter?.dateRange);
 
   // Sync local search input with Redux when filter changes externally (e.g. reset filters).
   const externalSearch = filter?.search || '';
@@ -156,20 +158,31 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
                   )}
                 </InputGroupAddon>
 
-                {incidents.length > 0 && filter?.search && (
-                  <InputGroupAddon align="inline-end">
-                    {incidents.length} results
-                  </InputGroupAddon>
-                )}
-                <InputGroupButton
-                  onClick={() => {
-                    dispatch(openModal('incident-filters'));
-                  }}
-                  variant="ghost"
-                  size="icon-sm"
-                >
-                  <SlidersHorizontal />
-                </InputGroupButton>
+                <InputGroupAddon align="inline-end">
+                  {(filter?.search || filtersActive) && (
+                    <span className="tabular-nums">
+                      {incidents.length}{' '}
+                      {incidents.length === 1 ? 'result' : 'results'}
+                    </span>
+                  )}
+                  <InputGroupButton
+                    onClick={() => {
+                      dispatch(openModal('incident-filters'));
+                    }}
+                    variant="ghost"
+                    size="icon-sm"
+                    aria-label={filtersActive ? 'Filters (on)' : 'Filters'}
+                    className={cn(
+                      'relative',
+                      filtersActive && 'text-tpscalls-primary'
+                    )}
+                  >
+                    <SlidersHorizontal />
+                    {filtersActive && (
+                      <span className="bg-tpscalls-primary absolute top-1 right-1 size-1.5 rounded-full" />
+                    )}
+                  </InputGroupButton>
+                </InputGroupAddon>
               </InputGroup>
             </div>
           </motion.div>
@@ -192,6 +205,12 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
                 transition={{ delay: 0.1, duration: 0.1 }}
                 className="text-gray-500 text-center pb-10"
               >
+                {incidents.length === 0 &&
+                  (filter?.search || filtersActive) && (
+                    <p className="text-muted-foreground py-10 text-sm">
+                      No incidents match your search or filters.
+                    </p>
+                  )}
                 {incidents.map(incident => (
                   <MapSidebarItem
                     key={incident.id}
