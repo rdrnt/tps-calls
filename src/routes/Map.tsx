@@ -53,6 +53,8 @@ import MapSidebar from '../components/MapSidebar';
 import { SafeArea } from '../components/SafeArea';
 import MapCameraInfo from '../components/MapCameraInfo';
 
+const INITIAL_ZOOM = 11;
+
 const Map: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const store = useAppStore();
@@ -74,6 +76,9 @@ const Map: React.FunctionComponent = () => {
   const [isMapLoaded, setIsMapLoaded] = React.useState<boolean>(false);
   const [interactingWithMap, setInteractingWithMap] =
     React.useState<boolean>(false);
+
+  const revealed = isMapLoaded && incidentsListReady;
+  const hasRevealed = React.useRef(false);
 
   // Lazy initializer so the WebGL2 probe runs once per mount, not per render.
   // Support can't change mid-session, so re-checking is pure waste.
@@ -142,6 +147,19 @@ const Map: React.FunctionComponent = () => {
       dispatch(closeLoader());
     }
   }, [mapSupported, isMapLoaded, incidentsListReady, loader.open, dispatch]);
+
+  // Settle into the city as the loader fades, unless a shared incident is about to fly in.
+  React.useEffect(() => {
+    if (!revealed || hasRevealed.current) return;
+    hasRevealed.current = true;
+    if (!id) {
+      refForMap.current?.easeTo({
+        zoom: INITIAL_ZOOM,
+        duration: 1400,
+        easing: t => 1 - Math.pow(1 - t, 3),
+      });
+    }
+  }, [revealed, id]);
 
   // The URL decides which incident is open, so shared links and back/forward stay in step.
   React.useEffect(() => {
@@ -226,7 +244,7 @@ const Map: React.FunctionComponent = () => {
         initialViewState={{
           latitude: 43.653225,
           longitude: -79.383186,
-          zoom: 11.0,
+          zoom: INITIAL_ZOOM - 0.4,
         }}
         maxBounds={[
           [-79.75, 43.5], // Southwest (includes a bit of Mississauga, and enough Lake Ontario that the map's overhang doesn't push downtown off-centre)
@@ -339,25 +357,18 @@ const Map: React.FunctionComponent = () => {
           />
         )}
 
-        {/* The incident features */}
-        {incidentList
-          .map(incident => {
-            const selected = Boolean(
-              selectedIncident && selectedIncident.id === incident.id
-            );
-            if (!selected) {
-              return (
-                <MapMarker
-                  key={incident.id}
-                  coordinates={incident.coordinates}
-                  onClick={() => selectIncident(incident)}
-                />
-              );
-            }
-
-            return null;
-          })
-          .filter(incidentFeature => Boolean(incidentFeature))}
+        {/* Pins wait for the reveal, then stagger in newest first as the loader fades. */}
+        {revealed &&
+          incidentList.map((incident, index) =>
+            incident.id === selectedIncident?.id ? null : (
+              <MapMarker
+                key={incident.id}
+                coordinates={incident.coordinates}
+                delay={150 + Math.min(index * 8, 400)}
+                onClick={() => selectIncident(incident)}
+              />
+            )
+          )}
       </ReactMapGl>
 
       <MapSidebar

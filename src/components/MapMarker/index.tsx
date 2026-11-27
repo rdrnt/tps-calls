@@ -5,30 +5,23 @@ import { Coordinates } from '@rdrnt/tps-calls-shared';
 import { Colors } from '../../config';
 
 interface MapMarkerProps {
-  selected?: boolean;
   coordinates: Coordinates;
   onClick: () => void;
   color?: string;
+  /** Milliseconds to wait before the pin animates in. */
+  delay?: number;
 }
 
 const MapMarker: React.FunctionComponent<MapMarkerProps> = ({
-  selected,
   coordinates,
   onClick,
   color = Colors.PRIMARY,
+  delay = 0,
 }) => (
-  <Marker
-    {...coordinates}
-    color={selected ? Colors.BLACK : color}
-    scale={selected ? 8 : 6}
-    style={{
-      border: selected ? 2 : 1,
-    }}
-    onClick={onClick}
-  >
+  <Marker {...coordinates} onClick={onClick}>
     <div
-      className="w-[17px] h-[17px] bg-red-500 rounded-full border-white border-2 "
-      style={{ backgroundColor: color }}
+      className="animate-in fade-in zoom-in-50 fill-mode-backwards size-[17px] rounded-full border-2 border-white duration-300 ease-out motion-reduce:animate-none"
+      style={{ backgroundColor: color, animationDelay: `${delay}ms` }}
     />
   </Marker>
 );

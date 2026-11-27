@@ -54,9 +54,10 @@ const IncidentListener: FunctionComponent = () => {
 
     listenerRef.current = FirebaseIncidents.listener(
       newIncidents => {
-        markIncidentsReady();
-
         setIncidents(newIncidents.map(FirebaseIncidents.toLocalIncident));
+        // Store the first snapshot now, so the map isn't revealed before its pins.
+        if (!hasReceivedInitialSnapshot.current) setIncidents.flush();
+        markIncidentsReady();
       },
       () => {
         markIncidentsReady();
