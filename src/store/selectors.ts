@@ -1,5 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { getDistance } from 'geolib';
+import { haversineDistance, type Coordinates } from '@rdrnt/tps-calls-shared';
 import Fuse from 'fuse.js';
 import type { AppState } from '.';
 import type { LocalIncident } from '../types';
@@ -15,6 +15,15 @@ import { useSelector } from 'react-redux';
  * intersection doesn't matter, but distance is cheaper so it runs first
  * to shrink the set before Fuse.js indexes it.
  */
+// haversineDistance throws on a malformed coordinate; treat that incident as out of range.
+const distanceKmOrInfinity = (a: Coordinates, b: Coordinates) => {
+  try {
+    return haversineDistance(a, b);
+  } catch {
+    return Infinity;
+  }
+};
+
 export const selectFilteredIncidents = createSelector(
   (state: AppState) => state.incidents.list,
   (state: AppState) => state.incidents.filter.distance,
@@ -25,20 +34,10 @@ export const selectFilteredIncidents = createSelector(
 
     // Distance filter (requires user location)
     if (distanceKm && userCoords) {
-      const maxMeters = distanceKm * 1000;
-      filtered = filtered.filter(incident => {
-        const meters = getDistance(
-          {
-            latitude: userCoords.latitude,
-            longitude: userCoords.longitude,
-          },
-          {
-            latitude: incident.coordinates.latitude,
-            longitude: incident.coordinates.longitude,
-          }
-        );
-        return meters <= maxMeters;
-      });
+      filtered = filtered.filter(
+        incident =>
+          distanceKmOrInfinity(userCoords, incident.coordinates) <= distanceKm
+      );
     }
 
     // Fuzzy text search

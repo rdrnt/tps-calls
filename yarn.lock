@@ -2691,11 +2691,6 @@ fuse.js@^7.5.0:
   resolved "https://registry.yarnpkg.com/fuse.js/-/fuse.js-7.5.0.tgz#c591b7bddad0135b9d28d190daa9415dd754c4c7"
   integrity sha512-sQtrEfA+ez/3G0cCZecF70oqpCRttCexYUG4mUrtWL49ULUzUyxokt5kyqwtKzj1270RaKih+hcP3qLcumccow==
 
-geolib@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/geolib/-/geolib-4.0.2.tgz#56f1824e1d5b01ad69a30c85f3eff457f5026f5e"
-  integrity sha512-QvBQvSO03XO8TV+/Dk6UOgAolqZlXDOs2ebvLg6Qd6WDulbpdcutjYLXo90GzUjF2rr7NAZMENk+MAKHjShoVw==
-
 get-caller-file@^2.0.5:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/get-caller-file/-/get-caller-file-2.0.5.tgz#4f94412a82db32f36e3b0b9741f8a97feb031f7e"
