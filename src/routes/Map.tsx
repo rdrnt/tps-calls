@@ -5,6 +5,7 @@ import ReactMapGl, { AttributionControl, MapRef } from 'react-map-gl/mapbox';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import {
   MenuIcon,
+  LoaderCircleIcon,
   NavigationIcon,
   CircleQuestionMarkIcon,
   MoonIcon,
@@ -331,11 +332,16 @@ const Map: React.FunctionComponent = () => {
               <>
                 <MapButton
                   label="Show my location"
+                  aria-busy={userLocation.requesting}
                   onClick={() =>
                     dispatch(setRequestingLocationPermissions(true))
                   }
                 >
-                  <NavigationIcon />
+                  {userLocation.requesting ? (
+                    <LoaderCircleIcon className="animate-spin" />
+                  ) : (
+                    <NavigationIcon />
+                  )}
                 </MapButton>
                 <ButtonGroupSeparator className="bg-accent" />
               </>
