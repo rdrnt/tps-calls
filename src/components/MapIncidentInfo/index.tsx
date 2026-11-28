@@ -1,5 +1,5 @@
 import { toast } from 'sonner';
-import { Link } from 'lucide-react';
+import { Link, Share } from 'lucide-react';
 import { MapRef } from 'react-map-gl/mapbox';
 import {
   FunctionComponent,
@@ -26,6 +26,7 @@ import {
 } from '../ui/sheet';
 import { formatIncidentDate } from '../../helpers/date';
 import useIsMobile from '../../hooks/useIsMobile';
+import * as Analytics from '../../helpers/analytics';
 
 import { LocalIncident } from '../../types';
 
@@ -43,17 +44,58 @@ const MapIncidentInfo: FunctionComponent<MapIncidentInfoProps> = ({
 }) => {
   const { isMobile } = useIsMobile();
 
-  const onClickCopyToClipboard = () => {
-    if (!incident || !navigator || navigator.clipboard === undefined) return;
-    navigator.clipboard.writeText(createShareUrl(incident.id));
-    toast.success('Share link copied to clipboard', {
-      position: 'top-center',
-    });
+  const canShare = isMobile && typeof navigator.share === 'function';
+
+  const copyLink = async (url: string) => {
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success('Share link copied to clipboard', {
+        position: 'top-center',
+      });
+      Analytics.event({
+        category: 'UI',
+        action: Analytics.UI.SHARE_INCIDENT_URL,
+        label: 'copy',
+      });
+    } catch {
+      toast.error("Couldn't copy the link", {
+        description: url,
+        position: 'top-center',
+      });
+    }
+  };
+
+  const onClickShare = async () => {
+    if (!incident) return;
+    const url = createShareUrl(incident.id);
+    if (!canShare) {
+      copyLink(url);
+      return;
+    }
+    try {
+      await navigator.share({
+        title: incident.name,
+        text: `${incident.name} at ${incident.location}`,
+        url,
+      });
+      Analytics.event({
+        category: 'UI',
+        action: Analytics.UI.SHARE_INCIDENT_URL,
+        label: 'share-sheet',
+      });
+    } catch (error) {
+      // Dismissing the share sheet rejects with AbortError, which isn't a failure.
+      if ((error as Error).name !== 'AbortError') copyLink(url);
+    }
   };
 
   const onClickShareOnTwitter = () => {
     if (!incident) return;
-    window.open(`${createTwitterShareUrl(incident)}`, '_blank');
+    Analytics.event({
+      category: 'UI',
+      action: Analytics.UI.SHARE_INCIDENT_TWITTER,
+    });
+    window.open(createTwitterShareUrl(incident), '_blank', 'noopener');
   };
 
   const sheetRef = useRef<HTMLDivElement>(null);
@@ -123,9 +165,9 @@ const MapIncidentInfo: FunctionComponent<MapIncidentInfoProps> = ({
         </div>
 
         <SheetFooter>
-          <Button onClick={onClickCopyToClipboard}>
-            <Link />
-            Copy link
+          <Button onClick={onClickShare}>
+            {canShare ? <Share /> : <Link />}
+            {canShare ? 'Share' : 'Copy link'}
           </Button>
           <Button onClick={onClickShareOnTwitter}>
             <TwitterIcon />
