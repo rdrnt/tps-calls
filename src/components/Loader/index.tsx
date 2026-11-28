@@ -1,5 +1,4 @@
-import { FunctionComponent } from 'react';
-import { m, AnimatePresence } from 'motion/react';
+import { FunctionComponent, useState } from 'react';
 
 import { useAppSelector } from '../../store';
 
@@ -42,21 +41,24 @@ export const StaticLoader: FunctionComponent<{
 
 const Loader: FunctionComponent = () => {
   const { open, message } = useAppSelector(state => state.ui.loader);
+  // Stays mounted while it fades out; a CSS transition, so it doesn't wait on motion's lazy features.
+  const [mounted, setMounted] = useState(open);
+  if (open && !mounted) setMounted(true);
+  if (!mounted) return null;
 
   return (
-    <AnimatePresence>
-      {open && (
-        // Only the map opens this loader, so it uses the map's colour.
-        <m.div
-          key="loader"
-          className="absolute top-0 left-0 h-(--map-height) w-full z-999 bg-(--map-background) flex flex-col justify-center items-center"
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <LoaderContent message={message} pulse />
-        </m.div>
+    // Only the map opens this loader, so it uses the map's colour.
+    <div
+      className={cn(
+        'absolute top-0 left-0 h-(--map-height) w-full z-999 bg-(--map-background) flex flex-col justify-center items-center transition-opacity duration-300',
+        !open && 'pointer-events-none opacity-0'
       )}
-    </AnimatePresence>
+      onTransitionEnd={event => {
+        if (event.target === event.currentTarget && !open) setMounted(false);
+      }}
+    >
+      <LoaderContent message={message} pulse />
+    </div>
   );
 };
 

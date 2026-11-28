@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  LazyMotion,
   m,
   AnimatePresence,
   useReducedMotion,
@@ -38,6 +39,10 @@ const ROW_VARIANTS: Variants = {
     transition: { duration: 0.2, delay: Math.min(index, 12) * 0.025 },
   }),
 };
+
+// Only the sidebar animates with motion, so its features load with the map page, not on every page.
+const loadMotionFeatures = () =>
+  import('../../motion-features').then(module => module.default);
 
 interface MapSidebarProps {
   isOpen: boolean;
@@ -109,126 +114,128 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
   };
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <m.div
-          initial={{ x: '-100%' }}
-          animate={{ x: 0 }}
-          exit={{ x: '-100%' }}
-          transition={{
-            type: 'spring',
-            stiffness: 300,
-            damping: 30,
-            mass: 0.8,
-          }}
-          className="bg-background fixed top-0 left-0 z-50 flex h-full w-full flex-col shadow-xl sm:w-96 md:w-[400px]"
-        >
-          <div className="shrink-0">
-            <div className="flex flex-row items-center justify-between p-4 pb-0">
-              <h2 className="text-lg font-semibold text-foreground">
-                Incidents
-              </h2>
+    <LazyMotion features={loadMotionFeatures} strict>
+      <AnimatePresence>
+        {isOpen && (
+          <m.div
+            initial={{ x: '-100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '-100%' }}
+            transition={{
+              type: 'spring',
+              stiffness: 300,
+              damping: 30,
+              mass: 0.8,
+            }}
+            className="bg-background fixed top-0 left-0 z-50 flex h-full w-full flex-col shadow-xl sm:w-96 md:w-[400px]"
+          >
+            <div className="shrink-0">
+              <div className="flex flex-row items-center justify-between p-4 pb-0">
+                <h2 className="text-lg font-semibold text-foreground">
+                  Incidents
+                </h2>
 
-              <Button
-                variant="ghost"
-                size="icon-lg"
-                onClick={onClose}
-                aria-label="Close sidebar"
-              >
-                <X />
-              </Button>
-            </div>
-            <div className="p-4">
-              <InputGroup>
-                <InputGroupInput
-                  placeholder="Arrest, Yonge St, etc..."
-                  value={localSearchInputValue}
-                  onChange={event =>
-                    handleLocalSearchInputChange(event.target.value)
-                  }
-                />
-                <InputGroupAddon>
-                  {localSearchInputValue ? (
+                <Button
+                  variant="ghost"
+                  size="icon-lg"
+                  onClick={onClose}
+                  aria-label="Close sidebar"
+                >
+                  <X />
+                </Button>
+              </div>
+              <div className="p-4">
+                <InputGroup>
+                  <InputGroupInput
+                    placeholder="Arrest, Yonge St, etc..."
+                    value={localSearchInputValue}
+                    onChange={event =>
+                      handleLocalSearchInputChange(event.target.value)
+                    }
+                  />
+                  <InputGroupAddon>
+                    {localSearchInputValue ? (
+                      <InputGroupButton
+                        onClick={() => handleLocalSearchInputChange('')}
+                        variant="ghost"
+                        size="icon-sm"
+                      >
+                        <X />
+                      </InputGroupButton>
+                    ) : (
+                      <Search />
+                    )}
+                  </InputGroupAddon>
+
+                  <InputGroupAddon align="inline-end">
+                    {(filter?.search || filtersActive) && (
+                      <span className="tabular-nums">
+                        {incidents.length}{' '}
+                        {incidents.length === 1 ? 'result' : 'results'}
+                      </span>
+                    )}
                     <InputGroupButton
-                      onClick={() => handleLocalSearchInputChange('')}
+                      onClick={() => {
+                        dispatch(openModal('incident-filters'));
+                      }}
                       variant="ghost"
                       size="icon-sm"
+                      aria-label={filtersActive ? 'Filters (on)' : 'Filters'}
+                      className={cn(
+                        'relative',
+                        filtersActive && 'text-tpscalls-primary'
+                      )}
                     >
-                      <X />
+                      <SlidersHorizontal />
+                      {filtersActive && (
+                        <span className="bg-tpscalls-primary absolute top-1 right-1 size-1.5 rounded-full" />
+                      )}
                     </InputGroupButton>
-                  ) : (
-                    <Search />
-                  )}
-                </InputGroupAddon>
-
-                <InputGroupAddon align="inline-end">
-                  {(filter?.search || filtersActive) && (
-                    <span className="tabular-nums">
-                      {incidents.length}{' '}
-                      {incidents.length === 1 ? 'result' : 'results'}
-                    </span>
-                  )}
-                  <InputGroupButton
-                    onClick={() => {
-                      dispatch(openModal('incident-filters'));
-                    }}
-                    variant="ghost"
-                    size="icon-sm"
-                    aria-label={filtersActive ? 'Filters (on)' : 'Filters'}
-                    className={cn(
-                      'relative',
-                      filtersActive && 'text-tpscalls-primary'
-                    )}
-                  >
-                    <SlidersHorizontal />
-                    {filtersActive && (
-                      <span className="bg-tpscalls-primary absolute top-1 right-1 size-1.5 rounded-full" />
-                    )}
-                  </InputGroupButton>
-                </InputGroupAddon>
-              </InputGroup>
+                  </InputGroupAddon>
+                </InputGroup>
+              </div>
             </div>
-          </div>
 
-          <div className="min-h-0 flex-1 overflow-y-auto p-4">
-            {children || (
-              <div className="relative pb-10 text-center">
-                {capped && filter?.dateRange && (
-                  <p className="text-muted-foreground pb-3 text-xs">
-                    Showing the newest {DATE_RANGE_LIMIT} incidents in this date
-                    range. Narrow the range to see the rest.
-                  </p>
-                )}
-                {incidents.length === 0 &&
-                  (filter?.search || filtersActive) && (
-                    <p className="text-muted-foreground py-10 text-sm">
-                      No incidents match your search or filters.
+            <div className="min-h-0 flex-1 overflow-y-auto p-4">
+              {children || (
+                <div className="relative pb-10 text-center">
+                  {capped && filter?.dateRange && (
+                    <p className="text-muted-foreground pb-3 text-xs">
+                      Showing the newest {DATE_RANGE_LIMIT} incidents in this
+                      date range. Narrow the range to see the rest.
                     </p>
                   )}
-                <AnimatePresence mode="popLayout">
-                  {incidents.map((incident, index) => (
-                    <m.div
-                      key={incident.id}
-                      layout="position"
-                      custom={reduceMotion ? 0 : index}
-                      variants={ROW_VARIANTS}
-                      initial="hidden"
-                      animate="shown"
-                      exit="hidden"
-                    >
-                      <MapSidebarItem
-                        incident={incident}
-                        onClick={() => onItemClick(incident)}
-                      />
-                    </m.div>
-                  ))}
-                </AnimatePresence>
-              </div>
-            )}
-          </div>
-        </m.div>
-      )}
-    </AnimatePresence>
+                  {incidents.length === 0 &&
+                    (filter?.search || filtersActive) && (
+                      <p className="text-muted-foreground py-10 text-sm">
+                        No incidents match your search or filters.
+                      </p>
+                    )}
+                  <AnimatePresence mode="popLayout">
+                    {incidents.map((incident, index) => (
+                      <m.div
+                        key={incident.id}
+                        layout="position"
+                        custom={reduceMotion ? 0 : index}
+                        variants={ROW_VARIANTS}
+                        initial="hidden"
+                        animate="shown"
+                        exit="hidden"
+                      >
+                        <MapSidebarItem
+                          incident={incident}
+                          onClick={() => onItemClick(incident)}
+                        />
+                      </m.div>
+                    ))}
+                  </AnimatePresence>
+                </div>
+              )}
+            </div>
+          </m.div>
+        )}
+      </AnimatePresence>
+    </LazyMotion>
   );
 };
 
