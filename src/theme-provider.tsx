@@ -2,6 +2,7 @@ import {
   createContext,
   useContext,
   useEffect,
+  useRef,
   useState,
   useSyncExternalStore,
 } from 'react';
@@ -68,10 +69,26 @@ export function ThemeProvider({
   );
   const resolvedTheme = theme === 'system' ? systemTheme : theme;
 
+  const appliedOnce = useRef(false);
+
   useEffect(() => {
     const root = window.document.documentElement;
+    // Fade colours on a change, but not on load (see .theme-transition in index.css).
+    const fade = appliedOnce.current;
+    appliedOnce.current = true;
+    if (fade) root.classList.add('theme-transition');
     root.classList.remove('light', 'dark');
     root.classList.add(resolvedTheme);
+    if (!fade) return;
+
+    const timer = setTimeout(
+      () => root.classList.remove('theme-transition'),
+      350
+    );
+    return () => {
+      clearTimeout(timer);
+      root.classList.remove('theme-transition');
+    };
   }, [resolvedTheme]);
 
   const storeTheme = (theme: Theme) => {

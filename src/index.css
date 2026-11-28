@@ -188,6 +188,20 @@ body {
   color: rgb(255 255 255 / 0.75);
 }
 
+/* Set briefly by ThemeProvider so the UI eases into a new theme alongside the map. */
+@media (prefers-reduced-motion: no-preference) {
+  .theme-transition,
+  .theme-transition *,
+  .theme-transition *::before,
+  .theme-transition *::after {
+    transition-property:
+      background-color, border-color, color, fill, stroke, box-shadow !important;
+    transition-duration: 300ms !important;
+    transition-timing-function: ease !important;
+    transition-delay: 0s !important;
+  }
+}
+
 /* Honour the device's reduced-motion setting everywhere; end states still apply. */
 @media (prefers-reduced-motion: reduce) {
   *,
