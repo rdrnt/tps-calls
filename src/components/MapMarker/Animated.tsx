@@ -18,12 +18,14 @@ interface AnimatedMapMarkerProps {
   coordinates: Coordinates;
   color?: keyof typeof COLOR_CLASSES;
   size?: number;
+  className?: string;
 }
 
 const AnimatedMapMarker: React.FunctionComponent<AnimatedMapMarkerProps> = ({
   coordinates,
   color = 'primary',
   size = 15,
+  className,
 }) => (
   <Marker {...coordinates} style={{ zIndex: 0 }} anchor="center">
     <div
@@ -36,7 +38,8 @@ const AnimatedMapMarker: React.FunctionComponent<AnimatedMapMarkerProps> = ({
       className={cn(
         'border-2 rounded-full',
         COLOR_CLASSES[color],
-        'z-10 relative'
+        'z-10 relative',
+        className
       )}
       style={{
         height: `${size}px`,

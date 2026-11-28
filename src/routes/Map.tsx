@@ -365,8 +365,9 @@ const Map: React.FunctionComponent = () => {
 
         {selectedIncident && (
           <AnimatedMapMarker
-            coordinates={selectedIncident?.coordinates}
-            size={22}
+            coordinates={selectedIncident.coordinates}
+            size={30}
+            className="border-4 shadow-[0_2px_6px_rgb(0_0_0/0.45)]"
           />
         )}
 
