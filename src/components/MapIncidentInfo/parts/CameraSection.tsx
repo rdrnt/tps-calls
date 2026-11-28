@@ -15,6 +15,7 @@ import { cn } from '../../../lib/utils';
 import { Alert, AlertTitle } from '../../ui/alert';
 import useNearbyCameras from '../../../hooks/useNearbyCameras';
 import CameraViewer, { liveImageUrl } from './CameraViewer';
+import FadeInImage from '../../FadeInImage';
 
 interface CameraSectionProps {
   nearbyCameraIds: string[];
@@ -96,13 +97,13 @@ const CameraSection: FunctionComponent<CameraSectionProps> = ({
                   }}
                 >
                   <ItemHeader>
-                    <img
+                    <FadeInImage
                       src={liveImageUrl(camera)}
                       alt=""
                       // City camera images are 320x240; reserving the space keeps the sheet's height fixed.
                       width={320}
                       height={240}
-                      className="bg-muted aspect-[4/3] w-full rounded-sm object-cover"
+                      className="aspect-[4/3] w-full rounded-sm"
                     />
                   </ItemHeader>
                   <ItemContent>

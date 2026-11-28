@@ -147,21 +147,27 @@ const MapIncidentInfo: FunctionComponent<MapIncidentInfoProps> = ({
         // Focusing the first button on open draws a ring on "Copy link".
         onOpenAutoFocus={event => event.preventDefault()}
       >
-        <SheetHeader className="pb-0">
-          <SheetTitle className="text-2xl font-bold">{shown.name}</SheetTitle>
-          <SheetDescription>{shown.location}</SheetDescription>
-          <SheetDescription className="text-sm text-gray-500">
-            {formatIncidentDate(new Date(shown.date))}
-          </SheetDescription>
-        </SheetHeader>
-        <div className="px-4">
-          <Separator />
-        </div>
+        {/* Keyed so switching incidents fades the new details in. */}
+        <div
+          key={shown.id}
+          className="animate-in fade-in-25 slide-in-from-bottom-1 flex flex-col gap-4 duration-200 ease-out"
+        >
+          <SheetHeader className="pb-0">
+            <SheetTitle className="text-2xl font-bold">{shown.name}</SheetTitle>
+            <SheetDescription>{shown.location}</SheetDescription>
+            <SheetDescription className="text-sm text-gray-500">
+              {formatIncidentDate(new Date(shown.date))}
+            </SheetDescription>
+          </SheetHeader>
+          <div className="px-4">
+            <Separator />
+          </div>
 
-        <div className="grid auto-rows-min gap-6 px-4">
-          <CameraSection
-            nearbyCameraIds={[...(shown.data?.nearbyCameras ?? [])]}
-          />
+          <div className="grid auto-rows-min gap-6 px-4">
+            <CameraSection
+              nearbyCameraIds={[...(shown.data?.nearbyCameras ?? [])]}
+            />
+          </div>
         </div>
 
         <SheetFooter>
