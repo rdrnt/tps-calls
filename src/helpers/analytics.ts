@@ -16,7 +16,6 @@ export const initialize = () => {
     Sentry.init({
       dsn: SENTRY_DSN,
       environment: 'production',
-      tracesSampleRate: 0.1, // 10% of transactions for performance monitoring
       // v11 collects user info, cookies and bodies by default; keep v10's no-PII baseline.
       dataCollection: { userInfo: false, cookies: false, httpBodies: [] },
       // Errors from extensions, in-app browsers and the OS, not our code.

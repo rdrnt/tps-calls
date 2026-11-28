@@ -180,10 +180,37 @@ body {
   bottom: var(--map-inset-bottom);
 }
 
-/* Mapbox's default light strip stands out on the always-dark map. */
-.mapboxgl-map .mapboxgl-ctrl-attrib:not(.mapboxgl-compact) {
+/* Mapbox's default light strip stands out on the dark map. */
+.dark .mapboxgl-map .mapboxgl-ctrl-attrib:not(.mapboxgl-compact) {
   background-color: rgb(0 0 0 / 0.4);
 }
-.mapboxgl-map .mapboxgl-ctrl-attrib:not(.mapboxgl-compact) a {
+.dark .mapboxgl-map .mapboxgl-ctrl-attrib:not(.mapboxgl-compact) a {
   color: rgb(255 255 255 / 0.75);
+}
+
+/* Set briefly by ThemeProvider so the UI eases into a new theme alongside the map. */
+@media (prefers-reduced-motion: no-preference) {
+  .theme-transition,
+  .theme-transition *,
+  .theme-transition *::before,
+  .theme-transition *::after {
+    transition-property:
+      background-color, border-color, color, fill, stroke, box-shadow !important;
+    transition-duration: 300ms !important;
+    transition-timing-function: ease !important;
+    transition-delay: 0s !important;
+  }
+}
+
+/* Honour the device's reduced-motion setting everywhere; end states still apply. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
 }

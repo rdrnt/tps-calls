@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Coordinates } from '@rdrnt/tps-calls-shared';
+import { toast } from 'sonner';
 
 import * as Permissions from '../../helpers/permissions';
 import {
@@ -11,45 +11,45 @@ import { AppState, useAppDispatch, useAppSelector } from '../../store';
 
 const LocationListener: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
-  const userLocationState = useAppSelector(
-    (state: AppState) => state.user.location
+  const requesting = useAppSelector(
+    (state: AppState) => state.user.location.requesting
   );
 
-  const onUpdate = (coordinates: Coordinates) => {
-    if (userLocationState.requesting) {
+  React.useEffect(() => {
+    dispatch(setLocationAvailable(Permissions.location.isSupported()));
+  }, [dispatch]);
+
+  React.useEffect(() => {
+    if (!requesting) return;
+
+    if (!Permissions.location.isSupported()) {
       dispatch(setRequestingLocationPermissions(false));
+      return;
     }
 
-    dispatch(
-      setLocationCoordinates({
-        latitude: coordinates.latitude,
-        longitude: coordinates.longitude,
-      })
-    );
-    dispatch(setLocationAvailable(true));
-  };
-
-  const onNotAvailable = () => {
-    setRequestingLocationPermissions(false);
-    dispatch(setLocationCoordinates(undefined));
-    dispatch(setLocationAvailable(false));
-  };
-
-  React.useEffect(() => {
-    if (Permissions.location.isSupported() && userLocationState.requesting) {
-      Permissions.location.requestPermission({
-        success: onUpdate,
-        error: onNotAvailable,
-      });
-    }
-  }, [userLocationState.requesting]);
-
-  React.useEffect(() => {
-    const isLocationAvailable = Boolean(window.navigator);
-    if (isLocationAvailable !== userLocationState.available) {
-      dispatch(setLocationAvailable(isLocationAvailable));
-    }
-  }, []);
+    Permissions.location.requestPermission({
+      success: ({ latitude, longitude }) => {
+        dispatch(setRequestingLocationPermissions(false));
+        dispatch(setLocationCoordinates({ latitude, longitude }));
+      },
+      // Keep the button so the user can retry after fixing the cause.
+      error: error => {
+        dispatch(setRequestingLocationPermissions(false));
+        if (error.code === error.PERMISSION_DENIED) {
+          toast.error('Location access is off', {
+            description:
+              'Allow location for this site in your browser settings, then try again.',
+            position: 'top-center',
+          });
+        } else {
+          toast.error("Couldn't find your location", {
+            description: 'Try again in a moment.',
+            position: 'top-center',
+          });
+        }
+      },
+    });
+  }, [requesting, dispatch]);
 
   return null;
 };

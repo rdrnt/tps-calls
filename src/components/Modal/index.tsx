@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useDebouncedCallback } from 'use-debounce';
 
 import { AppState } from '../../store';
 import { closeModal } from '../../store/actions';
 import { lazyWithReload } from '../../helpers/lazyWithReload';
 
 import { Dialog, DialogContent } from '../ui/dialog';
+import { Sheet, SheetContent } from '../ui/sheet';
+import useIsMobile from '../../hooks/useIsMobile';
 import { ModalTypes, ModalProps } from './types';
 
 const ProjectInfoModal = lazyWithReload(() => import('./ProjectInfo'));
@@ -28,21 +29,36 @@ const Modal: React.FunctionComponent = () => {
   const dispatch = useDispatch();
   const { open, type } = useSelector((appState: AppState) => appState.ui.modal);
 
-  const dismissModal = useDebouncedCallback(() => {
+  const dismissModal = React.useCallback(() => {
     dispatch(closeModal());
-  }, 200);
+  }, [dispatch]);
 
-  const ModalFromType = open && type ? ModalTable[type] : null;
+  const { isMobile } = useIsMobile();
+
+  const ModalFromType = type ? ModalTable[type] : null;
+  const body = ModalFromType && (
+    <React.Suspense fallback={null}>
+      <ModalFromType close={dismissModal} />
+    </React.Suspense>
+  );
+
+  // Phones get a bottom sheet, like the incident panel; larger screens get a centred dialog.
+  if (isMobile) {
+    return (
+      <Sheet open={open} onOpenChange={open => !open && dismissModal()}>
+        <SheetContent
+          side="bottom"
+          className="max-h-[85dvh] overflow-y-auto rounded-t-xl p-6 pb-[calc(1.5rem_+_var(--safe-bottom))]"
+        >
+          {body}
+        </SheetContent>
+      </Sheet>
+    );
+  }
 
   return (
     <Dialog open={open} onOpenChange={open => !open && dismissModal()}>
-      <DialogContent showCloseButton={true}>
-        {ModalFromType && (
-          <React.Suspense fallback={null}>
-            <ModalFromType close={dismissModal} />
-          </React.Suspense>
-        )}
-      </DialogContent>
+      <DialogContent showCloseButton={true}>{body}</DialogContent>
     </Dialog>
   );
 };

@@ -2,38 +2,44 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import * as React from 'react';
 // v8 requires the renderer-specific /mapbox entry point for Mapbox GL v3.
 import ReactMapGl, { AttributionControl, MapRef } from 'react-map-gl/mapbox';
-import { Navigate, useParams } from 'react-router';
+import { Navigate, useNavigate, useParams } from 'react-router';
 import {
   MenuIcon,
+  LoaderCircleIcon,
   NavigationIcon,
   CircleQuestionMarkIcon,
+  MoonIcon,
+  SunIcon,
   TabletSmartphoneIcon,
 } from 'lucide-react';
-import { toast, Toaster } from 'sonner';
+import { toast } from 'sonner';
 
 import { MAPBOX_THEME_URL } from '../config';
 import { buildIncidentTitle, MAP_METADATA } from '@/config/seo';
 import usePageMetadata from '@/hooks/usePageMetadata';
+import { cn } from '@/lib/utils';
 import * as Environment from '../helpers/environment';
 import * as Analytics from '../helpers/analytics';
 import * as FirebaseIncidents from '../helpers/firebase/incident';
 import { isMapSupported } from '../helpers/mapSupport';
 import useIsMobile from '../hooks/useIsMobile';
+import useSelectIncident from '../hooks/useSelectIncident';
 
-import { useAppDispatch, useAppSelector } from '../store';
+import { useAppDispatch, useAppSelector, useAppStore } from '../store';
 import { useReduxIncidents } from '../store/selectors';
 
-import {
-  LocationListener,
-  IncidentListener,
-  CameraListener,
-} from '../components/Listeners';
+import { LocationListener, IncidentListener } from '../components/Listeners';
+import Loader from '../components/Loader';
 
 import MapIncidentInfo from '../components/MapIncidentInfo';
 import AnimatedMapMarker from '../components/MapMarker/Animated';
-import MapMarker from '../components/MapMarker';
+import IncidentPins, {
+  PIN_HIT_LAYER_ID,
+} from '../components/MapMarker/IncidentPins';
 import MapButton from '../components/MapButton';
 import { TooltipProvider } from '../components/ui/tooltip';
+import { Toaster } from '../components/ui/sonner';
+import { useTheme } from '../theme-provider';
 import {
   ButtonGroup,
   ButtonGroupSeparator,
@@ -43,18 +49,20 @@ import {
   openLoader,
   openModal,
   setRequestingLocationPermissions,
-  setSelectedCamera,
   setSelectedIncident,
   toggleDrawer,
 } from '../store/actions';
 
 import MapSidebar from '../components/MapSidebar';
 import { SafeArea } from '../components/SafeArea';
-import MapCameraInfo from '../components/MapCameraInfo';
-import { LocalIncident } from '../types';
+
+const INITIAL_ZOOM = 11;
 
 const Map: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
+  const store = useAppStore();
+  const navigate = useNavigate();
+  const selectIncident = useSelectIncident();
   const { id } = useParams<{ id?: string }>();
 
   const incidentList = useReduxIncidents();
@@ -63,14 +71,19 @@ const Map: React.FunctionComponent = () => {
   const { drawerOpen, loader } = useAppSelector(state => state.ui);
   const userLocation = useAppSelector(state => state.user.location);
   const { isMobile } = useIsMobile();
-
-  const selectedCamera = useAppSelector(state => state.cameras.selected);
+  const { resolvedTheme, toggleTheme } = useTheme();
+  const lightPreset = resolvedTheme === 'dark' ? 'night' : 'day';
 
   const refForMap = React.useRef<MapRef | null>(null);
 
   const [isMapLoaded, setIsMapLoaded] = React.useState<boolean>(false);
+  const [hoveringPin, setHoveringPin] = React.useState(false);
   const [interactingWithMap, setInteractingWithMap] =
     React.useState<boolean>(false);
+
+  const revealed = isMapLoaded && incidentsListReady;
+  const buttonsHidden = Boolean(drawerOpen || selectedIncident);
+  const hasRevealed = React.useRef(false);
 
   // Lazy initializer so the WebGL2 probe runs once per mount, not per render.
   // Support can't change mid-session, so re-checking is pure waste.
@@ -91,21 +104,6 @@ const Map: React.FunctionComponent = () => {
     description: pageDescription,
     canonicalPath,
   });
-
-  // Finds and returns an incident from the store or database
-  const getIncidentWithId = async (
-    id: string,
-    searchDB = false
-  ): Promise<LocalIncident | undefined> => {
-    const matchingIncident = incidentList.find(incident => incident.id === id);
-
-    if (!matchingIncident && searchDB) {
-      const incidentFromDB = await FirebaseIncidents.getIncidentFromId(id);
-      return incidentFromDB;
-    }
-
-    return matchingIncident;
-  };
 
   // Scrolling past the map's top overhang makes iOS Safari draw the map under its bars.
   React.useLayoutEffect(() => {
@@ -135,8 +133,16 @@ const Map: React.FunctionComponent = () => {
     };
   }, []);
 
+  // The loader only exists on the map; reset it on the way out so it starts fresh next time.
+  React.useEffect(
+    () => () => {
+      dispatch(closeLoader());
+    },
+    [dispatch]
+  );
+
   React.useEffect(() => {
-    // The loader is global; leaving it open on the way out would cover /unsupported.
+    // Unsupported browsers are redirected, so the loader must not stay open.
     if (!mapSupported) {
       if (loader.open) {
         dispatch(closeLoader());
@@ -155,35 +161,74 @@ const Map: React.FunctionComponent = () => {
     }
   }, [mapSupported, isMapLoaded, incidentsListReady, loader.open, dispatch]);
 
+  // The style is Mapbox Standard, so one map switches between day and night.
   React.useEffect(() => {
-    if (!isMapLoaded || !id) {
+    if (!isMapLoaded) return;
+    refForMap.current
+      ?.getMap()
+      .setConfigProperty('basemap', 'lightPreset', lightPreset);
+  }, [isMapLoaded, lightPreset]);
+
+  // Settle into the city as the loader fades, unless a shared incident is about to fly in.
+  React.useEffect(() => {
+    if (!revealed || hasRevealed.current) return;
+    hasRevealed.current = true;
+    if (!id) {
+      refForMap.current?.easeTo({
+        zoom: INITIAL_ZOOM,
+        duration: 1400,
+        easing: t => 1 - Math.pow(1 - t, 3),
+      });
+    }
+  }, [revealed, id]);
+
+  // The URL decides which incident is open, so shared links and back/forward stay in step.
+  React.useEffect(() => {
+    if (!isMapLoaded || !incidentsListReady) return;
+
+    const { list, selected } = store.getState().incidents;
+    if (!id) {
+      if (selected) dispatch(setSelectedIncident(undefined));
+      return;
+    }
+    if (selected?.id === id) return;
+
+    const fromList = list.find(incident => incident.id === id);
+    if (fromList) {
+      dispatch(setSelectedIncident(fromList));
       return;
     }
 
-    getIncidentWithId(id, true).then(incident => {
-      if (!incident) {
+    let cancelled = false;
+    FirebaseIncidents.getIncidentFromId(id).then(incident => {
+      if (cancelled) return;
+      if (incident) {
+        dispatch(setSelectedIncident(incident));
+      } else {
         toast.error('Incident no longer exists', {
           description: 'The incident you are looking for no longer exists.',
           position: 'top-center',
         });
-      } else {
-        dispatch(setSelectedIncident(incident));
+        navigate('/', { replace: true });
       }
     });
-  }, [isMapLoaded, id, incidentList.length]);
+    return () => {
+      cancelled = true;
+    };
+  }, [id, isMapLoaded, incidentsListReady, store, dispatch, navigate]);
 
-  // Close the drawer if we're interacting with the map & the drawer is open d
+  // Dragging the map closes the drawer and the open incident.
   React.useEffect(() => {
-    if (interactingWithMap) {
-      if (drawerOpen) {
-        dispatch(toggleDrawer(false));
-      }
-
-      if (selectedIncident) {
-        dispatch(setSelectedIncident(undefined));
-      }
-    }
-  }, [interactingWithMap]);
+    if (!interactingWithMap) return;
+    if (drawerOpen) dispatch(toggleDrawer(false));
+    if (selectedIncident) selectIncident(undefined);
+  }, [
+    interactingWithMap,
+    drawerOpen,
+    selectedIncident,
+    dispatch,
+    selectIncident,
+  ]);
 
   React.useEffect(() => {
     const map = refForMap.current;
@@ -199,21 +244,6 @@ const Map: React.FunctionComponent = () => {
     }
   }, [userLocation.available, userLocation.coordinates]);
 
-  React.useEffect(() => {
-    // If the selected incident changes, zoom into it
-    const map = refForMap.current;
-    if (selectedIncident && map) {
-      map.flyTo({
-        center: [
-          selectedIncident.coordinates.longitude,
-          selectedIncident.coordinates.latitude,
-        ],
-        speed: 1,
-        zoom: 15,
-      });
-    }
-  }, [selectedIncident]);
-
   // Every hook above must run first — bailing earlier would violate the rules of hooks.
   // `replace` so the back button doesn't bounce the user into the same dead map.
   if (!mapSupported) {
@@ -222,20 +252,22 @@ const Map: React.FunctionComponent = () => {
 
   return (
     <TooltipProvider>
+      <Loader />
       <IncidentListener />
-      <CameraListener />
       <LocationListener />
       <h1 className="sr-only">Live Toronto Police Calls Map</h1>
       <ReactMapGl
         ref={refForMap}
         mapboxAccessToken={Environment.config.MAPBOX_API_KEY}
         mapStyle={MAPBOX_THEME_URL}
+        // Sets the preset before the first frame, so light mode doesn't flash dark.
+        config={{ basemap: { lightPreset } }}
         attributionControl={false}
         trackResize={true}
         initialViewState={{
           latitude: 43.653225,
           longitude: -79.383186,
-          zoom: 11.0,
+          zoom: INITIAL_ZOOM - 0.4,
         }}
         maxBounds={[
           [-79.75, 43.5], // Southwest (includes a bit of Mississauga, and enough Lake Ontario that the map's overhang doesn't push downtown off-centre)
@@ -257,8 +289,16 @@ const Map: React.FunctionComponent = () => {
         onDragEnd={() => {
           setInteractingWithMap(false);
         }}
-        onClick={() => {
-          if (drawerOpen) {
+        interactiveLayerIds={[PIN_HIT_LAYER_ID]}
+        cursor={hoveringPin ? 'pointer' : undefined}
+        onMouseEnter={() => setHoveringPin(true)}
+        onMouseLeave={() => setHoveringPin(false)}
+        onClick={event => {
+          const id = event.features?.[0]?.properties?.id;
+          const incident = id && incidentList.find(item => item.id === id);
+          if (incident) {
+            selectIncident(incident);
+          } else if (drawerOpen) {
             dispatch(toggleDrawer(false));
           }
         }}
@@ -271,39 +311,36 @@ const Map: React.FunctionComponent = () => {
         />
 
         <SafeArea className="h-dvh pb-safe-bottom">
-          {/* Overlay button for opening the drawer */}
-          {!drawerOpen && (
-            <MapButton
-              label="Incidents"
-              tooltipSide="right"
-              className="absolute top-[calc(var(--map-bleed)_+_20px)] left-[20px] lg:top-[calc(var(--map-bleed)_+_24px)] lg:left-[24px]"
-              onClick={() => {
-                dispatch(toggleDrawer(true));
-                if (selectedIncident) {
-                  dispatch(setSelectedIncident(undefined));
-                }
-              }}
-            >
-              <MenuIcon />
-            </MapButton>
-          )}
+          {/* Stays mounted so it can fade out; inert while the drawer covers it. */}
+          <MapButton
+            label="Incidents"
+            tooltipSide="right"
+            inert={drawerOpen}
+            className={cn(
+              'absolute top-[calc(var(--map-bleed)_+_20px)] left-[20px] duration-200 ease-out lg:top-[calc(var(--map-bleed)_+_24px)] lg:left-[24px]',
+              drawerOpen && '-translate-x-3 opacity-0'
+            )}
+            onClick={() => {
+              dispatch(toggleDrawer(true));
+              if (selectedIncident) selectIncident(undefined);
+            }}
+          >
+            <MenuIcon />
+          </MapButton>
 
           <MapIncidentInfo
             incident={selectedIncident}
             drawerOpen={drawerOpen}
-            close={() => dispatch(setSelectedIncident(undefined))}
+            close={() => selectIncident(undefined)}
             mapRef={refForMap}
           />
 
-          <MapCameraInfo
-            camera={selectedCamera}
-            drawerOpen={drawerOpen}
-            close={() => dispatch(setSelectedCamera(undefined))}
-          />
-
           <ButtonGroup
-            className="absolute bottom-[calc(var(--map-inset-bottom)_+_20px)] right-[20px] lg:bottom-[calc(var(--map-inset-bottom)_+_24px)] lg:right-[24px]"
-            hidden={Boolean(drawerOpen || selectedIncident)}
+            inert={buttonsHidden}
+            className={cn(
+              'absolute right-[20px] bottom-[calc(var(--map-inset-bottom)_+_20px)] transition-[opacity,translate] duration-200 ease-out lg:right-[24px] lg:bottom-[calc(var(--map-inset-bottom)_+_24px)]',
+              buttonsHidden && 'translate-y-3 opacity-0'
+            )}
           >
             <MapButton
               label="Get the app"
@@ -316,16 +353,28 @@ const Map: React.FunctionComponent = () => {
               <>
                 <MapButton
                   label="Show my location"
+                  aria-busy={userLocation.requesting}
                   onClick={() =>
                     dispatch(setRequestingLocationPermissions(true))
                   }
                 >
-                  <NavigationIcon />
+                  {userLocation.requesting ? (
+                    <LoaderCircleIcon className="animate-spin" />
+                  ) : (
+                    <NavigationIcon />
+                  )}
                 </MapButton>
                 <ButtonGroupSeparator className="bg-accent" />
               </>
             )}
 
+            <MapButton
+              label={resolvedTheme === 'dark' ? 'Light mode' : 'Dark mode'}
+              onClick={toggleTheme}
+            >
+              {resolvedTheme === 'dark' ? <SunIcon /> : <MoonIcon />}
+            </MapButton>
+            <ButtonGroupSeparator className="bg-accent" />
             <MapButton
               label="About"
               onClick={() => dispatch(openModal('project-info'))}
@@ -345,32 +394,20 @@ const Map: React.FunctionComponent = () => {
 
         {selectedIncident && (
           <AnimatedMapMarker
-            coordinates={selectedIncident?.coordinates}
-            size={22}
+            // Keyed so switching incidents replays the grow.
+            key={selectedIncident.id}
+            coordinates={selectedIncident.coordinates}
+            size={30}
+            // Grows from the 17px pin it replaces (17 / 30 ≈ 57%).
+            className="animate-in zoom-in-57 border-4 shadow-[0_2px_6px_rgb(0_0_0/0.45)] duration-300 ease-out"
           />
         )}
 
-        {/* The incident features */}
-        {incidentList
-          .map(incident => {
-            const selected = Boolean(
-              selectedIncident && selectedIncident.id === incident.id
-            );
-            if (!selected) {
-              return (
-                <MapMarker
-                  key={incident.id}
-                  coordinates={incident.coordinates}
-                  onClick={() => {
-                    dispatch(setSelectedIncident(incident));
-                  }}
-                />
-              );
-            }
-
-            return null;
-          })
-          .filter(incidentFeature => Boolean(incidentFeature))}
+        <IncidentPins
+          incidents={incidentList}
+          selectedId={selectedIncident?.id}
+          revealed={revealed}
+        />
       </ReactMapGl>
 
       <MapSidebar

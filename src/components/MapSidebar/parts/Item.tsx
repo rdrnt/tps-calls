@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { Item, ItemDescription, ItemTitle, ItemContent } from '../../ui/item';
+import { cn } from '../../../lib/utils';
 
 import * as DateHelper from '../../../helpers/date';
 import { LocalIncident } from '../../../types';
@@ -13,12 +14,18 @@ interface MapSidebarItemProps {
 const MapSidebarItem: React.FunctionComponent<MapSidebarItemProps> = ({
   incident,
   onClick,
-}) => {
-  return (
-    <Item
-      onClick={onClick}
-      className="bg-accent hover:bg-muted/40 mb-2 text-foreground mt-0 hover:cursor-pointer"
-    >
+}) => (
+  // A real button, so rows can be reached with Tab and opened with Enter.
+  // Grey card in both themes. Hover adds a blue outline; light mode turns pale blue, dark mode lightens slightly.
+  <Item
+    asChild
+    className={cn(
+      'bg-accent text-foreground hover:border-tpscalls-primary mt-0 mb-2 w-full duration-150',
+      'hover:bg-[color-mix(in_oklab,var(--color-tpscalls-primary)_6%,var(--card))] active:bg-[color-mix(in_oklab,var(--color-tpscalls-primary)_12%,var(--card))]',
+      'dark:hover:border-tpscalls-primary dark:hover:bg-[color-mix(in_oklab,var(--accent),var(--foreground)_7%)] dark:active:bg-[color-mix(in_oklab,var(--accent),var(--foreground)_12%)]'
+    )}
+  >
+    <button type="button" onClick={onClick}>
       <ItemContent className="text-left">
         <ItemTitle className="font-bold">{incident.name}</ItemTitle>
         <ItemTitle>{incident.location}</ItemTitle>
@@ -26,8 +33,8 @@ const MapSidebarItem: React.FunctionComponent<MapSidebarItemProps> = ({
           {DateHelper.formatIncidentDate(new Date(incident.date))}
         </ItemDescription>
       </ItemContent>
-    </Item>
-  );
-};
+    </button>
+  </Item>
+);
 
 export default MapSidebarItem;

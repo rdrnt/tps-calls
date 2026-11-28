@@ -1,5 +1,11 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import React, { useEffect, useState } from 'react';
+import {
+  LazyMotion,
+  m,
+  AnimatePresence,
+  useReducedMotion,
+  type Variants,
+} from 'motion/react';
 import { useDebouncedCallback } from 'use-debounce';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
 
@@ -16,12 +22,27 @@ import {
 } from '../ui/input-group';
 
 import {
-  setSelectedIncident,
   toggleDrawer,
   setIncidentFilter,
   openModal,
 } from '../../store/actions';
+import useSelectIncident from '../../hooks/useSelectIncident';
 import { LocalIncident } from '../../types';
+import { DATE_RANGE_LIMIT } from '../../store/slices/incidents';
+
+// Rows stagger in (capped so long lists don't trickle) and fade out when filtered away.
+const ROW_VARIANTS: Variants = {
+  hidden: { opacity: 0, x: -8, transition: { duration: 0.12 } },
+  shown: (index: number) => ({
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.2, delay: Math.min(index, 12) * 0.025 },
+  }),
+};
+
+// Only the sidebar animates with motion, so its features load with the map page, not on every page.
+const loadMotionFeatures = () =>
+  import('../../motion-features').then(module => module.default);
 
 interface MapSidebarProps {
   isOpen: boolean;
@@ -37,8 +58,12 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
   children,
 }) => {
   const dispatch = useAppDispatch();
+  const selectIncident = useSelectIncident();
+  // Motion keeps opacity fades under reduced motion, so drop the stagger delays too.
+  const reduceMotion = useReducedMotion();
   const incidents = useReduxIncidents();
   const filter = useAppSelector(state => state.incidents.filter);
+  const capped = useAppSelector(state => state.incidents.capped);
   const filtersActive = Boolean(filter?.distance || filter?.dateRange);
 
   // Sync local search input with Redux when filter changes externally (e.g. reset filters).
@@ -71,159 +96,146 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
     debouncedUpdateReduxSearch(newValue); // redux: debounced
   };
 
+  // Escape closes the sidebar, unless a popup on top of it is taking the key.
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      if (document.querySelector('[role="dialog"]')) return;
+      onClose();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isOpen, onClose]);
+
   const onItemClick = (incident: LocalIncident) => {
     dispatch(toggleDrawer(false));
-    dispatch(setSelectedIncident(incident));
+    selectIncident(incident);
   };
 
   return (
-    <AnimatePresence mode="wait">
-      {/* 
-        Sidebar container with Framer Motion animations
-     
-      */}
-      {isOpen && (
-        <motion.div
-          initial={{ x: '-100%' }} // Start off-screen to the left
-          animate={{ x: 0 }} // Slide in to normal position
-          exit={{ x: '-100%' }} // Slide out to the left when closing
-          transition={{
-            type: 'spring',
-            stiffness: 300,
-            damping: 30,
-            mass: 0.8,
-          }}
-          className={`
-          /* Positioning and Layout */
-          fixed top-0 left-0 h-full 
-          /* Responsive Width: Full width on mobile, 384px on small screens, 400px on medium+ */
-          w-full sm:w-96 md:w-[400px] 
-          /* Visual Styling */
-          bg-background shadow-xl z-50
-          /* Desktop Override: Always visible on large screens */
-          lg:translate-x-0
-        `}
-        >
-          {/* 
-            Sticky Header Container with subtle fade-in animation
-            - sticky top-0: Sticks to the top of the viewport when scrolling
-            - z-10: Ensures header stays above content
-          */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }} // Start slightly transparent and moved up
-            animate={{ opacity: 1, y: 0 }} // Fade in and slide to position
-            transition={{ delay: 0.1, duration: 0.1 }} // Slight delay for staggered effect
-            className="sticky top-0 z-10"
+    <LazyMotion features={loadMotionFeatures} strict>
+      <AnimatePresence>
+        {isOpen && (
+          <m.div
+            initial={{ x: '-100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '-100%' }}
+            transition={{
+              type: 'spring',
+              stiffness: 300,
+              damping: 30,
+              mass: 0.8,
+            }}
+            className="bg-background fixed top-0 left-0 z-50 flex h-full w-full flex-col shadow-xl sm:w-96 md:w-[400px]"
           >
-            <div className="flex flex-row items-center justify-between p-4 pb-0">
-              <motion.h2
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2, duration: 0.1 }}
-                className="text-lg font-semibold text-foreground"
-              >
-                Incidents
-              </motion.h2>
+            <div className="shrink-0">
+              <div className="flex flex-row items-center justify-between p-4 pb-0">
+                <h2 className="text-lg font-semibold text-foreground">
+                  Incidents
+                </h2>
 
-              <Button
-                variant="ghost"
-                size="icon-lg"
-                onClick={onClose}
-                className="p-2 rounded-md hover:bg-gray-100 transition-colors duration-200"
-                aria-label="Close sidebar"
-              >
-                <X />
-              </Button>
-            </div>
-            <div className="p-4">
-              <InputGroup>
-                <InputGroupInput
-                  placeholder="Arrest, Yonge St, etc..."
-                  value={localSearchInputValue}
-                  onChange={event =>
-                    handleLocalSearchInputChange(event.target.value)
-                  }
-                />
-                <InputGroupAddon>
-                  {localSearchInputValue ? (
+                <Button
+                  variant="ghost"
+                  size="icon-lg"
+                  onClick={onClose}
+                  aria-label="Close sidebar"
+                >
+                  <X />
+                </Button>
+              </div>
+              <div className="p-4">
+                <InputGroup>
+                  <InputGroupInput
+                    placeholder="Arrest, Yonge St, etc..."
+                    value={localSearchInputValue}
+                    onChange={event =>
+                      handleLocalSearchInputChange(event.target.value)
+                    }
+                  />
+                  <InputGroupAddon>
+                    {localSearchInputValue ? (
+                      <InputGroupButton
+                        onClick={() => handleLocalSearchInputChange('')}
+                        variant="ghost"
+                        size="icon-sm"
+                      >
+                        <X />
+                      </InputGroupButton>
+                    ) : (
+                      <Search />
+                    )}
+                  </InputGroupAddon>
+
+                  <InputGroupAddon align="inline-end">
+                    {(filter?.search || filtersActive) && (
+                      <span className="tabular-nums">
+                        {incidents.length}{' '}
+                        {incidents.length === 1 ? 'result' : 'results'}
+                      </span>
+                    )}
                     <InputGroupButton
-                      onClick={() => handleLocalSearchInputChange('')}
+                      onClick={() => {
+                        dispatch(openModal('incident-filters'));
+                      }}
                       variant="ghost"
                       size="icon-sm"
+                      aria-label={filtersActive ? 'Filters (on)' : 'Filters'}
+                      className={cn(
+                        'relative',
+                        filtersActive && 'text-tpscalls-primary'
+                      )}
                     >
-                      <X />
+                      <SlidersHorizontal />
+                      {filtersActive && (
+                        <span className="bg-tpscalls-primary absolute top-1 right-1 size-1.5 rounded-full" />
+                      )}
                     </InputGroupButton>
-                  ) : (
-                    <Search />
-                  )}
-                </InputGroupAddon>
-
-                <InputGroupAddon align="inline-end">
-                  {(filter?.search || filtersActive) && (
-                    <span className="tabular-nums">
-                      {incidents.length}{' '}
-                      {incidents.length === 1 ? 'result' : 'results'}
-                    </span>
-                  )}
-                  <InputGroupButton
-                    onClick={() => {
-                      dispatch(openModal('incident-filters'));
-                    }}
-                    variant="ghost"
-                    size="icon-sm"
-                    aria-label={filtersActive ? 'Filters (on)' : 'Filters'}
-                    className={cn(
-                      'relative',
-                      filtersActive && 'text-tpscalls-primary'
-                    )}
-                  >
-                    <SlidersHorizontal />
-                    {filtersActive && (
-                      <span className="bg-tpscalls-primary absolute top-1 right-1 size-1.5 rounded-full" />
-                    )}
-                  </InputGroupButton>
-                </InputGroupAddon>
-              </InputGroup>
+                  </InputGroupAddon>
+                </InputGroup>
+              </div>
             </div>
-          </motion.div>
 
-          {/* 
-            Scrollable Content Area with staggered content animation
-            - h-[calc(100vh-73px)]: Height calculation to account for sticky header
-              (73px is approximate header height including padding and border)
-          */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.2 }}
-            className="p-4 overflow-y-auto h-[calc(100dvh-73px)]"
-          >
-            {children || (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.1, duration: 0.1 }}
-                className="text-gray-500 text-center pb-10"
-              >
-                {incidents.length === 0 &&
-                  (filter?.search || filtersActive) && (
-                    <p className="text-muted-foreground py-10 text-sm">
-                      No incidents match your search or filters.
+            <div className="min-h-0 flex-1 overflow-y-auto p-4">
+              {children || (
+                <div className="relative pb-10 text-center">
+                  {capped && filter?.dateRange && (
+                    <p className="text-muted-foreground pb-3 text-xs">
+                      Showing the newest {DATE_RANGE_LIMIT} incidents in this
+                      date range. Narrow the range to see the rest.
                     </p>
                   )}
-                {incidents.map(incident => (
-                  <MapSidebarItem
-                    key={incident.id}
-                    incident={incident}
-                    onClick={() => onItemClick(incident)}
-                  />
-                ))}
-              </motion.div>
-            )}
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+                  {incidents.length === 0 &&
+                    (filter?.search || filtersActive) && (
+                      <p className="text-muted-foreground py-10 text-sm">
+                        No incidents match your search or filters.
+                      </p>
+                    )}
+                  <AnimatePresence mode="popLayout">
+                    {incidents.map((incident, index) => (
+                      <m.div
+                        key={incident.id}
+                        layout="position"
+                        custom={reduceMotion ? 0 : index}
+                        variants={ROW_VARIANTS}
+                        initial="hidden"
+                        animate="shown"
+                        exit="hidden"
+                      >
+                        <MapSidebarItem
+                          incident={incident}
+                          onClick={() => onItemClick(incident)}
+                        />
+                      </m.div>
+                    ))}
+                  </AnimatePresence>
+                </div>
+              )}
+            </div>
+          </m.div>
+        )}
+      </AnimatePresence>
+    </LazyMotion>
   );
 };
 

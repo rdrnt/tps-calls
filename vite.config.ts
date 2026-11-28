@@ -1,8 +1,43 @@
 import { sentryVitePlugin } from '@sentry/vite-plugin';
-import { defineConfig } from 'vite';
+import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { resolve } from 'node:path';
+
+/**
+ * On map URLs, starts downloading the map page's code (and Mapbox) as soon as the HTML loads,
+ * instead of after the main bundle has run and React has asked for the lazy route.
+ */
+const preloadMapRoute = (): Plugin => ({
+  name: 'preload-map-route',
+  apply: 'build',
+  transformIndexHtml: {
+    order: 'post',
+    handler(html, { bundle }) {
+      if (!bundle) return html;
+      const mapChunk = Object.values(bundle).find(
+        output =>
+          output.type === 'chunk' &&
+          output.facadeModuleId?.endsWith('/src/routes/Map.tsx')
+      );
+      if (!mapChunk || mapChunk.type !== 'chunk') return html;
+
+      const files = new Set<string>();
+      const visit = (fileName: string) => {
+        if (files.has(fileName)) return;
+        files.add(fileName);
+        const output = bundle[fileName];
+        if (output?.type === 'chunk') output.imports.forEach(visit);
+      };
+      visit(mapChunk.fileName);
+
+      const urls = JSON.stringify([...files].map(file => `/${file}`));
+      // index.html's earlier inline script has already marked map routes.
+      const script = `<script>if(document.documentElement.classList.contains('map-route'))${urls}.forEach(function(href){var link=document.createElement('link');link.rel='modulepreload';link.crossOrigin='';link.href=href;document.head.appendChild(link)})</script>`;
+      return html.replace('</head>', `${script}\n  </head>`);
+    },
+  },
+});
 
 export default defineConfig(() => {
   // Source-map publication is deliberately opt-in to prevent local and preview builds from creating Sentry releases.
@@ -16,6 +51,7 @@ export default defineConfig(() => {
         include: '**/*.{jsx,tsx}',
       }),
       tailwindcss(),
+      preloadMapRoute(),
       ...(uploadSentrySourceMaps
         ? [
             sentryVitePlugin({

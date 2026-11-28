@@ -1,5 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
+import {
+  useDispatch,
+  useSelector,
+  useStore,
+  TypedUseSelectorHook,
+} from 'react-redux';
 
 // Reducer stuff
 import incidentsReducer from './slices/incidents';
@@ -24,5 +29,6 @@ export type AppDispatch = typeof store.dispatch;
 // Typed hooks
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<AppState> = useSelector;
+export const useAppStore = useStore.withTypes<typeof store>();
 
 export default store;

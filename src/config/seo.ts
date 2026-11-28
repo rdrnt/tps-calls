@@ -29,13 +29,6 @@ export const DOWNLOAD_METADATA: RouteMetadata = {
   canonicalPath: '/download',
 };
 
-export const TRAFFIC_CAMS_METADATA: RouteMetadata = {
-  title: 'Toronto Traffic Cameras | tpscalls',
-  description:
-    'Real-time traffic camera feeds from intersections across Toronto.',
-  canonicalPath: '/traffic-cams',
-};
-
 export const UNSUPPORTED_METADATA: RouteMetadata = {
   title: 'Unsupported Browser | tpscalls',
   description:

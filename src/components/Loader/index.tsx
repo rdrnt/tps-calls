@@ -1,78 +1,64 @@
-import { FunctionComponent } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { FunctionComponent, useState } from 'react';
 
-import { useAppDispatch, useAppSelector } from '../../store';
+import { useAppSelector } from '../../store';
 
-import { closeLoader } from '../../store/slices/ui';
-import { Typography } from '../Typography';
 import { cn } from '../../lib/utils';
 
-const LoaderSpinner = ({ animate = true }: { animate?: boolean }) => {
-  return (
-    <div className={cn('relative rounded-full h-12 w-12 bg-tpscalls-primary')}>
-      <div
-        className={cn(
-          'absolute inset-0 rounded-full bg-tpscalls-primary',
-          animate && 'animate-ping'
-        )}
-      />
-    </div>
-  );
-};
+/** A small dot with a slow, soft pulse; the static version matches it so hand-offs don't jump. */
+const LoaderContent = ({
+  message,
+  pulse,
+}: {
+  message?: string;
+  pulse: boolean;
+}) => (
+  <div role="status" className="flex flex-col items-center gap-6">
+    <span className="relative flex size-6">
+      {pulse && (
+        <span className="bg-tpscalls-primary/50 absolute inset-0 animate-ping rounded-full [animation-duration:1.6s]" />
+      )}
+      <span className="bg-tpscalls-primary relative size-6 rounded-full" />
+    </span>
+    {message && (
+      <p className="text-muted-foreground text-lg font-medium">{message}</p>
+    )}
+  </div>
+);
 
 export const StaticLoader: FunctionComponent<{
   message?: string;
   className?: string;
-}> = ({ message = 'Loading map...', className }) => {
-  return (
-    <div
-      className={cn(
-        'absolute top-0 left-0 h-screen w-full z-999 bg-background flex flex-col justify-center items-center',
-        className
-      )}
-    >
-      <LoaderSpinner animate={false} />
-      <Typography
-        variant="h2"
-        align="center"
-        className="max-sm:text-[43px] mt-4 text-primary"
-      >
-        {message}
-      </Typography>
-    </div>
-  );
-};
+}> = ({ message = 'Loading map...', className }) => (
+  <div
+    className={cn(
+      'absolute top-0 left-0 h-screen w-full z-999 bg-background flex flex-col justify-center items-center',
+      className
+    )}
+  >
+    <LoaderContent message={message} pulse={false} />
+  </div>
+);
 
 const Loader: FunctionComponent = () => {
   const { open, message } = useAppSelector(state => state.ui.loader);
-  const dispatch = useAppDispatch();
+  // Stays mounted while it fades out; a CSS transition, so it doesn't wait on motion's lazy features.
+  const [mounted, setMounted] = useState(open);
+  if (open && !mounted) setMounted(true);
+  if (!mounted) return null;
 
   return (
-    <AnimatePresence>
-      {open && (
-        // Only the map opens this loader, and the map is always dark.
-        <motion.div
-          key="loader"
-          className="dark absolute top-0 left-0 h-(--map-height) w-full z-999 bg-(--map-background) flex flex-col justify-center items-center"
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onAnimationEnd={() => {
-            dispatch(closeLoader());
-          }}
-        >
-          <LoaderSpinner animate={true} />
-          {message && (
-            <Typography
-              variant="h2"
-              align="center"
-              className="max-sm:text-[43px] mt-4 text-primary"
-            >
-              {message}
-            </Typography>
-          )}
-        </motion.div>
+    // Only the map opens this loader, so it uses the map's colour.
+    <div
+      className={cn(
+        'absolute top-0 left-0 h-(--map-height) w-full z-999 bg-(--map-background) flex flex-col justify-center items-center transition-opacity duration-300',
+        !open && 'pointer-events-none opacity-0'
       )}
-    </AnimatePresence>
+      onTransitionEnd={event => {
+        if (event.target === event.currentTarget && !open) setMounted(false);
+      }}
+    >
+      <LoaderContent message={message} pulse />
+    </div>
   );
 };
 

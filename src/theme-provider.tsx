@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from 'react';
 
 type Theme = 'dark' | 'light' | 'system';
 
@@ -10,13 +17,30 @@ type ThemeProviderProps = {
 
 type ThemeProviderState = {
   theme: Theme;
+  /** The theme actually shown, with 'system' resolved. */
+  resolvedTheme: 'dark' | 'light';
   setTheme: (theme: Theme) => void;
+  /** Flips light/dark, going back to 'system' when the choice matches the device. */
+  toggleTheme: () => void;
 };
 
 const initialState: ThemeProviderState = {
   theme: 'system',
+  resolvedTheme: 'light',
   setTheme: () => null,
+  toggleTheme: () => null,
 };
+
+const DARK_QUERY = '(prefers-color-scheme: dark)';
+
+const subscribeToSystemTheme = (onChange: () => void) => {
+  const query = window.matchMedia(DARK_QUERY);
+  query.addEventListener('change', onChange);
+  return () => query.removeEventListener('change', onChange);
+};
+
+const getSystemTheme = () =>
+  window.matchMedia(DARK_QUERY).matches ? 'dark' : 'light';
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 
@@ -39,33 +63,50 @@ export function ThemeProvider({
     () => readStoredTheme(storageKey) || defaultTheme
   );
 
+  const systemTheme = useSyncExternalStore(
+    subscribeToSystemTheme,
+    getSystemTheme
+  );
+  const resolvedTheme = theme === 'system' ? systemTheme : theme;
+
+  const appliedOnce = useRef(false);
+
   useEffect(() => {
     const root = window.document.documentElement;
-
+    // Fade colours on a change, but not on load (see .theme-transition in index.css).
+    const fade = appliedOnce.current;
+    appliedOnce.current = true;
+    if (fade) root.classList.add('theme-transition');
     root.classList.remove('light', 'dark');
+    root.classList.add(resolvedTheme);
+    if (!fade) return;
 
-    if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
-        .matches
-        ? 'dark'
-        : 'light';
+    const timer = setTimeout(
+      () => root.classList.remove('theme-transition'),
+      350
+    );
+    return () => {
+      clearTimeout(timer);
+      root.classList.remove('theme-transition');
+    };
+  }, [resolvedTheme]);
 
-      root.classList.add(systemTheme);
-      return;
+  const storeTheme = (theme: Theme) => {
+    try {
+      localStorage.setItem(storageKey, theme);
+    } catch {
+      // Storage is blocked; keep the theme for this session only.
     }
-
-    root.classList.add(theme);
-  }, [theme]);
+    setTheme(theme);
+  };
 
   const value = {
     theme,
-    setTheme: (theme: Theme) => {
-      try {
-        localStorage.setItem(storageKey, theme);
-      } catch {
-        // Storage is blocked; keep the theme for this session only.
-      }
-      setTheme(theme);
+    resolvedTheme,
+    setTheme: storeTheme,
+    toggleTheme: () => {
+      const next = resolvedTheme === 'dark' ? 'light' : 'dark';
+      storeTheme(next === systemTheme ? 'system' : next);
     },
   };
 

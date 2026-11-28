@@ -67,9 +67,11 @@ export const getOldestIncident = async (): Promise<Incident<any>> => {
 export const getIncidentsAtDate = async ({
   startDate,
   endDate,
+  max,
 }: {
   startDate: Timestamp;
   endDate: Timestamp;
+  max: number;
 }): Promise<Incident<any>[]> => {
   try {
     const incidentsCollection = collection(
@@ -80,7 +82,8 @@ export const getIncidentsAtDate = async ({
       incidentsCollection,
       orderBy('date', 'desc'),
       where('date', '>=', startDate),
-      where('date', '<=', endDate)
+      where('date', '<=', endDate),
+      limit(max)
     );
 
     const querySnapshot = await getDocs(dateQuery);

@@ -1,11 +1,11 @@
 import { Coordinates } from '@rdrnt/tps-calls-shared';
 
 export const isSupported = (): boolean =>
-  Boolean('geolocation' in window.navigator);
+  typeof window !== 'undefined' && 'geolocation' in window.navigator;
 
 interface RequestPermissionParams {
   success: (coordinates: Coordinates) => void;
-  error: () => void;
+  error: (error: GeolocationPositionError) => void;
 }
 export const requestPermission = ({
   success,
@@ -15,12 +15,10 @@ export const requestPermission = ({
     event => {
       success(event.coords);
     },
-    () => {
-      error();
-    },
+    error,
     {
       enableHighAccuracy: true,
-      timeout: 5000,
+      timeout: 10000,
       maximumAge: 9000,
     }
   );

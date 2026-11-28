@@ -59,10 +59,21 @@
     -->
     <link rel="manifest" href="/manifest.json" />
 
-    <!-- Map routes use the map's colour so loading doesn't flash white, and iOS Safari tints its bars to match the map -->
+    <!-- Start connecting to the map and data servers while the app loads. -->
+    <link rel="preconnect" href="https://api.mapbox.com" crossorigin />
+    <link
+      rel="preconnect"
+      href="https://firestore.googleapis.com"
+      crossorigin
+    />
+
+    <!-- Map routes use the map's colour so loading doesn't flash, and iOS Safari tints its bars to match the map -->
     <style>
       :root {
         --map-background: #233043;
+      }
+      :root.light {
+        --map-background: #f4f0ef;
       }
       html.map-route,
       html.map-route body {
@@ -70,11 +81,20 @@
       }
     </style>
     <script>
-      if (
-        !/^\/(contact|download|traffic-cams|unsupported)\b/.test(
-          location.pathname
-        )
-      ) {
+      // Apply the theme before React loads; ThemeProvider takes over from here.
+      (function () {
+        var theme;
+        try {
+          theme = localStorage.getItem('tpscalls-ui-theme');
+        } catch (e) {}
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light';
+        }
+        document.documentElement.classList.add(theme);
+      })();
+      if (!/^\/(contact|download|unsupported)\b/.test(location.pathname)) {
         document.documentElement.classList.add('map-route');
       }
     </script>

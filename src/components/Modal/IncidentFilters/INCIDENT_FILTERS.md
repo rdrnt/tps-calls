@@ -65,7 +65,7 @@ Filters are split into two layers based on where they can run:
 **Client-side (selector)** — `selectFilteredIncidents` in `store/selectors.ts`
 
 - Distance and search filter the already-fetched list.
-- Distance uses `geolib.getDistance` against the user's coordinates.
+- Distance uses the shared package's `haversineDistance` against the user's coordinates.
 - Search uses Fuse.js fuzzy matching on `name` and `location`.
 - Memoized via `createSelector` — only recomputes when inputs change.
 - `Map.tsx` and `MapSidebar` read through this selector.
@@ -74,7 +74,7 @@ Filters are split into two layers based on where they can run:
 Firestore (date range)  →  state.incidents.list (raw)
                                     ↓
                          selectFilteredIncidents
-                           ├─ distance (geolib)
+                           ├─ distance (haversine)
                            └─ search   (fuse.js)
                                     ↓
                            Map.tsx / MapSidebar
