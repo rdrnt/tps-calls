@@ -16,6 +16,7 @@ import { toast } from 'sonner';
 import { MAPBOX_THEME_URL } from '../config';
 import { buildIncidentTitle, MAP_METADATA } from '@/config/seo';
 import usePageMetadata from '@/hooks/usePageMetadata';
+import { cn } from '@/lib/utils';
 import * as Environment from '../helpers/environment';
 import * as Analytics from '../helpers/analytics';
 import * as FirebaseIncidents from '../helpers/firebase/incident';
@@ -76,6 +77,7 @@ const Map: React.FunctionComponent = () => {
     React.useState<boolean>(false);
 
   const revealed = isMapLoaded && incidentsListReady;
+  const buttonsHidden = Boolean(drawerOpen || selectedIncident);
   const hasRevealed = React.useRef(false);
 
   // Lazy initializer so the WebGL2 probe runs once per mount, not per render.
@@ -287,20 +289,22 @@ const Map: React.FunctionComponent = () => {
         />
 
         <SafeArea className="h-dvh pb-safe-bottom">
-          {/* Overlay button for opening the drawer */}
-          {!drawerOpen && (
-            <MapButton
-              label="Incidents"
-              tooltipSide="right"
-              className="absolute top-[calc(var(--map-bleed)_+_20px)] left-[20px] lg:top-[calc(var(--map-bleed)_+_24px)] lg:left-[24px]"
-              onClick={() => {
-                dispatch(toggleDrawer(true));
-                if (selectedIncident) selectIncident(undefined);
-              }}
-            >
-              <MenuIcon />
-            </MapButton>
-          )}
+          {/* Stays mounted so it can fade out; inert while the drawer covers it. */}
+          <MapButton
+            label="Incidents"
+            tooltipSide="right"
+            inert={drawerOpen}
+            className={cn(
+              'absolute top-[calc(var(--map-bleed)_+_20px)] left-[20px] duration-200 ease-out lg:top-[calc(var(--map-bleed)_+_24px)] lg:left-[24px]',
+              drawerOpen && '-translate-x-3 opacity-0'
+            )}
+            onClick={() => {
+              dispatch(toggleDrawer(true));
+              if (selectedIncident) selectIncident(undefined);
+            }}
+          >
+            <MenuIcon />
+          </MapButton>
 
           <MapIncidentInfo
             incident={selectedIncident}
@@ -310,8 +314,11 @@ const Map: React.FunctionComponent = () => {
           />
 
           <ButtonGroup
-            className="absolute bottom-[calc(var(--map-inset-bottom)_+_20px)] right-[20px] lg:bottom-[calc(var(--map-inset-bottom)_+_24px)] lg:right-[24px]"
-            hidden={Boolean(drawerOpen || selectedIncident)}
+            inert={buttonsHidden}
+            className={cn(
+              'absolute right-[20px] bottom-[calc(var(--map-inset-bottom)_+_20px)] transition-[opacity,translate] duration-200 ease-out lg:right-[24px] lg:bottom-[calc(var(--map-inset-bottom)_+_24px)]',
+              buttonsHidden && 'translate-y-3 opacity-0'
+            )}
           >
             <MapButton
               label="Get the app"
