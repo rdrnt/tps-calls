@@ -359,16 +359,15 @@ const Map: React.FunctionComponent = () => {
 
         {/* Pins wait for the reveal, then stagger in newest first as the loader fades. */}
         {revealed &&
-          incidentList.map((incident, index) =>
-            incident.id === selectedIncident?.id ? null : (
-              <MapMarker
-                key={incident.id}
-                coordinates={incident.coordinates}
-                delay={150 + Math.min(index * 8, 400)}
-                onClick={() => selectIncident(incident)}
-              />
-            )
-          )}
+          incidentList.map((incident, index) => (
+            <MapMarker
+              key={incident.id}
+              coordinates={incident.coordinates}
+              delay={150 + Math.min(index * 8, 400)}
+              hidden={incident.id === selectedIncident?.id}
+              onClick={() => selectIncident(incident)}
+            />
+          ))}
       </ReactMapGl>
 
       <MapSidebar
