@@ -1,4 +1,4 @@
-import { act, render, screen } from '@testing-library/react';
+import { act, render, renderHook, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { ThemeProvider, useTheme } from './theme-provider';
@@ -55,5 +55,24 @@ describe('ThemeProvider', () => {
     expect(screen.getByText('light')).toBeInTheDocument();
     expect(document.documentElement).toHaveClass('light');
     expect(document.documentElement).not.toHaveClass('dark');
+  });
+
+  it('toggles light and dark, and follows the device again when toggled back to match it', () => {
+    localStorage.clear();
+    // The shared matchMedia mock reports a light device.
+    const { result } = renderHook(() => useTheme(), {
+      wrapper: ({ children }) => (
+        <ThemeProvider storageKey="toggle-theme">{children}</ThemeProvider>
+      ),
+    });
+    expect(result.current.resolvedTheme).toBe('light');
+
+    act(() => result.current.toggleTheme());
+    expect(result.current.theme).toBe('dark');
+    expect(localStorage.getItem('toggle-theme')).toBe('dark');
+
+    act(() => result.current.toggleTheme());
+    expect(result.current.theme).toBe('system');
+    expect(result.current.resolvedTheme).toBe('light');
   });
 });

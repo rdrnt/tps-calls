@@ -19,12 +19,15 @@ type ThemeProviderState = {
   /** The theme actually shown, with 'system' resolved. */
   resolvedTheme: 'dark' | 'light';
   setTheme: (theme: Theme) => void;
+  /** Flips light/dark, going back to 'system' when the choice matches the device. */
+  toggleTheme: () => void;
 };
 
 const initialState: ThemeProviderState = {
   theme: 'system',
   resolvedTheme: 'light',
   setTheme: () => null,
+  toggleTheme: () => null,
 };
 
 const DARK_QUERY = '(prefers-color-scheme: dark)';
@@ -71,16 +74,22 @@ export function ThemeProvider({
     root.classList.add(resolvedTheme);
   }, [resolvedTheme]);
 
+  const storeTheme = (theme: Theme) => {
+    try {
+      localStorage.setItem(storageKey, theme);
+    } catch {
+      // Storage is blocked; keep the theme for this session only.
+    }
+    setTheme(theme);
+  };
+
   const value = {
     theme,
     resolvedTheme,
-    setTheme: (theme: Theme) => {
-      try {
-        localStorage.setItem(storageKey, theme);
-      } catch {
-        // Storage is blocked; keep the theme for this session only.
-      }
-      setTheme(theme);
+    setTheme: storeTheme,
+    toggleTheme: () => {
+      const next = resolvedTheme === 'dark' ? 'light' : 'dark';
+      storeTheme(next === systemTheme ? 'system' : next);
     },
   };
 

@@ -7,6 +7,8 @@ import {
   MenuIcon,
   NavigationIcon,
   CircleQuestionMarkIcon,
+  MoonIcon,
+  SunIcon,
   TabletSmartphoneIcon,
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -68,7 +70,8 @@ const Map: React.FunctionComponent = () => {
   const { drawerOpen, loader } = useAppSelector(state => state.ui);
   const userLocation = useAppSelector(state => state.user.location);
   const { isMobile } = useIsMobile();
-  const lightPreset = useTheme().resolvedTheme === 'dark' ? 'night' : 'day';
+  const { resolvedTheme, toggleTheme } = useTheme();
+  const lightPreset = resolvedTheme === 'dark' ? 'night' : 'day';
 
   const refForMap = React.useRef<MapRef | null>(null);
 
@@ -336,6 +339,13 @@ const Map: React.FunctionComponent = () => {
               </>
             )}
 
+            <MapButton
+              label={resolvedTheme === 'dark' ? 'Light mode' : 'Dark mode'}
+              onClick={toggleTheme}
+            >
+              {resolvedTheme === 'dark' ? <SunIcon /> : <MoonIcon />}
+            </MapButton>
+            <ButtonGroupSeparator className="bg-accent" />
             <MapButton
               label="About"
               onClick={() => dispatch(openModal('project-info'))}
