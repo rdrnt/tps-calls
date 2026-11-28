@@ -26,11 +26,7 @@ import useSelectIncident from '../hooks/useSelectIncident';
 import { useAppDispatch, useAppSelector, useAppStore } from '../store';
 import { useReduxIncidents } from '../store/selectors';
 
-import {
-  LocationListener,
-  IncidentListener,
-  CameraListener,
-} from '../components/Listeners';
+import { LocationListener, IncidentListener } from '../components/Listeners';
 
 import MapIncidentInfo from '../components/MapIncidentInfo';
 import AnimatedMapMarker from '../components/MapMarker/Animated';
@@ -242,7 +238,6 @@ const Map: React.FunctionComponent = () => {
   return (
     <TooltipProvider>
       <IncidentListener />
-      <CameraListener />
       <LocationListener />
       <h1 className="sr-only">Live Toronto Police Calls Map</h1>
       <ReactMapGl
