@@ -373,9 +373,12 @@ const Map: React.FunctionComponent = () => {
 
         {selectedIncident && (
           <AnimatedMapMarker
+            // Keyed so switching incidents replays the grow.
+            key={selectedIncident.id}
             coordinates={selectedIncident.coordinates}
             size={30}
-            className="border-4 shadow-[0_2px_6px_rgb(0_0_0/0.45)]"
+            // Grows from the 17px pin it replaces (17 / 30 ≈ 57%).
+            className="animate-in zoom-in-57 border-4 shadow-[0_2px_6px_rgb(0_0_0/0.45)] duration-300 ease-out"
           />
         )}
 
