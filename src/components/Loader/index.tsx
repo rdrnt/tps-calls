@@ -1,5 +1,5 @@
 import { FunctionComponent } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { m, AnimatePresence } from 'motion/react';
 
 import { useAppSelector } from '../../store';
 
@@ -47,14 +47,14 @@ const Loader: FunctionComponent = () => {
     <AnimatePresence>
       {open && (
         // Only the map opens this loader, so it uses the map's colour.
-        <motion.div
+        <m.div
           key="loader"
           className="absolute top-0 left-0 h-(--map-height) w-full z-999 bg-(--map-background) flex flex-col justify-center items-center"
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
           <LoaderContent message={message} pulse />
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   );

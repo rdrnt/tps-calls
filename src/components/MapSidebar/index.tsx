@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  motion,
+  m,
   AnimatePresence,
   useReducedMotion,
   type Variants,
@@ -111,7 +111,7 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div
+        <m.div
           initial={{ x: '-100%' }}
           animate={{ x: 0 }}
           exit={{ x: '-100%' }}
@@ -207,7 +207,7 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
                   )}
                 <AnimatePresence mode="popLayout">
                   {incidents.map((incident, index) => (
-                    <motion.div
+                    <m.div
                       key={incident.id}
                       layout="position"
                       custom={reduceMotion ? 0 : index}
@@ -220,13 +220,13 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
                         incident={incident}
                         onClick={() => onItemClick(incident)}
                       />
-                    </motion.div>
+                    </m.div>
                   ))}
                 </AnimatePresence>
               </div>
             )}
           </div>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   );
