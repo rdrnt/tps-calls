@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { Radio, MousePointerClick, Eye } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 import { Card } from '@/components/ui/card';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
@@ -15,6 +16,7 @@ import { useAppSelector } from '@/store';
 import { RECENT_WINDOW_MINUTES } from './lib';
 import LiveTicker from './parts/LiveTicker';
 import DownloadButtons from './parts/DownloadButtons';
+import Reveal from './parts/Reveal';
 import heroAppPreview300Avif from '@/assets/images/heroAppPreview-300.avif';
 import heroAppPreview600Avif from '@/assets/images/heroAppPreview-600.avif';
 import heroAppPreview300Webp from '@/assets/images/heroAppPreview-300.webp';
@@ -22,6 +24,11 @@ import heroAppPreview600Webp from '@/assets/images/heroAppPreview-600.webp';
 import heroAppPreviewFallback from '@/assets/images/heroAppPreview-600.png';
 
 import './download.css';
+
+// The hero's pieces fade up one after another on load.
+const HERO_IN =
+  'animate-in fade-in slide-in-from-bottom-3 fill-mode-backwards duration-500 ease-out';
+const heroDelay = (ms: number) => ({ animationDelay: `${ms}ms` });
 
 const HERO_PREVIEW_WIDTH = 300;
 const HERO_PREVIEW_HEIGHT = 591;
@@ -88,28 +95,57 @@ const DownloadPage: FunctionComponent = () => {
             <div>
               <Badge
                 variant="outline"
-                className="text-tpscalls-primary border-tpscalls-primary/30 bg-tpscalls-primary/10 gap-2 rounded-full px-3 py-1 text-xs font-medium"
+                className={cn(
+                  'text-tpscalls-primary border-tpscalls-primary/30 bg-tpscalls-primary/10 gap-2 rounded-full px-3 py-1 text-xs font-medium',
+                  HERO_IN
+                )}
               >
                 <span className="dl-dot" />
-                {recentCalls} calls in the last {RECENT_WINDOW_MINUTES} minutes
+                <span>
+                  {/* Keyed so the number ticks in when the count changes. */}
+                  <span
+                    key={recentCalls}
+                    className="animate-in fade-in slide-in-from-bottom-1 inline-block tabular-nums duration-300"
+                  >
+                    {recentCalls}
+                  </span>{' '}
+                  calls in the last {RECENT_WINDOW_MINUTES} minutes
+                </span>
               </Badge>
-              <h1 className="mt-5 text-[40px] font-semibold leading-[1.04] tracking-tight sm:text-6xl">
+              <h1
+                className={cn(
+                  'mt-5 text-[40px] font-semibold leading-[1.04] tracking-tight sm:text-6xl',
+                  HERO_IN
+                )}
+                style={heroDelay(80)}
+              >
                 Know what that siren was.
               </h1>
-              <p className="text-muted-foreground mt-5 max-w-md text-base leading-relaxed sm:text-lg">
+              <p
+                className={cn(
+                  'text-muted-foreground mt-5 max-w-md text-base leading-relaxed sm:text-lg',
+                  HERO_IN
+                )}
+                style={heroDelay(160)}
+              >
                 Every Toronto Police call lands on the map the second it gets
                 published. Tap a pin for the call type, the closest
                 intersection, and a live look through the nearest city camera.
                 No scanner needed, no waiting for the news.
               </p>
-              <DownloadButtons
-                className="mt-7 flex flex-wrap gap-3"
-                withIcons
-                withWebApp
-              />
+              <div className={HERO_IN} style={heroDelay(240)}>
+                <DownloadButtons
+                  className="mt-7 flex flex-wrap gap-3"
+                  withIcons
+                  withWebApp
+                />
+              </div>
             </div>
 
-            <div className="flex justify-center md:justify-end">
+            <div
+              className="animate-in fade-in zoom-in-95 slide-in-from-bottom-4 fill-mode-backwards flex justify-center duration-700 ease-out md:justify-end"
+              style={heroDelay(150)}
+            >
               <picture>
                 <source
                   type="image/avif"
@@ -142,16 +178,18 @@ const DownloadPage: FunctionComponent = () => {
         <div className="mx-auto w-full max-w-5xl px-5">
           {/* Feature cards */}
           <section className="grid gap-4 py-14 sm:grid-cols-3">
-            {FEATURES.map(({ icon: Icon, title, body }) => (
-              <Card key={title} className="gap-0 rounded-xl p-5 shadow-sm">
-                <div className="text-tpscalls-primary border-tpscalls-primary/20 bg-tpscalls-primary/10 flex size-9 items-center justify-center rounded-[10px] border">
-                  <Icon size={16} />
-                </div>
-                <h3 className="mt-4 text-[15px] font-semibold">{title}</h3>
-                <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
-                  {body}
-                </p>
-              </Card>
+            {FEATURES.map(({ icon: Icon, title, body }, index) => (
+              <Reveal key={title} delay={index * 90} className="h-full">
+                <Card className="h-full gap-0 rounded-xl p-5 shadow-sm">
+                  <div className="text-tpscalls-primary border-tpscalls-primary/20 bg-tpscalls-primary/10 flex size-9 items-center justify-center rounded-[10px] border">
+                    <Icon size={16} />
+                  </div>
+                  <h3 className="mt-4 text-[15px] font-semibold">{title}</h3>
+                  <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
+                    {body}
+                  </p>
+                </Card>
+              </Reveal>
             ))}
           </section>
 
