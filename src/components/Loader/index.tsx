@@ -3,44 +3,42 @@ import { motion, AnimatePresence } from 'motion/react';
 
 import { useAppSelector } from '../../store';
 
-import { Typography } from '../Typography';
 import { cn } from '../../lib/utils';
 
-const LoaderSpinner = ({ animate = true }: { animate?: boolean }) => {
-  return (
-    <div className={cn('relative rounded-full h-12 w-12 bg-tpscalls-primary')}>
-      <div
-        className={cn(
-          'absolute inset-0 rounded-full bg-tpscalls-primary',
-          animate && 'animate-ping'
-        )}
-      />
-    </div>
-  );
-};
+/** A small dot with a slow, soft pulse; the static version matches it so hand-offs don't jump. */
+const LoaderContent = ({
+  message,
+  pulse,
+}: {
+  message?: string;
+  pulse: boolean;
+}) => (
+  <div role="status" className="flex flex-col items-center gap-5">
+    <span className="relative flex size-4">
+      {pulse && (
+        <span className="bg-tpscalls-primary/50 absolute inset-0 animate-ping rounded-full [animation-duration:1.6s]" />
+      )}
+      <span className="bg-tpscalls-primary relative size-4 rounded-full" />
+    </span>
+    {message && (
+      <p className="text-muted-foreground text-sm font-medium">{message}</p>
+    )}
+  </div>
+);
 
 export const StaticLoader: FunctionComponent<{
   message?: string;
   className?: string;
-}> = ({ message = 'Loading map...', className }) => {
-  return (
-    <div
-      className={cn(
-        'absolute top-0 left-0 h-screen w-full z-999 bg-background flex flex-col justify-center items-center',
-        className
-      )}
-    >
-      <LoaderSpinner animate={false} />
-      <Typography
-        variant="h2"
-        align="center"
-        className="max-sm:text-[43px] mt-4 text-primary"
-      >
-        {message}
-      </Typography>
-    </div>
-  );
-};
+}> = ({ message = 'Loading map...', className }) => (
+  <div
+    className={cn(
+      'absolute top-0 left-0 h-screen w-full z-999 bg-background flex flex-col justify-center items-center',
+      className
+    )}
+  >
+    <LoaderContent message={message} pulse={false} />
+  </div>
+);
 
 const Loader: FunctionComponent = () => {
   const { open, message } = useAppSelector(state => state.ui.loader);
@@ -55,16 +53,7 @@ const Loader: FunctionComponent = () => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <LoaderSpinner animate={true} />
-          {message && (
-            <Typography
-              variant="h2"
-              align="center"
-              className="max-sm:text-[43px] mt-4 text-primary"
-            >
-              {message}
-            </Typography>
-          )}
+          <LoaderContent message={message} pulse />
         </motion.div>
       )}
     </AnimatePresence>
