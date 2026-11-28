@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router, Route, Routes } from 'react-router';
+import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router';
 
 import { lazyWithReload } from './helpers/lazyWithReload';
 
 const Map = lazyWithReload(() => import('./routes/Map'));
 const ContactPage = lazyWithReload(() => import('./routes/Contact'));
 const DownloadPage = lazyWithReload(() => import('./routes/Download'));
-const TrafficCams = lazyWithReload(() => import('./routes/TrafficCams'));
 const UnsupportedPage = lazyWithReload(() => import('./routes/Unsupported'));
 
 import { ThemeProvider } from './theme-provider';
@@ -48,13 +47,10 @@ const App: React.FunctionComponent = () => (
                   </React.Suspense>
                 }
               />
+              {/* The traffic cams page was removed; send old links to the map. */}
               <Route
                 path="/traffic-cams"
-                element={
-                  <React.Suspense fallback={routeFallback}>
-                    <TrafficCams />
-                  </React.Suspense>
-                }
+                element={<Navigate to="/" replace />}
               />
               <Route
                 path="/unsupported"

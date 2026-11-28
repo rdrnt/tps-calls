@@ -86,11 +86,7 @@
         }
         document.documentElement.classList.add(theme);
       })();
-      if (
-        !/^\/(contact|download|traffic-cams|unsupported)\b/.test(
-          location.pathname
-        )
-      ) {
+      if (!/^\/(contact|download|unsupported)\b/.test(location.pathname)) {
         document.documentElement.classList.add('map-route');
       }
     </script>
