@@ -16,13 +16,13 @@ const MapSidebarItem: React.FunctionComponent<MapSidebarItemProps> = ({
   onClick,
 }) => (
   // A real button, so rows can be reached with Tab and opened with Enter.
-  // Light: white card, pale blue with a blue outline on hover. Dark: grey card that lightens, with the same outline.
+  // Grey card in both themes. Hover adds a blue outline; light mode turns pale blue, dark mode lightens slightly.
   <Item
     asChild
     className={cn(
-      'text-foreground mt-0 mb-2 w-full duration-150',
-      'bg-card border-border hover:border-tpscalls-primary hover:bg-[color-mix(in_oklab,var(--color-tpscalls-primary)_6%,var(--card))] active:bg-[color-mix(in_oklab,var(--color-tpscalls-primary)_12%,var(--card))]',
-      'dark:bg-accent dark:hover:border-tpscalls-primary dark:border-transparent dark:hover:bg-[color-mix(in_oklab,var(--accent),var(--foreground)_7%)] dark:active:bg-[color-mix(in_oklab,var(--accent),var(--foreground)_12%)]'
+      'bg-accent text-foreground hover:border-tpscalls-primary mt-0 mb-2 w-full duration-150',
+      'hover:bg-[color-mix(in_oklab,var(--color-tpscalls-primary)_6%,var(--card))] active:bg-[color-mix(in_oklab,var(--color-tpscalls-primary)_12%,var(--card))]',
+      'dark:hover:border-tpscalls-primary dark:hover:bg-[color-mix(in_oklab,var(--accent),var(--foreground)_7%)] dark:active:bg-[color-mix(in_oklab,var(--accent),var(--foreground)_12%)]'
     )}
   >
     <button type="button" onClick={onClick}>
