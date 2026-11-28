@@ -13,8 +13,13 @@ export interface IncidentFilterState {
   dateRange?: IncidentDateRangeFilter;
 }
 
+/** A date range can match thousands of incidents; only the newest this many are loaded. */
+export const DATE_RANGE_LIMIT = 500;
+
 export interface IncidentsState {
   list: LocalIncident[];
+  /** True when a date-range result hit DATE_RANGE_LIMIT. */
+  capped: boolean;
   selected?: LocalIncident;
   filter: IncidentFilterState;
   loading: boolean;
@@ -47,9 +52,13 @@ export const fetchFilteredIncidents = createAsyncThunk(
     const incidents = await getIncidentsAtDate({
       startDate: startTimestamp,
       endDate: endTimestamp,
+      max: DATE_RANGE_LIMIT,
     });
 
-    return incidents.map(toLocalIncident);
+    return {
+      incidents: incidents.map(toLocalIncident),
+      capped: incidents.length >= DATE_RANGE_LIMIT,
+    };
   }
 );
 
@@ -57,6 +66,7 @@ export const fetchFilteredIncidents = createAsyncThunk(
 
 const initialState: IncidentsState = {
   list: [],
+  capped: false,
   selected: undefined,
   filter: {},
   loading: false,
@@ -69,6 +79,7 @@ const incidentsSlice = createSlice({
   reducers: {
     setIncidentList: (state, action: PayloadAction<LocalIncident[]>) => {
       state.list = action.payload;
+      state.capped = false;
     },
     setIncidentsListReady: (state, action: PayloadAction<boolean>) => {
       state.listReady = action.payload;
@@ -111,11 +122,13 @@ const incidentsSlice = createSlice({
         state.listReady = false;
       })
       .addCase(fetchFilteredIncidents.fulfilled, (state, action) => {
-        state.list = action.payload;
+        state.list = action.payload.incidents;
+        state.capped = action.payload.capped;
         state.loading = false;
         state.listReady = true;
       })
       .addCase(fetchFilteredIncidents.rejected, state => {
+        state.capped = false;
         state.loading = false;
         state.listReady = true;
       });

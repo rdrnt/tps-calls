@@ -22,6 +22,7 @@ import {
 } from '../../store/actions';
 import useSelectIncident from '../../hooks/useSelectIncident';
 import { LocalIncident } from '../../types';
+import { DATE_RANGE_LIMIT } from '../../store/slices/incidents';
 
 interface MapSidebarProps {
   isOpen: boolean;
@@ -40,6 +41,7 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
   const selectIncident = useSelectIncident();
   const incidents = useReduxIncidents();
   const filter = useAppSelector(state => state.incidents.filter);
+  const capped = useAppSelector(state => state.incidents.capped);
   const filtersActive = Boolean(filter?.distance || filter?.dateRange);
 
   // Sync local search input with Redux when filter changes externally (e.g. reset filters).
@@ -217,6 +219,12 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
                 transition={{ delay: 0.1, duration: 0.1 }}
                 className="text-gray-500 text-center pb-10"
               >
+                {capped && filter?.dateRange && (
+                  <p className="text-muted-foreground pb-3 text-xs">
+                    Showing the newest {DATE_RANGE_LIMIT} incidents in this date
+                    range. Narrow the range to see the rest.
+                  </p>
+                )}
                 {incidents.length === 0 &&
                   (filter?.search || filtersActive) && (
                     <p className="text-muted-foreground py-10 text-sm">
