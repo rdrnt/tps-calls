@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useDebouncedCallback } from 'use-debounce';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
@@ -72,6 +72,18 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
     debouncedUpdateReduxSearch(newValue); // redux: debounced
   };
 
+  // Escape closes the sidebar, unless a popup on top of it is taking the key.
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      if (document.querySelector('[role="dialog"]')) return;
+      onClose();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isOpen, onClose]);
+
   const onItemClick = (incident: LocalIncident) => {
     dispatch(toggleDrawer(false));
     selectIncident(incident);
@@ -130,7 +142,6 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
                 variant="ghost"
                 size="icon-lg"
                 onClick={onClose}
-                className="p-2 rounded-md hover:bg-gray-100 transition-colors duration-200"
                 aria-label="Close sidebar"
               >
                 <X />
