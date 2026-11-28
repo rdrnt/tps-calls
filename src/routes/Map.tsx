@@ -46,14 +46,12 @@ import {
   openLoader,
   openModal,
   setRequestingLocationPermissions,
-  setSelectedCamera,
   setSelectedIncident,
   toggleDrawer,
 } from '../store/actions';
 
 import MapSidebar from '../components/MapSidebar';
 import { SafeArea } from '../components/SafeArea';
-import MapCameraInfo from '../components/MapCameraInfo';
 
 const INITIAL_ZOOM = 11;
 
@@ -71,8 +69,6 @@ const Map: React.FunctionComponent = () => {
   const userLocation = useAppSelector(state => state.user.location);
   const { isMobile } = useIsMobile();
   const lightPreset = useTheme().resolvedTheme === 'dark' ? 'night' : 'day';
-
-  const selectedCamera = useAppSelector(state => state.cameras.selected);
 
   const refForMap = React.useRef<MapRef | null>(null);
 
@@ -313,12 +309,6 @@ const Map: React.FunctionComponent = () => {
             drawerOpen={drawerOpen}
             close={() => selectIncident(undefined)}
             mapRef={refForMap}
-          />
-
-          <MapCameraInfo
-            camera={selectedCamera}
-            drawerOpen={drawerOpen}
-            close={() => dispatch(setSelectedCamera(undefined))}
           />
 
           <ButtonGroup

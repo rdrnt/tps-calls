@@ -1,9 +1,8 @@
 import { FunctionComponent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 
-import { useAppDispatch, useAppSelector } from '../../store';
+import { useAppSelector } from '../../store';
 
-import { closeLoader } from '../../store/slices/ui';
 import { Typography } from '../Typography';
 import { cn } from '../../lib/utils';
 
@@ -45,7 +44,6 @@ export const StaticLoader: FunctionComponent<{
 
 const Loader: FunctionComponent = () => {
   const { open, message } = useAppSelector(state => state.ui.loader);
-  const dispatch = useAppDispatch();
 
   return (
     <AnimatePresence>
@@ -56,9 +54,6 @@ const Loader: FunctionComponent = () => {
           className="absolute top-0 left-0 h-(--map-height) w-full z-999 bg-(--map-background) flex flex-col justify-center items-center"
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          onAnimationEnd={() => {
-            dispatch(closeLoader());
-          }}
         >
           <LoaderSpinner animate={true} />
           {message && (
