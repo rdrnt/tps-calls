@@ -29,6 +29,7 @@ import { useAppDispatch, useAppSelector, useAppStore } from '../store';
 import { useReduxIncidents } from '../store/selectors';
 
 import { LocationListener, IncidentListener } from '../components/Listeners';
+import Loader from '../components/Loader';
 
 import MapIncidentInfo from '../components/MapIncidentInfo';
 import AnimatedMapMarker from '../components/MapMarker/Animated';
@@ -132,8 +133,16 @@ const Map: React.FunctionComponent = () => {
     };
   }, []);
 
+  // The loader only exists on the map; reset it on the way out so it starts fresh next time.
+  React.useEffect(
+    () => () => {
+      dispatch(closeLoader());
+    },
+    [dispatch]
+  );
+
   React.useEffect(() => {
-    // The loader is global; leaving it open on the way out would cover /unsupported.
+    // Unsupported browsers are redirected, so the loader must not stay open.
     if (!mapSupported) {
       if (loader.open) {
         dispatch(closeLoader());
@@ -243,6 +252,7 @@ const Map: React.FunctionComponent = () => {
 
   return (
     <TooltipProvider>
+      <Loader />
       <IncidentListener />
       <LocationListener />
       <h1 className="sr-only">Live Toronto Police Calls Map</h1>

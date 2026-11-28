@@ -39,11 +39,9 @@ const uiSlice = createSlice({
         message: action.payload,
       };
     },
+    // Keep the message so it fades out with the loader instead of vanishing first.
     closeLoader: state => {
-      state.loader = {
-        open: false,
-        message: undefined,
-      };
+      state.loader.open = false;
     },
     openModal: (state, action: PayloadAction<ModalTypes>) => {
       state.modal = {

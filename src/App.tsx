@@ -27,9 +27,8 @@ import { ThemeProvider } from './theme-provider';
 import store, { useAppSelector } from './store';
 
 import ErrorBoundary from './components/ErrorBoundary';
-import Loader, { StaticLoader } from './components/Loader';
+import { StaticLoader } from './components/Loader';
 
-const routeFallback = <StaticLoader message="Loading..." />;
 // Matches the map, so loading doesn't flash.
 const mapFallback = <StaticLoader className="bg-(--map-background)" />;
 
@@ -41,14 +40,13 @@ const App: React.FunctionComponent = () => (
         <Router>
           <Provider store={store}>
             <>
-              <Loader />
               <ModalHost />
 
               <Routes>
                 <Route
                   path="/contact"
                   element={
-                    <React.Suspense fallback={routeFallback}>
+                    <React.Suspense fallback={null}>
                       <ContactPage />
                     </React.Suspense>
                   }
@@ -56,7 +54,7 @@ const App: React.FunctionComponent = () => (
                 <Route
                   path="/download"
                   element={
-                    <React.Suspense fallback={routeFallback}>
+                    <React.Suspense fallback={null}>
                       <DownloadPage />
                     </React.Suspense>
                   }
@@ -69,7 +67,7 @@ const App: React.FunctionComponent = () => (
                 <Route
                   path="/unsupported"
                   element={
-                    <React.Suspense fallback={routeFallback}>
+                    <React.Suspense fallback={null}>
                       <UnsupportedPage />
                     </React.Suspense>
                   }
