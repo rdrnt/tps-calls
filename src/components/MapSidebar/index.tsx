@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence, type Variants } from 'motion/react';
+import {
+  motion,
+  AnimatePresence,
+  useReducedMotion,
+  type Variants,
+} from 'motion/react';
 import { useDebouncedCallback } from 'use-debounce';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
 
@@ -49,6 +54,8 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const selectIncident = useSelectIncident();
+  // Motion keeps opacity fades under reduced motion, so drop the stagger delays too.
+  const reduceMotion = useReducedMotion();
   const incidents = useReduxIncidents();
   const filter = useAppSelector(state => state.incidents.filter);
   const capped = useAppSelector(state => state.incidents.capped);
@@ -203,7 +210,7 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
                     <motion.div
                       key={incident.id}
                       layout="position"
-                      custom={index}
+                      custom={reduceMotion ? 0 : index}
                       variants={ROW_VARIANTS}
                       initial="hidden"
                       animate="shown"
