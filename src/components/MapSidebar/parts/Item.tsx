@@ -15,9 +15,10 @@ const MapSidebarItem: React.FunctionComponent<MapSidebarItemProps> = ({
   onClick,
 }) => (
   // A real button, so rows can be reached with Tab and opened with Enter.
+  // Hover and press mix in the text colour, so rows darken in light mode and lighten in dark.
   <Item
     asChild
-    className="bg-accent hover:bg-muted/40 text-foreground mt-0 mb-2 w-full"
+    className="bg-accent text-foreground mt-0 mb-2 w-full duration-150 hover:bg-[color-mix(in_oklab,var(--accent),var(--foreground)_7%)] active:bg-[color-mix(in_oklab,var(--accent),var(--foreground)_12%)]"
   >
     <button type="button" onClick={onClick}>
       <ItemContent className="text-left">
