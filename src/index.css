@@ -187,3 +187,16 @@ body {
 .dark .mapboxgl-map .mapboxgl-ctrl-attrib:not(.mapboxgl-compact) a {
   color: rgb(255 255 255 / 0.75);
 }
+
+/* Honour the device's reduced-motion setting everywhere; end states still apply. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+}
