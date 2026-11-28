@@ -19,8 +19,8 @@ import Loader, { StaticLoader } from './components/Loader';
 import Modal from './components/Modal';
 
 const routeFallback = <StaticLoader message="Loading..." />;
-// Matches the map, so loading doesn't flash white in light mode.
-const mapFallback = <StaticLoader className="dark bg-(--map-background)" />;
+// Matches the map, so loading doesn't flash.
+const mapFallback = <StaticLoader className="bg-(--map-background)" />;
 
 const App: React.FunctionComponent = () => (
   <ThemeProvider defaultTheme="system" storageKey="tpscalls-ui-theme">

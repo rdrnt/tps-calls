@@ -50,10 +50,10 @@ const Loader: FunctionComponent = () => {
   return (
     <AnimatePresence>
       {open && (
-        // Only the map opens this loader, and the map is always dark.
+        // Only the map opens this loader, so it uses the map's colour.
         <motion.div
           key="loader"
-          className="dark absolute top-0 left-0 h-(--map-height) w-full z-999 bg-(--map-background) flex flex-col justify-center items-center"
+          className="absolute top-0 left-0 h-(--map-height) w-full z-999 bg-(--map-background) flex flex-col justify-center items-center"
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onAnimationEnd={() => {

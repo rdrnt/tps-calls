@@ -9,7 +9,7 @@ import {
   CircleQuestionMarkIcon,
   TabletSmartphoneIcon,
 } from 'lucide-react';
-import { toast, Toaster } from 'sonner';
+import { toast } from 'sonner';
 
 import { MAPBOX_THEME_URL } from '../config';
 import { buildIncidentTitle, MAP_METADATA } from '@/config/seo';
@@ -35,6 +35,8 @@ import AnimatedMapMarker from '../components/MapMarker/Animated';
 import MapMarker from '../components/MapMarker';
 import MapButton from '../components/MapButton';
 import { TooltipProvider } from '../components/ui/tooltip';
+import { Toaster } from '../components/ui/sonner';
+import { useTheme } from '../theme-provider';
 import {
   ButtonGroup,
   ButtonGroupSeparator,
@@ -68,6 +70,7 @@ const Map: React.FunctionComponent = () => {
   const { drawerOpen, loader } = useAppSelector(state => state.ui);
   const userLocation = useAppSelector(state => state.user.location);
   const { isMobile } = useIsMobile();
+  const lightPreset = useTheme().resolvedTheme === 'dark' ? 'night' : 'day';
 
   const selectedCamera = useAppSelector(state => state.cameras.selected);
 
@@ -147,6 +150,14 @@ const Map: React.FunctionComponent = () => {
       dispatch(closeLoader());
     }
   }, [mapSupported, isMapLoaded, incidentsListReady, loader.open, dispatch]);
+
+  // The style is Mapbox Standard, so one map switches between day and night.
+  React.useEffect(() => {
+    if (!isMapLoaded) return;
+    refForMap.current
+      ?.getMap()
+      .setConfigProperty('basemap', 'lightPreset', lightPreset);
+  }, [isMapLoaded, lightPreset]);
 
   // Settle into the city as the loader fades, unless a shared incident is about to fly in.
   React.useEffect(() => {
@@ -239,6 +250,8 @@ const Map: React.FunctionComponent = () => {
         ref={refForMap}
         mapboxAccessToken={Environment.config.MAPBOX_API_KEY}
         mapStyle={MAPBOX_THEME_URL}
+        // Sets the preset before the first frame, so light mode doesn't flash dark.
+        config={{ basemap: { lightPreset } }}
         attributionControl={false}
         trackResize={true}
         initialViewState={{

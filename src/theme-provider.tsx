@@ -1,4 +1,10 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useSyncExternalStore,
+} from 'react';
 
 type Theme = 'dark' | 'light' | 'system';
 
@@ -10,13 +16,27 @@ type ThemeProviderProps = {
 
 type ThemeProviderState = {
   theme: Theme;
+  /** The theme actually shown, with 'system' resolved. */
+  resolvedTheme: 'dark' | 'light';
   setTheme: (theme: Theme) => void;
 };
 
 const initialState: ThemeProviderState = {
   theme: 'system',
+  resolvedTheme: 'light',
   setTheme: () => null,
 };
+
+const DARK_QUERY = '(prefers-color-scheme: dark)';
+
+const subscribeToSystemTheme = (onChange: () => void) => {
+  const query = window.matchMedia(DARK_QUERY);
+  query.addEventListener('change', onChange);
+  return () => query.removeEventListener('change', onChange);
+};
+
+const getSystemTheme = () =>
+  window.matchMedia(DARK_QUERY).matches ? 'dark' : 'light';
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 
@@ -39,26 +59,21 @@ export function ThemeProvider({
     () => readStoredTheme(storageKey) || defaultTheme
   );
 
+  const systemTheme = useSyncExternalStore(
+    subscribeToSystemTheme,
+    getSystemTheme
+  );
+  const resolvedTheme = theme === 'system' ? systemTheme : theme;
+
   useEffect(() => {
     const root = window.document.documentElement;
-
     root.classList.remove('light', 'dark');
-
-    if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
-        .matches
-        ? 'dark'
-        : 'light';
-
-      root.classList.add(systemTheme);
-      return;
-    }
-
-    root.classList.add(theme);
-  }, [theme]);
+    root.classList.add(resolvedTheme);
+  }, [resolvedTheme]);
 
   const value = {
     theme,
+    resolvedTheme,
     setTheme: (theme: Theme) => {
       try {
         localStorage.setItem(storageKey, theme);
