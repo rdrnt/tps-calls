@@ -8,16 +8,26 @@ const Map = lazyWithReload(() => import('./routes/Map'));
 const ContactPage = lazyWithReload(() => import('./routes/Contact'));
 const DownloadPage = lazyWithReload(() => import('./routes/Download'));
 const UnsupportedPage = lazyWithReload(() => import('./routes/Unsupported'));
+const Modal = lazyWithReload(() => import('./components/Modal'));
+
+// Popup code loads the first time a popup opens, not on every page.
+const ModalHost: React.FunctionComponent = () => {
+  const opened = useAppSelector(state => state.ui.modal.type !== undefined);
+  return opened ? (
+    <React.Suspense fallback={null}>
+      <Modal />
+    </React.Suspense>
+  ) : null;
+};
 
 import { MotionConfig } from 'motion/react';
 
 import { ThemeProvider } from './theme-provider';
 
-import store from './store';
+import store, { useAppSelector } from './store';
 
 import ErrorBoundary from './components/ErrorBoundary';
 import Loader, { StaticLoader } from './components/Loader';
-import Modal from './components/Modal';
 
 const routeFallback = <StaticLoader message="Loading..." />;
 // Matches the map, so loading doesn't flash.
@@ -32,7 +42,7 @@ const App: React.FunctionComponent = () => (
           <Provider store={store}>
             <>
               <Loader />
-              <Modal />
+              <ModalHost />
 
               <Routes>
                 <Route
