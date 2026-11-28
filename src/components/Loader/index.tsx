@@ -12,15 +12,15 @@ const LoaderContent = ({
   message?: string;
   pulse: boolean;
 }) => (
-  <div role="status" className="flex flex-col items-center gap-5">
-    <span className="relative flex size-4">
+  <div role="status" className="flex flex-col items-center gap-6">
+    <span className="relative flex size-6">
       {pulse && (
         <span className="bg-tpscalls-primary/50 absolute inset-0 animate-ping rounded-full [animation-duration:1.6s]" />
       )}
-      <span className="bg-tpscalls-primary relative size-4 rounded-full" />
+      <span className="bg-tpscalls-primary relative size-6 rounded-full" />
     </span>
     {message && (
-      <p className="text-muted-foreground text-sm font-medium">{message}</p>
+      <p className="text-muted-foreground text-lg font-medium">{message}</p>
     )}
   </div>
 );
