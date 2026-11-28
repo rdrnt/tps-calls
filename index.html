@@ -59,6 +59,14 @@
     -->
     <link rel="manifest" href="/manifest.json" />
 
+    <!-- Start connecting to the map and data servers while the app loads. -->
+    <link rel="preconnect" href="https://api.mapbox.com" crossorigin />
+    <link
+      rel="preconnect"
+      href="https://firestore.googleapis.com"
+      crossorigin
+    />
+
     <!-- Map routes use the map's colour so loading doesn't flash, and iOS Safari tints its bars to match the map -->
     <style>
       :root {
