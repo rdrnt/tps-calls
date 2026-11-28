@@ -32,7 +32,9 @@ import { LocationListener, IncidentListener } from '../components/Listeners';
 
 import MapIncidentInfo from '../components/MapIncidentInfo';
 import AnimatedMapMarker from '../components/MapMarker/Animated';
-import MapMarker from '../components/MapMarker';
+import IncidentPins, {
+  PIN_HIT_LAYER_ID,
+} from '../components/MapMarker/IncidentPins';
 import MapButton from '../components/MapButton';
 import { TooltipProvider } from '../components/ui/tooltip';
 import { Toaster } from '../components/ui/sonner';
@@ -74,6 +76,7 @@ const Map: React.FunctionComponent = () => {
   const refForMap = React.useRef<MapRef | null>(null);
 
   const [isMapLoaded, setIsMapLoaded] = React.useState<boolean>(false);
+  const [hoveringPin, setHoveringPin] = React.useState(false);
   const [interactingWithMap, setInteractingWithMap] =
     React.useState<boolean>(false);
 
@@ -276,8 +279,16 @@ const Map: React.FunctionComponent = () => {
         onDragEnd={() => {
           setInteractingWithMap(false);
         }}
-        onClick={() => {
-          if (drawerOpen) {
+        interactiveLayerIds={[PIN_HIT_LAYER_ID]}
+        cursor={hoveringPin ? 'pointer' : undefined}
+        onMouseEnter={() => setHoveringPin(true)}
+        onMouseLeave={() => setHoveringPin(false)}
+        onClick={event => {
+          const id = event.features?.[0]?.properties?.id;
+          const incident = id && incidentList.find(item => item.id === id);
+          if (incident) {
+            selectIncident(incident);
+          } else if (drawerOpen) {
             dispatch(toggleDrawer(false));
           }
         }}
@@ -382,17 +393,11 @@ const Map: React.FunctionComponent = () => {
           />
         )}
 
-        {/* Pins wait for the reveal, then stagger in newest first as the loader fades. */}
-        {revealed &&
-          incidentList.map((incident, index) => (
-            <MapMarker
-              key={incident.id}
-              coordinates={incident.coordinates}
-              delay={150 + Math.min(index * 8, 400)}
-              hidden={incident.id === selectedIncident?.id}
-              onClick={() => selectIncident(incident)}
-            />
-          ))}
+        <IncidentPins
+          incidents={incidentList}
+          selectedId={selectedIncident?.id}
+          revealed={revealed}
+        />
       </ReactMapGl>
 
       <MapSidebar
