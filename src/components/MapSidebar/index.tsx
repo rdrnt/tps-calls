@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, type Variants } from 'motion/react';
 import { useDebouncedCallback } from 'use-debounce';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
 
@@ -23,6 +23,16 @@ import {
 import useSelectIncident from '../../hooks/useSelectIncident';
 import { LocalIncident } from '../../types';
 import { DATE_RANGE_LIMIT } from '../../store/slices/incidents';
+
+// Rows stagger in (capped so long lists don't trickle) and fade out when filtered away.
+const ROW_VARIANTS: Variants = {
+  hidden: { opacity: 0, x: -8, transition: { duration: 0.12 } },
+  shown: (index: number) => ({
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.2, delay: Math.min(index, 12) * 0.025 },
+  }),
+};
 
 interface MapSidebarProps {
   isOpen: boolean;
@@ -92,53 +102,25 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
   };
 
   return (
-    <AnimatePresence mode="wait">
-      {/* 
-        Sidebar container with Framer Motion animations
-     
-      */}
+    <AnimatePresence>
       {isOpen && (
         <motion.div
-          initial={{ x: '-100%' }} // Start off-screen to the left
-          animate={{ x: 0 }} // Slide in to normal position
-          exit={{ x: '-100%' }} // Slide out to the left when closing
+          initial={{ x: '-100%' }}
+          animate={{ x: 0 }}
+          exit={{ x: '-100%' }}
           transition={{
             type: 'spring',
             stiffness: 300,
             damping: 30,
             mass: 0.8,
           }}
-          className={`
-          /* Positioning and Layout */
-          fixed top-0 left-0 h-full 
-          /* Responsive Width: Full width on mobile, 384px on small screens, 400px on medium+ */
-          w-full sm:w-96 md:w-[400px] 
-          /* Visual Styling */
-          bg-background shadow-xl z-50
-          /* Desktop Override: Always visible on large screens */
-          lg:translate-x-0
-        `}
+          className="bg-background fixed top-0 left-0 z-50 flex h-full w-full flex-col shadow-xl sm:w-96 md:w-[400px]"
         >
-          {/* 
-            Sticky Header Container with subtle fade-in animation
-            - sticky top-0: Sticks to the top of the viewport when scrolling
-            - z-10: Ensures header stays above content
-          */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }} // Start slightly transparent and moved up
-            animate={{ opacity: 1, y: 0 }} // Fade in and slide to position
-            transition={{ delay: 0.1, duration: 0.1 }} // Slight delay for staggered effect
-            className="sticky top-0 z-10"
-          >
+          <div className="shrink-0">
             <div className="flex flex-row items-center justify-between p-4 pb-0">
-              <motion.h2
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2, duration: 0.1 }}
-                className="text-lg font-semibold text-foreground"
-              >
+              <h2 className="text-lg font-semibold text-foreground">
                 Incidents
-              </motion.h2>
+              </h2>
 
               <Button
                 variant="ghost"
@@ -199,26 +181,11 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
                 </InputGroupAddon>
               </InputGroup>
             </div>
-          </motion.div>
+          </div>
 
-          {/* 
-            Scrollable Content Area with staggered content animation
-            - h-[calc(100vh-73px)]: Height calculation to account for sticky header
-              (73px is approximate header height including padding and border)
-          */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.2 }}
-            className="p-4 overflow-y-auto h-[calc(100dvh-73px)]"
-          >
+          <div className="min-h-0 flex-1 overflow-y-auto p-4">
             {children || (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.1, duration: 0.1 }}
-                className="text-gray-500 text-center pb-10"
-              >
+              <div className="relative pb-10 text-center">
                 {capped && filter?.dateRange && (
                   <p className="text-muted-foreground pb-3 text-xs">
                     Showing the newest {DATE_RANGE_LIMIT} incidents in this date
@@ -231,16 +198,27 @@ const MapSidebar: React.FC<MapSidebarProps> = ({
                       No incidents match your search or filters.
                     </p>
                   )}
-                {incidents.map(incident => (
-                  <MapSidebarItem
-                    key={incident.id}
-                    incident={incident}
-                    onClick={() => onItemClick(incident)}
-                  />
-                ))}
-              </motion.div>
+                <AnimatePresence mode="popLayout">
+                  {incidents.map((incident, index) => (
+                    <motion.div
+                      key={incident.id}
+                      layout="position"
+                      custom={index}
+                      variants={ROW_VARIANTS}
+                      initial="hidden"
+                      animate="shown"
+                      exit="hidden"
+                    >
+                      <MapSidebarItem
+                        incident={incident}
+                        onClick={() => onItemClick(incident)}
+                      />
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
             )}
-          </motion.div>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>

@@ -13,12 +13,13 @@ interface MapSidebarItemProps {
 const MapSidebarItem: React.FunctionComponent<MapSidebarItemProps> = ({
   incident,
   onClick,
-}) => {
-  return (
-    <Item
-      onClick={onClick}
-      className="bg-accent hover:bg-muted/40 mb-2 text-foreground mt-0 hover:cursor-pointer"
-    >
+}) => (
+  // A real button, so rows can be reached with Tab and opened with Enter.
+  <Item
+    asChild
+    className="bg-accent hover:bg-muted/40 text-foreground mt-0 mb-2 w-full"
+  >
+    <button type="button" onClick={onClick}>
       <ItemContent className="text-left">
         <ItemTitle className="font-bold">{incident.name}</ItemTitle>
         <ItemTitle>{incident.location}</ItemTitle>
@@ -26,8 +27,8 @@ const MapSidebarItem: React.FunctionComponent<MapSidebarItemProps> = ({
           {DateHelper.formatIncidentDate(new Date(incident.date))}
         </ItemDescription>
       </ItemContent>
-    </Item>
-  );
-};
+    </button>
+  </Item>
+);
 
 export default MapSidebarItem;
